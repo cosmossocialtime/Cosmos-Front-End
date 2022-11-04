@@ -13,6 +13,9 @@ module.exports = {
           950:"#0e1040"
         }
       },
+      backgroundImage:{
+        "bgnave":"url('/images/bgOnboarding.png')",
+      },
     },
   },
   plugins: [],
