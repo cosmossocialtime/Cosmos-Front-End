@@ -1,6 +1,7 @@
+
 const DiarioBordoPage = () => {
     return(
-        <h1>DiarioBordo</h1>
+        <h1>DiarioBoasdasrdo</h1>
     );
 };
 
