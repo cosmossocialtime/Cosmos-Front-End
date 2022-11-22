@@ -15,6 +15,7 @@ module.exports = {
       },
       backgroundImage:{
         "bgnave":"url('/images/bgOnboarding.png')",
+        "bgsatelites":"url('/images/satelites/bgSatelite.png')",
       },
     },
   },
