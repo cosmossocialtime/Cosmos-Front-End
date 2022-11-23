@@ -1,6 +1,6 @@
 const DiarioBordoPage = () => {
     return(
-        <div className='h-screen grid grid-rows-[15%_1fr] pl-20 border-solid border-2 border-black'>
+        <div className='h-screen grid grid-rows-[15%_1fr] pl-20 border-solid border-2 border-black bg-red-400'>
             <header className='row-start-1 row-end-2 flex flex-col justify-center border-solid border-2 border-black'>
                 <p className='text-lg font-normal'>23/02/2023</p>
                 <h1 className='text-4xl font-semibold'>Encontro da Tripulação</h1>
