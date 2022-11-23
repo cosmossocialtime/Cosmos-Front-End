@@ -6,14 +6,14 @@ const DiarioBordoPage = () => {
                 <h1 className='text-4xl font-semibold'>Encontro da Tripulação</h1>
             </header>
 
-            <main className='row-start-2 row-end-3 grid grid-rows-2 border-solid border-2 border-black'>
-                <section className='infosAtuais'>
-                    <h3>Quais são algumas das informações que vocês já podem tomar como verdadeiras sobre o(a) [Nome da Instituição]?</h3>
-                    <input type="message" />
+            <main className='row-start-2 row-end-3 w-3/4 flex flex-col mt-8 gap-10 border-solid border-2 border-black'>
+                <section className='flex flex-col gap-5 border-solid border-2 border-black'>
+                    <h3 className='text-lg'>Quais são algumas das informações que vocês já podem tomar como verdadeiras sobre o(a) [Nome da Instituição]?</h3>
+                    <input type="message"className='text-base'/>
                 </section>
-                <section className='infosFaltantes'>
-                    <h3>Quais informações ainda estão faltando? O que vocês gostariam de perguntar para os líderes da Estrela?</h3>
-                    <input type="message" />
+                <section className='flex flex-col gap-5 border-solid border-2 border-black'>
+                    <h3 className='text-lg'>Quais informações ainda estão faltando? O que vocês gostariam de perguntar para os líderes da Estrela?</h3>
+                    <input type="message" className='text-base' />
                 </section>
             </main>
         </div>
