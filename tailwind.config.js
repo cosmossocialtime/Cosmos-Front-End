@@ -2,7 +2,6 @@
 module.exports = {
   content: ["./src/**/*.tsx"],
   theme: {
-
     extend: {
       colors:{
         "c-blue":{
