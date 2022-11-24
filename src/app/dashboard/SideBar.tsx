@@ -50,7 +50,7 @@ export const SideBar = () => {
 
   return (
     <div className="flex">
-      <aside className="bg-c-blue-800 h-screen max-w-[19rem] flex flex-col">
+      <aside className="bg-c-blue-800 h-screen max-w-[19rem] flex flex-col relative">
         <div>
           <div className="mx-auto w-fit my-5">
             {showside ? (
@@ -65,7 +65,7 @@ export const SideBar = () => {
             ) : (
               <>
                 <Image
-                  width={150}
+                  width={145}
                   height={0}
                   src="/images/logoCosmosBranco.svg"
                   alt="Logo Cosmos"
@@ -107,16 +107,16 @@ export const SideBar = () => {
             {showside ? "Chat" : "Chat do Controle da Missão"}
           </Link>
         </div>
-      </aside>
 
-      <div className="flex items-center">
         <button
           onClick={() => setShowSide(!showside)}
-          className={`bg-c-blue-800 h-fit text-lg text-white py-5`}
+          className={`-right-[1.25rem] top-1/2 absolute -translate-y-1/2 bg-c-blue-800 h-fit text-lg text-white py-5 px-1`}
         >
           <ArrowLeft className={`${showside && "rotate-180"} transition-all`}/>
         </button>
-      </div>
+      </aside>
+
+
     </div>
   );
 };

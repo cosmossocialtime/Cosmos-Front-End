@@ -1,5 +1,5 @@
-import { ItemSatelite } from "./ItemSatelite/ItemSatelite";
-import { Container, Content } from "./style";
+import { ItemSatelite } from "../../../../app/dashboard/imagens-de-satelite/ItemSatelite";
+import { Container, Content } from "../../../../app/dashboard/imagens-de-satelite/style";
 
 export function Satelite() {
   return (

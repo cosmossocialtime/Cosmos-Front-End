@@ -71,9 +71,9 @@ export function OptionSelect() {
 
         <Footer>
           <Link href="/cards/piloto">
-            <a>
+            
               <CaretLeft />
-            </a>
+            
           </Link>
           <button
             disabled={option === ""}

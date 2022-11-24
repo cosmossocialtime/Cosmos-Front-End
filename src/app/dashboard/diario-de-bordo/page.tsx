@@ -1,3 +1,4 @@
+
 import rightArrow from './rightArrow.svg'
 
 const DiarioBordoPage = () => {
@@ -22,7 +23,7 @@ const DiarioBordoPage = () => {
                 </section>
             </main>
         </div>
-    );
-};
+
+
 
 export default DiarioBordoPage
