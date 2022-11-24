@@ -11,7 +11,7 @@ export default function DashboardLayout({
   return (
     <html>
       <body>
-        <div className="flex">
+        <div className="flex ">
           <SideBar />
           {children}
         </div>
