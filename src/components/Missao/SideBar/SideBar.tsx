@@ -19,6 +19,7 @@ import {
 } from "phosphor-react";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function SideBar() {
   const SideBarItems = [
@@ -58,7 +59,7 @@ export function SideBar() {
     <>
       <Container showside={showside}>
         <Content showside={showside}>
-          <img src={+showside ? "/images/Ccosmos.svg" : "/images/logoCosmosBranco.svg"} alt="Logo Cosmos" />
+          <Image src={+showside ? "/images/Ccosmos.svg" : "/images/logoCosmosBranco.svg"} alt="Logo Cosmos" />
           {SideBarItems.map((item) => {
             return (
               <SideBarItem
