@@ -11,7 +11,9 @@ export default function DashboardLayout({
   return (
     <html>
       <body>
-        <div className="md:flex">
+
+        <div className="flex ">
+
           <SideBar />
           <main className='grow'>
             {children}
