@@ -23,7 +23,7 @@ const DiarioBordoPage = () => {
                 </section>
             </main>
         </div>
-
-
+    )
+}
 
 export default DiarioBordoPage
