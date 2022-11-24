@@ -49,7 +49,7 @@ export const SideBar = () => {
   const [isSelected, setIsSelected] = useState(0);
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <aside className="bg-c-blue-800 h-screen max-w-[19rem] flex flex-col relative">
         <div>
           <div className="mx-auto w-fit my-5">

@@ -12,7 +12,7 @@ export default function DashboardLayout({
     <html>
       <body>
 
-        <div className="flex ">
+        <div className="flex overflow-x-hidden">
 
           <SideBar />
           <main className='grow'>
