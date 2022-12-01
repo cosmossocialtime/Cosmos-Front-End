@@ -3,17 +3,17 @@ import { useState } from "react";
 import "../../mainTailwind.css";
 
 const Upload = () => {
-  const [userProfile, setUserProfile] = useState<string | ArrayBuffer | null>("");
+  // const [userProfile, setUserProfile] = useState<string | ArrayBuffer | null>("");
 
-  function UploadImage(img: File[]) {
-    const reader = new FileReader();
-    reader.readAsDataURL(img[0]);
-    reader.onload = () => {
-      const image = reader.result;
-      setUserProfile(image)
-      console.log(image);
-    };
-  }
+  // function UploadImage(img: File[]) {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(img[0]);
+  //   reader.onload = () => {
+  //     const image = reader.result;
+  //     setUserProfile(image)
+  //     console.log(image);
+  //   };
+  // }
 
   return (
     <>
@@ -31,7 +31,7 @@ const Upload = () => {
                 name="fotoUsuario"
                 className="hidden"
                 accept="image/*"
-                onChange={(e) => UploadImage(e.target.files)}
+                /*onChange={(e) => UploadImage(e.target.files)}*/
               />
             </label>
           </form>
