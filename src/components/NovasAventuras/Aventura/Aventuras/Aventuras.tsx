@@ -18,15 +18,15 @@ export function Aventuras() {
     {id:9, ProgramaNome: "nome 9", Descricao: "descricao 9" },
   ];
 
-  function handleRightClick(){
-    console.log(refProgramas.current.children[0].scrollWidth);
-    refProgramas.current.scrollLeft += refProgramas.current.children[0].scrollWidth;
-  }
+  // function handleRightClick(){
+  //   console.log(refProgramas.current.children[0].scrollWidth);
+  //   refProgramas.current.scrollLeft += refProgramas.current.children[0].scrollWidth;
+  // }
 
-  function handleLeftClick(){
-    console.log(refProgramas.current.children[0].scrollWidth);
-    refProgramas.current.scrollLeft -= refProgramas.current.children[0].scrollWidth;
-  }
+  // function handleLeftClick(){
+  //   console.log(refProgramas.current.children[0].scrollWidth);
+  //   refProgramas.current.scrollLeft -= refProgramas.current.children[0].scrollWidth;
+  // }
 
   return (
     <Container>
@@ -44,12 +44,12 @@ export function Aventuras() {
           <ItemPrograma key={item.id} Nome={item.ProgramaNome} Descricao={item.Descricao} />
         ))}
       <NavButton NavSide='right'>
-        <button onClick={handleRightClick}>
+        <button>
           <CaretRight />
         </button>
       </NavButton>
       <NavButton NavSide='left'>
-        <button onClick={handleLeftClick}>
+        <button>
           <CaretLeft />
         </button>
       </NavButton>
