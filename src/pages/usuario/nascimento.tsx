@@ -1,4 +1,4 @@
-import { UserBirthday } from "../../../components/Welcome/UserBirthday/UserBirthday";
+import { UserBirthday } from "../../components/Welcome/UserBirthday/UserBirthday";
 
 
 
