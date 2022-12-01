@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 
 import "../../mainTailwind.css";
 import { SideBar } from "./SideBar";
@@ -15,9 +15,9 @@ export default function DashboardLayout({
         <div className="flex overflow-x-hidden">
 
           <SideBar />
-          <main className='grow'>
+          <div className='grow'>
             {children}
-          </main>
+          </div>
         </div>
       </body>
     </html>

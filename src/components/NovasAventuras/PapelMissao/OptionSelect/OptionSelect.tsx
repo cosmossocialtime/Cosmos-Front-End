@@ -42,7 +42,6 @@ export function OptionSelect() {
     secondOption,
     thirdOption,
   };
-  console.log(Options);
   return (
     <>
       <HeaderMissao closeVisibility={+true} />

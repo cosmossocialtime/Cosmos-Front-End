@@ -28,9 +28,9 @@ export function Modal(ModalProps: DatasProfile) {
           />
         </div>
         <Dialog.Close className="absolute top-10 right-8">
-          <button>
+         
             <Image src={Close} alt="Button Close" className="rounded-md" />
-          </button>
+       
         </Dialog.Close>
       </div>
       <div className="relative flex gap-24 px-2 justify-center items-center">
