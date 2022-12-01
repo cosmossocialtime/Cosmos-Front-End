@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import styled from "styled-components";
 
 export function NewEmail() {
@@ -13,7 +13,7 @@ export function NewEmail() {
        <label htmlFor="newEmail">Email atualizado</label>
        <input id="newEmail" placeholder="exemplo@email.com" />
       </Input>
-      <Link to='' className='cBtn'>Atualizar email</Link>
+      <Link href='' className='cBtn'>Atualizar email</Link>
     </Container>
   );
 }

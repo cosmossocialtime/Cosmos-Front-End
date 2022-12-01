@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import styled from "styled-components";
 
 export function NewLink() {
@@ -10,7 +10,7 @@ export function NewLink() {
         Verifique sua conta pelo link que enviamos para o e-mail [email@email.com] e depois faça seu login
         </p>
       </Main>
-      <Link to="register/login-form" className="cBtn">Fazer login</Link>
+      <Link href="register/login-form" className="cBtn">Fazer login</Link>
 
       <Footer>
         <p>
@@ -18,7 +18,7 @@ export function NewLink() {
           o email fornecido está correto
         </p>
       <div>
-        <Link to=''>Enviar novo link de confirmação</Link> • <Link to=''>Trocar email</Link>
+        <Link href=''>Enviar novo link de confirmação</Link> • <Link href=''>Trocar email</Link>
       </div>
       </Footer>
     </Container>
