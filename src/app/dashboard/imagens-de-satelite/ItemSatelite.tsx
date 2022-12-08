@@ -1,4 +1,3 @@
-import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ReactNode } from "react";
 
