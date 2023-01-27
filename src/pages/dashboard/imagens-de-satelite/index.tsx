@@ -1,15 +1,15 @@
-"use client";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ModalSatelite } from "./modalSatelite";
 import { ItemSatelite } from "./ItemSatelite";
 import { DatasPlanets } from "./datas";
 import Image from "next/image";
-import "./planets.css"
+import { SideBar } from "../sideBar";
 
 const SatelitesPage = () => {
   return (
-    <div>
-      <div className="flex flex-col items-center gap-16 px-20 pt-14 w-full h-screen lg:overflow-y-hidden bg-bgsatelites bg-cover bg-center">
+    <div className="flex overflow-x-hidden">
+      <SideBar />
+      <div className="flex flex-col items-center gap-16 px-20 pt-14 h-screen lg:overflow-y-hidden bg-bgsatelites bg-cover bg-center w-auto">
         <h3 className="text-white text-2xl font-semibold text-center">
           Clique sobre a Estrela e os planetas para conhecer mais sobre a
           <br />

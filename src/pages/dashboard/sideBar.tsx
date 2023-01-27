@@ -81,14 +81,12 @@ export const SideBar = () => {
                   key={item.id}
                   href={item.route}
                   onClick={() => setIsSelected(item.id)}
-                  className={`flex items-center text-white ${
-                    isSelected === item.id && "bg-white/10"
-                  } rounded-lg p-2 gap-2`}
+                  className={`flex items-center text-white ${isSelected === item.id && "bg-white/10"
+                    } rounded-lg p-2 gap-2`}
                 >
                   <span
-                    className={`${
-                      isSelected === item.id ? "bg-purple-600" : "bg-white/10"
-                    } p-4 rounded-full text-2xl`}
+                    className={`${isSelected === item.id ? "bg-purple-600" : "bg-white/10"
+                      } p-4 rounded-full text-2xl`}
                   >
                     {item.icon}
                   </span>
@@ -110,9 +108,9 @@ export const SideBar = () => {
 
         <button
           onClick={() => setShowSide(!showside)}
-          className={`-right-[1.25rem] top-1/2 absolute -translate-y-1/2 bg-c-blue-800 h-fit text-lg text-white py-5 px-1`}
+          className={`-right-[1.25rem] top-1/2 absolute -translate-y-1/2 bg-c-blue-800 h-fit text-lg text-white py-5 px-1 z-10`}
         >
-          <ArrowLeft className={`${showside && "rotate-180"} transition-all`}/>
+          <ArrowLeft className={`${showside && "rotate-180"} transition-all`} />
         </button>
       </aside>
 

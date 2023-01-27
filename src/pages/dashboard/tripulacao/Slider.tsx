@@ -1,12 +1,11 @@
-"use client";
 import * as Dialog from "@radix-ui/react-dialog";
-import "keen-slider/keen-slider.min.css";
-import ProfilePhoto from "../../../../public/images/tripulacao/ProfileIcon.jpg";
+import { useState } from "react";
 import Image from "next/image";
+
+import ProfilePhoto from "../../../../public/images/tripulacao/ProfileIcon.jpg";
 import { cardTripulation } from "./cardTripulation";
 import { Arrow } from "./ArrowSlider";
 import { useKeenSlider } from "keen-slider/react";
-import { useState } from "react";
 import { ModalContent } from "./CreateModal";
 import { Modal } from "./Modal";
 
@@ -32,10 +31,10 @@ export function Slider() {
   return (
     <div>
       {!openModal && (
-        <div className="z-10 absolute bg-gradient-to-l from-white right-0 top-0 lg:w-80 h-full"></div>
+        <div className="z-10 absolute bg-gradient-to-l from-white right-0 top-0 lg:w-80 h-full" />
       )}
 
-      <div ref={sliderRef} className="flex keen-slider relative py-2">
+      <div ref={sliderRef} className="flex keen-slider py-2">
         {cardTripulation.map((card) => {
           return (
             <Dialog.Root
@@ -43,7 +42,7 @@ export function Slider() {
               onOpenChange={(Modal) => {
                 setOpenModal(Modal);
               }}
-              
+
             >
               <div className="keen-slider__slide bg-gray-100 rounded p-8 border border-gray-50 drop-shadow">
                 <Dialog.Trigger>
@@ -91,18 +90,19 @@ export function Slider() {
         })}
       </div>
       {loaded && instanceRef.current && (
-          <>
-            <Arrow
-              onClick={(e: any) =>
-                e.stopPropagation() || instanceRef.current?.next()
-              }
-              disabled={
-                currentSlide ===
-                instanceRef.current.track.details.slides.length - 1
-              }
-            />
-          </>
-        )}
+        <>
+          <Arrow
+
+            onClick={(e: any) =>
+              e.stopPropagation() || instanceRef.current?.next()
+            }
+            disabled={
+              currentSlide ===
+              instanceRef.current.track.details.slides.length - 1
+            }
+          />
+        </>
+      )}
     </div>
   );
 }
