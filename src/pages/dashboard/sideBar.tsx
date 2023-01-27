@@ -108,7 +108,7 @@ export const SideBar = () => {
 
         <button
           onClick={() => setShowSide(!showside)}
-          className={`-right-[1.25rem] top-1/2 absolute -translate-y-1/2 bg-c-blue-800 h-fit text-lg text-white py-5 px-1 z-10`}
+          className={`-right-[1.25rem] top-1/2 absolute -translate-y-1/2 bg-c-blue-800 h-fit text-lg text-white py-5 px-1`}
         >
           <ArrowLeft className={`${showside && "rotate-180"} transition-all`} />
         </button>

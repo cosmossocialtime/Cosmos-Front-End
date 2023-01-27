@@ -9,13 +9,13 @@ const SatelitesPage = () => {
   return (
     <div className="flex overflow-x-hidden">
       <SideBar />
-      <div className="flex flex-col items-center gap-16 px-20 pt-14 h-screen lg:overflow-y-hidden bg-bgsatelites bg-cover bg-center w-auto">
+      <div className="flex flex-col items-center gap-16 px-20 pt-14 h-screen lg:overflow-y-auto bg-bgsatelites bg-cover bg-center w-auto">
         <h3 className="text-white text-2xl font-semibold text-center">
           Clique sobre a Estrela e os planetas para conhecer mais sobre a
           <br />
           instituição que você irá mentorar
         </h3>
-        <div className="lg:overflow-hidden">
+        <div>
           <div className="lg:grid flex lg:grid-cols-12 lg:grid-rows-6 gap-2 justify-center">
             {DatasPlanets.map((planet) => {
               return (
