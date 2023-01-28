@@ -1,6 +1,8 @@
 import type { AppProps } from "next/app";
 import { RegisterContextProvider } from "../components/context/RegisterContext";
 import { GlobalStyle } from "../GlobalStyle";
+
+import "../lib/dayjs"
 import "../mainTailwind.css";
 import "./dashboard/imagens-de-satelite/planets.css"
 import "keen-slider/keen-slider.min.css";

@@ -8,7 +8,13 @@ module.exports = {
       },
       colors: {
         gray: {
-          100: "#FDFDFF"
+          100: "#FDFDFF",
+          200: "#EFF1F5",
+          300: "#D0D5E5",
+          400: "#A2ABCC",
+          500: "#727CA3",
+          600: "#363F63",
+          800: "#1B2031",
         },
         indigo: {
           200: "#727CA3",
@@ -25,13 +31,30 @@ module.exports = {
           800: "#22245d",
           900: "#141E59",
           950: "#0e1040"
-        }
-      },
-      backgroundImage: {
-        "bgnave": "url('/images/bgOnboarding.png')",
-        "bgsatelites": "url('/images/satelites/bgSatelite.png')",
+        },
+        violet: {
+          400: "#9D37F2",
+          500: "#7A40D3",
+          600: "#642BBB",
+          700: "#6F5597",
+          800: "#603C97",
+          900: "#22255D",
+        },
+        blue: {
+          200: "#9CD3FC",
+          300: "#65BAFA",
+          400: "#0890F7",
+          600: "#3662D3",
+          700: "#2C418C",
+          800: "#141E59",
+          900: "#0B1340",
+        },
+        backgroundImage: {
+          "bgnave": "url('/images/bgOnboarding.png')",
+          "bgsatelites": "url('/images/satelites/bgSatelite.png')",
+        },
       },
     },
-  },
-  plugins: [],
+    plugins: [],
+  }
 }
