@@ -49,12 +49,16 @@ module.exports = {
           800: "#141E59",
           900: "#0B1340",
         },
-        backgroundImage: {
-          "bgnave": "url('/images/bgOnboarding.png')",
-          "bgsatelites": "url('/images/satelites/bgSatelite.png')",
-        },
+      },
+      backgroundImage: {
+        "bgnave": "url('/images/bgOnboarding.png')",
+        "bgsatelites": "url('/images/satelites/bgSatelite.png')",
+        "art-board": "url(/images/background-art-board.png)",
+        "currentMission": "url(/images/bg-current-mission.png)",
       },
     },
-    plugins: [],
+    plugins: [
+      require('tailwind-scrollbar')({ nocompatible: true }),
+    ],
   }
 }

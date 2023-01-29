@@ -28,7 +28,7 @@ export default function CalendarioEventosPage() {
     return (
         <div className="flex">
             <SideBar />
-            <main className="flex flex-col flex-1 px-20 py-16 max-h-screen">
+            <main className="flex flex-col flex-1 px-20 py-12 2xl:py-16 max-h-screen">
                 <header className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
 
@@ -42,7 +42,7 @@ export default function CalendarioEventosPage() {
                         <h1
                             aria-label="Mês atual"
                             className="font-bold text-blue-900 text-3xl">
-                            {currentMonth.format("dddd YYYY")}
+                            {currentMonth.format("MMMM YYYY")}
                         </h1>
 
                         <CaretRight
@@ -55,12 +55,13 @@ export default function CalendarioEventosPage() {
                     </div>
                     <button
                         className="py-2 px-10 bg-violet-500 rounded-lg text-white text-sm font-semibold leading-tight hover:bg-violet-600 transition-all duration-200">
-                        Marcar encontro</button>
+                        Marcar encontro
+                    </button>
                 </header>
 
                 <div
                     className="flex flex-1 flex-col gap-4 mt-4 w-full">
-                    <div className="grid gap-6 grid-cols-7 text-center w-full">
+                    <div className="grid gap-4 2xl:gap-6 grid-cols-7 text-center w-full">
                         {daysOfWeek.map((day) => {
                             return (
                                 <h3
@@ -72,7 +73,8 @@ export default function CalendarioEventosPage() {
                             )
                         })}
                     </div>
-                    <div className="grid grid-cols-7 gap-6 flex-1">
+
+                    <div className="grid grid-cols-7 gap-4 2xl:gap-6 flex-1">
                         {daysOfMonth.map(day => (
                             <CardOfDaysWeek key={day.toString()} day={day.format("DD")} />
                         ))}
