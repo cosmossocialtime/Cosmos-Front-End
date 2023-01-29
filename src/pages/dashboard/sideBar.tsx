@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export const SideBar = () => {
   const SideBarItems = [
@@ -22,7 +23,12 @@ export const SideBar = () => {
       name: "Painel da Missão",
       icon: <HouseLine />,
     },
-    { id: 2, route: "/dashboard/diario-de-bordo", name: "Diário de Bordo", icon: <File /> },
+    {
+      id: 2,
+      route: "/dashboard/diario-de-bordo",
+      name: "Diário de Bordo",
+      icon: <File />
+    },
     {
       id: 3,
       route: "/dashboard/imagens-de-satelite",
@@ -35,62 +41,72 @@ export const SideBar = () => {
       name: "Calendário de Eventos",
       icon: <Calendar />,
     },
-    { id: 5, route: "/dashboard/chat", name: "Chat", icon: <ChatCenteredDots /> },
+    {
+      id: 5,
+      route: "/dashboard/chat",
+      name: "Chat",
+      icon: <ChatCenteredDots />
+    },
     {
       id: 6,
       route: "/dashboard/mapa-de-navegacao",
       name: "Mapa de Navegação",
       icon: <MapTrifold />,
     },
-    { id: 7, route: "/dashboard/tripulacao", name: "Tripulação", icon: <UsersThree /> },
+    {
+      id: 7,
+      route: "/dashboard/tripulacao",
+      name: "Tripulação",
+      icon: <UsersThree />
+    },
   ];
-
-  const [showside, setShowSide] = useState(false);
-  const [isSelected, setIsSelected] = useState(0);
+  const { pathname } = useRouter()
+  const [showside, setShowSide] = useState(true);
 
   return (
-    <div className="flex ">
-      <aside className="bg-c-blue-800 h-screen max-w-[19rem] flex flex-col relative">
+    <div className="relative">
+      <aside className={`${showside ? "w-[19rem]" : "w-[5.5rem]"} bg-violet-900 min-h-screen flex flex-col relative transition-all duration-300 overflow-hidden`}>
         <div>
           <div className="mx-auto w-fit my-5">
             {showside ? (
-              <>
-                <Image
-                  width={30}
-                  height={0}
-                  src="/images/Ccosmos.svg"
-                  alt="Logo Cosmos"
-                />
-              </>
+              <Image
+                width={160}
+                height={32}
+                src="/images/logoCosmosBranco.svg"
+                alt="Logo Cosmos"
+              />
             ) : (
-              <>
-                <Image
-                  width={145}
-                  height={0}
-                  src="/images/logoCosmosBranco.svg"
-                  alt="Logo Cosmos"
-                />
-              </>
+              <Image
+                width={32}
+                height={0}
+                src="/images/Ccosmos.svg"
+                alt="Logo Cosmos"
+              />
             )}
           </div>
 
-          <div className="flex flex-col px-2">
+          {showside &&
+            <Link
+              href={"/painelprincipal/painel"}
+              className="block mx-auto mb-2 text-center text-blue-400 font-semibold"
+            >
+              Voltar ao Painel Principal
+            </Link>
+          }
+
+          <div className="flex flex-col px-2 relative">
+
             {SideBarItems.map((item) => {
               return (
                 <Link
                   key={item.id}
                   href={item.route}
-                  onClick={() => setIsSelected(item.id)}
-                  className={`flex items-center text-white ${isSelected === item.id && "bg-white/10"
-                    } rounded-lg p-2 gap-2`}
+                  className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-2 flex items-center gap-4 w-72 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
                 >
-                  <span
-                    className={`${isSelected === item.id ? "bg-purple-600" : "bg-white/10"
-                      } p-4 rounded-full text-2xl`}
-                  >
+                  <span className={`${pathname === item.route ? "bg-purple-600" : "bg-white/10"} p-4 rounded-full text-2xl`}>
                     {item.icon}
                   </span>
-                  <strong className={`${showside && "hidden"}`}>
+                  <strong>
                     {item.name}
                   </strong>
                 </Link>
@@ -99,22 +115,22 @@ export const SideBar = () => {
           </div>
         </div>
 
-        <div className="flex flex-col bg-c-blue-950 text-white mt-auto p-2">
-          <Link href="/">{showside ? "?" : "Precisa de ajuda?"}</Link>
-          <Link href="/" className="text-c-blue-500">
-            {showside ? "Chat" : "Chat do Controle da Missão"}
+        <div className="flex flex-col bg-blue-900 text-white mt-auto p-2">
+          <Link href="/">{showside ?
+            "Precisa de ajuda?" : "?"}</Link>
+          <Link href="/" className="text-blue-400">
+            {showside ? "Chat do Controle da Missão" : "Chat"}
           </Link>
         </div>
 
-        <button
-          onClick={() => setShowSide(!showside)}
-          className={`-right-[1.25rem] top-1/2 absolute -translate-y-1/2 bg-c-blue-800 h-fit text-lg text-white py-5 px-1`}
-        >
-          <ArrowLeft className={`${showside && "rotate-180"} transition-all`} />
-        </button>
+
       </aside>
-
-
+      <button
+        onClick={() => setShowSide(!showside)}
+        className={`absolute left-full top-1/2 -translate-y-1/2  py-5 px-1 bg-violet-900 h-fit text-lg text-white rounded-r-lg`}
+      >
+        <ArrowLeft className={`${!showside && "rotate-180"} transition-transform duration-300`} />
+      </button>
     </div>
   );
 };
