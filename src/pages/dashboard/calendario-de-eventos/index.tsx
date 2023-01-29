@@ -23,8 +23,6 @@ export default function CalendarioEventosPage() {
     const currentMonth = dayjs()
     const [daysOfMonth, setDaysOfMonth] = useState<dayjs.Dayjs[]>(getDaysOfMonth(currentMonth))
 
-    console.log(daysOfMonth);
-
     return (
         <div className="flex">
             <SideBar />
