@@ -11,11 +11,9 @@ interface ObjectiveCardProps {
     completedTask: number,
 }
 
-export function ObjectiveCard({description, index, amountTask, completedTask}: ObjectiveCardProps) {
+export function ObjectiveCard({ description, index, amountTask, completedTask }: ObjectiveCardProps) {
     const completedPercentage = amountTask > 0 ? Math.round(completedTask / amountTask * 100) : 0;
     const percentageDistanceCenterImg = -(completedPercentage - 50);
-
-    console.log(percentageDistanceCenterImg)
 
     return (
         <Dialog.Trigger asChild>
@@ -30,13 +28,13 @@ export function ObjectiveCard({description, index, amountTask, completedTask}: O
                                 style={{ clipPath: `circle(50% at ${percentageDistanceCenterImg}% 50%)` }}
                             />
                             <Image
-                                src={moonIcon} 
-                                alt="Lua clara" 
-                                className='w-[78px] h-[78px]' 
+                                src={moonIcon}
+                                alt="Lua clara"
+                                className='w-[78px] h-[78px]'
                             />
                         </div>
 
-                        <ProgressBar 
+                        <ProgressBar
                             amountTask={amountTask}
                             completedTask={completedTask}
                         />

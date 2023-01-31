@@ -11,7 +11,7 @@ export default function MapaNavegacaoPage() {
         <div className='flex'>
             <SideBar />
 
-            <div className="w-screen h-screen bg-art-board bg-no-repeat bg-center flex flex-col">
+            <div className="w-screen h-screen bg-art-board bg-no-repeat bg-cover bg-center flex flex-col">
                 <header className="py-4 px-20 text-slate-100 bg-blue-900 bg-opacity-50">
                     <h1 className="mb-2 text-4xl font-semibold">Mapa da Navegação</h1>
                     <span>O plano de objetivos e atividades a serem alcançados no decorrer desta missão</span>

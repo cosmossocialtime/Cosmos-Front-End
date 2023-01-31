@@ -1,8 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.tsx"],
+  content: ["./src/**/*.tsx",
+    "./node_modules/tailwind-datepicker-react/dist/**/*.tsx"],
+
   theme: {
     extend: {
+
       fontFamily: {
         sans: "Inter, sans-serif",
       },
