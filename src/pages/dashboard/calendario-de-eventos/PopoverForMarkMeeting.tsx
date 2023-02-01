@@ -1,6 +1,5 @@
 import * as Popover from "@radix-ui/react-popover"
 import * as Select from "@radix-ui/react-select"
-import Datepicker from "tailwind-datepicker-react"
 
 import { useState } from "react"
 import { X } from "phosphor-react"
@@ -25,7 +24,7 @@ interface MeetingDataProps {
   linkMeeting?: string;
 }
 
-export function PopoverMeeting({ currentDay }: MeetingDataProps) {
+export function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
   const [show, setShow] = useState<boolean>(false)
 
   const [selectContent, setSelectContent] = useState("")

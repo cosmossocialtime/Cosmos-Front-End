@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import { getDaysOfMonth } from "../../../utils/getDaysOfMonth"
 import { SideBar } from "../sideBar"
 import CardOfDaysWeek from "./CardOfDaysWeek"
-import { PopoverMeeting } from "./PopoverMeeting"
+import { PopoverForMarkMeeting } from "./PopoverForMarkMeeting"
 
 const daysOfWeek = [
     "Domingo",
@@ -77,7 +77,7 @@ export default function CalendarioEventosPage() {
                             className="py-2 px-10 bg-violet-500 rounded-lg text-white text-sm font-semibold leading-tight hover:bg-violet-600 transition-all duration-200">
                             Marcar encontro
                         </Popover.Trigger>
-                        <PopoverMeeting />
+                        <PopoverForMarkMeeting />
                     </Popover.Root>
                 </header>
 
