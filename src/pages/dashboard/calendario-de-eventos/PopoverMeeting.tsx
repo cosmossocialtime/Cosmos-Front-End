@@ -3,6 +3,8 @@ import * as Select from "@radix-ui/react-select"
 import Datepicker from "tailwind-datepicker-react"
 
 import { useState } from "react"
+import { X } from "phosphor-react"
+import dayjs from "dayjs"
 
 const peoplesName = [
   "Érick Henrique",
@@ -13,7 +15,17 @@ const peoplesName = [
   "Rodrigo Fazoli",
 ]
 
-export function PopoverMeeting() {
+interface MeetingDataProps {
+  title?: string;
+  currentDay?: string;
+  hourStart?: string;
+  hourEnd?: string;
+  description?: string;
+  guests?: Array<string>;
+  linkMeeting?: string;
+}
+
+export function PopoverMeeting({ currentDay }: MeetingDataProps) {
   const [show, setShow] = useState<boolean>(false)
 
   const [selectContent, setSelectContent] = useState("")
@@ -23,9 +35,13 @@ export function PopoverMeeting() {
 
   return (
     <Popover.Portal>
-      <Popover.Content className="bg-violet-500 rounded-2xl text-white p-5 mt-4 z-[2]">
-        <Popover.Close />
-        <form action="" className="flex flex-col gap-3">
+      <Popover.Content
+        side={"right"}
+        className="relative w-[28rem] 2xl:w-[32rem] bg-violet-500 rounded-2xl text-white p-5 pr-16 pb-12 z-[2] m-4">
+        <Popover.Close className="absolute right-4 top-4">
+          <X size={24} />
+        </Popover.Close>
+        <form action="" className="flex flex-col items-center gap-3">
           <label
             htmlFor="title"
             className="opacity-0 w-0 h-0 absolute">Adiconar Título</label>
@@ -42,17 +58,36 @@ export function PopoverMeeting() {
             type="date"
             name=""
             id="date"
-            className="placeholder:text-white px-2 py-1 border border-solid border-white/40 rounded-lg w-full outline-none focus:border-white appearance-none data-[type=date]:appearance-none"
+            value={currentDay ? currentDay : dayjs().format("YYYY-MM-DD")}
+            className="placeholder:text-white px-2 py-1 border border-solid border-white/40 rounded-lg w-full outline-none focus:border-white"
           >
 
           </input>
 
-          <div>
-            <label htmlFor="hourStart">Horario de inicio da reunião</label>
-            <input type="time" id="hourStart" />
+          <div className="w-full flex items-center gap-3">
+            <label
+              htmlFor="hourStart"
+              className="opacity-0 w-0 h-0 absolute">
+              Horario de inicio da reunião
+            </label>
+            <input
+              type="time"
+              id="hourStart"
+              className="border border-solid border-white/40 outline-none focus:border-white p-2 rounded-lg flex-1"
+            />
 
-            <label htmlFor="hourEnd">Horario de fim da reunião</label>
-            <input type="time" id="hourEnd" />
+            <span className="font-semibold">até</span>
+
+            <label
+              htmlFor="hourEnd"
+              className="opacity-0 w-0 h-0 absolute">
+              Horario de fim da reunião
+            </label>
+            <input
+              type="time"
+              id="hourEnd"
+              className=" border border-solid border-white/40 focus:border-white outline-none p-2 rounded-lg flex-1"
+            />
           </div>
 
           <Select.Root>
@@ -81,16 +116,24 @@ export function PopoverMeeting() {
               </Select.Content>
             </Select.Portal>
           </Select.Root>
-          <textarea className="resize-none border border-solid border-white/40 bg-transparent rounded-lg outline-none px-4 py-2 w-full text-sm font-semibold" />
 
-          <label htmlFor="url"> Link da reunião</label>
+          <textarea className="h-20 resize-none border border-solid border-white/40 bg-transparent rounded-lg outline-none px-4 py-2 w-full text-sm font-semibold" />
+
+          <label
+            htmlFor="url"
+            className="opacity-0 w-0 h-0 absolute">
+            Link da reunião
+          </label>
           <input
             type="url"
             id="url"
             placeholder="https://calendar.google.com"
+            className="w-full border border-solid border-white/40 focus:border-white rounded-lg py-2 px-4 outline-none"
             pattern="https://.*" />
 
-          <button>Salvar</button>
+          <button className="mt-2 max-w-max py-2 px-20 rounded-lg bg-white text-violet-500 font-semibold">
+            Salvar
+          </button>
         </form>
       </Popover.Content>
     </Popover.Portal >

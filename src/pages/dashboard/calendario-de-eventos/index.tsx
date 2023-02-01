@@ -1,10 +1,13 @@
+import * as Popover from "@radix-ui/react-popover"
 import dayjs from "dayjs"
+
 import { CaretLeft, CaretRight } from "phosphor-react"
 
 import { useEffect, useState } from "react"
 import { getDaysOfMonth } from "../../../utils/getDaysOfMonth"
 import { SideBar } from "../sideBar"
 import CardOfDaysWeek from "./CardOfDaysWeek"
+import { PopoverMeeting } from "./PopoverMeeting"
 
 const daysOfWeek = [
     "Domingo",
@@ -69,10 +72,13 @@ export default function CalendarioEventosPage() {
                         />
 
                     </div>
-                    <button
-                        className="py-2 px-10 bg-violet-500 rounded-lg text-white text-sm font-semibold leading-tight hover:bg-violet-600 transition-all duration-200">
-                        Marcar encontro
-                    </button>
+                    <Popover.Root>
+                        <Popover.Trigger
+                            className="py-2 px-10 bg-violet-500 rounded-lg text-white text-sm font-semibold leading-tight hover:bg-violet-600 transition-all duration-200">
+                            Marcar encontro
+                        </Popover.Trigger>
+                        <PopoverMeeting />
+                    </Popover.Root>
                 </header>
 
                 <div
@@ -100,7 +106,10 @@ export default function CalendarioEventosPage() {
                         ))}
 
                         {daysOfMonth.map(day => (
-                            <CardOfDaysWeek key={day.toString()} day={day.format("DD")} />
+                            <CardOfDaysWeek
+                                key={day.toString()}
+                                day={day}
+                            />
                         ))}
                         {daysOfNextMonth.map((day, index) => (
                             <div
