@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState , useRef} from "react";
+import { FormEvent, useEffect, useState, useRef } from "react";
 import { Input, RecoveryContainer } from "./style";
 import { ToastContainer, toast } from 'react-toastify';
 import ILoginData from "../../types/login";
@@ -22,31 +22,28 @@ export function UserRecoveryForm() {
 
   useEffect(() => {
     if (isInitialMount.current) {
-       isInitialMount.current = false;
-        toast.success("Olá, identificamos seu problema, que tal recuperar sua conta?");
-  }});
+      isInitialMount.current = false;
+      toast.success("Olá, identificamos seu problema, que tal recuperar sua conta?");
+    }
+  });
 
   const [initLogin, setTutorial] = useState<ILoginData>(initialState);
 
   const SubmitForm = (e: FormEvent) => {
     e.preventDefault();
-    if(email == ""){
+    if (email == "") {
       toast.error("Por favor, preencha o campo de email corretamente.");
     }
-    else
-    {
-      AccessService.Recovery(initialState).then((response:any) =>{
-        if(!response.data.type.includes('error'))
-        {
+
+    else {
+      AccessService.Recovery(initialState).then((response: any) => {
+        if (!response.data.type.includes('error')) {
           router.push('/usuario/recuperacao-senha');
         }
-        else{
+        else {
           toast.error(response.data.text);
         }
-       
-        // localStorage.setItem('token', JSON.stringify(response.data));
-        // localStorage.setItem('currentUser', JSON.stringify(response.data));
-  
+
       }).catch((e: Error) => {
         toast.error("Ops...não foi processar sua requisição, tente novamente mais tarde.");
       });
@@ -58,24 +55,24 @@ export function UserRecoveryForm() {
       <h2>Informe seu email</h2>
       <form onSubmit={SubmitForm}>
         <Input>
-          <label htmlFor="Email">Email</label>
+          <label htmlFor="Email">Para recuperar sua senha, informe o email com o qual se cadastrou</label>
           <div>
             <input
               onChange={(e) => setEmail(e.target.value)}
               id="Email"
               type="email"
-              placeholder="nome@email.com.br"
+              placeholder="Escreva seu email aqui@email.com.br"
             />
           </div>
         </Input>
 
         <button type="submit" onClick={SubmitForm} className="cBtn">
-            Recuperar
+          Recuperar
         </button>
       </form>
       <div>
         <h3>
-        Lembrou de sua senha?{" "}
+          Lembrou de sua senha?{" "}
           <strong>
             <Link href="/usuario/entrar">Fazer Login</Link>
           </strong>

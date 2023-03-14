@@ -1,14 +1,13 @@
-
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
 import styled from "styled-components";
 
 
 export default function Main() {
 
   return (
-      <CosmoIMG>
-        <img src="/images/logoCosmos.svg" alt="Logo Cosmos"/>
-      </CosmoIMG>
+    <CosmoIMG>
+      <img src="/images/logoCosmos.svg" alt="Logo Cosmos" />
+    </CosmoIMG>
   );
 }
 

@@ -75,3 +75,12 @@ export const ForgetPass = styled.div`
     color: var(--purple-400);
   }
 `;
+
+export const InputArea = styled.input`
+      :focus {
+        outline: none;
+      }
+      :invalid{
+        color: red;
+      }
+`

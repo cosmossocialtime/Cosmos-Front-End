@@ -1,10 +1,11 @@
 import { Eye, EyeClosed } from "phosphor-react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { ForgetPass, Input, LoginContainer } from "./style";
 import { ToastContainer, toast } from 'react-toastify';
 import ILoginData from "../../types/login";
-import  AccessService  from "../../services/AccessService";
+import AccessService from "../../services/AccessService";
 import Link from "next/link";
+import { InputArea } from "./style";
 
 export function UserLoginForm() {
   const [email, setEmail] = useState("");
@@ -24,34 +25,32 @@ export function UserLoginForm() {
 
   const SubmitForm = (e: FormEvent) => {
     e.preventDefault();
-    if(senha == "" || email == ""){
+    if (senha == "" || email == "") {
       toast.error("Por favor, preencha os campos de email e senha corretamente.");
     }
-    else
-    {
-      setAttempt(Attemps+1);
-      if(Attemps <= 5){
+    else {
+      setAttempt(Attemps + 1);
+      if (Attemps <= 5) {
 
-      AccessService.Login(initialState).then((response:any) =>{
-        if(response.data.type.includes('success'))
-        {
-          //  localStorage.setItem('token', JSON.stringify(response.data));
-          //  localStorage.setItem('currentUser', JSON.stringify(response.data));
+        AccessService.Login(initialState).then((response: any) => {
+          if (response.data.type.includes('success')) {
+            //  localStorage.setItem('token', JSON.stringify(response.data));
+            //  localStorage.setItem('currentUser', JSON.stringify(response.data));
 
-          // navigate('/usuario/iniciar');
-        }
-        else{
-          toast.error(response.data.text);
-        }
-       
-      }).catch((e: Error) => {
-        toast.error("Ops...não foi processar sua requisição, tente novamente mais tarde.");
-      });
+            // navigate('/usuario/iniciar');
+          }
+          else {
+            toast.error(response.data.text);
+          }
+
+        }).catch((e: Error) => {
+          toast.error("Ops...não foi processar sua requisição, tente novamente mais tarde.");
+        });
+      }
+      else {
+        // navigate('/usuario/recuperar');
+      }
     }
-    else{
-      // navigate('/usuario/recuperar');
-    }
-  }
   }
 
   return (
@@ -61,7 +60,7 @@ export function UserLoginForm() {
         <Input>
           <label htmlFor="Email">Email</label>
           <div>
-            <input
+            <InputArea
               onChange={(e) => setEmail(e.target.value)}
               id="Email"
               type="email"
@@ -72,10 +71,11 @@ export function UserLoginForm() {
         <Input>
           <label htmlFor="Senha">Senha</label>
           <div>
-            <input
+            <InputArea
               onChange={(e) => setSenha(e.target.value)}
               id="Senha"
               type={showPassword ? "text" : "password"}
+              minLength={8}
               placeholder="Digite sua senha aqui"
             />
             <button
@@ -91,7 +91,7 @@ export function UserLoginForm() {
         </Input>
 
         <button type="submit" onClick={SubmitForm} className="cBtn">
-            Entrar
+          Entrar
         </button>
       </form>
 

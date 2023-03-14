@@ -1,118 +1,141 @@
-import { Eye, EyeClosed } from "phosphor-react";
-import { FormEvent, useEffect, useState } from "react";
-import { Input, RegisterContainer } from "./style";
-import { ToastContainer, toast } from 'react-toastify';
-import AccessService  from "../../services/AccessService";
-import styled from "styled-components";
 import Link from "next/link";
+import { useState } from "react";
+import { z } from "zod"
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from 'react-toastify';
+import { Eye, EyeClosed } from "phosphor-react";
+import * as Popover from "@radix-ui/react-popover"
 
-export function UserRegisterForm(){
+import { Input, InputContent, RegisterContainer } from "./style";
 
-  const [ID, setID] = useState(1);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmaSenha, setConfirmaSenha] = useState("");
+const schema = z.object({
+  name: z.string(),
+  email: z.string(),
+  password: z.string(),
+  confirmPassword: z.string(),
+})
+
+type formProps = z.infer<typeof schema>
+
+export function UserRegisterForm() {
+
+  const [isSubmiting, setIsSubmiting] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
 
-  const [user, setUser] = useState([]);
-  // const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors } } = useForm<formProps>()
 
-  const initialState = {
-    username: nome,
-    account: email,
-    password: senha,
-    password2: confirmaSenha,
-    token: "",
-    action:""
-  };
 
-  const SubmitForm = (e: FormEvent) => {
-    e.preventDefault();
-    if (senha === confirmaSenha) {
-      AccessService.Create(initialState).then((response:any) =>{
-      if(!response.data.type.includes('error'))
-      {
-        // navigate('/usuario/cadastro-email');
-      }
-      else{
-        toast.error(response.data.text);
-      }
-      }).catch((e: Error) => {
-        toast.error("Ops...não foi processar sua requisição, tente novamente mais tarde.");
-      });
+  function handleForm(data: formProps) {
+    setIsSubmiting(true)
+
+    if (data.password.length <= 8) {
+      setIsSubmiting(false)
+      return toast.error("A senha deve ser maior que 8 caracteres")
     }
-    else{
-      const data = {type: 'error', text: 'Senhas não coincidem"'};
-      toast.error(data.text);
+    if (!/[A-Z]/.test(data.password)) {
+      setIsSubmiting(false)
+      return toast.error("A senha deve conter ao menos uma letra maiscula")
     }
+    if (!/\d/.test(data.password)) {
+      setIsSubmiting(false)
+      return toast.error("A senha deve ao menos um número")
+    }
+
+    if (data.password !== data.confirmPassword) {
+      setIsSubmiting(false)
+      return toast.error("As senhas devem ser iguais")
+    }
+    return (
+      toast.success("Criado com sucesso"),
+      console.log(data));
+
   }
 
   return (
     <RegisterContainer>
       <h2>Cadastro para voluntariado</h2>
-      <form onSubmit={SubmitForm}>
+      <form onSubmit={handleSubmit(handleForm)}>
         <Input>
           <label htmlFor="Nome">Nome completo</label>
-          <div>
+          <InputContent>
             <input
-              onChange={(e) => setNome(e.target.value)}
+              {...register("name")}
+              required
               id="Nome"
               placeholder="Nome e sobrenome"
             />
-          </div>
+          </InputContent>
         </Input>
 
         <Input>
           <label htmlFor="Email">Email</label>
-          <div>
+          <InputContent>
             <input
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
+              required
               id="Email"
               type="email"
               placeholder="nome@email.com.br"
             />
-          </div>
+          </InputContent>
         </Input>
         <Input>
-          <label htmlFor="Senha">Senha</label>
           <div>
+            <label htmlFor="Senha">Senha</label>
+            <Popover.Root>
+              <Popover.Trigger className="flex text-center text-xs px-2 py-1 rounded-full border-solid border border-gray-700 text-gray-700">?</Popover.Trigger>
+              <Popover.Portal>
+                <Popover.Content className="max-w-sm bg-gray-100 border border-solid border-purple-800 p-2 rounded-lg shadow-2xl">
+                  <span>
+                    A senha deve ter no minimo 8 caracteres, com pelo menos uma letra maiscula e um número.
+                  </span>
+                </Popover.Content>
+              </Popover.Portal>
+            </Popover.Root>
+          </div>
+          <InputContent>
             <input
-              onChange={(e) => setSenha(e.target.value)}
+              {...register("password")}
+              required
               id="Senha"
               type={showPassword ? "text" : "password"}
               placeholder="Digite sua senha aqui"
             />
             <button
+              className="button-show-password"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <EyeClosed /> : <Eye />}
             </button>
-          </div>
+          </InputContent>
+
         </Input>
         <Input>
           <label htmlFor="ConfirmaSenha">Confirme a senha</label>
 
-          <div>
+          <InputContent>
             <input
-              onChange={(e) => setConfirmaSenha(e.target.value)}
+              {...register("confirmPassword")}
+              required
               id="ConfirmaSenha"
               type={showPassword1 ? "text" : "password"}
               placeholder="Digite sua senha aqui"
             />
             <button
+              className="button-show-password"
               type="button"
               onClick={() => setShowPassword1(!showPassword1)}
             >
               {showPassword1 ? <EyeClosed /> : <Eye />}
             </button>
-          </div>
+          </InputContent>
+
         </Input>
-        <button type="submit" onClick={SubmitForm} className="cBtn">
-            Criar Conta
-          </button>
+        <button type="submit" className="cBtn" disabled={isSubmiting}>
+          Criar Conta
+        </button>
       </form>
 
       <div>
@@ -122,7 +145,7 @@ export function UserRegisterForm(){
             <Link href="/usuario/entrar">Fazer login</Link>
           </strong>
         </h3>
-        <ToastContainer/>
+        <ToastContainer autoClose={2000} limit={3} />
       </div>
     </RegisterContainer>
   );
