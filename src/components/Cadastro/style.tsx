@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const RegisterContainer = styled.div`
   flex: 40%;
   background: var(--gray-50);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,7 +50,7 @@ export const Input = styled.div`
   }
   div{
     display: flex;
-    gap: 10px; 
+    gap: 4px; 
     align-items: center;
     justify-content: center;
 

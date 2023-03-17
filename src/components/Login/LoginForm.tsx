@@ -1,67 +1,59 @@
 import { Eye, EyeClosed } from "phosphor-react";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { ForgetPass, Input, LoginContainer } from "./style";
 import { ToastContainer, toast } from 'react-toastify';
-import ILoginData from "../../types/login";
-import AccessService from "../../services/AccessService";
+import { useForm } from "react-hook-form";
+import { z } from "zod"
+
 import Link from "next/link";
 import { InputArea } from "./style";
 
+const schema = z.object({
+  email: z.string(),
+  password: z.string()
+})
+type formProps = z.infer<typeof schema>
+
+const logInTest = {
+  email: "teste@gmail.com",
+  password: "123456"
+}
+
 export function UserLoginForm() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [Attemps, setAttempt] = useState(1);
+  const [isSubmiting, setIsSubmiting] = useState(false)
+  const { register, handleSubmit } = useForm<formProps>()
 
-  // const navigate = useNavigate();
+  const SubmitForm = ({ email, password }: formProps) => {
+    setIsSubmiting(true)
 
-  const initialState = {
-    account: email,
-    password: senha,
-    token: "",
-    action: ""
-  };
-  const [initLogin, setTutorial] = useState<ILoginData>(initialState);
-
-  const SubmitForm = (e: FormEvent) => {
-    e.preventDefault();
-    if (senha == "" || email == "") {
-      toast.error("Por favor, preencha os campos de email e senha corretamente.");
+    if (password === "" || email === "") {
+      setIsSubmiting(false)
+      return toast.error("Por favor, preencha os campos de email e senha corretamente.");
     }
-    else {
-      setAttempt(Attemps + 1);
-      if (Attemps <= 5) {
 
-        AccessService.Login(initialState).then((response: any) => {
-          if (response.data.type.includes('success')) {
-            //  localStorage.setItem('token', JSON.stringify(response.data));
-            //  localStorage.setItem('currentUser', JSON.stringify(response.data));
+    if (email !== logInTest.email || password !== logInTest.password) {
+      setIsSubmiting(false)
+      return toast.error("Credenciais incorretas")
+    }
+    if (email === logInTest.email && password === logInTest.password) {
+      try {
+        toast.success("Logado")
+        console.log({ email, password });
 
-            // navigate('/usuario/iniciar');
-          }
-          else {
-            toast.error(response.data.text);
-          }
-
-        }).catch((e: Error) => {
-          toast.error("Ops...não foi processar sua requisição, tente novamente mais tarde.");
-        });
-      }
-      else {
-        // navigate('/usuario/recuperar');
-      }
+      } catch (error) { console.log(error) }
     }
   }
 
   return (
     <LoginContainer>
       <h2>Faça o seu login</h2>
-      <form onSubmit={SubmitForm}>
+      <form onSubmit={handleSubmit(SubmitForm)}>
         <Input>
           <label htmlFor="Email">Email</label>
           <div>
             <InputArea
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
               id="Email"
               type="email"
               placeholder="nome@email.com.br"
@@ -72,10 +64,9 @@ export function UserLoginForm() {
           <label htmlFor="Senha">Senha</label>
           <div>
             <InputArea
-              onChange={(e) => setSenha(e.target.value)}
+              {...register("password")}
               id="Senha"
               type={showPassword ? "text" : "password"}
-              minLength={8}
               placeholder="Digite sua senha aqui"
             />
             <button
@@ -90,7 +81,7 @@ export function UserLoginForm() {
           </ForgetPass>
         </Input>
 
-        <button type="submit" onClick={SubmitForm} className="cBtn">
+        <button type="submit" className="cBtn" disabled={isSubmiting}>
           Entrar
         </button>
       </form>
@@ -102,7 +93,7 @@ export function UserLoginForm() {
             <Link href="/usuario/cadastrar">Cadastre-se</Link>
           </strong>
         </h3>
-        <ToastContainer></ToastContainer>
+        <ToastContainer autoClose={3000} />
       </div>
     </LoginContainer>
   );

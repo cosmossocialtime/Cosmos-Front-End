@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { useState } from "react";
 import { z } from "zod"
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
-import { Eye, EyeClosed } from "phosphor-react";
-import * as Popover from "@radix-ui/react-popover"
+import { Eye, EyeClosed, Question } from "phosphor-react";
+import Link from "next/link";
+import * as HoverCard from '@radix-ui/react-hover-card';
 
 import { Input, InputContent, RegisterContainer } from "./style";
 
@@ -14,7 +14,6 @@ const schema = z.object({
   password: z.string(),
   confirmPassword: z.string(),
 })
-
 type formProps = z.infer<typeof schema>
 
 export function UserRegisterForm() {
@@ -23,9 +22,7 @@ export function UserRegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<formProps>()
-
-
+  const { register, handleSubmit } = useForm<formProps>()
   function handleForm(data: formProps) {
     setIsSubmiting(true)
 
@@ -46,9 +43,7 @@ export function UserRegisterForm() {
       setIsSubmiting(false)
       return toast.error("As senhas devem ser iguais")
     }
-    return (
-      toast.success("Criado com sucesso"),
-      console.log(data));
+    return (toast.success("Criado com sucesso"), console.log(data));
 
   }
 
@@ -83,16 +78,17 @@ export function UserRegisterForm() {
         <Input>
           <div>
             <label htmlFor="Senha">Senha</label>
-            <Popover.Root>
-              <Popover.Trigger className="flex text-center text-xs px-2 py-1 rounded-full border-solid border border-gray-700 text-gray-700">?</Popover.Trigger>
-              <Popover.Portal>
-                <Popover.Content className="max-w-sm bg-gray-100 border border-solid border-purple-800 p-2 rounded-lg shadow-2xl">
+            <HoverCard.Root openDelay={200}>
+              <HoverCard.Trigger className="cursor-pointer"><Question size={24} /></HoverCard.Trigger>
+              <HoverCard.Portal>
+                <HoverCard.Content className="max-w-sm bg-gray-100 border border-solid border-purple-800 p-2 rounded-lg shadow-2xl">
                   <span>
                     A senha deve ter no minimo 8 caracteres, com pelo menos uma letra maiscula e um número.
                   </span>
-                </Popover.Content>
-              </Popover.Portal>
-            </Popover.Root>
+                  <HoverCard.Arrow width={16} height={8} className="fill-purple-800" />
+                </HoverCard.Content>
+              </HoverCard.Portal>
+            </HoverCard.Root>
           </div>
           <InputContent>
             <input

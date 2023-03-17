@@ -5,17 +5,31 @@ import styled from "styled-components";
 export default function Main() {
 
   return (
-    <CosmoIMG>
-      <img src="/images/logoCosmos.svg" alt="Logo Cosmos" />
-    </CosmoIMG>
+    <Container>
+      <img src="/images/image_aside_login.png" alt="" />
+    </Container>
   );
 }
 
 // STYLED
 
 const Container = styled.main`
-  height: 100vh;
-  display: flex;
+  position: relative;
+  width: 50%;
+  height: 100%;
+
+  img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .logo{
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+  }
   @media (max-width: 640px) {
     flex-direction: column;
   }
