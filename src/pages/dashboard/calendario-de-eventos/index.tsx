@@ -81,6 +81,8 @@ export default function CalendarioEventosPage() {
 
                     </div>
                 </div>
+
+                <input type="date" className="[-webkit-appearance:none] appearance-none rounded-none focus:outline-none focus:shadow-outline-none"/>
             </main>
         </div>
     )

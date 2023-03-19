@@ -14,6 +14,7 @@ module.exports = {
           400: "#A2ABCC",
           500: "#727CA3",
           600: "#363F63",
+          700: "#575757",
           800: "#1B2031",
         },
         indigo: {
@@ -49,6 +50,9 @@ module.exports = {
           800: "#141E59",
           900: "#0B1340",
         },
+        red: {
+          500: "#EB3D66",
+        }
       },
       backgroundImage: {
         "bgnave": "url('/images/bgOnboarding.png')",
