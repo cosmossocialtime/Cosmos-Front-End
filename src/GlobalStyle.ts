@@ -1,7 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import { createGlobalStyle } from "styled-components";
 
-
 export const GlobalStyle = createGlobalStyle`
     :root{
         --purple-400:#68459E;
@@ -76,7 +75,6 @@ export const GlobalStyle = createGlobalStyle`
     background: var(--purple-500);
     color: #fff;
     font-weight: bold;
-    width: min(384px, 100%);
     height: 3rem;
     border-radius: .5rem;
     transition: background .2s;

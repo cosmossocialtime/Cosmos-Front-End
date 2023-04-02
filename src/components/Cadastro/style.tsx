@@ -63,14 +63,17 @@ export const InputContent = styled.div`
     width: min(384px, 100%);
     display: flex;
     border-radius: 0.2rem;
-    height: 3rem;
     padding: 0.5rem;
+
     
   input{
         width: 100%;
         :focus{
-            outline: none;
-          
-        }   
+          outline: 2px solid transparent;
+          outline-offset: 2px;
+        }
+        :invalid{
+            border: 1px solid red
+        }
     }
 `

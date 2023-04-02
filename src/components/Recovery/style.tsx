@@ -92,12 +92,12 @@ export const Input = styled.div`
     width: min(384px, 100%);
     display: flex;
     border-radius: 0.2rem;
-    border: 1px solid red;
+    border: 1px solid var(--gray-500);
     height: 3rem;
     padding: 0.5rem;
     input {
       width: 100%;
-      
+      outline: none;
     }
   }
 `;

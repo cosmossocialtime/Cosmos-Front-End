@@ -46,40 +46,45 @@ export function UserLoginForm() {
   }
 
   return (
-    <LoginContainer>
-      <h2>Faça o seu login</h2>
-      <form onSubmit={handleSubmit(SubmitForm)}>
-        <Input>
-          <label htmlFor="Email">Email</label>
-          <div>
-            <InputArea
-              {...register("email")}
-              id="Email"
-              type="email"
-              placeholder="nome@email.com.br"
-            />
-          </div>
-        </Input>
-        <Input>
-          <label htmlFor="Senha">Senha</label>
-          <div>
-            <InputArea
+    <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
+      <h2 className="text-3xl text-purple-700">Faça o seu login</h2>
+      <form onSubmit={handleSubmit(SubmitForm)} className="w-1/2 flex flex-col gap-2 mt-4">
+        <div className="flex flex-col w-full max-w-md gap-2">
+          <label htmlFor="email">Email</label>
+          <input
+            {...register("email")}
+            autoFocus
+            required
+            id="email"
+            type="email"
+            placeholder="nome@email.com.br"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 valid:border-green-500"
+          />
+        </div>
+        <div className="flex flex-col w-full max-w-md gap-2">
+          <label htmlFor="password">Senha</label>
+          <div className="flex group w-full max-w-md gap-2 relative">
+            <input
               {...register("password")}
-              id="Senha"
+              id="password"
+              min={8}
+              required
               type={showPassword ? "text" : "password"}
               placeholder="Digite sua senha aqui"
+              className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
+              className="button-show-password absolute top-3 right-2"
             >
-              {showPassword ? <EyeClosed /> : <Eye />}
+              {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
             </button>
           </div>
-          <ForgetPass>
-            <Link href="/usuario/recuperar">Esqueci a minha senha</Link>
-          </ForgetPass>
-        </Input>
+          <span className="text-right text-sm  py-3">
+            <Link href="/usuario/recuperar" className="text-purple-500 hover:text-purple-700">Esqueci a minha senha</Link>
+          </span>
+        </div>
 
         <button type="submit" className="cBtn" disabled={isSubmiting}>
           Entrar
@@ -89,12 +94,12 @@ export function UserLoginForm() {
       <div>
         <h3>
           Ainda não tem uma conta?{" "}
-          <strong>
+          <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
             <Link href="/usuario/cadastrar">Cadastre-se</Link>
           </strong>
         </h3>
         <ToastContainer autoClose={3000} />
       </div>
-    </LoginContainer>
+    </main>
   );
 }

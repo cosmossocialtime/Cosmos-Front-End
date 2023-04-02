@@ -15,7 +15,7 @@ export function UserBirthday() {
   const [month, setMonth] = useState(1);
   const [year, setYear] = useState(1990);
 
-  const {setBirthday} = useContext(RegisterContext);
+  const { setBirthday } = useContext(RegisterContext);
 
   function submitBirthday(e: FormEvent) {
     e.preventDefault();
@@ -32,7 +32,7 @@ export function UserBirthday() {
         <Content>
           <div>
             <strong>Data de chegada na Terra</strong>
-            <p>Nos conte sua data de nascimento ;)</p>
+            <p>Nos conte sua data de nascimento ;</p>
           </div>
 
           <form onSubmit={submitBirthday}>
@@ -85,9 +85,9 @@ export function UserBirthday() {
             </Input>
 
           </form>
-            <button type="submit" onClick={submitBirthday} className="cBtn">
-              Pousar
-            </button>
+          <button type="submit" onClick={submitBirthday} className="cBtn">
+            Pousar
+          </button>
         </Content>
       </Container>
     </>
@@ -144,6 +144,7 @@ const optionsMonth = {
 };
 
 const optionsYears = {
+  1989: 1989,
   1990: 1990,
   1991: 1991,
   1992: 1992,
@@ -177,4 +178,5 @@ const optionsYears = {
   2020: 2020,
   2021: 2021,
   2022: 2022,
+  2023: 2023
 };
