@@ -61,7 +61,7 @@ export function UserRegisterForm() {
             required
             id="Nome"
             placeholder="Nome e sobrenome"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 valid:border-green-500"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
 
@@ -72,7 +72,7 @@ export function UserRegisterForm() {
             required
             id="apelido"
             placeholder="Como gostaria de ser chamado(a)"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 valid:border-green-500"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
 
@@ -84,7 +84,7 @@ export function UserRegisterForm() {
             id="email"
             type="email"
             placeholder="nome@email.com.br"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500  invalid:border-pink-600 valid:border-green-500"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500  invalid:border-pink-600 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
 
@@ -110,7 +110,7 @@ export function UserRegisterForm() {
             minLength={8}
             type={showPassword ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 "
+            className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
           <button
             className="button-show-password absolute top-3 right-2"
@@ -130,7 +130,7 @@ export function UserRegisterForm() {
             id="confirm-password"
             type={showPassword1 ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className="w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600"
+            className="w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
           <button
             className="button-show-password absolute top-3 right-2"

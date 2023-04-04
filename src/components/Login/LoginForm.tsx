@@ -50,7 +50,9 @@ export function UserLoginForm() {
       <h2 className="text-3xl text-purple-700">Faça o seu login</h2>
       <form onSubmit={handleSubmit(SubmitForm)} className="w-1/2 flex flex-col gap-2 mt-4">
         <div className="flex flex-col w-full max-w-md gap-2">
-          <label htmlFor="email">Email</label>
+          <div>
+            <label htmlFor="email" className="text">Email</label>
+          </div>
           <input
             {...register("email")}
             autoFocus
@@ -58,11 +60,13 @@ export function UserLoginForm() {
             id="email"
             type="email"
             placeholder="nome@email.com.br"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 valid:border-green-500"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
         <div className="flex flex-col w-full max-w-md gap-2">
-          <label htmlFor="password">Senha</label>
+          <div>
+            <label htmlFor="password">Senha</label>
+          </div>
           <div className="flex group w-full max-w-md gap-2 relative">
             <input
               {...register("password")}
@@ -71,7 +75,7 @@ export function UserLoginForm() {
               required
               type={showPassword ? "text" : "password"}
               placeholder="Digite sua senha aqui"
-              className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500"
+              className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
             />
             <button
               type="button"
