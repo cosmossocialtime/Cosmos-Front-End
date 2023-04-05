@@ -1,12 +1,10 @@
 import { Eye, EyeClosed } from "phosphor-react";
 import { useState } from "react";
-import { ForgetPass, Input, LoginContainer } from "./style";
 import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { z } from "zod"
-
 import Link from "next/link";
-import { InputArea } from "./style";
+
 
 const schema = z.object({
   email: z.string(),
