@@ -27,27 +27,25 @@ export function UserRegisterForm() {
   const { register, handleSubmit } = useForm<formProps>()
   function handleForm(data: formProps) {
     setIsSubmiting(true)
-
+    setMessageErrorPassword("A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.")
     if (data.password.length <= 8) {
       setIsSubmiting(false)
-      return setMessageErrorPassword("A senha deve ser maior que 8 caracteres")
+      return messageErrorPassword
     }
     if (!/[A-Z]/.test(data.password)) {
       setIsSubmiting(false)
-      return setMessageErrorPassword("A senha deve conter ao menos uma letra maiscula")
+      return messageErrorPassword
     }
     if (!/\d/.test(data.password)) {
       setIsSubmiting(false)
-      return setMessageErrorPassword("A senha deve ao menos um número")
+      return messageErrorPassword
     }
-
     if (data.password !== data.confirmPassword) {
       setIsSubmiting(false)
       return setMessageErrorPassword("As senhas devem ser iguais")
     }
     setMessageErrorPassword("")
     return (toast.success("Criado com sucesso"), console.log(data, acceptTerms));
-
   }
 
   return (
@@ -110,7 +108,7 @@ export function UserRegisterForm() {
             minLength={8}
             type={showPassword ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 valid:border-green-500"
           />
           <button
             className="button-show-password absolute top-3 right-2"
@@ -130,7 +128,7 @@ export function UserRegisterForm() {
             id="confirm-password"
             type={showPassword1 ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className="w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className="w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 valid:border-green-500"
           />
           <button
             className="button-show-password absolute top-3 right-2"

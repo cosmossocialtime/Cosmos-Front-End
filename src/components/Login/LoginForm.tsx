@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod"
 import Link from "next/link";
 
-
 const schema = z.object({
   email: z.string(),
   password: z.string()
@@ -42,7 +41,6 @@ export function UserLoginForm() {
       } catch (error) { console.log(error) }
     }
   }
-
   return (
     <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
       <h2 className="text-3xl text-purple-700">Faça o seu login</h2>
@@ -92,7 +90,6 @@ export function UserLoginForm() {
           Entrar
         </button>
       </form>
-
       <div>
         <h3>
           Ainda não tem uma conta?{" "}

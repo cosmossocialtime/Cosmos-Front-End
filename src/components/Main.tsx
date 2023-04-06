@@ -5,34 +5,22 @@ import styled from "styled-components";
 export default function Main() {
 
   return (
-    <Container>
-      <img src="/images/image_aside_login.png" alt="" />
-    </Container>
+    <div className="h-screen relative">
+      <img className="bg-cover bg-no-repeat relative h-full" src="/images/background-login.png" alt="" />
+      <img
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  p-14 bg-black/20 rounded-2xl backdrop-blur-md"
+        src="/images/logo.png"
+        alt="Logo" />
+    </div>
   );
 }
 
 // STYLED
 
 const Container = styled.main`
-  position: relative;
-  width: 50%;
-  height: 100%;
+  height: 100vh;
+  pos
 
-  img{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .logo{
-    width: 50px;
-    height: 50px;
-    background-size: cover;
-  }
-  @media (max-width: 640px) {
-    flex-direction: column;
-  }
 `;
 
 const CosmoIMG = styled.div`

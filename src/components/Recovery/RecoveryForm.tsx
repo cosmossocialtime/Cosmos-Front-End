@@ -7,9 +7,7 @@ import { useRouter } from "next/router";
 export function UserRecoveryForm() {
 
   const [email, setEmail] = useState("");
-
   const router = useRouter();
-  const isInitialMount = useRef(true);
 
   const initialState = {
     account: email,
