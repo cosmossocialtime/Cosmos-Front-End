@@ -11,9 +11,9 @@ export function ModalSatelite({ name }: NamesPlanet) {
   return (
     <>
       <Dialog.Portal >
-        <Dialog.Overlay className="fixed bg-black/70 inset-0" />
+        <Dialog.Overlay className="fixed bg-black/70 inset-0 z-[2]" />
 
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-c-blue-800 flex w-[70%] h-[95%] rounded-xl flex-col p-5 text-white">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-c-blue-800 flex w-[70%] h-[95%] rounded-xl flex-col p-5 text-white z-10">
           <Dialog.Title>
             <p className="text-[50px] self-end">{name}</p>
           </Dialog.Title>

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useContext, useState } from "react";
 import { CaretRight } from "phosphor-react";
 import { Container, Content, OtherGender, RadioBox } from "./style";
@@ -12,8 +13,8 @@ export function GenderSelection() {
   const [genderSelect, setGenderSelect] = useState("");
   const [otherGenderActive, setOtherGenderActive] = useState(true);
 
-  const {SetGender} = useContext(RegisterContext);
-  
+  const { SetGender } = useContext(RegisterContext);
+
   function GenderSubmit(gender: string) {
     SetGender(gender);
     router.push("/usuario/codigo-empresa");
@@ -21,7 +22,7 @@ export function GenderSelection() {
 
   return (
     <>
-    <BackButton link="/usuario/iniciar"/>
+      <BackButton link="/usuario/iniciar" />
       <Container>
 
         <Content>
@@ -54,19 +55,23 @@ export function GenderSelection() {
                 Outro
               </RadioBox>
             ) : (
+
               <OtherGender>
                 <input
                   onChange={(e) => setGenderSelect(e.target.value)}
                   placeholder="Digite seu gênero"
                 />
-
                 <button
+                  className="button-carret-right"
                   type="button"
                   onClick={() => GenderSubmit(genderSelect)}
                 >
-                  <CaretRight weight="bold"/>
+                  <CaretRight weight="bold" />
                 </button>
               </OtherGender>
+
+
+
             )}
           </div>
         </Content>

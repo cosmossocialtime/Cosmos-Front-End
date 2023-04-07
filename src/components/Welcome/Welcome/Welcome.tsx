@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Container, Content } from "./style";
 import Link from "next/link";
 

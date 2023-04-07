@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const LoginContainer = styled.div`
   flex: 40%;
   background: var(--gray-50);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,3 +76,10 @@ export const ForgetPass = styled.div`
     color: var(--purple-400);
   }
 `;
+
+export const InputArea = styled.input`
+      :focus {
+        outline: none;
+      }
+     
+`

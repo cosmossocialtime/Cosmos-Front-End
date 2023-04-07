@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const RegisterContainer = styled.div`
   flex: 40%;
   background: var(--gray-50);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,32 +34,46 @@ export const RegisterContainer = styled.div`
 export const Input = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 4px;
+  align-items: flex-start;
   width: min(384px, 100%);
   position: relative;
 
   label {
     margin-right: auto;
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-bottom: 0.3rem;
   }
-  button {
+  .button-show-password {
     font-size: 1.2rem;
     color: var(--gray-500);
   }
-
   div{
+    display: flex;
+    gap: 4px; 
+    align-items: center;
+    justify-content: center;
+
+  }
+
+`;
+
+export const InputContent = styled.div`
+    border: 1px solid #a2abcc;
     width: min(384px, 100%);
     display: flex;
     border-radius: 0.2rem;
-    border: 1px solid #a2abcc;
-    height: 3rem;
     padding: 0.5rem;
-    input{
+
+    
+  input{
         width: 100%;
         :focus{
-            outline: none;
+          outline: 2px solid transparent;
+          outline-offset: 2px;
+        }
+        :invalid{
+            border: 1px solid red
         }
     }
-  }
-`;
+`

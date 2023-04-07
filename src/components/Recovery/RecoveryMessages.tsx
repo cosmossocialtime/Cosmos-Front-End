@@ -44,10 +44,9 @@ export function EmailConfirmed() {
   return (
     <Container>
       <Main>
-        <h2>Email de notificação enviado!</h2>
+        <h2>Enviamos um email pra você</h2>
         <p>
-          Se tudo estiver correto, você receberá um e-mail confirmando a troca
-          de sua senha.
+          Redefina sua senha clicando no link que enviamos para o e-mail [email@email.com] e depois faça seu login.
         </p>
       </Main>
       <Link href="/usuario/entrar">

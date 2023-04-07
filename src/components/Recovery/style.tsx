@@ -84,7 +84,7 @@ export const Input = styled.div`
     margin-bottom: 0.3rem;
   }
   button {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: var(--gray-500); 
   }
 
@@ -92,14 +92,13 @@ export const Input = styled.div`
     width: min(384px, 100%);
     display: flex;
     border-radius: 0.2rem;
-    border: 1px solid #a2abcc;
+    border: 1px solid var(--gray-500);
     height: 3rem;
     padding: 0.5rem;
     input {
       width: 100%;
-      :focus {
-        outline: none;
-      }
+      outline: none;
     }
   }
 `;
+

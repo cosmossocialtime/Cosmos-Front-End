@@ -3,7 +3,7 @@
 import styled from "styled-components";
 
 
-  export const Container = styled.main`
+export const Container = styled.main`
     min-height: 100vh;
     background-image: url("/images/bgCadastro.png");
     background-size: cover;
@@ -15,8 +15,8 @@ import styled from "styled-components";
     justify-content: center;
     align-items: center;
   `;
-  
-  export const Content = styled.div`
+
+export const Content = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,8 +67,8 @@ import styled from "styled-components";
       }
     }
   `;
-  
-  export const RadioBox = styled.button`
+
+export const RadioBox = styled.button`
     background: var(--purple-500);
     color: #fff;
     font-weight: bold;
@@ -88,11 +88,12 @@ import styled from "styled-components";
       cursor: not-allowed;
     }
   `;
-  
-  export const OtherGender = styled.span`
+
+export const OtherGender = styled.span`
     display: flex;
-    color: #fff;
     font-weight: bold;
+    background-color: #fff;
+    color: #fff;
     width: min(384px, 100%);
     height: 3rem;
     transition: background 0.2s;
@@ -123,4 +124,3 @@ import styled from "styled-components";
       }
     }
   `;
-  

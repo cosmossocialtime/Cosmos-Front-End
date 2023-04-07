@@ -1,109 +1,104 @@
 import { Eye, EyeClosed } from "phosphor-react";
-import { FormEvent, useEffect, useState } from "react";
-import { ForgetPass, Input, LoginContainer } from "./style";
+import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
-import ILoginData from "../../types/login";
-import  AccessService  from "../../services/AccessService";
+import { useForm } from "react-hook-form";
+import { z } from "zod"
 import Link from "next/link";
 
+const schema = z.object({
+  email: z.string(),
+  password: z.string()
+})
+type formProps = z.infer<typeof schema>
+
+const logInTest = {
+  email: "teste@gmail.com",
+  password: "123456"
+}
+
 export function UserLoginForm() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [Attemps, setAttempt] = useState(1);
+  const [isSubmiting, setIsSubmiting] = useState(false)
+  const { register, handleSubmit } = useForm<formProps>()
 
-  // const navigate = useNavigate();
+  const SubmitForm = ({ email, password }: formProps) => {
+    setIsSubmiting(true)
 
-  const initialState = {
-    account: email,
-    password: senha,
-    token: "",
-    action: ""
-  };
-  const [initLogin, setTutorial] = useState<ILoginData>(initialState);
-
-  const SubmitForm = (e: FormEvent) => {
-    e.preventDefault();
-    if(senha == "" || email == ""){
-      toast.error("Por favor, preencha os campos de email e senha corretamente.");
+    if (password === "" || email === "") {
+      setIsSubmiting(false)
+      return toast.error("Por favor, preencha os campos de email e senha corretamente.");
     }
-    else
-    {
-      setAttempt(Attemps+1);
-      if(Attemps <= 5){
 
-      AccessService.Login(initialState).then((response:any) =>{
-        if(response.data.type.includes('success'))
-        {
-          //  localStorage.setItem('token', JSON.stringify(response.data));
-          //  localStorage.setItem('currentUser', JSON.stringify(response.data));
-
-          // navigate('/usuario/iniciar');
-        }
-        else{
-          toast.error(response.data.text);
-        }
-       
-      }).catch((e: Error) => {
-        toast.error("Ops...não foi processar sua requisição, tente novamente mais tarde.");
-      });
+    if (email !== logInTest.email || password !== logInTest.password) {
+      setIsSubmiting(false)
+      return toast.error("Credenciais incorretas")
     }
-    else{
-      // navigate('/usuario/recuperar');
+    if (email === logInTest.email && password === logInTest.password) {
+      try {
+        toast.success("Logado")
+        console.log({ email, password });
+
+      } catch (error) { console.log(error) }
     }
   }
-  }
-
   return (
-    <LoginContainer>
-      <h2>Faça o seu login</h2>
-      <form onSubmit={SubmitForm}>
-        <Input>
-          <label htmlFor="Email">Email</label>
+    <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
+      <h2 className="text-3xl text-purple-700">Faça o seu login</h2>
+      <form onSubmit={handleSubmit(SubmitForm)} className="w-1/2 flex flex-col gap-2 mt-4">
+        <div className="flex flex-col w-full max-w-md gap-2">
           <div>
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              id="Email"
-              type="email"
-              placeholder="nome@email.com.br"
-            />
+            <label htmlFor="email" className="text">Email</label>
           </div>
-        </Input>
-        <Input>
-          <label htmlFor="Senha">Senha</label>
+          <input
+            {...register("email")}
+            autoFocus
+            required
+            id="email"
+            type="email"
+            placeholder="nome@email.com.br"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+          />
+        </div>
+        <div className="flex flex-col w-full max-w-md gap-2">
           <div>
+            <label htmlFor="password">Senha</label>
+          </div>
+          <div className="flex group w-full max-w-md gap-2 relative">
             <input
-              onChange={(e) => setSenha(e.target.value)}
-              id="Senha"
+              {...register("password")}
+              id="password"
+              min={8}
+              required
               type={showPassword ? "text" : "password"}
               placeholder="Digite sua senha aqui"
+              className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
+              className="button-show-password absolute top-3 right-2"
             >
-              {showPassword ? <EyeClosed /> : <Eye />}
+              {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
             </button>
           </div>
-          <ForgetPass>
-            <Link href="/usuario/recuperar">Esqueci a minha senha</Link>
-          </ForgetPass>
-        </Input>
+          <span className="text-right text-sm  py-3">
+            <Link href="/usuario/recuperar" className="text-purple-500 hover:text-purple-700">Esqueci a minha senha</Link>
+          </span>
+        </div>
 
-        <button type="submit" onClick={SubmitForm} className="cBtn">
-            Entrar
+        <button type="submit" className="cBtn" disabled={isSubmiting}>
+          Entrar
         </button>
       </form>
-
       <div>
         <h3>
           Ainda não tem uma conta?{" "}
-          <strong>
+          <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
             <Link href="/usuario/cadastrar">Cadastre-se</Link>
           </strong>
         </h3>
-        <ToastContainer></ToastContainer>
+        <ToastContainer autoClose={3000} />
       </div>
-    </LoginContainer>
+    </main>
   );
 }
