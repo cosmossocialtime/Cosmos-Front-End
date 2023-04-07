@@ -1,6 +1,7 @@
 import * as HoverCard from '@radix-ui/react-hover-card';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,11 +9,27 @@ import { Check, Eye, EyeClosed, Question } from "phosphor-react";
 import Link from "next/link";
 
 const schema = z.object({
-  name: z.string(),
-  alias: z.string(),
-  email: z.string(),
-  password: z.string(),
+  name: z.string()
+    .nonempty("O campo nome é obrigatório")
+    .transform(name => {
+      return name.trim().split(" ").map(word => {
+        return word[0].toLocaleUpperCase().concat(word.substring(1))
+      }).join()
+    }),
+  alias: z.string()
+    .nonempty("O campo nome é obrigatório"),
+  email: z.string()
+    .nonempty("O campo e-mail é obrigatório")
+    .email("O formato do email esta incorreto"),
+  password: z.string()
+    .nonempty("O campo senha é obrigatório")
+    .min(8, "A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.")
+    .regex(/[A-Z]/, "A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.")
+    .regex(/\d/, "A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número."),
   confirmPassword: z.string(),
+}).refine((fields) => fields.password === fields.confirmPassword, {
+  message: "As senhas não são iguais",
+  path: ["confirmPassword"]
 })
 type formProps = z.infer<typeof schema>
 
@@ -22,29 +39,10 @@ export function UserRegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false)
-  const [messageErrorPassword, setMessageErrorPassword] = useState("")
 
-  const { register, handleSubmit } = useForm<formProps>()
+  const { register, handleSubmit, formState: { errors } } = useForm<formProps>({ resolver: zodResolver(schema) })
   function handleForm(data: formProps) {
     setIsSubmiting(true)
-    setMessageErrorPassword("A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.")
-    if (data.password.length <= 8) {
-      setIsSubmiting(false)
-      return messageErrorPassword
-    }
-    if (!/[A-Z]/.test(data.password)) {
-      setIsSubmiting(false)
-      return messageErrorPassword
-    }
-    if (!/\d/.test(data.password)) {
-      setIsSubmiting(false)
-      return messageErrorPassword
-    }
-    if (data.password !== data.confirmPassword) {
-      setIsSubmiting(false)
-      return setMessageErrorPassword("As senhas devem ser iguais")
-    }
-    setMessageErrorPassword("")
     return (toast.success("Criado com sucesso"), console.log(data, acceptTerms));
   }
 
@@ -82,9 +80,10 @@ export function UserRegisterForm() {
             id="email"
             type="email"
             placeholder="nome@email.com.br"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500  invalid:border-pink-600 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className={`border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500  invalid:border-pink-600  hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.email ? "border-pink-600" : "valid:border-green-500"}`}
           />
         </div>
+        {errors.email && <span className='text-sm text-rose-600'>{errors.email.message}</span>}
 
         <div className="flex text-left items-start gap-1">
           <label htmlFor="password">Senha</label>
@@ -105,10 +104,10 @@ export function UserRegisterForm() {
             {...register("password")}
             required
             id="password"
-            minLength={8}
+            // minLength={8}
             type={showPassword ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 valid:border-green-500"
+            className={`w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-rose-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.password ? "border-rose-600" : "valid:border-green-500"}`}
           />
           <button
             className="button-show-password absolute top-3 right-2"
@@ -118,7 +117,7 @@ export function UserRegisterForm() {
             {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        <span className="text-rose-600 text-sm">{messageErrorPassword}</span>
+        {errors.password && <span className='text-sm text-rose-600'>{errors.password.message}</span>}
 
         <label htmlFor="confirm-password">Confirme a senha</label>
         <div className="flex justify-between group w-full max-w-md gap-2 relative">
@@ -128,7 +127,7 @@ export function UserRegisterForm() {
             id="confirm-password"
             type={showPassword1 ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className="w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 valid:border-green-500"
+            className={`w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-rose-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.password || errors.confirmPassword ? "border-rose-600" : "border-green-500"}`}
           />
           <button
             className="button-show-password absolute top-3 right-2"
@@ -138,6 +137,7 @@ export function UserRegisterForm() {
             {showPassword1 ? <EyeClosed size={20} /> : <Eye size={20} />}
           </button>
         </div>
+        {errors.confirmPassword && <span className='text-sm text-rose-600'>{errors.confirmPassword.message}</span>}
 
         <div className='flex gap-2 my-4'>
           <Checkbox.Root
