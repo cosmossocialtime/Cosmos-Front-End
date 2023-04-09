@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const schema = z.object({
   email: z.string(),
@@ -20,6 +21,7 @@ export function UserLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false)
   const { register, handleSubmit } = useForm<formProps>()
+  const router = useRouter()
 
   const SubmitForm = ({ email, password }: formProps) => {
     setIsSubmiting(true)
@@ -35,9 +37,10 @@ export function UserLoginForm() {
     }
     if (email === logInTest.email && password === logInTest.password) {
       try {
-        toast.success("Logado")
-        console.log({ email, password });
-
+        setTimeout(() => {
+          router.push("/painelprincipal/painel")
+        }, 2000)
+        toast.success("Acesso autorizado, ligando os foguetes")
       } catch (error) { console.log(error) }
     }
   }
@@ -97,7 +100,7 @@ export function UserLoginForm() {
             <Link href="/usuario/cadastrar">Cadastre-se</Link>
           </strong>
         </h3>
-        <ToastContainer autoClose={3000} />
+        <ToastContainer autoClose={2000} />
       </div>
     </main>
   );
