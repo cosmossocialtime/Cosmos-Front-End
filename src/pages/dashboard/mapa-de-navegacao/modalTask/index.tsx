@@ -130,6 +130,7 @@ export function ModalTask({
                             localTasks.map((task, index) => (
                                 <InputTask
                                     index={index}
+                                    key={task.id}
                                     task={task}
                                     taskWithActiveEditing={taskWithActiveEditing}
                                     deleteTask={deleteTask}
@@ -140,6 +141,7 @@ export function ModalTask({
                         ) : (
                             tasks.map((task) => (
                                 <Task
+                                    key={task.id}
                                     task={task}
                                     changeTaskCheck={changeTaskCheck}
                                 />

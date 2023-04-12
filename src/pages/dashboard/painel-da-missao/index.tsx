@@ -8,7 +8,7 @@ export default function painelDaMissão() {
     const stagesLength = stagesData.length;
     const stageWidth = 100 / stagesLength;
     const barGrayWidth = 100 - stageWidth;
-    
+
     const marginBar = stageWidth / 2;
 
     const completedStages = stagesData.filter(stage => stage.completed === true);
@@ -27,7 +27,7 @@ export default function painelDaMissão() {
                 return "Ver instruções";
             case stage === currentStage && availabilityDate.isBefore(now):
                 return "Etapa atual";
-            case availabilityDate == null: 
+            case availabilityDate == null:
                 return "Data de disponibilidade não definida";
             case availabilityDate.isBefore(now):
                 return "Já disponível";
@@ -76,8 +76,8 @@ export default function painelDaMissão() {
                             className="grid justify-center items-center"
                             style={{ gridTemplateColumns: `repeat(${stagesLength}, minmax(0, 1fr))` }}
                         >
-                            {stagesData.map((stage) => (
-                                <span className="text-center">{stage.title}</span>
+                            {stagesData.map((stage, index) => (
+                                <span key={index} className="text-center">{stage.title}</span>
                             ))}
                         </div>
 
@@ -111,8 +111,8 @@ export default function painelDaMissão() {
                             className="mt-2 grid justify-center"
                             style={{ gridTemplateColumns: `repeat(${stagesLength}, minmax(0, 1fr))` }}
                         >
-                            {stagesData.map((stage) => (
-                                <span className="text-gray-400 text-sm text-center">
+                            {stagesData.map((stage, index) => (
+                                <span key={index} className="text-gray-400 text-sm text-center">
                                     {setMessage(stage)}
                                 </span>
                             ))}

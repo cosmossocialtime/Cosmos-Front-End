@@ -12,10 +12,6 @@ export function CurrentMissionsArea() {
         )
     }
 
-    const [ref] = useKeenSlider<HTMLDivElement>({
-        loop: true,
-    })
-
     return (
         <div className="min-h-[16rem] relative p-6 bg-[#1E2543] flex flex-col rounded-lg overflow-hidden">
             <span className="text-xl text-gray-500">
@@ -24,7 +20,7 @@ export function CurrentMissionsArea() {
 
             <div>
                 {missionsData.map((mission, key) => (
-                    <div key={mission.id} className={`${"number-slide"+(key+1)} keen-slider__slide flex-1 relative mt-6 p-6 bg-currentMission bg-no-repeat bg-cover rounded-lg`}>
+                    <div key={mission.id} className={`${"number-slide" + (key + 1)} keen-slider__slide flex-1 relative mt-6 p-6 bg-currentMission bg-no-repeat bg-cover rounded-lg`}>
                         <div>
                             <h2 className="mb-3 text-2xl text-gray-200 font-semibold">{mission.title}</h2>
                             <p className="mb-6 text-gray-200">{mission.description}</p>
