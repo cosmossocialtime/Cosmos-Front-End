@@ -6,7 +6,7 @@ type NamesPlanet = {
   name: string
 }
 
-export function ModalSatelite({ name }: NamesPlanet) {
+export default function ModalSatelite({ name }: NamesPlanet) {
 
   return (
     <>

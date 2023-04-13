@@ -1,9 +1,9 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { ModalSatelite } from "./modalSatelite";
-import { ItemSatelite } from "./ItemSatelite";
+import ModalSatelite from "./modalSatelite";
+import ItemSatelite from "./ItemSatelite";
 import { DatasPlanets } from "./datas";
 import Image from "next/image";
-import { SideBar } from "../sideBar";
+import SideBar from "../sideBar";
 
 const SatelitesPage = () => {
   return (
