@@ -7,7 +7,7 @@ import { Footer } from "../PapelMissao/OptionSelect/style";
 import { CheckboxItem } from "./CheckboxItem/CheckboxItem";
 import { Container, Form } from "./style";
 
-export function Confirm() {
+export default function Confirm() {
   const router = useRouter();
 
   function handleSubmit(e: FormEvent) {

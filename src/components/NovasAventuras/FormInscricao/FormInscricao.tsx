@@ -5,7 +5,7 @@ import { ForwardArrow } from "../SobreVoce/ForwardArrow/ForwardArrow";
 import { SelectInput } from "./SelectInput/SelectInput";
 import { Container, DoubleInput, FormContainer } from "./style";
 
-export function FormInscricao() {
+export default function FormInscricao() {
   const router = useRouter();
 
   const experienciaOptions = [
@@ -67,7 +67,7 @@ export function FormInscricao() {
     if ((experiencia && setor && cargo && tempoDisponivel && linkedin) === "") {
       alert("Please enter");
     }
-    else{
+    else {
       router.push("/sobrevoce/1");
     }
   }

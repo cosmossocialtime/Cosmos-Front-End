@@ -1,7 +1,7 @@
 import { StaticImageData } from "next/image";
 import { useCallback, useState } from "react";
 import Cropper, { Area, Point } from "react-easy-crop";
-import { CropImage } from "../../../utils/CropImage";
+import CropImage from "../../../utils/CropImage";
 import Img from '../assets/user.jpg'
 
 interface SettingCropAreaProps {

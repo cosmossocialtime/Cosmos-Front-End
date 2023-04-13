@@ -1,5 +1,5 @@
 import { Calendar, CaretRight, Check, Clock } from "phosphor-react";
-import { adventuresData } from "./data/AdventuresData";
+import adventuresData from "./data/AdventuresData";
 
 export default function AdventureArea() {
     return (

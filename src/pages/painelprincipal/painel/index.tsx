@@ -1,9 +1,9 @@
-import { Header } from "../components/Header";
+import Header from "../components/Header";
 import AchievementsArea from "./AchievementsArea";
 import AdventureArea from "./AdventureArea";
 import CurrentAchievement from "./CurrentAchievement";
 import CurrentMissionsArea from "./CurrentMissionsArea";
-import { missionsData } from "./data/missionsData";
+import missionsData from "./data/missionsData";
 import PerfilArea from "./PerfilArea";
 
 export default function Painel() {

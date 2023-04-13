@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Check, List } from 'phosphor-react';
 
-export function Menu() {
+export default function Menu() {
     const { pathname } = useRouter()
 
     const pagesRoutes = [

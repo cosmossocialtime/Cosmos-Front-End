@@ -1,12 +1,12 @@
-import { Aventuras } from "../../../components/NovasAventuras/Aventura/Aventuras/Aventuras";
+import Aventuras from "../../../components/NovasAventuras/Aventura/Aventuras/Aventuras";
 
 
 const Aventura = () => {
-    return (
-      <>
-        <Aventuras />
-      </>
-    );
-  };
-  
-  export default Aventura;
+  return (
+    <>
+      <Aventuras />
+    </>
+  );
+};
+
+export default Aventura;

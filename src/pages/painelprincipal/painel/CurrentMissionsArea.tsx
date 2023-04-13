@@ -1,7 +1,6 @@
 import { CaretRight } from 'phosphor-react';
 import AstronautaImg from './assets/astronauta.png';
-import { missionsData } from './data/missionsData';
-import { useKeenSlider } from 'keen-slider/react';
+import missionsData from './data/missionsData';
 import "keen-slider/keen-slider.min.css";
 import Image from 'next/image';
 

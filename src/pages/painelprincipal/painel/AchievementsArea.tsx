@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { achievementsData } from "./data/achievementData";
+import achievementsData from "./data/achievementData";
 
 interface AchievementsAreaProps {
     openMission: string;

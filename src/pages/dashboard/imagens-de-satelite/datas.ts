@@ -1,4 +1,4 @@
-export const DatasPlanets = [
+const DatasPlanets = [
   {
     id: 1,
     name: "Captação de recursos",
@@ -77,3 +77,5 @@ export const DatasPlanets = [
     size: 52,
   },
 ];
+
+export default DatasPlanets;

@@ -1,7 +1,7 @@
 import { HeaderMissao } from "../HeaderMissao";
 import { Container } from "./style";
 
-export function Cards() {
+export default function Cards() {
   return (
     <>
       <Container>

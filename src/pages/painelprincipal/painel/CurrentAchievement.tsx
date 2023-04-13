@@ -1,6 +1,6 @@
 import Medal from './assets/medal.svg';
 import LightMedal from './assets/light-medal.svg';
-import { achievementsData } from './data/achievementData';
+import achievementsData from './data/achievementData';
 import Image from 'next/image';
 import { hideText } from 'polished';
 

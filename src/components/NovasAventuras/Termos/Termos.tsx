@@ -7,7 +7,7 @@ import {
   Container,
 } from "./style";
 
-export function Termos() {
+export default function Termos() {
   const [isLGPDchecked, setIsLGPDcheck] = useState(false);
 
   function handleLGPD() {
@@ -16,7 +16,7 @@ export function Termos() {
 
   return (
     <>
-    <HeaderMissao title="[Nome do Programa]"/>
+      <HeaderMissao title="[Nome do Programa]" />
       <Container>
         <h2>
           Coloque seu capacete, ajuste seu traje e se prepare para uma aventura!
@@ -48,7 +48,7 @@ export function Termos() {
           label="Aceito que minhas respostas sejam compartilhadas"
         />
       </Container>
-      <ForwardArrow to="/forminscricao" back="/aventuras" page={0} isActive={+isLGPDchecked}/>
+      <ForwardArrow to="/forminscricao" back="/aventuras" page={0} isActive={+isLGPDchecked} />
     </>
   );
 }

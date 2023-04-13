@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 import ProfilePhoto from "../../../../public/images/tripulacao/ProfileIcon.jpg";
-import { cardTripulation } from "./cardTripulation";
+import cardTripulation from "./cardTripulation";
 import Arrow from "./ArrowSlider";
 import { useKeenSlider } from "keen-slider/react";
 import ModalContent from "./CreateModal";

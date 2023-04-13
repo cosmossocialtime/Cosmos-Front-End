@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export function getDaysOfMonth(month: dayjs.Dayjs) {
+export default function getDaysOfMonth(month: dayjs.Dayjs) {
   const days = [];
 
   const firstDayOfMonth = month.startOf("M");

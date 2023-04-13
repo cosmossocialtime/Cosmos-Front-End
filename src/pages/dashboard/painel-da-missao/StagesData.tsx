@@ -6,7 +6,7 @@ export type stage = {
     availabilityDate: dayjs.Dayjs;
 }
 
-export const stagesData: Array<stage> = [
+const stagesData: Array<stage> = [
     {
         title: "Introdução",
         completed: true,
@@ -43,3 +43,4 @@ export const stagesData: Array<stage> = [
         availabilityDate: dayjs("2023-08-12"),
     },
 ]
+export default stagesData

@@ -1,9 +1,9 @@
 import Image, { StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
-import { userData } from "../data/userData";
+import userData from "../data/userData";
 import DialogPopUp from "./DialogPopUp";
 import FormUserData from "./FormUserData";
-import { Header } from "../components/Header";
+import Header from "../components/Header";
 import UploadImage from "./UploadImage";
 
 export default function Perfil() {

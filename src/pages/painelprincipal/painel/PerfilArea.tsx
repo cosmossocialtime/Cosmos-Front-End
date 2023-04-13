@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Camera } from "phosphor-react"
-import { userData } from "../data/userData"
+import userData from "../data/userData"
 
 export default function PerfilArea() {
 

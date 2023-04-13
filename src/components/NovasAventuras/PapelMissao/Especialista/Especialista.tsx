@@ -5,7 +5,7 @@ import { Dots } from "../Cards/Dots";
 import { Container, MobileLink } from "../Piloto/style";
 import Link from "next/link";
 
-export function Especialista() {
+export default function Especialista() {
   return (
     <>
       <Container>

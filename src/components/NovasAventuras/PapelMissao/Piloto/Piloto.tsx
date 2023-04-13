@@ -3,7 +3,7 @@ import { CaretLeft, CaretRight } from "phosphor-react";
 import { Dots } from "../Cards/Dots";
 import Link from "next/link";
 
-export function Piloto() {
+export default function Piloto() {
   const Popup =
     "O Mapa da Navegação é o plano de objetivos e atividades que serão desenvolvidos ao longo do projeto. Ele será criado em conjunto com a equipe da instituição mentorada";
 

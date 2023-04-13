@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 import { useState } from 'react';
 
-import { objectiveCardsData } from "./data/objectiveCardsData";
+import objectiveCardsData from "./data/objectiveCardsData";
 
 import SideBar from "../sideBar";
 import DialogObjective from './DialogObjective';

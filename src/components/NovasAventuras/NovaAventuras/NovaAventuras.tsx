@@ -2,7 +2,7 @@ import Link from "next/link";
 import { HeaderAventura } from "./HeaderAventura";
 import { Container, DisplayText, InscricaoBtn } from "./style";
 
-export function NovaAventuras() {
+export default function NovaAventuras() {
   return (
     <>
       <HeaderAventura />

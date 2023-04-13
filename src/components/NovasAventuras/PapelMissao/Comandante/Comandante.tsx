@@ -4,7 +4,7 @@ import { Dots } from "../Cards/Dots";
 import { Container, MobileLink } from "../Piloto/style";
 import Link from "next/link";
 
-export function Comandante() {
+export default function Comandante() {
   return (
     <>
       <Container>

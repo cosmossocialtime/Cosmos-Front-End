@@ -3,7 +3,7 @@ import { BackButton, Container, Header, Main } from "./style";
 import { HeaderMissao } from "./HeaderMissao";
 import Link from "next/link";
 
-export function PapelMissao() {
+export default function PapelMissao() {
   return (
     <>
       <HeaderMissao />

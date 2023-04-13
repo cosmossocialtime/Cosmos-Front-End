@@ -1,30 +1,33 @@
 import { Area } from "react-easy-crop";
 
-export function CropImage({width, height, x, y}: Area, source: string) {
-    const canvas = document.createElement('canvas');   
-    
-    const image = new Image();   
-    image.src = source
-    
-    canvas.width = image.width;
-    canvas.height = image.height;
+export default function CropImage(
+  { width, height, x, y }: Area,
+  source: string
+) {
+  const canvas = document.createElement("canvas");
 
-    const ctx = canvas.getContext('2d');
+  const image = new Image();
+  image.src = source;
 
-    if(!ctx) {
-        return console.error("ctx not create");
-    }
+  canvas.width = image.width;
+  canvas.height = image.height;
 
-    ctx.drawImage(image, 0, 0);
+  const ctx = canvas.getContext("2d");
 
-    const croppedImg = ctx.getImageData(x, y, width, height)
+  if (!ctx) {
+    return console.error("ctx not create");
+  }
 
-    canvas.width = width;
-    canvas.height = height;
-    
-    ctx?.putImageData(croppedImg, 0, 0);
+  ctx.drawImage(image, 0, 0);
 
-    const base64Image = canvas.toDataURL('image/jpeg');
-    
-    return base64Image;
+  const croppedImg = ctx.getImageData(x, y, width, height);
+
+  canvas.width = width;
+  canvas.height = height;
+
+  ctx?.putImageData(croppedImg, 0, 0);
+
+  const base64Image = canvas.toDataURL("image/jpeg");
+
+  return base64Image;
 }
