@@ -5,9 +5,9 @@ import { CaretLeft, CaretRight } from "phosphor-react"
 
 import { useEffect, useState } from "react"
 import { getDaysOfMonth } from "../../../utils/getDaysOfMonth"
-import { SideBar } from "../sideBar"
+import SideBar from "../sideBar"
 import CardOfDaysWeek from "./CardOfDaysWeek"
-import { PopoverForMarkMeeting } from "./PopoverForMarkMeeting"
+import PopoverForMarkMeeting from "./PopoverForMarkMeeting"
 
 const daysOfWeek = [
     "Domingo",
@@ -122,7 +122,7 @@ export default function CalendarioEventosPage() {
                     </div>
                 </div>
 
-                <input type="date" className="[-webkit-appearance:none] appearance-none rounded-none focus:outline-none focus:shadow-outline-none"/>
+                <input type="date" className="[-webkit-appearance:none] appearance-none rounded-none focus:outline-none focus:shadow-outline-none" />
             </main>
         </div>
     )

@@ -1,15 +1,14 @@
 import * as Popover from "@radix-ui/react-popover"
 import dayjs from "dayjs";
-
-import { PopoverForMarkMeeting } from "./PopoverForMarkMeeting"
-import { PopoverMeetingMarked } from "./PopoverMeetingMarked";
+// import PopoverForMarkMeeting from "./PopoverForMarkMeeting"
+import PopoverMeetingMarked from "./PopoverMeetingMarked";
 interface CardOfDaysWeekProps {
   day: dayjs.Dayjs;
 }
 
 export default function CardOfDaysWeek({ day }: CardOfDaysWeekProps) {
   const dayInNumberFormart = day.format("DD");
-  const dayinStringFormat = day.format("YYYY-MM-DD");
+  // const dayinStringFormat = day.format("YYYY-MM-DD");
 
   return (
     <Popover.Root>

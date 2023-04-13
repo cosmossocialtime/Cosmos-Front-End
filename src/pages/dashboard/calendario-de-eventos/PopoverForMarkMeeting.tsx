@@ -27,10 +27,10 @@ interface MeetingDataProps {
 export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
   const [show, setShow] = useState<boolean>(false)
 
-  const [selectContent, setSelectContent] = useState("")
-  const handleClose = (state: boolean) => {
-    setShow(state)
-  }
+  // const [selectContent, setSelectContent] = useState("")
+  // const handleClose = (state: boolean) => {
+  //   setShow(state)
+  // }
 
   return (
     <Popover.Portal>
