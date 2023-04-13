@@ -1,6 +1,4 @@
 "use client"
-
-import "../../mainTailwind.css";
 import { SideBar } from "./sideBar";
 
 export default function DashboardLayout({
