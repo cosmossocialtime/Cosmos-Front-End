@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import { objectiveCardsData } from "./data/objectiveCardsData";
 
-import { SideBar } from "../sideBar";
-import { DialogObjective } from './DialogObjective';
+import SideBar from "../sideBar";
+import DialogObjective from './DialogObjective';
 
 export default function MapaNavegacaoPage() {
     const [objectiveCards, setObjectiveCards] = useState(objectiveCardsData)
@@ -60,7 +60,7 @@ export default function MapaNavegacaoPage() {
                         }
                     </div>
                     {objectiveCards.length < 4 &&
-                        <button 
+                        <button
                             className='mb-24 max-w-max py-4 px-28 text-white text-lg font-semibold bg-violet-500 rounded-lg hover:bg-violet-600 transition-all'
                             onClick={createNewGoal}
                         >

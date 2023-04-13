@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ArrowRight } from "phosphor-react";
 // import ArrowRight from "../../../../public/images/tripulacao/arrowLeft.svg";
 
-export function Arrow(props: {
+export default function Arrow(props: {
   disabled: boolean;
   left?: boolean;
   onClick: (e: any) => void;

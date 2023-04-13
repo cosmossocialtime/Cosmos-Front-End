@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Camera } from "phosphor-react"
 import { userData } from "../data/userData"
 
-export function PerfilArea() {
+export default function PerfilArea() {
 
   return (
     <div className="relative py-11 pb-7 bg-[#1E2543] flex flex-col items-center rounded-lg overflow-hidden">

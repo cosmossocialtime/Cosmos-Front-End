@@ -5,7 +5,7 @@ import { useKeenSlider } from 'keen-slider/react';
 import "keen-slider/keen-slider.min.css";
 import Image from 'next/image';
 
-export function CurrentMissionsArea() {
+export default function CurrentMissionsArea() {
     if (missionsData.length === 0) {
         return (
             <></>

@@ -1,7 +1,7 @@
 import { Calendar, CaretRight, Check, Clock } from "phosphor-react";
 import { adventuresData } from "./data/AdventuresData";
 
-export function AdventureArea() {
+export default function AdventureArea() {
     return (
         <div className="flex-1 relative p-6 bg-[#1E2543] rounded-lg overflow-hidden">
             <span className="text-xl text-gray-500">

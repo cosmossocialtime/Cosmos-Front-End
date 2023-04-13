@@ -11,7 +11,7 @@ interface inputTasksProps {
     toggleTaskWithActiveEditing: (id?: string) => void;
 }
 
-export function InputTask({
+export default function InputTask({
     index,
     task,
     taskWithActiveEditing,

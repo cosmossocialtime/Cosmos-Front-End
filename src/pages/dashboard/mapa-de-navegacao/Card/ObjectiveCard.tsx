@@ -1,6 +1,6 @@
 import moonIcon from '../assets/moon-icon.svg'
 import darkMoonIcon from '../assets/dark-moon-icon.svg'
-import { ProgressBar } from './ProgressBar'
+import ProgressBar from './ProgressBar'
 import Image from 'next/image';
 
 interface ObjectiveCardProps {
@@ -10,7 +10,7 @@ interface ObjectiveCardProps {
     completedTask: number,
 }
 
-export function ObjectiveCard({ description, index, amountTask, completedTask }: ObjectiveCardProps) {
+export default function ObjectiveCard({ description, index, amountTask, completedTask }: ObjectiveCardProps) {
     const completedPercentage = amountTask > 0 ? Math.round(completedTask / amountTask * 100) : 0;
     const percentageDistanceCenterImg = -(completedPercentage - 50);
 

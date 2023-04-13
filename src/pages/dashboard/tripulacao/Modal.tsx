@@ -15,7 +15,7 @@ type DatasProfile = {
   description: string;
 };
 
-export function Modal(ModalProps: DatasProfile) {
+export default function Modal(ModalProps: DatasProfile) {
   return (
     <div className="rounded-2xl overflow-hidden">
       <div className="flex">
@@ -28,9 +28,9 @@ export function Modal(ModalProps: DatasProfile) {
           />
         </div>
         <Dialog.Close className="absolute top-10 right-8">
-         
-            <Image src={Close} alt="Button Close" className="rounded-md" />
-       
+
+          <Image src={Close} alt="Button Close" className="rounded-md" />
+
         </Dialog.Close>
       </div>
       <div className="relative flex gap-24 px-2 justify-center items-center">

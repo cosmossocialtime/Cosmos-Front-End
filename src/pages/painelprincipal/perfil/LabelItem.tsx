@@ -7,7 +7,7 @@ interface LabelItemProps {
     children: JSX.Element;
 }
 
-export function LabelItem({ title, enableForm, children }: LabelItemProps) {
+export default function LabelItem({ title, enableForm, children }: LabelItemProps) {
     return (
         <label className="w-80 text-[#8b8b8b] text-sm">
             {title}

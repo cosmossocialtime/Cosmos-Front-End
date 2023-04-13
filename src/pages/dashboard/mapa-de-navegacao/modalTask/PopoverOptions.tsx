@@ -3,7 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 import { DotsThree, PencilSimpleLine, Trash } from 'phosphor-react'
-import { ModalConfirmGoalDeletion } from './ModalConfirmGoalDeletion'
+import ModalConfirmGoalDeletion from './ModalConfirmGoalDeletion'
 
 interface PopoverOptionsProps {
     setEditEnabled: Dispatch<SetStateAction<boolean>>
@@ -11,7 +11,7 @@ interface PopoverOptionsProps {
     id: string;
 }
 
-export function PopoverOptions({ setEditEnabled, deleteObjective, id }: PopoverOptionsProps) {
+export default function PopoverOptions({ setEditEnabled, deleteObjective, id }: PopoverOptionsProps) {
     const [openPopover, setOpenPopover] = useState(false)
 
     function EnableEdit() {

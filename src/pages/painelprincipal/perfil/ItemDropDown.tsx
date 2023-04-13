@@ -5,7 +5,7 @@ interface ItemDropDownProps {
     title: string;
 }
 
-export function ItemDropDown({ slug, title } : ItemDropDownProps) {
+export default function ItemDropDown({ slug, title }: ItemDropDownProps) {
     return (
         <DropDownMenu.Item className='outline-none cursor-pointer hover:text-blue-400 transition'>
             {title}

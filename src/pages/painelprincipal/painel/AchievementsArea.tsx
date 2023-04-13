@@ -5,7 +5,7 @@ interface AchievementsAreaProps {
     openMission: string;
 }
 
-export function AchievementsArea({ openMission }: AchievementsAreaProps) {
+export default function AchievementsArea({ openMission }: AchievementsAreaProps) {
     return (
         <div className="relative p-6 bg-[#1E2543] rounded-lg overflow-hidden">
             <div className="flex justify-between">

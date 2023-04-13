@@ -3,7 +3,7 @@ interface ProgressBarProps {
     completedTask: number
 }
 
-export function ProgressBar({ amountTask = 0, completedTask = 0 } : ProgressBarProps) {
+export default function ProgressBar({ amountTask = 0, completedTask = 0 }: ProgressBarProps) {
     const circumferenceSize = 377;
     const percentOfCircumference = amountTask > 0 ? (completedTask / amountTask) : 0;
     const completedSize = Math.abs(Math.round(percentOfCircumference * circumferenceSize) - circumferenceSize);
@@ -22,7 +22,7 @@ export function ProgressBar({ amountTask = 0, completedTask = 0 } : ProgressBarP
                     <stop offset="100%" stopColor="#9D37F2" />
                 </linearGradient>
             </defs>
-            
+
             <circle
                 className='fill-none stroke-slate-100 [stroke-width:8px] [stroke-dasharray:472] '
                 cx="50%"

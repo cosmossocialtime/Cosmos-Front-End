@@ -4,10 +4,10 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Check, PencilSimpleLine, Plus, X } from 'phosphor-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { TasksProps } from '../data/objectiveCardsData';
-import { InputTask } from './InputTask';
-import { ModalConfirmEdit } from './ModalConfirmEdit';
-import { PopoverOptions } from './PopoverOptions';
-import { Task } from './Task';
+import InputTask from './InputTask';
+import ModalConfirmEdit from './ModalConfirmEdit';
+import PopoverOptions from './PopoverOptions';
+import Task from './Task';
 
 type ModalTaskProps = {
     title: string;
@@ -23,7 +23,7 @@ type ModalTaskProps = {
     setModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export function ModalTask({
+export default function ModalTask({
     title,
     tasks,
     id,

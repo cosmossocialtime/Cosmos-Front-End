@@ -1,5 +1,5 @@
 import * as Checkbox from '@radix-ui/react-checkbox'
-import { Check} from "phosphor-react";
+import { Check } from "phosphor-react";
 import { TasksProps } from '../data/objectiveCardsData';
 
 
@@ -8,7 +8,7 @@ type TaskProps = {
     changeTaskCheck: (id: string) => void;
 }
 
-export function Task({ task, changeTaskCheck }: TaskProps) {
+export default function Task({ task, changeTaskCheck }: TaskProps) {
 
     return (
 

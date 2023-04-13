@@ -10,7 +10,7 @@ interface SettingCropAreaProps {
     setImgCropped: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function SettingCropArea({
+export default function SettingCropArea({
     selectedFileUrl, setOnDialog, setImgCropped }: SettingCropAreaProps
 ) {
     const imgFile = new Image();
@@ -18,13 +18,13 @@ export function SettingCropArea({
 
     const cropSize = 300;
     const cropArea = 360;
-    const proportionOfSizeToArea = Number((cropSize/cropArea).toFixed(2));
+    const proportionOfSizeToArea = Number((cropSize / cropArea).toFixed(2));
 
-    const aspectImg = (imgFile.height/imgFile.width);
+    const aspectImg = (imgFile.height / imgFile.width);
 
-    const zoomDefault = aspectImg > 1 
-        ? aspectImg * proportionOfSizeToArea 
-        : (1/aspectImg) * proportionOfSizeToArea;
+    const zoomDefault = aspectImg > 1
+        ? aspectImg * proportionOfSizeToArea
+        : (1 / aspectImg) * proportionOfSizeToArea;
 
     const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);

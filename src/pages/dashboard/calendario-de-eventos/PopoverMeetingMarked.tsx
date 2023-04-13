@@ -2,7 +2,7 @@ import * as Popover from "@radix-ui/react-popover"
 import { Calendar, Clock, DotsThree, PencilSimpleLine, Trash, User, X } from "phosphor-react"
 
 
-export function PopoverMeetingMarked() {
+export default function PopoverMeetingMarked() {
   return (
     <Popover.Portal>
       <Popover.Content

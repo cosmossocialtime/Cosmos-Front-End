@@ -1,10 +1,10 @@
 import Image, { StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 import { userData } from "../data/userData";
-import { DialogPopUp } from "./DialogPopUp";
-import { FormUserData } from "./FormUserData";
+import DialogPopUp from "./DialogPopUp";
+import FormUserData from "./FormUserData";
 import { Header } from "../components/Header";
-import { UploadImage } from "./UploadImage";
+import UploadImage from "./UploadImage";
 
 export default function Perfil() {
     const [selectedFileUrl, setSelectedFileUrl] = useState<StaticImageData>(userData.profilePicture);

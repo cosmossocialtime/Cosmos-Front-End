@@ -1,10 +1,10 @@
 import { Header } from "../components/Header";
-import { AchievementsArea } from "./AchievementsArea";
-import { AdventureArea } from "./AdventureArea";
-import { CurrentAchievement } from "./CurrentAchievement";
-import { CurrentMissionsArea } from "./CurrentMissionsArea";
+import AchievementsArea from "./AchievementsArea";
+import AdventureArea from "./AdventureArea";
+import CurrentAchievement from "./CurrentAchievement";
+import CurrentMissionsArea from "./CurrentMissionsArea";
 import { missionsData } from "./data/missionsData";
-import { PerfilArea } from "./PerfilArea";
+import PerfilArea from "./PerfilArea";
 
 export default function Painel() {
     return (

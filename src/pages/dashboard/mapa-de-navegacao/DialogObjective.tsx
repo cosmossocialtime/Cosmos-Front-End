@@ -1,8 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
-import { ObjectiveCard } from './Card/ObjectiveCard'
+import ObjectiveCard from './Card/ObjectiveCard'
 import { CardProps, TasksProps } from './data/objectiveCardsData'
-import { ModalTask } from './modalTask'
+import ModalTask from './modalTask'
 
 type DialogObjectiveProps = {
     cardData: CardProps
@@ -10,7 +10,7 @@ type DialogObjectiveProps = {
     deleteObjective: (id: string) => void;
 }
 
-export function DialogObjective({ cardData, index, deleteObjective }: DialogObjectiveProps) {
+export default function DialogObjective({ cardData, index, deleteObjective }: DialogObjectiveProps) {
     const [modalOpen, setModalOpen] = useState(false)
     const [title, setTitle] = useState(cardData.title)
     const [tasks, setTasks] = useState(cardData.tasks)

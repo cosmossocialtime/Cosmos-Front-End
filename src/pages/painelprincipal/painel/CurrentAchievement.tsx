@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { hideText } from 'polished';
 
 
-export function CurrentAchievement() {
-    const nextAchievement = achievementsData.find( achievement => achievement.status == false)
-    
+export default function CurrentAchievement() {
+    const nextAchievement = achievementsData.find(achievement => achievement.status == false)
+
     console.log(nextAchievement?.imageOn)
     return (
         <div className="relative p-6 pr-9 bg-[#1E2543] rounded-lg flex justify-between">
@@ -18,7 +18,7 @@ export function CurrentAchievement() {
             </div>
             <div className={`${false ? "scale-125 opacity-0" : "opacity-100 scale-1"} absolute -top-1 right-9 z-10 transition-all duration-400`}>
                 <Image src={LightMedal} alt="Medalha" className="w-32" />
-                <Image 
+                <Image
                     className="absolute top-0 border-8 border-solid border-transparent rounded-full"
                     src={nextAchievement?.imageOn}
                     alt=""

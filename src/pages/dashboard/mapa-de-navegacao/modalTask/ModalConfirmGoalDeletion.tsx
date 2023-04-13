@@ -5,13 +5,13 @@ type ModalConfirmGoalDeletionProps = {
     id: string;
 }
 
-export function ModalConfirmGoalDeletion({ deleteObjective, id }: ModalConfirmGoalDeletionProps) {
+export default function ModalConfirmGoalDeletion({ deleteObjective, id }: ModalConfirmGoalDeletionProps) {
     return (
         <Dialog.Portal>
             <Dialog.Overlay className='z-40 fixed inset-0 bg-gray-600/25' />
             <Dialog.Content className='z-50 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-10 bg-blue-900 flex flex-col gap-8 rounded-lg'>
                 <p className='text-center text-white text-lg'>
-                    Tem certeza que deseja excluir este objetivo? <br/>
+                    Tem certeza que deseja excluir este objetivo? <br />
                     Todos os itens dentro dele serão excluídos.
                 </p>
 
@@ -21,7 +21,7 @@ export function ModalConfirmGoalDeletion({ deleteObjective, id }: ModalConfirmGo
                             Cancelar
                         </button>
                     </Dialog.Close>
-                    <button 
+                    <button
                         className='w-52 py-4 text-center text-white font-semibold rounded-lg bg-red-500 hover:bg-red-600 transition-colors'
                         onClick={() => deleteObjective(id)}
                     >

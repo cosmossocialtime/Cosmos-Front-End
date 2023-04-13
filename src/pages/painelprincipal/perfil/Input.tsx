@@ -1,12 +1,12 @@
 import { InputHTMLAttributes } from "react"
 
-interface inputProps extends InputHTMLAttributes<HTMLInputElement> {}
+interface inputProps extends InputHTMLAttributes<HTMLInputElement> { }
 
 
-export function Input(props : inputProps) {
+export default function Input(props: inputProps) {
     return (
         <input
-            {...props} 
+            {...props}
             className="w-0 flex-1 outline-none bg-transparent"
         />
     )

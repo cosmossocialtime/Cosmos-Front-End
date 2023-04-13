@@ -7,7 +7,7 @@ type ModalConfirmGoalDeletionProps = {
     setModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export function ModalConfirmEdit({ 
+export default function ModalConfirmEdit({
     setEditEnabled,
     setModalOpen }: ModalConfirmGoalDeletionProps) {
 

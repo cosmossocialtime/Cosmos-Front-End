@@ -24,7 +24,7 @@ interface MeetingDataProps {
   linkMeeting?: string;
 }
 
-export function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
+export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
   const [show, setShow] = useState<boolean>(false)
 
   const [selectContent, setSelectContent] = useState("")

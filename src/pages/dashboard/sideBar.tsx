@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-export const SideBar = () => {
+export default function SideBar() {
   const SideBarItems = [
     {
       id: 1,

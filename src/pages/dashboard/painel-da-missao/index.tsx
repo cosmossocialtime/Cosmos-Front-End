@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { Calendar, Check } from "phosphor-react";
-import { SideBar } from "../sideBar";
+import SideBar from "../sideBar";
 import { stage, stagesData } from "./StagesData";
 
 export default function painelDaMissão() {

@@ -8,7 +8,7 @@ interface UploadImageProps {
     setOnDialog: Dispatch<SetStateAction<boolean>>;
 }
 
-export function UploadImage({ updateSrcFile, setOnDialog }: UploadImageProps) {
+export default function UploadImage({ updateSrcFile, setOnDialog }: UploadImageProps) {
     function handleSelecteFile(acceptedFiles: File[]) {
         const file = acceptedFiles[0];
         updateSrcFile(URL.createObjectURL(file))
@@ -26,7 +26,7 @@ export function UploadImage({ updateSrcFile, setOnDialog }: UploadImageProps) {
             {({ getInputProps }) => (
                 <label>
                     <input {...getInputProps()} />
-                    <Pencil className='absolute right-0 -bottom-2 w-10 h-10 p-2 text-white bg-[#5200AB] rounded-full border-2 border-white cursor-pointer'/>
+                    <Pencil className='absolute right-0 -bottom-2 w-10 h-10 p-2 text-white bg-[#5200AB] rounded-full border-2 border-white cursor-pointer' />
                 </label>
             )}
         </Dropzone>
