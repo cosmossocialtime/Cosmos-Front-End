@@ -9,7 +9,7 @@ import { useKeenSlider } from "keen-slider/react";
 import ModalContent from "./CreateModal";
 import Modal from "./Modal";
 
-export function Slider() {
+export default function Slider() {
   const [openModal, setOpenModal] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);

@@ -1,6 +1,6 @@
 import Head from "next/head";
-import { SideBar } from "../sideBar";
-import { Slider } from "./Slider"
+import SideBar from "../sideBar";
+import Slider from "./Slider"
 const TripulacaoPage = () => {
   return (
     <div className="flex">
