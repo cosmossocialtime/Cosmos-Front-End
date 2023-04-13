@@ -19,7 +19,6 @@ export default function Main() {
 
 const Container = styled.main`
   height: 100vh;
-  pos
 
 `;
 

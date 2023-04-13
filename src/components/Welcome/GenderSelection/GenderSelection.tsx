@@ -13,6 +13,8 @@ export function GenderSelection() {
   const [genderSelect, setGenderSelect] = useState("");
   const [otherGenderActive, setOtherGenderActive] = useState(true);
 
+  console.log(genderSelect);
+
   const { SetGender } = useContext(RegisterContext);
 
   function GenderSubmit(gender: string) {
@@ -36,13 +38,13 @@ export function GenderSelection() {
               plataforma!
             </p>
 
-            <RadioBox onClick={() => GenderSubmit("Feminino")} type="button" disabled={!otherGenderActive}>
+            <RadioBox onClick={() => GenderSubmit("Feminino")} type="button" >
               Feminino
             </RadioBox>
 
             <RadioBox
               onClick={() => GenderSubmit("Masculino")}
-              type="button" disabled={!otherGenderActive}
+              type="button"
             >
               Masculino
             </RadioBox>
