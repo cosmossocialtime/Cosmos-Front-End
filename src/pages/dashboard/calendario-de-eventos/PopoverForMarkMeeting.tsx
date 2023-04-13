@@ -1,36 +1,94 @@
+const { v4: uuidv4 } = require('uuid');
+
 import * as Popover from "@radix-ui/react-popover"
 import * as Select from "@radix-ui/react-select"
 
-import { useState } from "react"
-import { X } from "phosphor-react"
+import { FormEvent, useState } from "react"
+import { CaretDown, User, X } from "phosphor-react"
 import dayjs from "dayjs"
+import Image from "next/image"
 
-const peoplesName = [
-  "Érick Henrique",
-  "Gabriel Ximenes",
-  "Daniel Doarte",
-  "Paulo Victor",
-  "Amanda Sales",
-  "Rodrigo Fazoli",
+type personProps = {
+  id: string,
+  name: string,
+  perfilLink: string,
+  office: string,
+  selected: boolean
+}
+
+const people: Array<personProps> = [
+  {
+    id: uuidv4(),
+    name: "Érick Henrique",
+    perfilLink: "/images/papelMissao/comandante.png",
+    office: "Comandante",
+    selected: false,
+  },
+  {
+    id: uuidv4(),
+    name: "Gabriel dos Santos",
+    perfilLink: "/images/papelMissao/especialista.png",
+    office: "Especialista",
+    selected: false,
+  },
+  {
+    id: uuidv4(),
+    name: "Amanda Sales",
+    perfilLink: "/images/papelMissao/piloto.png",
+    office: "Piloto",
+    selected: false,
+  },
+  {
+    id: uuidv4(),
+    name: "Rodrigo Fazoli",
+    perfilLink: "/images/papelMissao/especialista.png",
+    office: "Especialista",
+    selected: false,
+  }
+
 ]
-
 interface MeetingDataProps {
   title?: string;
-  currentDay?: string;
+  currentDay: dayjs.Dayjs;
   hourStart?: string;
   hourEnd?: string;
   description?: string;
-  guests?: Array<string>;
+  guests?: Array<personProps>;
   linkMeeting?: string;
 }
 
-export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
+export default function PopoverForMarkMeeting({ currentDay, guests = [] }: MeetingDataProps) {
   const [show, setShow] = useState<boolean>(false)
+  const [localGuests, setLocalGuests] = useState(guests)
 
-  // const [selectContent, setSelectContent] = useState("")
-  // const handleClose = (state: boolean) => {
-  //   setShow(state)
-  // }
+  const [selectContent, setSelectContent] = useState("")
+  const handleClose = (state: boolean) => {
+    setShow(state)
+  }
+
+  function addGuest(person: personProps) {
+    setLocalGuests(prevLocalGuest => {
+      const updatedGuests = [...prevLocalGuest, person];
+
+      return updatedGuests;
+    })
+
+
+  }
+  function removeGuest(person: personProps) {
+    setLocalGuests(prevLocalGuest => {
+      const updatedGuests = prevLocalGuest.filter(guest => guest !== person)
+
+      return updatedGuests;
+    })
+  }
+
+  function toSendForm(event : FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    console.log("form enviado")
+  }
+
 
   return (
     <Popover.Portal>
@@ -40,20 +98,23 @@ export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) 
         <Popover.Close className="absolute right-4 top-4">
           <X size={24} />
         </Popover.Close>
-        <form action="" className="flex flex-col items-center gap-3">
+        <form action="" onSubmit={(event) => toSendForm(event)} className="flex flex-col items-center gap-3">
           <label
             htmlFor="title"
             className="opacity-0 w-0 h-0 absolute">Adiconar Título</label>
           <input
             id="title"
             type="text"
+            required
             placeholder="Adicionar título"
             className="placeholder:text-white px-2 py-1 border border-solid  border-white/40 rounded-lg w-full outline-none focus:border-white "
           />
 
           <label htmlFor="date" className="opacity-0 w-0 h-0 absolute">Adicionar data</label>
-
-          <input
+          <span className="placeholder:text-white px-2 py-1 border border-solid border-white/40 rounded-lg w-full outline-none focus:border-white">
+          {currentDay ? currentDay.format("dddd, DD [de] MMMM") : dayjs().format("dddd")}
+          </span>
+          {/* <input
             type="date"
             name=""
             id="date"
@@ -61,7 +122,7 @@ export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) 
             className="placeholder:text-white px-2 py-1 border border-solid border-white/40 rounded-lg w-full outline-none focus:border-white"
           >
 
-          </input>
+          </input> */}
 
           <div className="w-full flex items-center gap-3">
             <label
@@ -89,13 +150,65 @@ export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) 
             />
           </div>
 
-          <Select.Root>
+          <Popover.Root>
+
+            <Popover.Trigger className="w-full">
+              <div className="p-2 text-sm text-white w-full flex gap-4 items-center rounded-lg border border-solid border-white/40 focus:border-white">
+                <User size={20} />
+                <div className="flex-1 flex gap-1 flex-wrap">
+                  {localGuests.length !== 0 ? (
+                    localGuests.map(guest =>
+                      <span className="whitespace-nowrap p-1 w-min text-xs flex gap-1 items-center border border-solid border-white/40 rounded hover:bg-black/10">
+                        {guest.name}
+                        <X size={12} onClick={() => removeGuest(guest)} />
+                      </span>
+                    )) : (
+                    <span className="text-sm font-semibold">
+                      Adicionar convidados
+                    </span>
+                  )
+
+                  }
+
+                </div>
+              </div>
+            </Popover.Trigger>
+            <Popover.Content align="start" alignOffset={45}>
+              <div className="min-w-[16rem] bg-white shadow-2xl">
+                {people.map(person => (
+                  !localGuests.includes(person) && (
+                    <div
+                      className="p-2 flex gap-2 items-center hover:bg-gray-300/80 cursor-pointer"
+                      onClick={() => addGuest(person)}
+                    >
+                      <Image
+                        className="rounded-full"
+                        width={32}
+                        height={32}
+                        src={person.perfilLink}
+                        alt="Foto da pessoa"
+                      />
+                      <div>
+                        <span className="block text-blue-900 text-sm">{person.name}</span>
+                        <span className="block text-gray-500 text-xs">{person.office}</span>
+                      </div>
+                    </div>
+                  )
+                ))}
+              </div>
+            </Popover.Content>
+          </Popover.Root>
+
+
+
+
+
+          {/* <Select.Root>
             <Select.Trigger
               className="rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
             >
-              <Select.Value asChild>
-                <input type="text" />
-              </Select.Value>
+              <Select.Value placeholder="Adicionar convidados"/>
+
 
             </Select.Trigger>
             <Select.Portal>
@@ -114,9 +227,12 @@ export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) 
                 </Select.Viewport>
               </Select.Content>
             </Select.Portal>
-          </Select.Root>
+          </Select.Root> */}
 
-          <textarea className="h-20 resize-none border border-solid border-white/40 bg-transparent rounded-lg outline-none px-4 py-2 w-full text-sm font-semibold" />
+          <textarea
+            className="h-20 resize-none border border-solid border-white/40 bg-transparent rounded-lg outline-none px-4 py-2 w-full text-sm font-semibold placeholder:font-normal placeholder:text-white"
+            placeholder="Adicionar uma descrição"
+          />
 
           <label
             htmlFor="url"
@@ -130,7 +246,10 @@ export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) 
             className="w-full border border-solid border-white/40 focus:border-white rounded-lg py-2 px-4 outline-none"
             pattern="https://.*" />
 
-          <button className="mt-2 max-w-max py-2 px-20 rounded-lg bg-white text-violet-500 font-semibold">
+          <button 
+            className="mt-2 max-w-max py-2 px-20 rounded-lg bg-white text-violet-500 font-semibold"
+            type="submit"  
+          >
             Salvar
           </button>
         </form>
