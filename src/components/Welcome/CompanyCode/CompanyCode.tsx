@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -9,7 +10,7 @@ import { Container, Content } from "./style";
 export function CompanyCode() {
   const [companyCode, setCompanyCode] = useState("");
   const router = useRouter();
-  const {setCompany} = useContext(RegisterContext);
+  const { setCompany } = useContext(RegisterContext);
 
   function SubmitPousar() {
     setCompany(companyCode);
