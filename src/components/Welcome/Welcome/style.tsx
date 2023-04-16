@@ -2,7 +2,7 @@
 import styled from "styled-components";
 
 
-  
+
 export const Container = styled.main`
     height: 100vh;
     background-image: url("/images/bgEspaco.png");
@@ -15,7 +15,7 @@ export const Container = styled.main`
     align-items: center;
     padding: 1rem;
   `;
-  
+
 export const Content = styled.div`
     display: flex;
     img {
@@ -23,6 +23,19 @@ export const Content = styled.div`
       width: 45%;
       z-index: 1;
       margin-left: -10rem;
+    }
+
+    a{
+      margin-top: 1rem;
+      padding: .5rem 10rem;
+      border-radius: 8px;
+      background-color: #7A40D3;
+      font-size: 18px;
+      transition: all .1s ease-in;
+
+      :hover{
+        background-color: #7B61FF;
+      }
     }
   
     div {
@@ -66,4 +79,3 @@ export const Content = styled.div`
       }
     }
   `;
-  

@@ -41,8 +41,7 @@ export const Content = styled.div`
   
     div {
       padding: 1rem;
-      width: min(448px, 90%);
-      height: 473px;
+      /* width: min(448px, 90%); */
       background: #0000001c;
       backdrop-filter: blur(10px);
       text-align: center;
@@ -91,8 +90,8 @@ export const RadioBox = styled.button`
 
 export const OtherGender = styled.span`
     display: flex;
+    width: 100%;
     font-weight: bold;
-    background-color: #fff;
     color: #fff;
     width: min(384px, 100%);
     height: 3rem;
@@ -100,16 +99,16 @@ export const OtherGender = styled.span`
     gap: 2%;
   
     input {
-      height: 100%;
-      width: 80%;
       color: #000;
+      width: 100%;
+      background-color: #fff;
       padding: 0.5rem;
       border-radius: 0.2rem;
     }
   
     button {
-      height: 100%;
-      width: 23%;
+      width: 81px;
+      padding: 0.5rem;
       background: var(--purple-500);
       border-radius: 0.5rem;
       display: flex;
