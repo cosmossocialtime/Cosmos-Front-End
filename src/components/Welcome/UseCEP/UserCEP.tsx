@@ -15,14 +15,14 @@ export function UserCEP() {
 
   function SetUserCEP() {
 
-    !userCEP ? (alert("CEP inválido")) : 
-    
-    (setCEP(userCEP));
+    !userCEP ? (alert("CEP inválido")) :
+
+      (setCEP(userCEP));
   }
 
   return (
     <>
-      <BackButton link="/usuario/nascimento" />
+      <BackButton link="/usuario/genero" />
       <Container>
         <Content>
           <strong>Onde a sua nave está estacionada?</strong>
