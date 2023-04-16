@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 
 import { CaretLeft, CaretRight } from "phosphor-react"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import getDaysOfMonth from "../../../utils/getDaysOfMonth"
 import SideBar from "../sideBar"
 import CardOfDaysWeek from "./CardOfDaysWeek"
