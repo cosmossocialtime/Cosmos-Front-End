@@ -6,14 +6,18 @@ import "../lib/dayjs"
 import "../mainTailwind.css";
 import "./dashboard/imagens-de-satelite/planets.css"
 import "keen-slider/keen-slider.min.css";
+import { AuthProvider } from "../context/AuthProvider";
+import { ProtectedLayout } from "../components/ProtectedLayout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <RegisterContextProvider>
-        <Component {...pageProps} />
-        <GlobalStyle />
-      </RegisterContextProvider>
+      <AuthProvider>
+        <ProtectedLayout>
+          <Component {...pageProps} />
+        </ProtectedLayout>
+      </AuthProvider>
+      <GlobalStyle />
     </>
   );
 }

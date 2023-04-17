@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod"
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useAuth } from "../../context/AuthProvider/useAuth";
 
 const schema = z.object({
   email: z.string(),
@@ -22,8 +23,9 @@ export function UserLoginForm() {
   const [isSubmiting, setIsSubmiting] = useState(false)
   const { register, handleSubmit } = useForm<formProps>()
   const router = useRouter()
+  const auth = useAuth()
 
-  const SubmitForm = ({ email, password }: formProps) => {
+  const SubmitForm = async ({ email, password }: formProps) => {
     setIsSubmiting(true)
 
     if (password === "" || email === "") {
@@ -31,17 +33,13 @@ export function UserLoginForm() {
       return toast.error("Por favor, preencha os campos de email e senha corretamente.");
     }
 
-    if (email !== logInTest.email || password !== logInTest.password) {
+    try {
+      await auth.authenticate(email, password)
+      router.push("/usuario/iniciar")
+      toast.success("Acesso autorizado, ligando os foguetes")
+    } catch (error) {
       setIsSubmiting(false)
-      return toast.error("Credenciais incorretas")
-    }
-    if (email === logInTest.email && password === logInTest.password) {
-      try {
-        setTimeout(() => {
-          router.push("/painelprincipal/painel")
-        }, 2000)
-        toast.success("Acesso autorizado, ligando os foguetes")
-      } catch (error) { console.log(error) }
+      toast.error("Credenciais incorretas")
     }
   }
   return (
