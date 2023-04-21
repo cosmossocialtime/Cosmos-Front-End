@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { RegisterContext } from "../../context/RegisterContext";
 import { BackButton } from "../BackButton";
 import { Container, Content } from "./style";
+import Image from "next/image";
 
 
 export function CompanyCode() {
@@ -43,7 +44,10 @@ export function CompanyCode() {
             </button>
           </div>
 
-          <img src="/images/bandeira.png" alt="Imagem de uma bandeira" />
+          <Image 
+            src="/images/bandeira.png" 
+            alt="Imagem de uma bandeira"
+          />
         </Content>
       </Container>
     </>
