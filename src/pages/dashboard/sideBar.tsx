@@ -19,25 +19,25 @@ export default function SideBar() {
   const SideBarItems = [
     {
       id: 1,
-      route: "/dashboard/painel-da-missao",
+      route: "/dashboard/mission-painel",
       name: "Painel da Missão",
       icon: <HouseLine />,
     },
     {
       id: 2,
-      route: "/dashboard/diario-de-bordo",
+      route: "/dashboard/log-book",
       name: "Diário de Bordo",
       icon: <File />
     },
     {
       id: 3,
-      route: "/dashboard/imagens-de-satelite",
+      route: "/dashboard/satellite-images",
       name: "Imagens de Satétile",
       icon: <Star />,
     },
     {
       id: 4,
-      route: "/dashboard/calendario-de-eventos",
+      route: "/dashboard/events-calendar",
       name: "Calendário de Eventos",
       icon: <Calendar />,
     },
@@ -49,13 +49,13 @@ export default function SideBar() {
     },
     {
       id: 6,
-      route: "/dashboard/mapa-de-navegacao",
+      route: "/dashboard/navigation-map",
       name: "Mapa de Navegação",
       icon: <MapTrifold />,
     },
     {
       id: 7,
-      route: "/dashboard/tripulacao",
+      route: "/dashboard/crew",
       name: "Tripulação",
       icon: <UsersThree />
     },
@@ -87,7 +87,7 @@ export default function SideBar() {
 
           {showside &&
             <Link
-              href={"/painelprincipal/painel"}
+              href={"/main-painel/painel"}
               className="block mx-auto mb-2 text-center text-blue-400 font-semibold"
             >
               Voltar ao Painel Principal
