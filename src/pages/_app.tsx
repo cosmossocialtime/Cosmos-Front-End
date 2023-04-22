@@ -4,7 +4,7 @@ import { GlobalStyle } from "../GlobalStyle";
 
 import "../lib/dayjs"
 import "../mainTailwind.css";
-import "./dashboard/imagens-de-satelite/planets.css"
+import "./dashboard/satellite-images/planets.css"
 import "keen-slider/keen-slider.min.css";
 import { AuthProvider } from "../context/AuthProvider";
 import { ProtectedLayout } from "../components/ProtectedLayout";

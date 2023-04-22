@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 interface CardProps {
@@ -10,7 +11,7 @@ interface CardProps {
 export function Card({ Name, img, cardSelected, firstOption }: CardProps) {
   return (
     <CardOp firstOption={firstOption} Name={Name} cardSelected={cardSelected}>
-      <img src={img} alt={img} />
+      <Image src={img} alt={img} />
 
       <p>{Name}</p>
     </CardOp>
