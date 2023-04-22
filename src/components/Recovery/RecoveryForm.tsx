@@ -50,7 +50,7 @@ export function UserRecoveryForm() {
             type="email"
             required
             placeholder="Escreva seu email aqui@email.com.br"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
 
