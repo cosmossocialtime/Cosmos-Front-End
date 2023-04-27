@@ -34,12 +34,10 @@ const schema = z.object({
 type formProps = z.infer<typeof schema>
 
 export function UserRegisterForm() {
-
   const [isSubmiting, setIsSubmiting] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false)
-
   const { register, handleSubmit, formState: { errors } } = useForm<formProps>({ resolver: zodResolver(schema) })
   function handleForm(data: formProps) {
     setIsSubmiting(true)
@@ -104,7 +102,7 @@ export function UserRegisterForm() {
             {...register("password")}
             required
             id="password"
-            // minLength={8}
+            minLength={8}
             type={showPassword ? "text" : "password"}
             placeholder="Digite sua senha aqui"
             className={`w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500  hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.password ? "border-rose-600" : "valid:border-green-500"}`}
@@ -141,7 +139,7 @@ export function UserRegisterForm() {
 
         <div className='flex gap-2 my-4'>
           <Checkbox.Root
-            className='bg-white w-6 h-6 border-2 border-solid border-[#A2ABCC] rounded flex items-center justify-center'
+            className={`bg-zinc-50  w-6 h-6 border-2 border-solid border-[#A2ABCC] rounded flex items-center justify-center ${acceptTerms && "&& bg-gradient-to-r to-[#9D37F2] from-blue-300 border-none"}`}
             id='checkbox'
             required
             checked={acceptTerms}
@@ -156,7 +154,7 @@ export function UserRegisterForm() {
             }
           >
             <Checkbox.Indicator >
-              <Check size={32} className="p-1 text-green-500 font-bold" />
+              <Check size={32} className="p-1 text-zinc-50 font-bold" />
             </Checkbox.Indicator>
           </Checkbox.Root>
           <label htmlFor="checkbox">

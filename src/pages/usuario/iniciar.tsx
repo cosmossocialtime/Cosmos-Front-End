@@ -5,7 +5,7 @@ export default function Iniciar() {
   return (
     <main className="bg-espaco bg-cover bg-no-repeat h-screen text-white flex items-center justify-center p-4">
       <div className="flex flex-col items-center gap-10 p-10 backdrop-blur-md rounded-2xl bg-black/10">
-        <h2 className="text-4xl font-semibold">Bem-vindo(a), Cosmonauta!</h2>
+        <h2 className="text-4xl font-semibold">Boas-vindas, Cosmonauta!</h2>
         <p className="max-w-sm text-center text-xl font-light">
           Antes de começarmos, precisamos saber um pouco mais sobre você
         </p>

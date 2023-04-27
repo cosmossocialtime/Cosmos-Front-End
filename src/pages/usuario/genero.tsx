@@ -22,7 +22,6 @@ export default function Genero() {
 
   function submitFormGender(data: any) {
     console.log(gender);
-
     router.push("/usuario/codigo-empresa")
   }
 
