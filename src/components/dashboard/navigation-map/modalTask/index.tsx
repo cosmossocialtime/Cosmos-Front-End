@@ -7,16 +7,14 @@ import InputTask from './InputTask';
 import ModalConfirmEdit from './ModalConfirmEdit';
 import PopoverOptions from './PopoverOptions';
 import Task from './Task';
-import { TasksProps } from '../../../../data/objectiveCardsData';
+import { objectiveCardsData, TasksProps } from '../../../../data/objectiveCardsData';
 
 type ModalTaskProps = {
-    title: string;
-    tasks: TasksProps[];
     id: string;
     index: number;
-    taskWithActiveEditing?: string;
-    changeTitle: (newTitle: string) => void;
-    toggleTaskWithActiveEditing: (id?: string) => void;
+    // taskWithActiveEditing?: string;
+    // changeTitle: (newTitle: string) => void;
+    // toggleTaskWithActiveEditing: (id?: string) => void;
     deleteObjective: (id: string) => void;
     saveEditions: (localTasks: TasksProps[]) => void;
     changeTaskCheck: (id: string) => void;
@@ -24,8 +22,7 @@ type ModalTaskProps = {
 }
 
 export default function ModalTask({
-    title,
-    tasks,
+
     id,
     index,
     changeTitle,
@@ -35,10 +32,12 @@ export default function ModalTask({
     saveEditions,
     changeTaskCheck,
     setModalOpen }: ModalTaskProps) {
+    
+    const objective = objectiveCardsData.find(objective => objective.id === id);
 
     const [editEnabled, setEditEnabled] = useState(false)
     const [editTitle, setEditTitle] = useState(false)
-    const [localTasks, setLocalTasks] = useState(tasks)
+    const [localTasks, setLocalTasks] = useState(objective!.tasks)
 
     function createNewTask() {
         console.log(localTasks)

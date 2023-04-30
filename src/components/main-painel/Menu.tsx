@@ -9,17 +9,12 @@ export default function Menu() {
     const pagesRoutes = [
         {
             title: "Painel Principal",
-            route: "/painelprincipal/painel",
+            route: "/main-painel/painel",
         },
         {
             title: "Meu Perfil",
-            route: "/painelprincipal/perfil",
+            route: "/main-painel/profile",
         },
-        {
-            title: "Novas Aventuras",
-            route: "/painelprincipal/",
-        },
-
     ]
 
     const optionsRoutes = [

@@ -6,8 +6,7 @@ import { CaretLeft, CaretRight } from "phosphor-react"
 import { useState } from "react"
 import getDaysOfMonth from "../../../utils/getDaysOfMonth"
 import SideBar from "../sideBar"
-import { CardOfDaysWeek } from "../../../components/dashboard/events-calendar/CardOfDaysWeek"
-import { PopoverForMarkMeeting } from "../../../components/dashboard/events-calendar/PopoverForMarkMeeting"
+import CardOfDaysWeek from "../../../components/dashboard/events-calendar/CardOfDaysWeek"
 
 const daysOfWeek = [
     "Domingo",
@@ -43,7 +42,7 @@ export default function CalendarioEventosPage() {
     return (
         <div className="flex">
             <SideBar />
-            <main className="flex flex-col flex-1 px-20 py-12 2xl:py-16 max-h-screen">
+            <main className="flex flex-col flex-1 px-20 py-4 2xl:py-16 max-h-screen">
                 <header className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
 
@@ -72,18 +71,10 @@ export default function CalendarioEventosPage() {
                         />
 
                     </div>
-                    <Popover.Root>
-                        <Popover.Trigger
-                            className="py-2 px-10 bg-violet-500 rounded-lg text-white text-sm font-semibold leading-tight hover:bg-violet-600 transition-all duration-200">
-                            Marcar encontro
-                        </Popover.Trigger>
-                        <PopoverForMarkMeeting />
-                    </Popover.Root>
                 </header>
 
-                <div
-                    className="flex flex-1 flex-col gap-4 mt-4 w-full">
-                    <div className="grid gap-4 2xl:gap-6 grid-cols-7 text-center w-full">
+                <div className=" flex flex-1 flex-col gap-2 2xl:gap-4 mt-4 w-full">
+                    <div className="grid gap-2 2xl:gap-6 grid-cols-7 text-center w-full">
                         {daysOfWeek.map((day) => {
                             return (
                                 <h3
@@ -96,7 +87,7 @@ export default function CalendarioEventosPage() {
                         })}
                     </div>
 
-                    <div className="grid grid-cols-7 gap-4 2xl:gap-6 flex-1">
+                    <div className="grid grid-cols-7 gap-2 2xl:gap-6 flex-1">
                         {daysOfPreviousMonth.map((day, index) => (
                             <div
                                 key={index}
@@ -121,8 +112,6 @@ export default function CalendarioEventosPage() {
 
                     </div>
                 </div>
-
-                <input type="date" className="[-webkit-appearance:none] appearance-none rounded-none focus:outline-none focus:shadow-outline-none" />
             </main>
         </div>
     )

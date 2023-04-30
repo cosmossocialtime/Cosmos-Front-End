@@ -1,4 +1,5 @@
-import Image, { StaticImageData } from "next/image";
+import * as Dialog from '@radix-ui/react-dialog';
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import Header from "../../../components/main-painel/Header";
@@ -6,9 +7,10 @@ import userData from "../../../data/userData";
 import UploadImage from "../../../components/main-painel/profile/UploadImage";
 import DialogPopUp from "../../../components/main-painel/profile/DialogPopUp";
 import FormUserData from "../../../components/main-painel/profile/FormUserData";
+import SettingCropArea from '../../../components/main-painel/profile/SettingCropArea';
 
 export default function Perfil() {
-    const [selectedFileUrl, setSelectedFileUrl] = useState<StaticImageData>(userData.profilePicture);
+    const [selectedFileUrl, setSelectedFileUrl] = useState(userData.profilePicture);
     const [imgCropped, setImgCropped] = useState("");
     const [onDialog, setOnDialog] = useState(false);
     const [enableForm, setEnableForm] = useState(false);
@@ -38,7 +40,7 @@ export default function Perfil() {
                 />
                 <div className='relative top-10'>
                     <Image
-                        className='w-32 h-32 bg-slate-400 rounded-full border-4 border-white'
+                        className='w-32 h-32 bg-slate-400 rounded-full border-4 border-solid border-white'
                         src={imgCropped}
                         alt="foto do usuario"
                         width={128}
@@ -50,12 +52,18 @@ export default function Perfil() {
                         updateSrcFile={updateSrcFile}
                         setOnDialog={setOnDialog}
                     />
-                    <DialogPopUp
-                        setImgCropped={setImgCropped}
-                        selectedFileUrl={selectedFileUrl}
-                        setOnDialog={setOnDialog}
-                        onDialog={onDialog}
-                    />
+                    <Dialog.Root open={onDialog}>
+                        <Dialog.Portal>
+                            <Dialog.Overlay className='z-10 top-0 left-0 fixed h-screen w-screen bg-black/40' />
+                            <Dialog.Content className='z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                                <SettingCropArea
+                                    selectedFileUrl={selectedFileUrl}
+                                    setOnDialog={setOnDialog}
+                                    setImgCropped={setImgCropped}
+                                />
+                            </Dialog.Content>
+                        </Dialog.Portal>
+                    </Dialog.Root>
 
                 </div>
 

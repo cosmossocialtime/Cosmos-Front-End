@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 
 import SideBar from "../sideBar";
-import objectiveCardsData from '../../../data/objectiveCardsData';
+import { objectiveCardsData } from '../../../data/objectiveCardsData';
 import DialogObjective from '../../../components/dashboard/navigation-map/DialogObjective';
 
 export default function MapaNavegacaoPage() {

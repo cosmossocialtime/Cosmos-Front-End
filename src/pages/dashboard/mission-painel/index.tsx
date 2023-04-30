@@ -22,28 +22,30 @@ export default function painelDaMissão() {
         const now = dayjs();
         const { completed, availabilityDate } = stage;
 
-        switch (true) {
-            case completed:
-                return "Ver instruções";
-            case stage === currentStage && availabilityDate.isBefore(now):
-                return "Etapa atual";
-            case availabilityDate == null:
-                return "Data de disponibilidade não definida";
-            case availabilityDate.isBefore(now):
-                return "Já disponível";
-            case availabilityDate.isAfter(now):
-                return `Disponível em ${stage.availabilityDate.format("DD/MM/YYYY")}`;
-            default:
-                throw new Error("Não foi possível definir uma mensagem para esta etapa.")
+        if (completed) {
+            return "Ver instruções";
+        }
+        if (stage === currentStage && availabilityDate.isBefore(now)) {
+            return "Etapa atual";
+        }
+        if (availabilityDate == null) {
+            return "Data de disponibilidade não definida";
+        }
+        if (availabilityDate.isBefore(now)) {
+            return "Já disponível";
+        }
+        if (availabilityDate.isAfter(now)) {
+            return `Disponível em ${stage.availabilityDate.format("DD/MM/YYYY")}`;
         }
 
+        throw new Error("Não foi possível definir uma mensagem para esta etapa.")
     }
 
     return (
-        <div className="flex w-screen bg-gray-100">
+        <div className="flex max-w-screen bg-gray-100">
             <SideBar />
 
-            <div className="flex-1 text-gray-600 ">
+            <div className="max-h-screen flex-1 text-gray-600 overflow-y-auto scroll">
                 <header className="py-5 px-20 w-full shadow-lg shadow-[#2B124A]/5">
                     <h1 className="text-4xl font-semibold">
                         Nome do Programa
@@ -119,7 +121,7 @@ export default function painelDaMissão() {
                         </div>
                     </div>
 
-                    <button className="mt-10 mx-auto px-20 py-4 text-white text-lg font-semibold rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors">
+                    <button className="my-10 mx-auto px-20 py-4 text-white text-lg font-semibold rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors">
                         Instruções da etapa atual
                     </button>
                 </div>

@@ -25,7 +25,7 @@ export default function UploadImage({ updateSrcFile, setOnDialog }: UploadImageP
             {({ getInputProps }) => (
                 <label>
                     <input {...getInputProps()} />
-                    <Pencil className='absolute right-0 -bottom-2 w-10 h-10 p-2 text-white bg-[#5200AB] rounded-full border-2 border-white cursor-pointer' />
+                    <Pencil className='absolute right-0 -bottom-2 w-10 h-10 p-2 text-white bg-[#5200AB] rounded-full border-2 border-solid border-white cursor-pointer' />
                 </label>
             )}
         </Dropzone>

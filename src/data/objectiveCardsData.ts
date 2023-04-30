@@ -12,7 +12,7 @@ export type CardProps = {
   tasks: TasksProps[];
 };
 
-const objectiveCardsData: Array<CardProps> = [
+export const objectiveCardsData: Array<CardProps> = [
   {
     id: uuidv4(),
     title: "Aumentar o número de doadores",
@@ -109,4 +109,3 @@ const objectiveCardsData: Array<CardProps> = [
   },
 ];
 
-export default objectiveCardsData;

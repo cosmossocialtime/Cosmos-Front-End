@@ -1,7 +1,19 @@
 import UserProfile from "../assets/user.jpg";
 import BgPerfil from "../assets/bg-perfil.png";
+import { StaticImageData } from "next/image";
 
-const userData = {
+type userProps = {
+  profilePicture?: StaticImageData;
+  backgroundPicture: StaticImageData;
+  name: string;
+  birthDate: string;
+  genre: string;
+  cep: string;
+  companyCode: string;
+  email: string;  
+}
+
+const userData : userProps = {
   profilePicture: UserProfile,
   backgroundPicture: BgPerfil,
   name: "Érick Henrique",
