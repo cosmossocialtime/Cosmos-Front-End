@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { useRouter } from "next/router";
 import { useAuth } from "../../context/AuthProvider/useAuth";
+import { api } from "../../services/api";
 
 const schema = z.object({
   email: z.string(),

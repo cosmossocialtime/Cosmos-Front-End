@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { Check, Eye, EyeClosed, Question } from "phosphor-react";
+import { api } from "../../services/api";
 
 const schema = z.object({
   name: z.string()
@@ -39,8 +40,20 @@ export function UserRegisterForm() {
   const [showPassword1, setShowPassword1] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false)
   const { register, handleSubmit, formState: { errors } } = useForm<formProps>({ resolver: zodResolver(schema) })
-  function handleForm(data: formProps) {
-    setIsSubmiting(true)
+
+  async function handleForm(data: formProps) {
+    // setIsSubmiting(true)
+    try {
+      await api.post('/auth/signup', {
+        "byname": data.alias,
+        "fullName": data.name,
+        "email": data.email,
+        "password": data.password,
+        "passwordConfirmation": data.confirmPassword
+      })
+    } catch (error) {
+      return toast.error("Não foi possivel criar sua conta, por favor tente novamente mais tarde")
+    }
     return (toast.success("Criado com sucesso"), console.log(data, acceptTerms));
   }
 
