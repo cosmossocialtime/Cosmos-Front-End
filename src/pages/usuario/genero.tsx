@@ -20,8 +20,8 @@ export default function Genero() {
 
   const { handleSubmit } = useForm<GenderForm>()
 
-  function submitFormGender(data: any) {
-    console.log(gender);
+  function submitFormGender(data: GenderForm) {
+    console.log(data);
     router.push("/usuario/codigo-empresa")
   }
 

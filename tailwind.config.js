@@ -66,7 +66,8 @@ module.exports = {
         "art-board": "url(/images/background-art-board.png)",
         "currentMission": "url(/images/bg-current-mission.png)",
         "espaco": "url(/images/bgEspaco.png)",
-        "bgCadastro": "url(/images/bgCadastro.png)"
+        "bgCadastro": "url(/images/bgCadastro.png)",
+        "bgTerra": "url(/images/bgTerra.png)"
       },
     },
     plugins: [
