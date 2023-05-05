@@ -6,6 +6,8 @@ import { useState } from "react";
 import { CaretRight } from "phosphor-react";
 
 import { BackButton } from "../../components/Welcome/BackButton";
+import { api } from "../../services/api";
+import { useAuth } from "../../context/AuthProvider/useAuth";
 
 const schemaGender = z.object({
   gender: z.string().nonempty("Por favor selecione o seu gênero")
@@ -20,8 +22,13 @@ export default function Genero() {
 
   const { handleSubmit } = useForm<GenderForm>()
 
-  function submitFormGender(data: GenderForm) {
-    console.log(data);
+  const useAuthenticate = useAuth()
+
+  function submitFormGender() {
+    api.patch("/user/onboarding", {
+      "gender": gender
+    })
+    console.log(useAuthenticate.token);
     router.push("/usuario/codigo-empresa")
   }
 
