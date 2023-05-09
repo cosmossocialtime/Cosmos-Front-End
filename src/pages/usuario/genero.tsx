@@ -26,9 +26,14 @@ export default function Genero() {
 
   function submitFormGender() {
     api.patch("/user/onboarding", {
-      "gender": gender
-    })
-    console.log(useAuthenticate.token);
+      "gender": gender,
+    },
+      {
+        headers: {
+          "Authorization": "Bearer_" + useAuthenticate.token
+        }
+      }
+    )
     router.push("/usuario/codigo-empresa")
   }
 
