@@ -10,17 +10,14 @@ export default function Nascimento() {
   const [dayValue, setDayValue] = useState("20")
   const [monthValue, setMonthValue] = useState("Julho")
   const [yearValue, setYearValue] = useState("1969")
-  console.log(dayValue, monthValue, yearValue);
 
   const currentYear = dayjs().year();
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const months = Array.from({ length: 12 }, (_, i) => i);
-  // const monthFormated = dayjs().month(month).format('MMMM')
   const years = Array.from({ length: currentYear - 1950 }, (_, i) => i + 1950);
 
-  function monthFormated(dateMonth: number) {
-    return dayjs().month(dateMonth).format('MMMM')
-  }
+  function monthFormated(dateMonth: number) { return dayjs().month(dateMonth).format('MMMM') }
+
   return (
     <>
       <BackButton link="/usuario/codigo-empresa" />
@@ -46,20 +43,19 @@ export default function Nascimento() {
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
-                  <Select.Content className="bg-white text-center rounded">
-                    <Select.Viewport className="text-violet-500 py-2 cursor-pointer">
-
+                  <Select.Content position='popper' className="bg-white text-center rounded mt-2 w-32">
+                    <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
                       {days.map((days, index) => (
                         <Select.Item
                           key={index}
                           value={`${days}`}
-                          className="py-2 px-2 hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                          className="py-2 px-4 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
                         >
-                          <Select.ItemText className="">
+                          <Select.ItemText>
                             {days}
                           </Select.ItemText>
                           <Select.ItemIndicator className="">
-                            <Check size={15} />
+                            <Check size={18} />
                           </Select.ItemIndicator>
                         </Select.Item>
                       ))}
@@ -82,20 +78,20 @@ export default function Nascimento() {
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
-                  <Select.Content className="bg-white text-center rounded overflow-hidden">
-                    <Select.Viewport className="bg-zinc-50 text-violet-500 py-2 cursor-pointer">
+                  <Select.Content position='popper' className="bg-white text-center rounded overflow-hidden mt-2 w-32">
+                    <Select.Viewport className="bg-zinc-50 text-violet-500 p-2 cursor-pointer max-h-60 w-full">
 
                       {months.map((month, index) => (
                         <Select.Item
                           key={index}
                           value={`${monthFormated(month)}`}
-                          className="py-2 px-2 hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                          className="py-2 px-2  outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
                         >
-                          <Select.ItemText className="">
+                          <Select.ItemText >
                             {monthFormated(month)}
                           </Select.ItemText>
                           <Select.ItemIndicator className="">
-                            <Check size={15} />
+                            <Check size={18} />
                           </Select.ItemIndicator>
                         </Select.Item>
                       ))}
@@ -118,20 +114,22 @@ export default function Nascimento() {
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
-                  <Select.Content className="bg-white text-center rounded">
-                    <Select.Viewport className="text-violet-500 py-2 cursor-pointer">
+                  <Select.Content
+                    position='popper'
+                    className="bg-white text-center rounded mt-2 w-32">
+                    <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
 
                       {years.reverse().map((year, index) => (
                         <Select.Item
                           key={year}
                           value={`${year}`}
-                          className="py-2 px-2 hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                          className="py-2 px-2 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
                         >
                           <Select.ItemText className="">
                             {year}
                           </Select.ItemText>
                           <Select.ItemIndicator className="">
-                            <Check size={15} />
+                            <Check size={18} />
                           </Select.ItemIndicator>
                         </Select.Item>
                       ))}
@@ -141,6 +139,8 @@ export default function Nascimento() {
               </Select.Root>
             </div>
           </div>
+
+          <button className='py-4 bg-violet-500 text-zinc-50 text-lg w-full rounded-lg mt-10 hover:bg-violet-600 transition-all duration-200'>Pousar</button>
         </form>
       </main>
     </>
