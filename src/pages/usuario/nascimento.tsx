@@ -14,7 +14,7 @@ export default function Nascimento() {
   const currentYear = dayjs().year();
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const months = Array.from({ length: 12 }, (_, i) => i);
-  const years = Array.from({ length: currentYear - 1950 }, (_, i) => i + 1950);
+  const years = Array.from({ length: currentYear - 1930 }, (_, i) => i + 1930);
 
   function monthFormated(dateMonth: number) { return dayjs().month(dateMonth).format('MMMM') }
 
