@@ -4,6 +4,7 @@ import { CaretLeft, CaretRight } from "phosphor-react";
 import { Dots } from "../Cards/Dots";
 import { Container, MobileLink } from "../Piloto/style";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Especialista() {
   return (
@@ -14,7 +15,7 @@ export default function Especialista() {
         </Link>
 
         <OpCard>
-          <img src="/images/papelMissao/especialista.png" alt="" />
+          <Image src="/images/papelMissao/especialista.png" alt="" />
 
           <CardContent>
             <div>

@@ -2,6 +2,7 @@ import { CardContent, Container, MobileLink, OpCard } from "./style";
 import { CaretLeft, CaretRight } from "phosphor-react";
 import { Dots } from "../Cards/Dots";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Piloto() {
   const Popup =
@@ -14,7 +15,7 @@ export default function Piloto() {
           <CaretLeft />
         </Link>
         <OpCard>
-          <img src="/images/papelMissao/piloto.png" alt="" />
+          <Image src="/images/papelMissao/piloto.png" alt="" />
 
           <CardContent>
             <div>

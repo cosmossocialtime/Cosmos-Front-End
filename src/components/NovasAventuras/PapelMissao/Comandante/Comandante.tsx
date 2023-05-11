@@ -3,6 +3,7 @@ import { CaretLeft, CaretRight } from "phosphor-react";
 import { Dots } from "../Cards/Dots";
 import { Container, MobileLink } from "../Piloto/style";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Comandante() {
   return (
@@ -13,7 +14,7 @@ export default function Comandante() {
         </Link>
 
         <OpCard>
-          <img src="/images/papelMissao/comandante.png" alt="" />
+          <Image src="/images/papelMissao/comandante.png" alt="" />
           <CardContent>
             <div>
               <h3>Comandante</h3>
