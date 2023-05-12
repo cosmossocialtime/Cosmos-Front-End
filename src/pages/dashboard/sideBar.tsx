@@ -68,21 +68,23 @@ export default function SideBar() {
       <aside className={`${showside ? "w-[19rem]" : "w-[5.5rem]"} bg-violet-900 min-h-screen flex flex-col relative transition-all duration-300 overflow-hidden`}>
         <div>
           <div className="mx-auto w-fit my-5">
-            {showside ? (
-              <Image
-                width={160}
-                height={32}
-                src="/images/logoCosmosBranco.svg"
-                alt="Logo Cosmos"
-              />
-            ) : (
-              <Image
-                width={32}
-                height={0}
-                src="/images/Ccosmos.svg"
-                alt="Logo Cosmos"
-              />
-            )}
+            <Link href={"/main-painel/painel"}>
+              {showside ? (
+                <Image
+                  width={160}
+                  height={32}
+                  src="/images/logoCosmosBranco.svg"
+                  alt="Logo Cosmos"
+                />
+              ) : (
+                <Image
+                  width={32}
+                  height={0}
+                  src="/images/Ccosmos.svg"
+                  alt="Logo Cosmos"
+                />
+              )}
+            </Link>
           </div>
 
           {showside &&
@@ -101,9 +103,9 @@ export default function SideBar() {
                 <Link
                   key={item.id}
                   href={item.route}
-                  className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-2 flex items-center gap-4 w-72 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
+                  className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-2 flex items-center gap-4 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
                 >
-                  <span className={`${pathname === item.route ? "bg-purple-600" : "bg-white/10"} p-4 rounded-full text-2xl`}>
+                  <span className={`${pathname === item.route ? "bg-purple-600" : "bg-white/10"} p-3 2xl:p-4 rounded-full text-2xl`}>
                     {item.icon}
                   </span>
                   <strong>
@@ -115,7 +117,7 @@ export default function SideBar() {
           </div>
         </div>
 
-        <div className="flex flex-col bg-blue-900 text-white mt-auto p-2">
+        <div className="mt-auto flex flex-col bg-blue-900 text-white p-2">
           <Link href="/">{showside ?
             "Precisa de ajuda?" : "?"}</Link>
           <Link href="/" className="text-blue-400">
