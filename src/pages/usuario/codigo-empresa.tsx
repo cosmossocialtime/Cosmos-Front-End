@@ -51,7 +51,7 @@ export default function CompanyCode() {
         <img
           src="/images/bandeira.png"
           alt="Bandeira branca"
-          className="mt-72"
+          className="mt-56 medium:mt-72"
         />
       </main>
     </>

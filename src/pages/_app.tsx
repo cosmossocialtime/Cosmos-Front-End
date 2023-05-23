@@ -7,15 +7,12 @@ import "../mainTailwind.css";
 import "./dashboard/satellite-images/planets.css"
 import "keen-slider/keen-slider.min.css";
 import { AuthProvider } from "../context/AuthProvider";
-import { ProtectedLayout } from "../components/ProtectedLayout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthProvider>
-        <ProtectedLayout>
-          <Component {...pageProps} />
-        </ProtectedLayout>
+        <Component {...pageProps} />
       </AuthProvider>
       <GlobalStyle />
     </>

@@ -5,8 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { useRouter } from "next/router";
-import { useAuth } from "../../context/AuthProvider/useAuth";
 import { api } from "../../services/api";
+import { useAuth } from "../../context/AuthProvider/useAuth";
 
 const schema = z.object({
   email: z.string(),
@@ -25,9 +25,10 @@ export function UserLoginForm() {
   const SubmitForm = async ({ email, password }: formProps) => {
     setIsSubmiting(true)
 
+    console.log(email, password);
+
     try {
-      await auth.authenticate(email, password)
-      router.push("/usuario/iniciar")
+      await auth.signIn({ email, password })
       toast.success("Acesso autorizado, ligando os foguetes")
     } catch (error) {
       setIsSubmiting(false)
