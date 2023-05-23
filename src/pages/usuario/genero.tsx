@@ -23,14 +23,13 @@ export default function Genero() {
   const { handleSubmit } = useForm<GenderForm>()
 
   const useAuthenticate = useAuth()
-
   function submitFormGender() {
     api.patch("/user/onboarding", {
       "gender": gender,
     },
       {
         headers: {
-          "Authorization": "Bearer_" + useAuthenticate.token
+          "Authorization": "Bearer " + useAuthenticate.accessToken
         }
       }
     )

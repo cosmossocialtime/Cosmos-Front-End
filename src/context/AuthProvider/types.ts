@@ -1,6 +1,7 @@
 export interface IUser {
   email?: string;
-  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 export interface IContext extends IUser {
