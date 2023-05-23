@@ -9,7 +9,6 @@ export const AuthContext = createContext<IContext>({} as IContext)
 export const AuthProvider = ({ children }: IAuthProvider) => {
   const [user, setUser] = useState<User | null>(null)
   const isAutenticate = !!user
-
   async function signIn({ email, password }: SignInData) {
     const { accessToken, user } = await authenticate({ email, password })
 
