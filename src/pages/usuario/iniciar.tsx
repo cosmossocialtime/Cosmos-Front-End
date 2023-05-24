@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { parseCookies } from "nookies";
 
 export default function Iniciar() {
   return (

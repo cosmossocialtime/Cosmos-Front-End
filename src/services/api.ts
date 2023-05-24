@@ -7,10 +7,6 @@ export const api = axios.create({
   baseURL: "http://18.222.112.130:8080/api",
 });
 
-api.interceptors.request.use(config => {
-  // console.log(config);
-  return config
-})
 
 if(token){
    api.defaults.headers['Authorization'] = `Bearer ${token}` 

@@ -4,6 +4,7 @@ import { BackButton } from "../../components/Welcome/BackButton";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { api } from "../../services/api";
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty("O código da empresa é obrigatorio")
@@ -16,7 +17,10 @@ export default function CompanyCode() {
   const router = useRouter()
 
   function submitForm() {
-    console.log(code);
+    api.patch("/user/onboarding", {
+      "companyCode": code,
+    }
+    )
     router.push("/usuario/nascimento")
   }
 

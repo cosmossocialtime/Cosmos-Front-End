@@ -1,11 +1,8 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { GetServerSideProps } from "next";
 import { parseCookies } from 'nookies'
-import { useAuth } from "../../context/AuthProvider/useAuth";
 import { useRouter } from "next/router";
 
 export function ProtectedLayout({ children }: { children: JSX.Element }) {
-  const auth = useAuth()
   const router = useRouter()
   const { ['cosmos.token']: token } = parseCookies()
 
