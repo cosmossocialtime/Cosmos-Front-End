@@ -4,7 +4,12 @@ module.exports = {
     "./node_modules/tailwind-datepicker-react/dist/**/*.tsx"],
 
   theme: {
+
     extend: {
+
+      screens: {
+        "medium": { "min": "1601", "max": "1680" }
+      },
 
       fontFamily: {
         sans: "Inter, sans-serif",

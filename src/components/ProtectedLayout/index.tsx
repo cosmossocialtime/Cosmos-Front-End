@@ -1,16 +1,20 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
+import { GetServerSideProps } from "next";
+import { parseCookies } from 'nookies'
 import { useAuth } from "../../context/AuthProvider/useAuth";
 import { useRouter } from "next/router";
 
 export function ProtectedLayout({ children }: { children: JSX.Element }) {
   const auth = useAuth()
   const router = useRouter()
+  const { ['cosmos.token']: token } = parseCookies()
+
 
   if (router.pathname == "/usuario/entrar" || router.pathname == "/usuario/cadastrar" || router.pathname == "/usuario/recuperar") {
     return children
   }
 
-  if (!auth.email) {
+  if (!token) {
     return (
       <div className="flex h-screen bg-espaco items-center justify-center">
         <div className="p-10 rounded-xl bg-black/10 backdrop-blur-sm flex flex-col items-center gap-10">

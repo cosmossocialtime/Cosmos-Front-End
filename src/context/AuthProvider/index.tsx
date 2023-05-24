@@ -1,32 +1,27 @@
+import { setCookie, parseCookies } from "nookies"
 import { createContext, useEffect, useState } from "react"
-import { IAuthProvider, IContext, IUser } from "./types"
-import { getUserLocalStorage, loginRequest, setRefreshTokenUser, setTokenUser, setUserLocalStorage } from "./util"
+import { IAuthProvider, IContext, SignInData, User } from "./types"
+import { authenticate } from "./util"
+import Router from 'next/router'
 
 export const AuthContext = createContext<IContext>({} as IContext)
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
-  const [user, setUser] = useState<IUser | null>()
+  const [user, setUser] = useState<User | null>(null)
+  const isAutenticate = !!user
 
-  useEffect(() => {
-    const user = getUserLocalStorage()
-    if (user) {
-      setUser(user)
-    }
-  }, [])
+  async function signIn({ email, password }: SignInData) {
+    const { accessToken, user } = await authenticate({ email, password })
 
-  async function authenticate(email: string, password: string) {
-    const response = await loginRequest(email, password)
-    const payload = { accessToken: response.accessToken, refreshToken: response.refreshToken, email }
-    setUser(payload)
-    setUserLocalStorage(payload)
-    setTokenUser(payload)
-    setRefreshTokenUser(payload)
+    setCookie(undefined, 'cosmos.token', accessToken, {
+      maxAge: 60 * 60 * 12 // 1 Dia 
+    })
+    setUser(user)
+    Router.push('/usuario/iniciar')
   }
 
-  function logout() { setUser(null), setUserLocalStorage(null) }
-
   return (
-    <AuthContext.Provider value={{ ...user, authenticate, logout }}>
+    <AuthContext.Provider value={{ user, isAutenticate, signIn }}>
       {children}
     </AuthContext.Provider>
   )

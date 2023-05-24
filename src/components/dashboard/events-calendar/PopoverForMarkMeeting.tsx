@@ -24,7 +24,7 @@ interface MeetingDataProps {
   linkMeeting?: string;
 }
 
-export function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
+export default function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
   const [show, setShow] = useState<boolean>(false)
 
   // const [selectContent, setSelectContent] = useState("")
@@ -129,12 +129,8 @@ export function PopoverForMarkMeeting({ currentDay }: MeetingDataProps) {
             placeholder="https://calendar.google.com"
             className="w-full border border-solid border-white/40 focus:border-white rounded-lg py-2 px-4 outline-none"
             pattern="https://.*" />
-
-          <button className="mt-2 max-w-max py-2 px-20 rounded-lg bg-white text-violet-500 font-semibold">
-            Salvar
-          </button>
         </form>
       </Popover.Content>
-    </Popover.Portal >
+    </Popover.Portal>
   )
 }

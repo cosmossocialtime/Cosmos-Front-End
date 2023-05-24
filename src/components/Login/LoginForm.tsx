@@ -4,9 +4,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { z } from "zod"
-import { useRouter } from "next/router";
 import { useAuth } from "../../context/AuthProvider/useAuth";
-import { api } from "../../services/api";
 
 const schema = z.object({
   email: z.string(),
@@ -19,15 +17,13 @@ export function UserLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false)
   const { register, handleSubmit, formState: { errors } } = useForm<formProps>()
-  const router = useRouter()
   const auth = useAuth()
 
   const SubmitForm = async ({ email, password }: formProps) => {
     setIsSubmiting(true)
 
     try {
-      await auth.authenticate(email, password)
-      router.push("/usuario/iniciar")
+      await auth.signIn({ email, password })
       toast.success("Acesso autorizado, ligando os foguetes")
     } catch (error) {
       setIsSubmiting(false)
