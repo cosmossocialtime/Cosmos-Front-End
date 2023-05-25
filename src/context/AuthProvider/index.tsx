@@ -1,5 +1,5 @@
-import { setCookie, parseCookies } from "nookies"
-import { createContext, useEffect, useState } from "react"
+import { setCookie } from "nookies"
+import { createContext, useState } from "react"
 import { IAuthProvider, IContext, SignInData, User } from "./types"
 import { authenticate } from "./util"
 import Router from 'next/router'
