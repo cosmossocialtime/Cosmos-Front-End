@@ -5,11 +5,14 @@ import { useState } from 'react';
 import dayjs from "dayjs"
 
 import { BackButton } from "../../components/Welcome/BackButton";
+import { useForm } from 'react-hook-form';
+import { api } from '../../services/api';
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState("20")
   const [monthValue, setMonthValue] = useState("Julho")
   const [yearValue, setYearValue] = useState("1969")
+  const { handleSubmit } = useForm()
 
   const currentYear = dayjs().year();
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -18,11 +21,18 @@ export default function Nascimento() {
 
   function monthFormated(dateMonth: number) { return dayjs().month(dateMonth).format('MMMM') }
 
+  function submitBirth() {
+    api.patch("/user/onboarding", {
+      "birthdate": `${yearValue}-${monthValue}-${dayValue}`
+    })
+  }
+
   return (
-    <>
+    <div>
       <BackButton link="/usuario/codigo-empresa" />
       <main className="h-screen w-full bg-bgTerra bg-no-repeat bg-cover flex items-center justify-center">
         <form
+          onSubmit={handleSubmit(submitBirth)}
           className="flex flex-col items-center justify-center gap-3 p-16 backdrop-blur-md bg-black/10 rounded-2xl ">
           <h1
             className="text-zinc-50 text-2xl font-semibold">Nos conte o dia em que você chegou à Terra</h1>
@@ -143,6 +153,6 @@ export default function Nascimento() {
           <button className='py-4 bg-violet-500 text-zinc-50 text-lg w-full rounded-lg mt-10 hover:bg-violet-600 transition-all duration-200'>Pousar</button>
         </form>
       </main>
-    </>
+    </div>
   )
 }

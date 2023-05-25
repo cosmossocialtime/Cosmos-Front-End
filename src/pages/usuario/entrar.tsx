@@ -4,15 +4,15 @@ import Main from "../../components/Main";
 
 const Entrar = () => {
   return (
-    <>
-    <Head>
-      <title>Entrar | Cosmos</title>
-    </Head>
-    <div className="md:flex h-screen">
-      <Main />
-      <UserLoginForm />
+    <div>
+      <Head>
+        <title>Entrar | Cosmos</title>
+      </Head>
+      <div className="flex h-screen">
+        <Main />
+        <UserLoginForm />
+      </div>
     </div>
-    </>
   );
 }
 

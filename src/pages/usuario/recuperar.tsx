@@ -4,7 +4,7 @@ import { UserRecoveryForm } from "../../components/Recovery/RecoveryForm";
 
 export default function Recuperar() {
   return (
-    <>
+    <div>
       <Head>
         <title>Esqueci minha senha | Cosmos</title>
       </Head>
@@ -12,6 +12,6 @@ export default function Recuperar() {
         <Main />
         <UserRecoveryForm />
       </div>
-    </>
+    </div>
   );
 }

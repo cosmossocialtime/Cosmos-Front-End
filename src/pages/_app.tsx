@@ -1,10 +1,10 @@
 import type { AppProps } from "next/app";
-import { GlobalStyle } from "../GlobalStyle";
+import { GlobalStyle } from "../styles/GlobalStyle";
 import { AuthProvider } from "../context/AuthProvider";
 import { ProtectedLayout } from "../components/ProtectedLayout";
 
 import "../lib/dayjs"
-import "../mainTailwind.css";
+import "../styles/mainTailwind.css";
 import "./dashboard/satellite-images/planets.css"
 import "keen-slider/keen-slider.min.css";
 

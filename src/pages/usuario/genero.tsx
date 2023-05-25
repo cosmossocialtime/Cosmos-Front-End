@@ -22,22 +22,16 @@ export default function Genero() {
 
   const { handleSubmit } = useForm<GenderForm>()
 
-  const useAuthenticate = useAuth()
   function submitFormGender() {
     api.patch("/user/onboarding", {
       "gender": gender,
-    },
-      {
-        headers: {
-          "Authorization": "Bearer " + useAuthenticate.accessToken
-        }
-      }
+    }
     )
     router.push("/usuario/codigo-empresa")
   }
 
   return (
-    <>
+    <div>
       <BackButton link="/usuario/iniciar" />
       <main
         className="bg-bgCadastro h-screen bg-cover bg-no-repeat flex items-center justify-around">
@@ -93,6 +87,6 @@ export default function Genero() {
           )}
         </form>
       </main>
-    </>
+    </div>
   )
 }
