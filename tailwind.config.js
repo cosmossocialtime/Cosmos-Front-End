@@ -72,7 +72,8 @@ module.exports = {
         "currentMission": "url(/images/bg-current-mission.png)",
         "espaco": "url(/images/bgEspaco.png)",
         "bgCadastro": "url(/images/bgCadastro.png)",
-        "bgTerra": "url(/images/bgTerra.png)"
+        "bgTerra": "url(/images/bgTerra.png)",
+        "little-nave": "url(/images/bgNave.png)"
       },
     },
     plugins: [
