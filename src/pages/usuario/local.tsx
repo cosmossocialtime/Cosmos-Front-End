@@ -4,17 +4,36 @@ import * as Select from '@radix-ui/react-select';
 import * as Checkbox from '@radix-ui/react-checkbox'
 import { BackButton } from "../../components/Welcome/BackButton";
 import { Check } from 'phosphor-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Head from 'next/head';
+import axios from 'axios';
+
+interface State {
+  id: number;
+  nome: string;
+}
 
 export default function Local() {
   const [outOfBrazil, setOutOfBrazil] = useState(false)
+  const [states, setStates] = useState<State[]>([])
+
+  useEffect(() => {
+    axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+      .then(response => {
+        setStates(response.data);
+      })
+
+  }, []);
 
   return (
     <div>
+      <Head>
+        <title>Local de nascimento</title>
+      </Head>
       <BackButton link="/usuario/nascimento" />
-      <main className="w-full h-screen bg-little-nave bg-cover bg-no-repeat flex text-zinc-50 items-center justify-center">
+      <main className="w-full h-screen bg-little-nave bg-cover bg-no-repeat flex text-zinc-50 items-center ">
 
-        <form action="" className='flex flex-col items-center justify-center gap-7 p-16 backdrop-blur-md bg-black/10 rounded-2xl '>
+        <form action="" className='flex flex-col items-center justify-center gap-7 lg:ml-72 p-16 backdrop-blur-md bg-black/10 rounded-2xl '>
           <h2 className='text-2xl'>Onde a sua nave está estacionada?</h2>
           <span className='font-light text-xl'>O local onde você vive atualmente</span>
           <div className='flex flex-col w-full justify-between gap-6'>
@@ -34,17 +53,25 @@ export default function Local() {
                   <Select.Content position='popper' className="bg-white text-center rounded mt-2 w-full">
                     <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
 
-                      <Select.Item
-                        value='teste'
-                        className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
-                      >
-                        Maranhão
-                        <Select.ItemText>
-                        </Select.ItemText>
-                        <Select.ItemIndicator >
-                          <Check size={18} />
-                        </Select.ItemIndicator>
-                      </Select.Item>
+                      {states.map(states => {
+                        return (
+                          <Select.Item
+                            key={states.id}
+                            value={states.nome}
+                            className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                          >
+                            {states.nome}
+                            <Select.ItemText>
+                            </Select.ItemText>
+                            <Select.ItemIndicator >
+                              <Check size={18} />
+                            </Select.ItemIndicator>
+                          </Select.Item>
+                        )
+                      })}
+
+
+
                     </Select.Viewport>
                   </Select.Content>
                 </Select.Portal>
