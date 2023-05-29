@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { CaretRight } from "phosphor-react";
 
-import { BackButton } from "../../components/Welcome/BackButton";
+import { BackButton } from "../../components/BackButton";
 import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthProvider/useAuth";
 

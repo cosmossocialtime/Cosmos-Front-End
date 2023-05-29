@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
 .scroll {
     --scrollbar-thumb: #65BAFA !important;
     --scrollbar-track: rgb(135 121 181 / 0.1) !important;

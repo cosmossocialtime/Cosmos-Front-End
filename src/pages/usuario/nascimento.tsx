@@ -4,7 +4,7 @@ import { Check } from 'phosphor-react';
 import { useState } from 'react';
 import dayjs from "dayjs"
 
-import { BackButton } from "../../components/Welcome/BackButton";
+import { BackButton } from "../../components/BackButton";
 import { useForm } from 'react-hook-form';
 import { api } from '../../services/api';
 
@@ -64,7 +64,7 @@ export default function Nascimento() {
                           <Select.ItemText>
                             {days}
                           </Select.ItemText>
-                          <Select.ItemIndicator className="">
+                          <Select.ItemIndicator >
                             <Check size={18} />
                           </Select.ItemIndicator>
                         </Select.Item>

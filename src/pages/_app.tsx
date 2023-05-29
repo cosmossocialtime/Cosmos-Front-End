@@ -12,9 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthProvider>
-        <ProtectedLayout>
-          <Component {...pageProps} />
-        </ProtectedLayout>
+        <Component {...pageProps} />
       </AuthProvider>
       <GlobalStyle />
     </>

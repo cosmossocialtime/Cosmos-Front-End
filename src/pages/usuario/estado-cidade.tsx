@@ -1,67 +1,63 @@
-/* eslint-disable @next/next/no-img-element */
-
 import * as Select from '@radix-ui/react-select';
 import * as Checkbox from '@radix-ui/react-checkbox'
-import { BackButton } from "../../components/Welcome/BackButton";
+import { BackButton } from "../../components/BackButton";
 import { Check } from 'phosphor-react';
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import axios from 'axios';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form'
+import useFetch from '../../hooks/useFetch';
+import Image from 'next/image';
 
-interface State {
-  id: number;
-  nome: string;
+interface stateProps {
+  id: number,
+  nome: string
 }
 
-export default function Local() {
+export default function EstadoCidade() {
   const [outOfBrazil, setOutOfBrazil] = useState(false)
-  const [states, setStates] = useState<State[]>([])
+  const [state, setState] = useState("")
+  const { handleSubmit } = useForm()
+  const { data: statesOfBrazil } = useFetch<stateProps[]>("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
 
-  useEffect(() => {
-    axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
-      .then(response => {
-        setStates(response.data);
-      })
+  function handleSubmitStateAndCity() {
+    console.log(state);
 
-  }, []);
+  }
 
   return (
     <div>
-      <Head>
-        <title>Local de nascimento</title>
-      </Head>
       <BackButton link="/usuario/nascimento" />
-      <main className="w-full h-screen bg-little-nave bg-cover bg-no-repeat flex text-zinc-50 items-center ">
-
-        <form action="" className='flex flex-col items-center justify-center gap-7 lg:ml-72 p-16 backdrop-blur-md bg-black/10 rounded-2xl '>
+      <main className="w-full h-screen bg-little-nave bg-cover bg-no-repeat flex text-zinc-50 items-center">
+        <form
+          onSubmit={handleSubmit(handleSubmitStateAndCity)}
+          className="flex flex-col items-center justify-center gap-7 lg:ml-72 p-16 backdrop-blur-md bg-black/10 rounded-2xl">
           <h2 className='text-2xl'>Onde a sua nave está estacionada?</h2>
           <span className='font-light text-xl'>O local onde você vive atualmente</span>
           <div className='flex flex-col w-full justify-between gap-6'>
             <div className='w-full flex flex-col gap-2'>
               <label htmlFor="country">Estado</label>
-              <Select.Root  >
+              <Select.Root onValueChange={setState}>
                 <Select.Trigger
-                  id="day"
+                  id="country"
                   className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
                 >
                   <Select.Value placeholder="Selecione seu estado" />
                   <Select.Icon>
-                    <img src="/images/arrow-down.svg" alt="arrow down" />
+                    <Image src="/images/arrow-down.svg" alt="arrow down" width={12} height={12} />
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
                   <Select.Content position='popper' className="bg-white text-center rounded mt-2 w-full">
                     <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
 
-                      {states.map(states => {
+                      {statesOfBrazil?.map(states => {
                         return (
                           <Select.Item
                             key={states.id}
                             value={states.nome}
-                            className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                            className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50 rounded-lg flex justify-between items-center"
                           >
-                            {states.nome}
                             <Select.ItemText>
+                              {states.nome}
                             </Select.ItemText>
                             <Select.ItemIndicator >
                               <Check size={18} />
@@ -69,24 +65,21 @@ export default function Local() {
                           </Select.Item>
                         )
                       })}
-
-
-
                     </Select.Viewport>
                   </Select.Content>
                 </Select.Portal>
               </Select.Root>
             </div>
             <div className='w-full flex flex-col gap-2'>
-              <label htmlFor="country">Cidade</label>
+              <label htmlFor="City">Cidade</label>
               <Select.Root  >
                 <Select.Trigger
-                  id="day"
+                  id="City"
                   className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
                 >
                   <Select.Value placeholder="Selecione sua cidade" />
                   <Select.Icon>
-                    <img src="/images/arrow-down.svg" alt="arrow down" />
+                    <Image src="/images/arrow-down.svg" alt="arrow down" width={12} height={12} />
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
@@ -97,8 +90,8 @@ export default function Local() {
                         value='teste'
                         className="py-2 px-4 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
                       >
-                        Oi
                         <Select.ItemText>
+                          Oi
                         </Select.ItemText>
                         <Select.ItemIndicator className="">
                           <Check size={18} />
@@ -129,7 +122,6 @@ export default function Local() {
                   <Check size={32} className="p-1 text-zinc-50 font-bold" />
                 </Checkbox.Indicator>
               </Checkbox.Root>
-
               <label>Não moro no Brasil</label>
             </div>
 

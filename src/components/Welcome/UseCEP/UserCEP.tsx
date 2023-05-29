@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 
 import { Container, Content, Input } from "./style";
-import { BackButton } from "../BackButton";
+import { BackButton } from "../../BackButton";
 import { RegisterContext } from "../../context/RegisterContext";
 
 export function UserCEP() {

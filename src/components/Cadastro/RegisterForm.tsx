@@ -58,7 +58,7 @@ export function UserRegisterForm() {
   }
 
   return (
-    <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
+    <main className="flex flex-col w-full gap-2 justify-center items-center">
       <h1 className="text-3xl text-purple-700">Cadastro para voluntariado</h1>
       <form onSubmit={handleSubmit(handleForm)} className="w-1/2 flex flex-col gap-2 mt-4">
         <div className="flex flex-col w-full max-w-md gap-2">
