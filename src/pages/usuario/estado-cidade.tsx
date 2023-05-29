@@ -2,26 +2,51 @@ import * as Select from '@radix-ui/react-select';
 import * as Checkbox from '@radix-ui/react-checkbox'
 import { BackButton } from "../../components/BackButton";
 import { Check } from 'phosphor-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form'
 import useFetch from '../../hooks/useFetch';
 import Image from 'next/image';
-
-interface stateProps {
+import axios from 'axios';
+interface cityProps {
   id: number,
-  nome: string
+  nome: string,
 }
+
+interface stateProps extends cityProps {
+  sigla: string
+}
+
 
 export default function EstadoCidade() {
   const [outOfBrazil, setOutOfBrazil] = useState(false)
-  const [state, setState] = useState("")
+  const [stateSubmit, setStateSubmit] = useState("")
+  const [citySubmit, setCitySubmit] = useState("")
+  const [city, setCity] = useState<cityProps[]>()
   const { handleSubmit } = useForm()
   const { data: statesOfBrazil } = useFetch<stateProps[]>("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
 
   function handleSubmitStateAndCity() {
-    console.log(state);
+    console.log(city);
 
   }
+
+  useEffect(() => {
+    async function fetchCidadesPorEstado() {
+      try {
+        const estadoEncontrado = statesOfBrazil?.find(e => e.sigla === stateSubmit);
+
+        const cidadesResponse = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`);
+
+        setCity(cidadesResponse.data);
+      } catch (error) {
+        console.error('Não foi possível obter a lista de cidades:')
+        setCity([]);
+      }
+    }
+
+    fetchCidadesPorEstado();
+  }, [stateSubmit]);
+
 
   return (
     <div>
@@ -35,7 +60,7 @@ export default function EstadoCidade() {
           <div className='flex flex-col w-full justify-between gap-6'>
             <div className='w-full flex flex-col gap-2'>
               <label htmlFor="country">Estado</label>
-              <Select.Root onValueChange={setState}>
+              <Select.Root onValueChange={setStateSubmit}>
                 <Select.Trigger
                   id="country"
                   className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
@@ -53,7 +78,7 @@ export default function EstadoCidade() {
                         return (
                           <Select.Item
                             key={states.id}
-                            value={states.nome}
+                            value={states.sigla}
                             className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50 rounded-lg flex justify-between items-center"
                           >
                             <Select.ItemText>
@@ -72,7 +97,7 @@ export default function EstadoCidade() {
             </div>
             <div className='w-full flex flex-col gap-2'>
               <label htmlFor="City">Cidade</label>
-              <Select.Root  >
+              <Select.Root onValueChange={setCitySubmit}>
                 <Select.Trigger
                   id="City"
                   className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
@@ -83,20 +108,26 @@ export default function EstadoCidade() {
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
-                  <Select.Content position='popper' className="bg-white text-center rounded mt-2 w-32">
+                  <Select.Content position='popper' className="bg-white text-center rounded mt-2 w-full">
                     <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
 
-                      <Select.Item
-                        value='teste'
-                        className="py-2 px-4 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
-                      >
-                        <Select.ItemText>
-                          Oi
-                        </Select.ItemText>
-                        <Select.ItemIndicator className="">
-                          <Check size={18} />
-                        </Select.ItemIndicator>
-                      </Select.Item>
+                      {city?.map(city => {
+                        return (
+                          <Select.Item
+                            key={city.id}
+                            value={city.nome}
+                            className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50 rounded-lg flex justify-between items-center"
+                          >
+                            <Select.ItemText>
+                              {city.nome}
+                            </Select.ItemText>
+                            <Select.ItemIndicator >
+                              <Check size={18} />
+                            </Select.ItemIndicator>
+                          </Select.Item>
+                        )
+                      })}
+
                     </Select.Viewport>
                   </Select.Content>
                 </Select.Portal>
@@ -106,7 +137,6 @@ export default function EstadoCidade() {
               <Checkbox.Root
                 className={`bg-transparent w-6 h-6 border-2 border-solid border-[#A2ABCC] rounded flex items-center justify-center ${outOfBrazil && "&& bg-gradient-to-r to-[#9D37F2] from-blue-300 border-none"}`}
                 id='checkbox'
-                required
                 checked={outOfBrazil}
                 onCheckedChange={
                   (checked) => {
