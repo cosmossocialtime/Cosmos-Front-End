@@ -12,9 +12,11 @@ import { objectiveCardsData, TasksProps } from '../../../../data/objectiveCardsD
 type ModalTaskProps = {
     id: string;
     index: number;
-    // taskWithActiveEditing?: string;
-    // changeTitle: (newTitle: string) => void;
-    // toggleTaskWithActiveEditing: (id?: string) => void;
+    title: string;
+    tasks: TasksProps[];
+    taskWithActiveEditing?: string;
+    changeTitle: (newTitle: string) => void;
+    toggleTaskWithActiveEditing: (id?: string) => void;
     deleteObjective: (id: string) => void;
     saveEditions: (localTasks: TasksProps[]) => void;
     changeTaskCheck: (id: string) => void;
@@ -25,6 +27,8 @@ export default function ModalTask({
 
     id,
     index,
+    title,
+    tasks,
     changeTitle,
     taskWithActiveEditing,
     toggleTaskWithActiveEditing,
