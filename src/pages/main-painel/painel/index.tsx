@@ -23,7 +23,7 @@ export default function Painel() {
                     <AdventureArea />
                 </div>
 
-                <div className="min-w-max flex flex-col gap-6">
+                <div className="flex flex-col gap-6 w-1/3">
                     <PerfilArea />
 
                     <AchievementsArea openMission={"example"} />

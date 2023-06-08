@@ -22,7 +22,7 @@ export default function CalendarioEventosPage() {
 
     const [currentMonth, setCurrentMonth] = useState(dayjs())
     const [daysOfMonth, setDaysOfMonth] = useState<dayjs.Dayjs[]>(getDaysOfMonth(currentMonth))
-
+    
     const firstDayWeekOfMonth = Number(daysOfMonth[0].format("d"))
     const daysOfPreviousMonth = Array.from({ length: firstDayWeekOfMonth })
 
@@ -88,7 +88,7 @@ export default function CalendarioEventosPage() {
                     </div>
 
                     <div className="grid grid-cols-7 gap-2 2xl:gap-6 flex-1">
-                        {daysOfPreviousMonth.map((day, index) => (
+                        {daysOfPreviousMonth.map((_, index) => (
                             <div
                                 key={index}
                                 className="p-3 bg-zinc-100 rounded-2xl w-full cursor-not-allowed opacity-60 relative">
@@ -102,7 +102,7 @@ export default function CalendarioEventosPage() {
                                 day={day}
                             />
                         ))}
-                        {daysOfNextMonth.map((day, index) => (
+                        {daysOfNextMonth.map((_, index) => (
                             <div
                                 key={index}
                                 className="p-3 bg-zinc-100 rounded-2xl w-full cursor-not-allowed opacity-60 relative">

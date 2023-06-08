@@ -65,7 +65,7 @@ export default function SideBar() {
 
   return (
     <div className="relative">
-      <aside className={`${showside ? "w-[19rem]" : "w-[5.5rem]"} bg-violet-900 min-h-screen flex flex-col relative transition-all duration-300 overflow-hidden`}>
+      <aside className={`${showside ? "w-[19rem]" : "w-20 2xl:w-[5.5rem]"} bg-violet-900 min-h-screen flex flex-col relative transition-all duration-300 overflow-hidden`}>
         <div>
           <div className="mx-auto w-fit my-5">
             <Link href={"/main-painel/painel"}>
@@ -117,11 +117,12 @@ export default function SideBar() {
           </div>
         </div>
 
-        <div className="mt-auto flex flex-col bg-blue-900 text-white p-2">
-          <Link href="/">{showside ?
-            "Precisa de ajuda?" : "?"}</Link>
+        <div className={`${showside ? "" : "hidden"} mt-auto flex flex-col bg-blue-900 text-white p-2`}>
+          <Link href="/">
+            Precisa de ajuda?
+          </Link>
           <Link href="/" className="text-blue-400">
-            {showside ? "Chat do Controle da Missão" : "Chat"}
+            Chat do Controle da Missão
           </Link>
         </div>
 

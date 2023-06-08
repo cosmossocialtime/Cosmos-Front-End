@@ -14,7 +14,7 @@ export default function Comandante() {
         </Link>
 
         <OpCard>
-          <Image src="/images/papelMissao/comandante.png" alt="" />
+          <Image src="/images/papelMissao/comandante.png" alt="" width={200} height={200}/>
           <CardContent>
             <div>
               <h3>Comandante</h3>
@@ -33,7 +33,7 @@ export default function Comandante() {
           </CardContent>
         </OpCard>
 
-        <Link href="/cards/especialista">
+        <Link href="/usuario/aventuras/especialista">
           <CaretRight />
         </Link>
 
@@ -42,7 +42,7 @@ export default function Comandante() {
             <CaretLeft />
           </Link>
 
-          <Link href="/cards/especialista">
+          <Link href="/usuario/aventuras/especialista">
             <CaretRight />
           </Link>
         </MobileLink>

@@ -15,7 +15,7 @@ export default function Piloto() {
           <CaretLeft />
         </Link>
         <OpCard>
-          <Image src="/images/papelMissao/piloto.png" alt="" />
+          <Image src="/images/papelMissao/piloto.png" alt="" width={200} height={200}/>
 
           <CardContent>
             <div>
@@ -37,16 +37,16 @@ export default function Piloto() {
           </CardContent>
         </OpCard>
 
-        <Link href="/selectrole">
+        <Link href="/usuario/aventuras/especialista">
           <CaretRight />
         </Link>
 
         <MobileLink>
-          <Link href="/cards/especialista">
+          <Link href="/usuario/aventuras/especialista">
             <CaretLeft />
           </Link>
 
-          <Link href="/selectrole">
+          <Link href="/usuario/aventuras/comandante">
             <CaretRight />
           </Link>
         </MobileLink>

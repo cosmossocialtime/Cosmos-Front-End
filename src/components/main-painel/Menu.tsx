@@ -1,7 +1,9 @@
 import * as DropDownMenu from '@radix-ui/react-dropdown-menu';
+import * as Dialog from '@radix-ui/react-dialog';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Check, List } from 'phosphor-react';
+import { Feedback } from './Feedback';
 
 export default function Menu() {
     const { pathname } = useRouter()
@@ -67,20 +69,32 @@ export default function Menu() {
                         className='flex flex-col gap-6'
                         value={pathname}
                     >
-                        {optionsRoutes.map(option => (
-                            <DropDownMenu.RadioItem
-                                key={option.route}
-                                className='relative flex items-center outline-none cursor-pointer hover:text-blue-400 transition data-[state=checked]:font-semibold data-[state=checked]:text-blue-400'
-                                value={option.route}
-                            >
-                                <DropDownMenu.ItemIndicator className='absolute -left-8 text-blue-400'>
-                                    <Check size={24} />
-                                </DropDownMenu.ItemIndicator>
-                                <Link key={option.title} href={option.route}>
-                                    {option.title}
-                                </Link>
-                            </DropDownMenu.RadioItem>
-                        ))}
+
+                        <DropDownMenu.RadioItem
+                            className='relative flex items-center outline-none cursor-pointer hover:text-blue-400 transition data-[state=checked]:font-semibold data-[state=checked]:text-blue-400'
+                            value={"Precisando de Ajuda?"}
+                        >
+                            Precisando de Ajuda?
+                        </DropDownMenu.RadioItem>
+                        <DropDownMenu.RadioItem
+                            className='relative flex items-center outline-none cursor-pointer hover:text-blue-400 transition data-[state=checked]:font-semibold data-[state=checked]:text-blue-400'
+                            value={"Feedback"}
+                        >   
+                        <Dialog.Root>
+                            <Dialog.Trigger>
+                                Feedback
+                            </Dialog.Trigger>
+                            <Feedback />
+                        </Dialog.Root>
+                        </DropDownMenu.RadioItem>
+                        <DropDownMenu.RadioItem
+                            className='relative flex items-center outline-none cursor-pointer hover:text-blue-400 transition data-[state=checked]:font-semibold data-[state=checked]:text-blue-400'
+                            value={"Sair"}
+                        >
+                            Sair
+                        </DropDownMenu.RadioItem>
+
+
                     </DropDownMenu.RadioGroup>
                 </DropDownMenu.Content>
             </DropDownMenu.Portal>
