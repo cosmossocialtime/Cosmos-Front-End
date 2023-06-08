@@ -73,7 +73,8 @@ module.exports = {
         "espaco": "url(/images/bgEspaco.png)",
         "bgCadastro": "url(/images/bgCadastro.png)",
         "bgTerra": "url(/images/bgTerra.png)",
-        "little-nave": "url(/images/bgNave.png)"
+        "little-nave": "url(/images/bgNave.png)",
+        "decolar": "url(/images/decolar.png)"
       },
     },
     plugins: [

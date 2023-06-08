@@ -16,7 +16,6 @@ interface stateProps extends cityProps {
   sigla: string
 }
 
-
 export default function EstadoCidade() {
   const [outOfBrazil, setOutOfBrazil] = useState(false)
   const [stateSubmit, setStateSubmit] = useState("")
