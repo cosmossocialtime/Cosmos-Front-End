@@ -4,8 +4,8 @@ import styled from "styled-components";
 export default function Main() {
 
   return (
-    <div className="h-screen relative">
-      <img className="bg-cover bg-no-repeat relative h-full" src="/images/background-login.png" alt="" />
+    <div className="h-screen relative w-full">
+      <img className="bg-cover bg-no-repeat relative h-full w-full" src="/images/background-login.png" alt="" />
       <img
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  p-14 bg-black/20 rounded-2xl backdrop-blur-md"
         src="/images/logo.png"

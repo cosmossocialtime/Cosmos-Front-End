@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 export default function Iniciar() {
   return (
@@ -9,11 +10,11 @@ export default function Iniciar() {
         <p className="max-w-sm text-center text-xl font-light">
           Antes de começarmos, precisamos saber um pouco mais sobre você
         </p>
-        <Link
+        <a
           className=" py-2 px-40 bg-violet-500 text-lg transition-all duration-150 hover:bg-violet-600 rounded-lg font-semibold"
           href={"/usuario/genero"}>
           Vamos lá
-        </Link>
+        </a>
       </div>
       <img
         className="h-fit w-1/3 z-10 -ml-10"

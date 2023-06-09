@@ -8,6 +8,7 @@ export interface User {
   password: string,
   avatar_url: string,
 }
+
 export interface IContext {
   isAutenticate: boolean,
   user: User | null,

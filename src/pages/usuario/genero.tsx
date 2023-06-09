@@ -5,9 +5,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { CaretRight } from "phosphor-react";
 
-import { BackButton } from "../../components/Welcome/BackButton";
+import { BackButton } from "../../components/BackButton";
 import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthProvider/useAuth";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 const schemaGender = z.object({
   gender: z.string().nonempty("Por favor selecione o seu gênero")
@@ -22,23 +24,16 @@ export default function Genero() {
 
   const { handleSubmit } = useForm<GenderForm>()
 
-  const useAuthenticate = useAuth()
-
   function submitFormGender() {
     api.patch("/user/onboarding", {
       "gender": gender,
-    },
-      {
-        headers: {
-          "Authorization": "Bearer_" + useAuthenticate.token
-        }
-      }
+    }
     )
     router.push("/usuario/codigo-empresa")
   }
 
   return (
-    <>
+    <div>
       <BackButton link="/usuario/iniciar" />
       <main
         className="bg-bgCadastro h-screen bg-cover bg-no-repeat flex items-center justify-around">
@@ -94,6 +89,23 @@ export default function Genero() {
           )}
         </form>
       </main>
-    </>
+    </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/usuario/entrar',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }

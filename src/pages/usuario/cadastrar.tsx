@@ -4,7 +4,7 @@ import Main from "../../components/Main";
 
 export default function Cadastrar() {
   return (
-    <>
+    <div>
       <Head>
         <title>Cadastrar | Cosmos</title>
       </Head>
@@ -12,6 +12,6 @@ export default function Cadastrar() {
         <Main />
         <UserRegisterForm />
       </div>
-    </>
+    </div>
   );
 }

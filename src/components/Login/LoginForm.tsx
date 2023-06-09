@@ -4,8 +4,6 @@ import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { z } from "zod"
-import { useRouter } from "next/router";
-import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthProvider/useAuth";
 
 const schema = z.object({
@@ -19,13 +17,10 @@ export function UserLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false)
   const { register, handleSubmit, formState: { errors } } = useForm<formProps>()
-  const router = useRouter()
   const auth = useAuth()
 
   const SubmitForm = async ({ email, password }: formProps) => {
     setIsSubmiting(true)
-
-    console.log(email, password);
 
     try {
       await auth.signIn({ email, password })
@@ -36,7 +31,7 @@ export function UserLoginForm() {
     }
   }
   return (
-    <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
+    <main className="flex flex-col w-full gap-2 justify-center items-center">
       <h2 className="text-3xl text-purple-700">Faça o seu login</h2>
       <form onSubmit={handleSubmit(SubmitForm)} className="w-1/2 flex flex-col gap-2 mt-4">
         <div className="flex flex-col w-full max-w-md gap-2">
