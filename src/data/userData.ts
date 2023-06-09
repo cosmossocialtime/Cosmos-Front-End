@@ -1,9 +1,9 @@
-import UserProfile from "../assets/user.jpg";
+import UserProfile from "../assets/cam-icon.png";
 import BgPerfil from "../assets/bg-perfil.png";
 import { StaticImageData } from "next/image";
 
 type userProps = {
-  profilePicture?: StaticImageData;
+  profilePicture: StaticImageData;
   backgroundPicture: StaticImageData;
   name: string;
   birthDate: string;
@@ -16,12 +16,12 @@ type userProps = {
 const userData : userProps = {
   profilePicture: UserProfile,
   backgroundPicture: BgPerfil,
-  name: "Érick Henrique",
+  name: "Jhon Wood",
   birthDate: "2000-01-24",
   genre: "Masculino",
   cep: "62923-130",
   companyCode: "123abc",
-  email: "erick.henrique@gmail.com",
+  email: "jhon@gmail.com",
 };
 
 export default userData;

@@ -12,13 +12,13 @@ export default function AchievementsArea({ openMission }: AchievementsAreaProps)
             <div className="flex justify-between">
                 <span className="text-gray-500">Minhas conquistas:</span>
                 <span className="text-sm text-gray-500">
-                    <strong className="text-gray-200">1</strong> de 9
+                    <strong className="text-gray-200">{completeAchievements.length}</strong> de 9
                 </span>
             </div>
 
             <div className="pr-6 h-[29rem] mt-2 overflow-y-auto scrollbar-thin scrollbar-w-1 scrollbar-h-1/2 scrollbar-thumb-blue-300 scrollbar-track-[#8779B5]/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
                 {completeAchievements.map(achievement => (
-                    <div className="py-4 border-0 border-b border-solid border-[#333B5B] flex items-center gap-4">
+                    <div key={achievement.id} className="py-4 border-0 border-b border-solid border-[#333B5B] flex items-center gap-4">
                         <Image
                             className="w-12 h-12 rounded-full border-4 border-solid border-blue-200"
                             src={achievement.image}
@@ -31,7 +31,7 @@ export default function AchievementsArea({ openMission }: AchievementsAreaProps)
                     </div>
                 ))}
                 {incompleteAchievements.map(achievement => (
-                    <div className="py-4 border-0 border-b border-solid border-[#333B5B] flex items-center gap-4">
+                    <div key={achievement.id} className="py-4 border-0 border-b border-solid border-[#333B5B] flex items-center gap-4">
                         <Image
                             className="w-12 h-12 rounded-full border-4 border-solid border-gray-500"
                             src={achievement.image}
