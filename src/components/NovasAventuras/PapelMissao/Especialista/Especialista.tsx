@@ -15,7 +15,7 @@ export default function Especialista() {
         </Link>
 
         <OpCard>
-          <Image src="/images/papelMissao/especialista.png" alt="" />
+          <Image src="/images/papelMissao/especialista.png" alt="" width={200} height={200}/>
 
           <CardContent>
             <div>
@@ -34,16 +34,16 @@ export default function Especialista() {
           </CardContent>
         </OpCard>
 
-        <Link href="/cards/piloto">
+        <Link href="/usuario/aventuras/piloto">
           <CaretRight />
         </Link>
 
         <MobileLink>
-          <Link href="/cards/comandante">
+          <Link href="/usuario/aventuras/comandante">
             <CaretLeft />
           </Link>
 
-          <Link href="/cards/piloto">
+          <Link href="/usuario/aventuras/piloto">
             <CaretRight />
           </Link>
         </MobileLink>

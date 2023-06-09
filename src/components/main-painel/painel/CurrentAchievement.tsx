@@ -32,32 +32,32 @@ export default function CurrentAchievement() {
   return (
     <div className="w-full navigation-wrapper relative bg-[#1E2543] rounded-lg flex justify-between">
       <div ref={sliderRef} className='keen-slider w-full'>
-        {completeAchievements.map(achievements => (
-          <div className="keen-slider__slide flex flex-col py-6 pl-24 pr-16">
-            <span className="text-xl text-gray-500">{achievements.title}</span>
-            <strong className="mt-4 mb-2 text-gray-200 font-semibold text-2xl">{achievements.description}</strong>
+        {completeAchievements.map(achievement => (
+          <div key={achievement.id} className="keen-slider__slide flex flex-col py-6 pl-24 pr-16">
+            <span className="text-xl text-gray-500">{achievement.title}</span>
+            <strong className="mt-4 mb-2 text-gray-200 font-semibold text-2xl">{achievement.description}</strong>
             <span className="text-gray-200">e consquiste uma medalha</span>
             <div className="absolute top-1/2 -translate-y-1/2 right-16 z-10 transition-all duration-400">
               <Image src={LightMedal} alt="Medalha" className="w-32" />
               <Image
                 className="absolute top-0 border-8 border-solid border-transparent rounded-full"
-                src={achievements.image}
+                src={achievement.image}
                 alt=""
               />
             </div>
           </div>
         ))}
 
-        {incompleteAchievements.map(achievements => (
-          <div className="keen-slider__slide flex flex-col py-6 pl-24 pr-52">
-            <span className="text-xl text-gray-500">{achievements.title}</span>
-            <strong className="mt-4 mb-2 text-gray-200 font-semibold text-2xl">{achievements.description}</strong>
+        {incompleteAchievements.map(achievement => (
+          <div key={achievement.id} className="keen-slider__slide flex flex-col py-6 pl-24 pr-52">
+            <span className="text-xl text-gray-500">{achievement.title}</span>
+            <strong className="mt-4 mb-2 text-gray-200 font-semibold text-2xl">{achievement.description}</strong>
             <span className="text-gray-200">e consquiste uma medalha</span>
             <div className="absolute top-1/2 -translate-y-1/2 right-16 z-10 transition-all duration-400">
               <Image src={Medal} alt="Medalha" className="w-32" />
               <Image
                 className="absolute top-0 border-8 border-solid border-transparent rounded-full"
-                src={achievements.image}
+                src={achievement.image}
                 alt=""
               />
             </div>
