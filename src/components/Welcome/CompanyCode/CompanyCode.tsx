@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
 import { RegisterContext } from "../../context/RegisterContext";
-import { BackButton } from "../BackButton";
+import { BackButton } from "../../BackButton";
 import { Container, Content } from "./style";
 import Image from "next/image";
 
@@ -44,8 +44,8 @@ export function CompanyCode() {
             </button>
           </div>
 
-          <Image 
-            src="/images/bandeira.png" 
+          <Image
+            src="/images/bandeira.png"
             alt="Imagem de uma bandeira"
           />
         </Content>

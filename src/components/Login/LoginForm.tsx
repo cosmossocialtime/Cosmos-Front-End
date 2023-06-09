@@ -1,51 +1,37 @@
+import Link from "next/link";
 import { Eye, EyeClosed } from "phosphor-react";
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { z } from "zod"
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { useAuth } from "../../context/AuthProvider/useAuth";
 
 const schema = z.object({
   email: z.string(),
-  password: z.string()
+  password: z.string().nonempty("O campo senha é obrigatório")
 })
 type formProps = z.infer<typeof schema>
 
-const logInTest = {
-  email: "teste@gmail.com",
-  password: "123456"
-}
 
 export function UserLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false)
-  const { register, handleSubmit } = useForm<formProps>()
-  const router = useRouter()
+  const { register, handleSubmit, formState: { errors } } = useForm<formProps>()
+  const auth = useAuth()
 
-  const SubmitForm = ({ email, password }: formProps) => {
+  const SubmitForm = async ({ email, password }: formProps) => {
     setIsSubmiting(true)
 
-    if (password === "" || email === "") {
+    try {
+      await auth.signIn({ email, password })
+      toast.success("Acesso autorizado, ligando os foguetes")
+    } catch (error) {
       setIsSubmiting(false)
-      return toast.error("Por favor, preencha os campos de email e senha corretamente.");
-    }
-
-    if (email !== logInTest.email || password !== logInTest.password) {
-      setIsSubmiting(false)
-      return toast.error("Credenciais incorretas")
-    }
-    if (email === logInTest.email && password === logInTest.password) {
-      try {
-        setTimeout(() => {
-          router.push("/painelprincipal/painel")
-        }, 2000)
-        toast.success("Acesso autorizado, ligando os foguetes")
-      } catch (error) { console.log(error) }
+      toast.error("Credenciais incorretas")
     }
   }
   return (
-    <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
+    <main className="flex flex-col w-full gap-2 justify-center items-center">
       <h2 className="text-3xl text-purple-700">Faça o seu login</h2>
       <form onSubmit={handleSubmit(SubmitForm)} className="w-1/2 flex flex-col gap-2 mt-4">
         <div className="flex flex-col w-full max-w-md gap-2">
@@ -59,9 +45,10 @@ export function UserLoginForm() {
             id="email"
             type="email"
             placeholder="nome@email.com.br"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
+        {errors.email && <span className='text-sm text-rose-600'>{errors.email.message}</span>}
         <div className="flex flex-col w-full max-w-md gap-2">
           <div>
             <label htmlFor="password">Senha</label>
@@ -74,7 +61,7 @@ export function UserLoginForm() {
               required
               type={showPassword ? "text" : "password"}
               placeholder="Digite sua senha aqui"
-              className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+              className="w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
             />
             <button
               type="button"
@@ -84,6 +71,8 @@ export function UserLoginForm() {
               {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
             </button>
           </div>
+          {errors.password && <span className='text-sm text-rose-600'>{errors.password.message}</span>}
+
           <span className="text-right text-sm  py-3">
             <Link href="/usuario/recuperar" className="text-purple-500 hover:text-purple-700">Esqueci a minha senha</Link>
           </span>

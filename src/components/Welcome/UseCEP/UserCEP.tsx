@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 
 import { Container, Content, Input } from "./style";
-import { BackButton } from "../BackButton";
+import { BackButton } from "../../BackButton";
 import { RegisterContext } from "../../context/RegisterContext";
 
 export function UserCEP() {
@@ -15,14 +15,14 @@ export function UserCEP() {
 
   function SetUserCEP() {
 
-    !userCEP ? (alert("CEP inválido")) : 
-    
-    (setCEP(userCEP));
+    !userCEP ? (alert("CEP inválido")) :
+
+      (setCEP(userCEP));
   }
 
   return (
     <>
-      <BackButton link="/usuario/nascimento" />
+      <BackButton link="/usuario/genero" />
       <Container>
         <Content>
           <strong>Onde a sua nave está estacionada?</strong>

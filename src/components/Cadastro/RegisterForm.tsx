@@ -7,6 +7,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { Check, Eye, EyeClosed, Question } from "phosphor-react";
 import Link from "next/link";
+import { api } from "../../services/api";
 
 const schema = z.object({
   name: z.string()
@@ -34,20 +35,29 @@ const schema = z.object({
 type formProps = z.infer<typeof schema>
 
 export function UserRegisterForm() {
-
   const [isSubmiting, setIsSubmiting] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false)
-
   const { register, handleSubmit, formState: { errors } } = useForm<formProps>({ resolver: zodResolver(schema) })
-  function handleForm(data: formProps) {
-    setIsSubmiting(true)
-    return (toast.success("Criado com sucesso"), console.log(data, acceptTerms));
+
+  async function handleForm(data: formProps) {
+    try {
+      await api.post('/auth/signup', {
+        "byname": data.alias,
+        "fullName": data.name,
+        "email": data.email,
+        "password": data.password,
+        "passwordConfirmation": data.confirmPassword
+      })
+    } catch (error) {
+      return toast.error("Não foi possivel criar sua conta, por favor tente novamente mais tarde")
+    }
+    return (toast.success("Criado com sucesso"));
   }
 
   return (
-    <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
+    <main className="flex flex-col w-full gap-2 justify-center items-center">
       <h1 className="text-3xl text-purple-700">Cadastro para voluntariado</h1>
       <form onSubmit={handleSubmit(handleForm)} className="w-1/2 flex flex-col gap-2 mt-4">
         <div className="flex flex-col w-full max-w-md gap-2">
@@ -57,7 +67,7 @@ export function UserRegisterForm() {
             required
             id="Nome"
             placeholder="Nome e sobrenome"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
 
@@ -68,7 +78,7 @@ export function UserRegisterForm() {
             required
             id="apelido"
             placeholder="Como gostaria de ser chamado(a)"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-pink-600 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
           />
         </div>
 
@@ -80,7 +90,7 @@ export function UserRegisterForm() {
             id="email"
             type="email"
             placeholder="nome@email.com.br"
-            className={`border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500  invalid:border-pink-600  hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.email ? "border-pink-600" : "valid:border-green-500"}`}
+            className={`border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500   hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.email ? "border-pink-600" : "valid:border-green-500"}`}
           />
         </div>
         {errors.email && <span className='text-sm text-rose-600'>{errors.email.message}</span>}
@@ -104,10 +114,10 @@ export function UserRegisterForm() {
             {...register("password")}
             required
             id="password"
-            // minLength={8}
+            minLength={8}
             type={showPassword ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className={`w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-rose-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.password ? "border-rose-600" : "valid:border-green-500"}`}
+            className={`w-full border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500  hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.password ? "border-rose-600" : "valid:border-green-500"}`}
           />
           <button
             className="button-show-password absolute top-3 right-2"
@@ -127,7 +137,7 @@ export function UserRegisterForm() {
             id="confirm-password"
             type={showPassword1 ? "text" : "password"}
             placeholder="Digite sua senha aqui"
-            className={`w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 invalid:border-rose-600 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.password || errors.confirmPassword ? "border-rose-600" : "border-green-500"}`}
+            className={`w-full border-solid border border-gray-400 p-2 rounded-md focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 ${errors.password ? "border-rose-600" : "valid:border-green-500"}} `}
           />
           <button
             className="button-show-password absolute top-3 right-2"
@@ -141,7 +151,7 @@ export function UserRegisterForm() {
 
         <div className='flex gap-2 my-4'>
           <Checkbox.Root
-            className='bg-white w-6 h-6 border-2 border-solid border-[#A2ABCC] rounded flex items-center justify-center'
+            className={`bg-zinc-50  w-6 h-6 border-2 border-solid border-[#A2ABCC] rounded flex items-center justify-center ${acceptTerms && "&& bg-gradient-to-r to-[#9D37F2] from-blue-300 border-none"}`}
             id='checkbox'
             required
             checked={acceptTerms}
@@ -156,7 +166,7 @@ export function UserRegisterForm() {
             }
           >
             <Checkbox.Indicator >
-              <Check size={32} className="p-1 text-green-500 font-bold" />
+              <Check size={32} className="p-1 text-zinc-50 font-bold" />
             </Checkbox.Indicator>
           </Checkbox.Root>
           <label htmlFor="checkbox">

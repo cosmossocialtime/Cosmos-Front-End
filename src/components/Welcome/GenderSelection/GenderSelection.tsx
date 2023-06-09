@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import { CaretRight } from "phosphor-react";
 import { Container, Content, OtherGender, RadioBox } from "./style";
-import { BackButton } from "../BackButton";
+import { BackButton } from "../../BackButton";
 import { RegisterContext } from "../../context/RegisterContext";
 import { useRouter } from "next/router";
 

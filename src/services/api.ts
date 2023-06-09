@@ -1,5 +1,5 @@
 import axios from "axios";
+import {parseCookies} from 'nookies'
+import { getApiClient } from "./axios";
 
-export const api = axios.create({
-    baseURL: "http://localhost:3000/api"
-})
+export const api = getApiClient()

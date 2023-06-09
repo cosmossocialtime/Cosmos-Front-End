@@ -4,7 +4,12 @@ module.exports = {
     "./node_modules/tailwind-datepicker-react/dist/**/*.tsx"],
 
   theme: {
+
     extend: {
+
+      screens: {
+        "medium": { "min": "1601", "max": "1680" }
+      },
 
       fontFamily: {
         sans: "Inter, sans-serif",
@@ -65,6 +70,11 @@ module.exports = {
         "bgsatelites": "url('/images/satelites/bgSatelite.png')",
         "art-board": "url(/images/background-art-board.png)",
         "currentMission": "url(/images/bg-current-mission.png)",
+        "espaco": "url(/images/bgEspaco.png)",
+        "bgCadastro": "url(/images/bgCadastro.png)",
+        "bgTerra": "url(/images/bgTerra.png)",
+        "little-nave": "url(/images/bgNave.png)",
+        "decolar": "url(/images/decolar.png)"
       },
     },
     plugins: [
