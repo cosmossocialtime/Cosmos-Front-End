@@ -65,6 +65,8 @@ module.exports = {
         "bgsatelites": "url('/images/satelites/bgSatelite.png')",
         "art-board": "url(/images/background-art-board.png)",
         "currentMission": "url(/images/bg-current-mission.png)",
+        "espaco": "url(/images/bgEspaco.png)",
+        "bgCadastro": "url(/images/bgCadastro.png)"
       },
     },
     plugins: [
