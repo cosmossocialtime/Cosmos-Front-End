@@ -1,4 +1,3 @@
-import Link from "next/link";
 import * as HoverCard from '@radix-ui/react-hover-card';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { z } from "zod"
@@ -7,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { Check, Eye, EyeClosed, Question } from "phosphor-react";
+import Link from "next/link";
 
 const schema = z.object({
   name: z.string()

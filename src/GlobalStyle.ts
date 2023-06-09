@@ -31,6 +31,8 @@ export const GlobalStyle = createGlobalStyle`
       
         font-family:'Inter', sans-serif;
         -webkit-font-smoothing: antialiased!important;
+        font-weight: lighter;
+        color: #363F63;
     }
 
     svg{

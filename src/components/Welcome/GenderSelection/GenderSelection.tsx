@@ -26,10 +26,13 @@ export function GenderSelection() {
     <>
       <BackButton link="/usuario/iniciar" />
       <Container>
+
         <Content>
           <img src="/images/astronauta.png" alt="Imagem de um astronauta" />
+
           <div>
             <h2>Com qual gênero você se identifica?</h2>
+
             <p>
               Utilizaremos esses dados para mapear o público da nossa
               plataforma!
@@ -57,7 +60,6 @@ export function GenderSelection() {
 
               <OtherGender>
                 <input
-                  required
                   onChange={(e) => setGenderSelect(e.target.value)}
                   placeholder="Digite seu gênero"
                 />
