@@ -42,7 +42,6 @@ export function UserRegisterForm() {
   const { register, handleSubmit, formState: { errors } } = useForm<formProps>({ resolver: zodResolver(schema) })
 
   async function handleForm(data: formProps) {
-    // setIsSubmiting(true)
     try {
       await api.post('/auth/signup', {
         "byname": data.alias,
@@ -54,7 +53,7 @@ export function UserRegisterForm() {
     } catch (error) {
       return toast.error("Não foi possivel criar sua conta, por favor tente novamente mais tarde")
     }
-    return (toast.success("Criado com sucesso"), console.log(data, acceptTerms));
+    return (toast.success("Criado com sucesso"));
   }
 
   return (

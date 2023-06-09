@@ -8,6 +8,8 @@ import { CaretRight } from "phosphor-react";
 import { BackButton } from "../../components/BackButton";
 import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthProvider/useAuth";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 const schemaGender = z.object({
   gender: z.string().nonempty("Por favor selecione o seu gênero")
@@ -89,4 +91,21 @@ export default function Genero() {
       </main>
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/usuario/entrar',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }

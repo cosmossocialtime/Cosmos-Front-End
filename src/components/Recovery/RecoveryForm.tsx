@@ -1,47 +1,32 @@
 import { FormEvent, useState, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
-import AccessService from "../../services/AccessService";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { api } from "../../services/api";
 
 export function UserRecoveryForm() {
 
   const [email, setEmail] = useState("");
   const router = useRouter();
 
-  const initialState = {
-    account: email,
-    password: "",
-    token: "",
-    action: ""
-  };
-
-
   const SubmitForm = (e: FormEvent) => {
-    e.preventDefault();
-    if (email == "") {
-      toast.error("Por favor, preencha o campo de email corretamente.");
+    e.preventDefault()
+    try {
+      api.post('/auth/forgotPassword', {
+        "email": email
+      })
+    } catch (error) {
+      return toast.error("Não foi possivel recuperar sua senha, por favor tente novamente mais tarde")
     }
-
-    else {
-      AccessService.Recovery(initialState).then((response: any) => {
-        if (!response.data.type.includes('error')) {
-          router.push('/usuario/recuperacao-senha');
-        }
-        else {
-          toast.error(response.data.text);
-        }
-
-      }).catch((e: Error) => {
-        toast.error("Ops...não foi processar sua requisição, tente novamente mais tarde.");
-      });
-    }
+    return toast.success("Conta encontrada, Link de recuperação enviado por email")
   }
 
+  console.log(email);
+
   return (
-    <main className="flex flex-col w-1/2 gap-2 justify-center items-center">
+    <main className="flex flex-col w-full gap-2 justify-center items-center">
       <h2 className="text-3xl text-purple-600">Informe o seu email</h2>
-      <form onSubmit={SubmitForm} className="w-1/2 flex flex-col gap-2 mt-4">
+      <form onSubmit={SubmitForm} className="p-10 flex flex-col gap-2 mt-4">
         <div className="flex flex-col w-full max-w-md gap-3 mb-9">
           <label htmlFor="email" className="text-lg">Para recuperar sua senha, informe o email com o qual se cadastrou</label>
           <input

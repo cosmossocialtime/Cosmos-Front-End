@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { parseCookies } from 'nookies'
 import { useRouter } from "next/router";
+import { GetServerSideProps } from 'next';
 
 export function ProtectedLayout({ children }: { children: JSX.Element }) {
   // const router = useRouter()
@@ -27,4 +28,20 @@ export function ProtectedLayout({ children }: { children: JSX.Element }) {
   // }
 
   // return children
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/usuario/entrar',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }

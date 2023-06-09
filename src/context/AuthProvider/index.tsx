@@ -3,6 +3,7 @@ import { createContext, useState } from "react"
 import { IAuthProvider, IContext, SignInData, User } from "./types"
 import { authenticate } from "./util"
 import Router from 'next/router'
+import { api } from "../../services/api"
 
 export const AuthContext = createContext<IContext>({} as IContext)
 
@@ -16,6 +17,8 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     setCookie(undefined, 'cosmos.token', accessToken, {
       maxAge: 60 * 60 * 12 // 1 Dia 
     })
+
+    api.defaults.headers['Authorization'] = `Bearer ${accessToken}`
     setUser(user)
     Router.push('/usuario/iniciar')
   }
