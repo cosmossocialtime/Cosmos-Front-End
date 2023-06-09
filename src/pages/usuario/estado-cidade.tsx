@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form'
 import useFetch from '../../hooks/useFetch';
 import Image from 'next/image';
 import axios from 'axios';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 interface cityProps {
   id: number,
   nome: string,
@@ -161,4 +163,20 @@ export default function EstadoCidade() {
       </main>
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/usuario/entrar',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }

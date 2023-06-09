@@ -9,7 +9,7 @@ export default function useFetch<T = unknown>(url: string){
     axios.get(url).then(response => {
       setData(response.data)
     })
-  },[])
+  },[url])
 
   return { data }
 }
