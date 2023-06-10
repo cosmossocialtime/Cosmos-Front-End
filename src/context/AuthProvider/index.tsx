@@ -12,11 +12,12 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   const isAutenticate = !!user
 
   async function signIn({ email, password }: SignInData) {
-    const { accessToken, user } = await authenticate({ email, password })
+    const { accessToken, refreshToken, user } = await authenticate({ email, password })
 
     setCookie(undefined, 'cosmos.token', accessToken, {
       maxAge: 60 * 60 * 12
     })
+    setCookie(undefined, 'cosmos.refreshToken', refreshToken)
     api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
     setUser(user)
     Router.push('/usuario/iniciar')

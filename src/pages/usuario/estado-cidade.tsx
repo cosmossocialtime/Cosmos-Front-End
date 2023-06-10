@@ -28,7 +28,6 @@ export default function EstadoCidade() {
 
   function handleSubmitStateAndCity() {
     console.log(city);
-
   }
 
   useEffect(() => {

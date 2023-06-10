@@ -1,5 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from "next/document";
-
+import Router from "next/router";
 export default class MyDocument extends Document {
   render() {
     return (
