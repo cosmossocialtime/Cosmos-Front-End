@@ -1,4 +1,14 @@
 import Document, { Head, Html, Main, NextScript } from "next/document";
+import Router from "next/router";
+import Nprogress from "nprogress"
+
+
+Router.events.on("routeChangeStart", (url) => {
+  Nprogress.start()
+})
+Router.events.on("routeChangeComplete", () => {
+  Nprogress.done()
+})
 
 export default class MyDocument extends Document {
   render() {
