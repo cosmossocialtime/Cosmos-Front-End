@@ -25,6 +25,7 @@
     "keen-slider": "^6.8.5",
     "next": "^13.0.1",
     "nookies": "^2.5.2",
+    "nprogress": "^0.2.0",
     "phosphor-react": "^1.4.1",
     "polished": "^4.2.2",
     "react": "^18.2.0",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/cookie": "^0.5.1",
     "@types/node": "18.8.4",
+    "@types/nprogress": "^0.2.0",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "@types/styled-components": "^5.1.26",
