@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   const isAutenticate = !!user
 
   async function signIn({ email, password }: SignInData) {
-    const { accessToken, refreshToken, user } = await authenticate({ email, password })
+    const { accessToken, refreshToken } = await authenticate({ email, password })
 
     setCookie(undefined, 'cosmos.token', accessToken, {
       maxAge: 60 * 60 * 12

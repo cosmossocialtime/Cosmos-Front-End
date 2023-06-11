@@ -9,12 +9,3 @@ export async function authenticate({email, password}:SignInData) {
     return null;
   }
 }
-
-// export async function userData(){
-//   try {
-//     const userData = await api.get("user")
-//     return userData
-//   } catch (error) {
-//     return null
-//   }
-// }
