@@ -1,6 +1,6 @@
 import { api } from "./api"
 import {axiosPrivate} from "./axios"
-import {parseCookies} from 'nookies'
+import {parseCookies, setCookie} from 'nookies'
 import Router from "next/router"
 
 const {'cosmos.refreshToken': refresh_token} = parseCookies()
@@ -12,8 +12,8 @@ async function renewToken() {
           "RefreshToken": refresh_token
         }
       })
-      const newToken = response.data.accessToken
-      return newToken
+      const {accesToken, refreshToken} = response.data
+      return {accesToken, refreshToken}
   } catch (error) {
       console.log(error);
   }
@@ -27,12 +27,14 @@ axiosPrivate.interceptors.request.use( response => response,
 
       try {
         const newToken = await renewToken();
-        api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+        setCookie(undefined, 'cosmos.refreshToken', newToken?.refreshToken)
+        api.defaults.headers.common['Authorization'] = `Bearer ${newToken?.accesToken}`;
         return api(originalRequest);
       } catch (error) {
         Router.push('/usuario/entrar')
         throw error;
       }
     }
+    
     return Promise.reject(error);
   })
