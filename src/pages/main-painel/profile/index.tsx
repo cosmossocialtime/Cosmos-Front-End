@@ -8,8 +8,11 @@ import UploadImage from "../../../components/main-painel/profile/UploadImage";
 import DialogPopUp from "../../../components/main-painel/profile/DialogPopUp";
 import FormUserData from "../../../components/main-painel/profile/FormUserData";
 import SettingCropArea from '../../../components/main-painel/profile/SettingCropArea';
+import { api } from '../../../services/api';
+import { userProps } from '../../../types/user';
 
 export default function Perfil() {
+    const [user, setUser] = useState<userProps | null>(null)
     const [selectedFileUrl, setSelectedFileUrl] = useState(userData.profilePicture);
     const [imgCropped, setImgCropped] = useState("");
     const [onDialog, setOnDialog] = useState(false);
@@ -25,9 +28,20 @@ export default function Perfil() {
     }
 
     useEffect(() => {
+        api.get("/dashboard")
+            .then(response => {
+                setUser(response.data.user)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+
         setImgCropped(userData.profilePicture.src)
     }, [])
 
+    if (!user) {
+        return;
+    }
     return (
         <div >
             <Header />
@@ -37,6 +51,10 @@ export default function Perfil() {
                     className="absolute inset-x-0 h-28 object-cover"
                     src={userData.backgroundPicture}
                     alt=""
+                />
+                <UploadImage
+                    updateSrcFile={updateSrcFile}
+                    setOnDialog={setOnDialog}
                 />
                 <div className='relative top-10'>
                     <Image
@@ -72,7 +90,7 @@ export default function Perfil() {
 
             <div className='flex flex-col items-center'>
                 <FormUserData
-                    userData={userData}
+                    userData={user}
                     enableForm={enableForm}
                     setEnableForm={setEnableForm}
                 />

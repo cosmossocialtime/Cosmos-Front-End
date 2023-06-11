@@ -2,8 +2,7 @@
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 
-
-const Iniciar = () => {   
+export default function Iniciar() {
   return (
     <main className="bg-espaco bg-cover bg-no-repeat h-screen text-white flex items-center justify-center p-4">
       <div className="flex flex-col items-center gap-10 p-10 backdrop-blur-md rounded-2xl bg-black/10">
@@ -23,21 +22,4 @@ const Iniciar = () => {
         alt="Imagem de um satélite" />
     </main >
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
-  const { ['cosmos.token']: token } = parseCookies(ctx)
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/usuario/entrar',
-        permanent: false
-      }
-    }
-  }
-  return {
-    props: {}
-  }
 }

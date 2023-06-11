@@ -5,28 +5,63 @@ import CurrentAchievement from "../../../components/main-painel/painel/CurrentAc
 import CurrentMissionsArea from "../../../components/main-painel/painel/CurrentMissionsArea";
 import AdventureArea from "../../../components/main-painel/painel/AdventureArea";
 import AchievementsArea from "../../../components/main-painel/painel/AchievementsArea";
-import missionsData from "../../../data/missionsData";
+import { api } from "../../../services/api";
+import { useEffect, useState } from "react";
+import { userProps } from "../../../types/user";
+import { programsProps } from "../../../types/programs";
+
+
+
 
 export default function Painel() {
+    const [user, setUser] = useState<userProps | null>(null)
+    const [achievements, setAchievements] = useState<| null>(null)
+    const [programs, setPrograms] = useState<programsProps | null>(null)
+
+    useEffect(() => {
+        api.get("/dashboard")
+            .then(response => {
+                setUser(response.data.user)
+                setAchievements(response.data.achievements)
+                setPrograms(response.data.programs)
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [])
+
+    if (!user || !achievements || !programs) {
+        return;
+    }
+
     return (
         <div className="max-w-[100vw] flex flex-col h-screen">
             <Header />
 
             <main className="px-16 py-5 bg-gray-800 flex-1 flex gap-6">
                 <div className="flex flex-col gap-6 flex-1 w-4/6">
-                    <CurrentAchievement />
+                    <CurrentAchievement
+                        achievements={achievements}
+                    />
 
-                    {missionsData.length !== 0 &&
-                        <CurrentMissionsArea />
-                    }
+                    <CurrentMissionsArea
+                        programs={programs}
+                    />
 
-                    <AdventureArea />
+                    <AdventureArea
+                        programs={programs}
+                    />
                 </div>
 
                 <div className="flex flex-col gap-6 w-1/3">
-                    <PerfilArea />
+                    <PerfilArea
+                        bannerPicture={user.banner?.directoryPath}
+                        profilePicture={user.profilePicture}
+                        name={user.fullName}
+                    />
 
-                    <AchievementsArea openMission={"example"} />
+                    <AchievementsArea achievements={achievements} />
                 </div>
             </main>
         </div>

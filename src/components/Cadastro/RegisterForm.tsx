@@ -15,7 +15,7 @@ const schema = z.object({
     .transform(name => {
       return name.trim().split(" ").map(word => {
         return word[0].toLocaleUpperCase().concat(word.substring(1))
-      }).join()
+      }).join(" ")
     }),
   alias: z.string()
     .nonempty("O campo nome é obrigatório"),

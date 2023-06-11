@@ -2,6 +2,8 @@ import { StaticImageData } from "next/image";
 import { useCallback, useState } from "react";
 import Cropper, { Area, Point } from "react-easy-crop";
 import CropImage from "../../../utils/CropImage";
+import { api } from "../../../services/api";
+import html2canvas from 'html2canvas';
 
 interface SettingCropAreaProps {
     selectedFileUrl: StaticImageData;
@@ -29,17 +31,32 @@ export default function SettingCropArea({
     const [zoom, setZoom] = useState(1);
     const [croppedArea, setCroppedArea] = useState<Area>()
 
-    console.log(zoomDefault)
-
     const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
         setCroppedArea(croppedAreaPixels)
     }, []
     );
 
+    async function updateImgProfile(base64Image: string) {
+        const blob = await fetch(base64Image).then((response) => response.blob())
+
+        const formData = new FormData();
+        formData.append('file', blob, 'image.jpg')
+        const canvas = document.createElement('canvas');
+        const imgJPEG = canvas.toDataURL('image/jpeg')
+        api.patch("/user/picture/profile", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+    }
+
     function cropImg() {
         const imageSrc = CropImage(croppedArea!, selectedFileUrl.src)
-        imageSrc && setImgCropped(imageSrc)
-
+        if (imageSrc){
+            setImgCropped(imageSrc)
+            updateImgProfile(imageSrc)   
+        }
+    
         setOnDialog(false)
     }
 

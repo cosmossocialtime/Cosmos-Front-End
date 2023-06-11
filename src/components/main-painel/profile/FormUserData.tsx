@@ -2,16 +2,11 @@ import { Envelope, Eye, EyeSlash, Lock } from 'phosphor-react';
 import LabelItem from './LabelItem';
 import Input from './Input';
 import { useState } from 'react';
+import { userProps } from '../../../types/user';
+import dayjs from 'dayjs';
 
 interface FormUserDataProps {
-    userData: {
-        name: string
-        birthDate: string
-        genre: string
-        cep: string
-        companyCode: string
-        email: string
-    }
+    userData: userProps
     setEnableForm: React.Dispatch<React.SetStateAction<boolean>>
     enableForm: boolean
 }
@@ -30,17 +25,17 @@ export default function FormUserData({ userData, setEnableForm, enableForm }: Fo
     return (
         <form className='mt-6 w-max mx-auto grid grid-cols-2 gap-x-16 gap-y-5 items-center justify-center'>
             <LabelItem title='Nome pelo qual gostaria de ser chamando(a)' enableForm={enableForm}>
-                <Input type="text" value={newUserData.name} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, name: e.target.value })) }} />
+                <Input type="text" value={newUserData.fullName} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, name: e.target.value })) }} />
             </LabelItem>
             <LabelItem title='Data de nascimento' enableForm={enableForm}>
-                <Input type="date" value={newUserData.birthDate} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, birthDate: e.target.value })) }} />
+                <Input type="date" value={dayjs(newUserData.birthdate).format("AAAA-MM-DD")} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, birthDate: e.target.value })) }} />
             </LabelItem>
 
             <LabelItem title='Gênero' enableForm={enableForm}>
-                <Input type="text" value={newUserData.genre} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, genre: e.target.value })) }} />
+                <Input type="text" value={newUserData.gender} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, genre: e.target.value })) }} />
             </LabelItem>
             <LabelItem title='CEP' enableForm={enableForm}>
-                <Input type="text" pattern="\d{5}-\d{3}" value={newUserData.cep} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, cep: e.target.value })) }} />
+                <Input type="text" pattern="\d{5}-\d{3}" value={""} disabled={!enableForm} onChange={(e) => { setNewUserData(prevState => ({ ...prevState, cep: e.target.value })) }} />
             </LabelItem>
 
             <LabelItem title='Email' enableForm={enableForm}>
@@ -50,7 +45,7 @@ export default function FormUserData({ userData, setEnableForm, enableForm }: Fo
                 </>
             </LabelItem>
             <LabelItem title='Código da empresa em que trabalha' enableForm={enableForm}>
-                <Input type="text" value={newUserData.companyCode} disabled={!enableForm} />
+                <Input type="text" value={newUserData.company} disabled={!enableForm} />
             </LabelItem>
 
             <LabelItem title='Senha' enableForm={enableForm}>
@@ -68,25 +63,6 @@ export default function FormUserData({ userData, setEnableForm, enableForm }: Fo
                             size={24}
                             className="cursor-pointer"
                             onClick={() => enableForm && setTypeInputPassword("password")}
-                        />
-                    )}
-                </>
-            </LabelItem>
-            <LabelItem title='Confirmar senha' enableForm={enableForm}>
-                <>
-                    <Lock size={24} />
-                    <Input type={confirmTypeInputPassword} value={!enableForm ? "*****" : ""} disabled={!enableForm} />
-                    {confirmTypeInputPassword === "password" ? (
-                        <EyeSlash
-                            size={24}
-                            className="cursor-pointer"
-                            onClick={() => enableForm && setConfirmTypeInputPassword("text")}
-                        />
-                    ) : (
-                        <Eye
-                            size={24}
-                            className="cursor-pointer"
-                            onClick={() => enableForm && setConfirmTypeInputPassword("password")}
                         />
                     )}
                 </>

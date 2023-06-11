@@ -8,24 +8,24 @@ import ovniOffIcon from "../assets/icons/ovni-off-icon.svg";
 import spaceshipOffIcon from "../assets/icons/spaceship-off-icon.svg";
 
 export const incompleteAchievements = [
-//   {
-//     id: 1,
-//     image: bootOffIcon,
-//     title: "Um pequeno passo",
-//     description: "",
-//   },
-//   { 
-//     id: 2,
-//     image: camOffIcon,
-//     title: "Diga Xis",
-//     description: "Complete seu perfil com uma foto",
-//   },
-//   {
-//     id: 3,
-//     image: beltOffIcon,
-//     title: "Aperte os cintos",
-//     description: "Inscreva-se na sua primeira aventura",
-//   },
+  {
+    id: 1,
+    image: bootOffIcon,
+    title: "Um pequeno passo",
+    description: "Cadastre-se e passe pelas boas-vindas",
+  },
+  { 
+    id: 2,
+    image: camOffIcon,
+    title: "Diga Xis",
+    description: "Complete seu perfil com uma foto",
+  },
+  {
+    id: 3,
+    image: beltOffIcon,
+    title: "Aperte os cintos",
+    description: "Inscreva-se na sua primeira aventura",
+  },
   {
     id: 4,
     image: spaceshipOffIcon,
