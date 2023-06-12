@@ -57,7 +57,7 @@ export default function Painel() {
                     <PerfilArea
                         bannerPicture={user.banner}
                         profilePicture={user.profilePicture}
-                        name={user.fullName}
+                        name={user.byname}
                     />
 
                     <AchievementsArea achievements={achievements} />

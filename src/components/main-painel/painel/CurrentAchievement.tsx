@@ -42,7 +42,7 @@ export default function CurrentAchievement({ achievements }: CurrentAchievementP
             <div key={achievement.id} className=" keen-slider__slide flex flex-col py-6 pl-24 pr-52">
               <span className="text-xl text-gray-500">{currentAchivement.title}</span>
               <strong className="mt-4 mb-2 text-gray-200 font-semibold text-2xl">{currentAchivement.description}</strong>
-              <span className="text-gray-200">e consquiste uma medalha</span>
+              <span className="text-gray-200">e conquiste uma medalha</span>
               <div className="absolute top-1/2 -translate-y-1/2 right-16 z-10 transition-all duration-400">
                 <Image src={achievement.completed ? LightMedal : Medal} alt="Medalha" className="w-32" />
                 <Image
