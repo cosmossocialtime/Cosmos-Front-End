@@ -24,7 +24,6 @@ export default function Painel() {
                 setUser(response.data.user)
                 setAchievements(response.data.achievements)
                 setPrograms(response.data.programs)
-                console.log(response.data)
             })
             .catch(error => {
                 console.error(error)
@@ -56,7 +55,7 @@ export default function Painel() {
 
                 <div className="flex flex-col gap-6 w-1/3">
                     <PerfilArea
-                        bannerPicture={user.banner?.directoryPath}
+                        bannerPicture={user.banner}
                         profilePicture={user.profilePicture}
                         name={user.fullName}
                     />

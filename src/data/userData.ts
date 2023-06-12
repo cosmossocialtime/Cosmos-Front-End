@@ -1,5 +1,5 @@
 import UserProfile from "../assets/cam-icon.png";
-import BgPerfil from "../assets/bg-perfil.png";
+import BgPerfil from "../assets/default-banner-perfil.png";
 import { StaticImageData } from "next/image";
 
 type userProps = {

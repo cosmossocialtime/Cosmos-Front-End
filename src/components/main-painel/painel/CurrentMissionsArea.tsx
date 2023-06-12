@@ -2,7 +2,6 @@ import { CaretLeft, CaretRight } from 'phosphor-react';
 import AstronautaImg from '../../../assets/astronauta.png';
 import "keen-slider/keen-slider.min.css";
 import Image from 'next/image';
-import missionsData from '../../../data/missionsData';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useKeenSlider } from 'keen-slider/react';
@@ -37,7 +36,9 @@ export default function CurrentMissionsArea({ programs }: currentMissionProps) {
 
             {programs.filter(program => program.applied).length === 0 ? (
                 <div className='relative mt-10 h-60 flex items-center justify-center bg-currentMission bg-no-repeat bg-cover rounded-lg overflow-hidden'>
-                    <h1 className='z-10 text-center text-xl text-gray-200 font-semibold'>Você nao possui missões disponíveis no momento. Se inscreva em alguma aventura para desbloqueadas.</h1>
+                    <h1 className='px-4 z-10 text-center text-xl text-gray-200 font-semibold'>
+                        Atualmente você não está participando de nenhuma missão. Acesse as opções abaixo e inscreva-se em uma nova aventura!
+                    </h1>
                 </div>
             ) : (
                 <div ref={sliderRef} className='keen-slider w-full'>

@@ -19,12 +19,7 @@ export type userProps = {
     mainCompetencies: string | null,
     reasonToJoin: string | null,
     previousMentorship: string | null,
-    banner: {
-        id: number,
-        bucketName: string,
-        directoryPath: string,
-        mimeType: string
-    } | null,
+    banner: string | null,
     profilePicture: string | null
     role: {
         id: number,
