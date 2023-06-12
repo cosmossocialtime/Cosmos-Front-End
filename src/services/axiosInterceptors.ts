@@ -35,6 +35,10 @@ axiosPrivate.interceptors.request.use( response => response,
         throw error;
       }
     }
+
+    if(error.response.status === 400){
+      return Router.push('/usuario/entrar')
+    }
     
     return Promise.reject(error);
   })

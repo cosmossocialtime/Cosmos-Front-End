@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "../../services/api";
+import { ToastContainer, toast } from "react-toastify";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty("O código da empresa é obrigatorio")
@@ -12,17 +15,39 @@ const shemaCompanyCode = z.object({
 type TypeCompanyCode = z.infer<typeof shemaCompanyCode>
 
 export default function CompanyCode() {
-  const [code, setCode] = useState("C-")
+  const [code, setCode] = useState("")
   const { handleSubmit } = useForm<TypeCompanyCode>()
   const router = useRouter()
 
-  function submitForm() {
-    api.patch("/user/onboarding", {
-      "companyCode": code,
+  function getCodeForInput(code: string) {
+    const codeWithoutC = code.split('-')[1]
+    if (codeWithoutC == undefined) {
+      return toast.error('Digite um código valido!')
     }
-    )
-    router.push("/usuario/nascimento")
+
+    setCode(codeWithoutC)
   }
+
+  function submitForm() {
+    if (!code) {
+      return toast.error("Por gentileza digite um código válido")
+    }
+
+    try {
+      api.patch("/user/onboarding", {
+        "companyCode": code,
+      }
+      ).then((response) => {
+        if (response.status === 201) {
+          router.push("/usuario/nascimento")
+        }
+      })
+    } catch (error: any) {
+      if (error.response.status === 400) return toast.error("Error")
+    }
+  }
+
+
 
   return (
     <>
@@ -46,8 +71,8 @@ export default function CompanyCode() {
             Digite o código da empresa
             <input
               type="text"
-              value={code}
-              onChange={(e) => (setCode(e.target.value))}
+              value={`C-${code}`}
+              onChange={(e) => (getCodeForInput(e.target.value))}
               className="w-full bg-zinc-50 border-solid border border-gray-400 rounded-md py-3 p-4 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 mt-1 text-zinc-800" />
           </label>
           <button className="py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg">Continuar</button>
@@ -57,7 +82,27 @@ export default function CompanyCode() {
           alt="Bandeira branca"
           className="mt-56 medium:mt-72"
         />
+        <ToastContainer autoClose={2000} limit={3} />
       </main>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+  console.log(token);
+
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/usuario/entrar',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }
