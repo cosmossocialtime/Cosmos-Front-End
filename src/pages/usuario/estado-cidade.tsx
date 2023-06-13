@@ -9,6 +9,9 @@ import Image from 'next/image';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
+import { api } from '../../services/api';
+import Router from 'next/router';
+import { toast } from 'react-toastify';
 interface cityProps {
   id: number,
   nome: string,
@@ -26,10 +29,6 @@ export default function EstadoCidade() {
   const { handleSubmit } = useForm()
   const { data: statesOfBrazil } = useFetch<stateProps[]>("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
 
-  function handleSubmitStateAndCity() {
-    console.log(city);
-  }
-
   useEffect(() => {
     async function fetchCidadesPorEstado() {
       try {
@@ -45,8 +44,19 @@ export default function EstadoCidade() {
     }
 
     fetchCidadesPorEstado();
-  }, [stateSubmit]);
+  }, [stateSubmit, statesOfBrazil]);
 
+  function handleSubmitStateAndCity() {
+    try {
+      api.patch('/user/onboarding', {
+        "state": stateSubmit,
+        "city": citySubmit
+      })
+      Router.push('/usuario/decolar')
+    } catch (error) {
+      toast.error("Não foi possivel fazer sua requisição, tente novamente mais tarde")
+    }
+  }
 
   return (
     <div>

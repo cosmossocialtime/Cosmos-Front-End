@@ -21,10 +21,6 @@ export default function CompanyCode() {
 
   function getCodeForInput(code: string) {
     const codeWithoutC = code.split('-')[1]
-    if (codeWithoutC == undefined) {
-      return toast.error('Digite um código valido!')
-    }
-
     setCode(codeWithoutC)
   }
 

@@ -7,6 +7,8 @@ import dayjs from "dayjs"
 import { BackButton } from "../../components/BackButton";
 import { useForm } from 'react-hook-form';
 import { api } from '../../services/api';
+import Router from 'next/router';
+import { toast } from 'react-toastify';
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState("20")
@@ -22,9 +24,15 @@ export default function Nascimento() {
   function monthFormated(dateMonth: number) { return dayjs().month(dateMonth).format('MMMM') }
 
   function submitBirth() {
-    api.patch("/user/onboarding", {
-      "birthdate": `${yearValue}-${monthValue}-${dayValue}`
-    })
+
+    try {
+      api.patch("/user/onboarding", {
+        "birthdate": `${yearValue}-${monthValue}-${dayValue}`
+      })
+      Router.push('/usuario/estado-cidade')
+    } catch (error: any) {
+      return toast.error(error)
+    }
   }
 
   return (
