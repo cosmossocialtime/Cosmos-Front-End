@@ -22,17 +22,18 @@ export default function Nascimento() {
   const years = Array.from({ length: currentYear - 1930 }, (_, i) => i + 1930);
 
   function monthFormated(dateMonth: number) { return dayjs().month(dateMonth).format('MMMM') }
+  function monthInNumber(month: string) { { return dayjs().month(Number(month)).format('MM') } }
 
   function submitBirth() {
-
     try {
       api.patch("/user/onboarding", {
-        "birthdate": `${yearValue}-${monthValue}-${dayValue}`
+        "birthdate": `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`
       })
       Router.push('/usuario/estado-cidade')
     } catch (error: any) {
       return toast.error(error)
     }
+
   }
 
   return (
@@ -102,7 +103,7 @@ export default function Nascimento() {
                       {months.map((month, index) => (
                         <Select.Item
                           key={index}
-                          value={`${monthFormated(month)}`}
+                          value={`${month}`}
                           className="py-2 px-2  outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
                         >
                           <Select.ItemText >
