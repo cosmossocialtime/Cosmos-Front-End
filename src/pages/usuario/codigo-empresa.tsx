@@ -91,8 +91,6 @@ export default function CompanyCode() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { ['cosmos.token']: token } = parseCookies(ctx)
-  console.log(token);
-
 
   if (!token) {
     return {

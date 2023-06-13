@@ -12,8 +12,8 @@ async function renewToken() {
           "RefreshToken": refresh_token
         }
       })
-      const {accesToken, refreshToken} = response.data
-      return {accesToken, refreshToken}
+      const {accessToken, refreshToken} = response.data
+      return {accessToken, refreshToken}
   } catch (error) {
       console.log(error);
   }
@@ -28,7 +28,7 @@ axiosPrivate.interceptors.request.use( response => response,
       try {
         const newToken = await renewToken();
         setCookie(undefined, 'cosmos.refreshToken', newToken?.refreshToken)
-        api.defaults.headers.common['Authorization'] = `Bearer ${newToken?.accesToken}`;
+        api.defaults.headers.common['Authorization'] = `Bearer ${newToken?.accessToken}`;
         return api(originalRequest);
       } catch (error) {
         Router.push('/usuario/entrar')

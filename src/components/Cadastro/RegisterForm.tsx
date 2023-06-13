@@ -51,7 +51,7 @@ export function UserRegisterForm() {
         "password": data.password,
         "passwordConfirmation": data.confirmPassword
       })
-      setCookie(undefined, 'cosmos.user', data.email)
+      setCookie(undefined, 'cosmos.user', data.email, { maxAge: 60 * 60 * 12 })
       return (toast.success("Criado com sucesso"));
     } catch (error: any) {
       if (error.response.status === 400) {

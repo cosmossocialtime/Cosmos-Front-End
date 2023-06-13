@@ -1,5 +1,5 @@
-import { setCookie } from "nookies"
-import { createContext, useState } from "react"
+import { parseCookies, setCookie } from "nookies"
+import { createContext, useEffect, useState } from "react"
 import { IAuthProvider, IContext, SignInData, User } from "./types"
 import { authenticate } from "./util"
 import { api } from "../../services/api"
@@ -17,9 +17,10 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     setCookie(undefined, 'cosmos.token', accessToken, {
       maxAge: 60 * 60 * 12
     })
+
     setCookie(undefined, 'cosmos.refreshToken', refreshToken)
     api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
-    setUser(user)
+
     Router.push('/usuario/iniciar')
   }
 
