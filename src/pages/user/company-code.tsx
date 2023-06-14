@@ -28,7 +28,6 @@ export default function CompanyCode() {
     if (!code) {
       return toast.error("Por gentileza digite um código válido")
     }
-
     try {
       api.patch("/user/onboarding", {
         "companyCode": code,

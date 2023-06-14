@@ -13,9 +13,7 @@ export function getApiClient(ctx?: any){
 if(token){
    api.defaults.headers['Authorization'] = `Bearer ${token}` 
 }
-
 return api
-
 }
 
 export const axiosPrivate = axios.create({

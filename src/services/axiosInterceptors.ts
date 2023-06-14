@@ -19,26 +19,27 @@ async function renewToken() {
   }
 }
 
-axiosPrivate.interceptors.request.use( response => response,
-  async error => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
 
-      try {
-        const newToken = await renewToken();
-        setCookie(undefined, 'cosmos.refreshToken', newToken?.refreshToken)
-        api.defaults.headers.common['Authorization'] = `Bearer ${newToken?.accessToken}`;
-        return api(originalRequest);
-      } catch (error) {
-        Router.push('/usuario/entrar')
-        throw error;
-      }
-    }
+// axiosPrivate.interceptors.request.use( response => response,
+//   async error => {
+//     const originalRequest = error.config;
+//     if (error.response.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
 
-    if(error.response.status === 400){
-      return Router.push('/usuario/entrar')
-    }
+//       try {
+//         const newToken = await renewToken();
+//         setCookie(undefined, 'cosmos.refreshToken', newToken?.refreshToken)
+//         api.defaults.headers.common['Authorization'] = `Bearer ${newToken?.accessToken}`;
+//         return api(originalRequest);
+//       } catch (error) {
+//         Router.push('/usuario/entrar')
+//         throw error;
+//       }
+//     }
+
+//     if(error.response.status === 400){
+//       return Router.push('/usuario/entrar')
+//     }
     
-    return Promise.reject(error);
-  })
+//     return Promise.reject(error);
+//   })
