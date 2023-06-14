@@ -7,6 +7,8 @@ import dayjs from "dayjs"
 import { BackButton } from "../../components/BackButton";
 import { useForm } from 'react-hook-form';
 import { api } from '../../services/api';
+import Router from 'next/router';
+import { toast } from 'react-toastify';
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState("20")
@@ -20,16 +22,24 @@ export default function Nascimento() {
   const years = Array.from({ length: currentYear - 1930 }, (_, i) => i + 1930);
 
   function monthFormated(dateMonth: number) { return dayjs().month(dateMonth).format('MMMM') }
+  function monthInNumber(month: string) { { return dayjs().month(Number(month)).format('MM') } }
 
   function submitBirth() {
-    api.patch("/user/onboarding", {
-      "birthdate": `${yearValue}-${monthValue}-${dayValue}`
-    })
+    try {
+      api.patch("/user/onboarding", {
+        "birthdate": `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`
+      }).then((response) => {
+        if (response.status === 200) {
+          Router.push('/user/live')
+        }
+      })
+    } catch (error: any) {
+      if (error.response.status === 400) return toast.error("Sem autorização")
+    }
   }
-
   return (
     <div>
-      <BackButton link="/usuario/codigo-empresa" />
+      <BackButton link="/user/company-code" />
       <main className="h-screen w-full bg-bgTerra bg-no-repeat bg-cover flex items-center justify-center">
         <form
           onSubmit={handleSubmit(submitBirth)}
@@ -94,7 +104,7 @@ export default function Nascimento() {
                       {months.map((month, index) => (
                         <Select.Item
                           key={index}
-                          value={`${monthFormated(month)}`}
+                          value={`${month}`}
                           className="py-2 px-2  outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
                         >
                           <Select.ItemText >

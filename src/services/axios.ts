@@ -1,5 +1,6 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
+import { api } from "./api";
 
 const BASE_URL = "https://cosmos-social.cyclic.app/api"
 
@@ -13,9 +14,7 @@ export function getApiClient(ctx?: any){
 if(token){
    api.defaults.headers['Authorization'] = `Bearer ${token}` 
 }
-
 return api
-
 }
 
 export const axiosPrivate = axios.create({

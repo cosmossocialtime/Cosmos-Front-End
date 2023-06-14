@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { z } from "zod"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { useState } from "react";
 import { CaretRight } from "phosphor-react";
 
@@ -20,7 +20,6 @@ type GenderForm = z.infer<typeof schemaGender>
 export default function Genero() {
   const [gender, setGender] = useState("")
   const [otherGenderActive, setOtherGenderActive] = useState(true);
-  const router = useRouter()
 
   const { handleSubmit } = useForm<GenderForm>()
 
@@ -29,7 +28,7 @@ export default function Genero() {
       "gender": gender,
     }
     )
-    router.push("/usuario/codigo-empresa")
+    Router.push('/usuario/codigo-empresa')
   }
 
   return (
@@ -96,6 +95,7 @@ export default function Genero() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { ['cosmos.token']: token } = parseCookies(ctx)
+  console.log(token);
 
   if (!token) {
     return {
