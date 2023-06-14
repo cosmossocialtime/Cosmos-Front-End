@@ -12,6 +12,7 @@ import { parseCookies } from 'nookies';
 import { api } from '../../services/api';
 import Router from 'next/router';
 import { toast } from 'react-toastify';
+
 interface cityProps {
   id: number,
   nome: string,
@@ -51,17 +52,17 @@ export default function EstadoCidade() {
       api.patch('/user/onboarding', {
         "state": stateSubmit,
         "city": citySubmit
+      }).then((response) => {
+        if (response.status === 200) Router.push('/user/endpoint')
       })
 
-      Router.push('/usuario/decolar')
-    } catch (error) {
-      toast.error("Não foi possivel fazer sua requisição, tente novamente mais tarde")
+    } catch (error: any) {
+      if (error.response.status === 400) return toast.error("Sem autorização")
     }
   }
-
   return (
     <div>
-      <BackButton link="/usuario/nascimento" />
+      <BackButton link="/user/birth" />
       <main className="w-full h-screen bg-little-nave bg-cover bg-no-repeat flex text-zinc-50 items-center">
         <form
           onSubmit={handleSubmit(handleSubmitStateAndCity)}
@@ -69,8 +70,6 @@ export default function EstadoCidade() {
           <h2 className='text-2xl'>Onde a sua nave está estacionada?</h2>
           <span className='font-light text-xl'>O local onde você vive atualmente</span>
           <div className='flex flex-col w-full justify-between gap-6'>
-
-
             {!outOfBrazil ? (
               <>
                 <div className='w-full flex flex-col gap-2'>
@@ -142,7 +141,6 @@ export default function EstadoCidade() {
                               </Select.Item>
                             )
                           })}
-
                         </Select.Viewport>
                       </Select.Content>
                     </Select.Portal>

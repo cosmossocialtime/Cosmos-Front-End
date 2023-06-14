@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     setCookie(undefined, 'cosmos.refreshToken', refreshToken)
     api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
 
-    Router.push('/usuario/iniciar')
+    Router.push('/user/start')
   }
 
   return (

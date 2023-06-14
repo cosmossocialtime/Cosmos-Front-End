@@ -7,7 +7,6 @@ import { CaretRight } from "phosphor-react";
 
 import { BackButton } from "../../components/BackButton";
 import { api } from "../../services/api";
-import { useAuth } from "../../context/AuthProvider/useAuth";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 
@@ -28,12 +27,12 @@ export default function Genero() {
       "gender": gender,
     }
     )
-    Router.push('/usuario/codigo-empresa')
+    Router.push('/user/company-code')
   }
 
   return (
     <div>
-      <BackButton link="/usuario/iniciar" />
+      <BackButton link="/user/start" />
       <main
         className="bg-bgCadastro h-screen bg-cover bg-no-repeat flex items-center justify-around">
         <img
