@@ -33,7 +33,7 @@ export default function Genero() {
 
   return (
     <div>
-      <BackButton link="/usuario/iniciar" />
+      <BackButton link="/user/start" />
       <main
         className="bg-bgCadastro h-screen bg-cover bg-no-repeat flex items-center justify-around">
         <img
