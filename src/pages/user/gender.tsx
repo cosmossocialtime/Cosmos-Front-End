@@ -34,7 +34,7 @@ export default function Genero() {
     <div>
       <BackButton link="/user/start" />
       <main
-        className="bg-bgCadastro h-screen bg-cover bg-no-repeat flex items-center justify-around">
+        className="bg-bgCadastro h-screen bg-cover bg-no-repeat bg-bottom flex items-center justify-around">
         <img
           className="h-fit w-1/3 self-end"
           src="/images/astronauta.png"

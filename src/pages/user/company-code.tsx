@@ -44,10 +44,10 @@ export default function CompanyCode() {
   }
 
   return (
-    <>
+    <div className="relative">
       <BackButton link="/user/gender" />
       <main
-        className="bg-bgCadastro h-screen bg-cover bg-no-repeat bg-bottom flex items-center justify-around relative">
+        className="bg-bgCadastro h-screen bg-cover bg-no-repeat bg-bottom flex items-center justify-around ">
         <form
           onSubmit={handleSubmit(submitForm)}
           className="flex flex-col items-center justify-center gap-12 py-10 px-8 backdrop-blur-md bg-black/10 rounded-2xl max-w-md"
@@ -79,7 +79,7 @@ export default function CompanyCode() {
         />
         <ToastContainer autoClose={2000} limit={3} />
       </main>
-    </>
+    </div>
   )
 }
 
