@@ -28,7 +28,7 @@ export default function Genero() {
       "gender": gender,
     }
     )
-    Router.push('/usuario/codigo-empresa')
+    // Router.push('/usuario/codigo-empresa')
   }
 
   return (
@@ -95,7 +95,6 @@ export default function Genero() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { ['cosmos.token']: token } = parseCookies(ctx)
-  console.log(token);
 
   if (!token) {
     return {

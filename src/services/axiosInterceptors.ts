@@ -2,6 +2,7 @@ import { api } from "./api"
 import {axiosPrivate} from "./axios"
 import {parseCookies, setCookie} from 'nookies'
 import Router from "next/router"
+import axios from "axios"
 
 const {'cosmos.refreshToken': refresh_token} = parseCookies()
 
@@ -42,3 +43,4 @@ axiosPrivate.interceptors.request.use( response => response,
     
     return Promise.reject(error);
   })
+
