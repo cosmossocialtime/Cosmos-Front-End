@@ -28,17 +28,18 @@ export default function Nascimento() {
     try {
       api.patch("/user/onboarding", {
         "birthdate": `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`
+      }).then((response) => {
+        if (response.status === 200) {
+          Router.push('/user/live')
+        }
       })
-      Router.push('/usuario/estado-cidade')
     } catch (error: any) {
-      return toast.error(error)
+      if (error.response.status === 400) return toast.error("Sem autorização")
     }
-
   }
-
   return (
     <div>
-      <BackButton link="/usuario/codigo-empresa" />
+      <BackButton link="/user/company-code" />
       <main className="h-screen w-full bg-bgTerra bg-no-repeat bg-cover flex items-center justify-center">
         <form
           onSubmit={handleSubmit(submitBirth)}

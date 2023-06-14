@@ -10,7 +10,7 @@ export default function Iniciar() {
         </p>
         <a
           className=" py-2 px-40 bg-violet-500 text-lg transition-all duration-150 hover:bg-violet-600 rounded-lg font-semibold"
-          href={"/usuario/genero"}>
+          href={"/user/gender"}>
           Vamos lá
         </a>
       </div>

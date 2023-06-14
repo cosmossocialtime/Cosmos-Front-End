@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import { BackButton } from "../../components/BackButton";
 import { useRouter } from "next/router";
@@ -8,6 +7,7 @@ import { api } from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
+import Image from "next/image";
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty("O código da empresa é obrigatorio")
@@ -28,14 +28,13 @@ export default function CompanyCode() {
     if (!code) {
       return toast.error("Por gentileza digite um código válido")
     }
-
     try {
       api.patch("/user/onboarding", {
         "companyCode": code,
       }
       ).then((response) => {
-        if (response.status === 201) {
-          router.push("/usuario/nascimento")
+        if (response.status === 200) {
+          router.push("/user/birth")
         }
       })
     } catch (error: any) {
@@ -43,14 +42,11 @@ export default function CompanyCode() {
     }
   }
 
-
-
   return (
-    <>
-      <BackButton link="/usuario/genero" />
+    <div className="relative">
+      <BackButton link="/user/gender" />
       <main
-        className="bg-bgCadastro h-screen bg-cover bg-no-repeat flex items-center justify-around">
-
+        className="bg-bgCadastro h-screen bg-cover bg-no-repeat bg-bottom flex items-center justify-around ">
         <form
           onSubmit={handleSubmit(submitForm)}
           className="flex flex-col items-center justify-center gap-12 py-10 px-8 backdrop-blur-md bg-black/10 rounded-2xl max-w-md"
@@ -73,14 +69,16 @@ export default function CompanyCode() {
           </label>
           <button className="py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg">Continuar</button>
         </form>
-        <img
+        <Image
+          width={268}
+          height={268}
           src="/images/bandeira.png"
           alt="Bandeira branca"
-          className="mt-56 medium:mt-72"
+          className="flex absolute bottom-10 left-2/3"
         />
         <ToastContainer autoClose={2000} limit={3} />
       </main>
-    </>
+    </div>
   )
 }
 
