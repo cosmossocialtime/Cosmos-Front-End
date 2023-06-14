@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { BackButton } from "../../components/BackButton";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 export default function Decolar() {
   return (
@@ -14,4 +16,21 @@ export default function Decolar() {
       </main>
     </>
   )
+}
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+  console.log(token);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/user/login',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }

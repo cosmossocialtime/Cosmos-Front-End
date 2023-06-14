@@ -9,6 +9,8 @@ import { useForm } from 'react-hook-form';
 import { api } from '../../services/api';
 import Router from 'next/router';
 import { toast } from 'react-toastify';
+import { parseCookies } from 'nookies';
+import { GetServerSideProps } from 'next';
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState("20")
@@ -165,4 +167,21 @@ export default function Nascimento() {
       </main>
     </div>
   )
+}
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+  console.log(token);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/user/login',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }

@@ -1,5 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
+
 export default function Iniciar() {
   return (
     <main className="bg-espaco bg-cover bg-no-repeat h-screen text-white flex items-center justify-center p-4">
@@ -20,4 +23,22 @@ export default function Iniciar() {
         alt="Imagem de um satélite" />
     </main >
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const { ['cosmos.token']: token } = parseCookies(ctx)
+  console.log(token);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/user/login',
+        permanent: false
+      }
+    }
+  }
+  return {
+    props: {}
+  }
 }

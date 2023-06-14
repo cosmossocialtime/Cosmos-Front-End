@@ -100,7 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!token) {
     return {
       redirect: {
-        destination: '/usuario/entrar',
+        destination: '/user/login',
         permanent: false
       }
     }
