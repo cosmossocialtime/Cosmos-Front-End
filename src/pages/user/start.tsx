@@ -25,20 +25,3 @@ export default function Iniciar() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
-  const { ['cosmos.token']: token } = parseCookies(ctx)
-  console.log(token);
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/user/login',
-        permanent: false
-      }
-    }
-  }
-  return {
-    props: {}
-  }
-}
