@@ -28,7 +28,7 @@ export default function Genero() {
       "gender": gender,
     }
     )
-    Router.push('/usuario/codigo-empresa')
+    Router.push('/user/company-code')
   }
 
   return (
