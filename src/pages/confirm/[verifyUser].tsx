@@ -16,7 +16,7 @@ export default function VerifyUser() {
         "email": user,
         "token": verifyUser
       })
-      router.push('/usuario/entrar')
+      router.push('/user/login')
     } catch (error) {
       console.log(error);
 
