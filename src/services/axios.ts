@@ -1,6 +1,5 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { api } from "./api";
 
 const BASE_URL = "https://cosmos-social.cyclic.app/api"
 

@@ -1,8 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
-
 export default function Iniciar() {
   return (
     <main className="bg-espaco bg-cover bg-no-repeat h-screen text-white flex items-center justify-center p-4">
