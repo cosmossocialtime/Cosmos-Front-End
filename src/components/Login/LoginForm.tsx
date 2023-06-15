@@ -86,7 +86,7 @@ export function UserLoginForm() {
         <h3>
           Ainda não tem uma conta?{" "}
           <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
-            <Link href="/usuario/cadastrar">Cadastre-se</Link>
+            <Link href="/user/register">Cadastre-se</Link>
           </strong>
         </h3>
         <ToastContainer autoClose={2000} />
