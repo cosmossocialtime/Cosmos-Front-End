@@ -189,7 +189,7 @@ export function UserRegisterForm() {
         <h3>
           Já tem conta?{" "}
           <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
-            <Link href="/usuario/entrar">Fazer login</Link>
+            <Link href="/user/login">Fazer login</Link>
           </strong>
         </h3>
         <ToastContainer autoClose={2000} limit={3} />
