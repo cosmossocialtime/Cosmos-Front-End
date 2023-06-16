@@ -87,12 +87,16 @@ export default function CompanyCode() {
           </label>
           <button className="py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg">Continuar</button>
         </form>
-        <Image
-          width={268}
-          height={268}
-          src={imageCompany}
-          alt="Bandeira branca"
-          className="flex absolute bottom-10 left-2/3" />
+        {
+          imageCompany &&
+          <Image
+            width={268}
+            height={268}
+            src={imageCompany}
+            alt="Bandeira branca"
+            className="flex absolute bottom-10 left-2/3" />
+        }
+
         <Image
           width={268}
           height={268}

@@ -5,6 +5,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    domains: ['cyclic-wild-red-clam-tie-eu-west-3.s3.eu-west-3.amazonaws.com'],
+  }
 };
 
 
