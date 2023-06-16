@@ -11,9 +11,11 @@ import Header from "../../../components/main-painel/Header";
 import UploadImage from "../../../components/main-painel/profile/UploadImage";
 import FormUserData from "../../../components/main-painel/profile/FormUserData";
 import SettingCropArea from '../../../components/main-painel/profile/SettingCropArea';
+import { companyProps } from '../../../types/company';
 
 export default function Perfil() {
     const [user, setUser] = useState<userProps | null>(null)
+    const [company, setCompany] = useState<companyProps | null>(null)
     const [selectedImgSrc, setSelectedImgSrc] = useState("");
     const [cropType, setCroptType] = useState<"profile" | "banner">("profile")
     const [onDialog, setOnDialog] = useState(false);
@@ -23,13 +25,14 @@ export default function Perfil() {
         api.get("/dashboard")
             .then(response => {
                 setUser(response.data.user)
+                setCompany(response.data.company)
             })
             .catch(error => {
                 console.error(error)
             })
     }, [])
 
-    if (!user) {
+    if (!user || !company) {
         return;
     }
 
@@ -48,13 +51,13 @@ export default function Perfil() {
 
     function updateProfileSrc(source: string) {
         setSelectedImgSrc(source);
-        setOnDialog(true)
         setCroptType("profile");
+        setOnDialog(true)
     }
     function updateBannerSrc(source: string) {
         setSelectedImgSrc(source);
-        setOnDialog(true)
         setCroptType("banner");
+        setOnDialog(true)
     }
 
     function handleProfileImg(image: string) {
@@ -85,7 +88,7 @@ export default function Perfil() {
                     className="absolute w-full left-0 h-28 object-cover"
                     src={user.banner ? user.banner : defaultBannerPerfil}
                     width={2000}
-                    height={400}
+                    height={112}
                     quality={100}
                     alt=""
                 />
@@ -147,6 +150,7 @@ export default function Perfil() {
             <div className='flex flex-col items-center'>
                 <FormUserData
                     userData={user}
+                    companyName={company.name}
                     enableForm={enableForm}
                     setEnableForm={setEnableForm}
                 />

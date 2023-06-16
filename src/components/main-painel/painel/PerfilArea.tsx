@@ -13,12 +13,12 @@ export default function PerfilArea({ bannerPicture, profilePicture, name }: perf
   return (
     <div className="relative py-11 pb-7 bg-[#1E2543] flex-1 flex flex-col items-center rounded-lg overflow-hidden">
       <Image
-        className="absolute top-0 max-h-24 w-full object-cover"
+        className="absolute top-0 h-24 w-full object-cover"
         src={bannerPicture ? bannerPicture : bannerPerfilDefault}
         alt="background do perfil"
-        width={1200}
-        height={600}
-        quality={100}
+        width={1000}
+        height={96}
+        // quality={100}
       />
 
       <div className="z-10 mb-4 w-32 h-32 rounded-full border-2 border-solid border-gray-300 bg-gray-600 flex items-center justify-center overflow-hidden">

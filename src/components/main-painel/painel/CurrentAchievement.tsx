@@ -39,11 +39,12 @@ export default function CurrentAchievement({ achievements }: CurrentAchievementP
           const currentAchivement = achievement.completed ? completeAchievements[achievement.id-1] : incompleteAchievements[achievement.id-1]
 
           return (
-            <div key={achievement.id} className=" keen-slider__slide flex flex-col py-6 pl-24 pr-52">
+            <div key={achievement.id} className=" keen-slider__slide flex flex-col py-6 pl-20 pr-52">
               <span className="text-xl text-gray-500">{currentAchivement.title}</span>
               <strong className="mt-4 mb-2 text-gray-200 font-semibold text-2xl">{currentAchivement.description}</strong>
-              <span className="text-gray-200">e conquiste uma medalha</span>
+              <span className="text-gray-200">{achievement.completed ? "e conquistou uma medalha" : "e conquiste uma medalha"}</span>
               <div className="absolute top-1/2 -translate-y-1/2 right-16 z-10 transition-all duration-400">
+                {achievement.completed && <div className='absolute w-32 h-32 bg-white/50 rounded-full blur-xl'/>}
                 <Image src={achievement.completed ? LightMedal : Medal} alt="Medalha" className="w-32" />
                 <Image
                   className="absolute top-0 border-8 border-solid border-transparent rounded-full"
