@@ -3,14 +3,13 @@ import { Dispatch, SetStateAction } from "react";
 import Dropzone from "react-dropzone"
 
 interface UploadImageProps {
-    updateSrcFile: (source: string) => void;
-    setOnDialog: Dispatch<SetStateAction<boolean>>;
+    updateImgSrc: (source: string) => void;
 }
 
-export default function UploadImage({ updateSrcFile, setOnDialog }: UploadImageProps) {
+export default function UploadImage({ updateImgSrc }: UploadImageProps) {
     function handleSelecteFile(acceptedFiles: File[]) {
         const file = acceptedFiles[0];
-        updateSrcFile(URL.createObjectURL(file))
+        updateImgSrc(URL.createObjectURL(file))
     }
 
     return (
@@ -18,14 +17,12 @@ export default function UploadImage({ updateSrcFile, setOnDialog }: UploadImageP
             maxFiles={1}
             accept={{ 'image/*': ['.png', '.jpeg', '.jpg'] }}
             onDropAccepted={acceptedFiles => {
-                handleSelecteFile(acceptedFiles)
-                setOnDialog(true)
-            }}
+                handleSelecteFile(acceptedFiles)}}
         >
             {({ getInputProps }) => (
                 <label>
                     <input {...getInputProps()} />
-                    <Pencil className='absolute right-0 -bottom-2 w-10 h-10 p-2 text-white bg-[#5200AB] rounded-full border-2 border-solid border-white cursor-pointer' />
+                    <Pencil size={24} className=' w-10 h-10 p-2 bg-[#5200AB] text-white cursor-pointer border-2 border-solid border-white rounded-full' />
                 </label>
             )}
         </Dropzone>

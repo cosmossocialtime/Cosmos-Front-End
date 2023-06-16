@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from "styled-components";
 
+
 export default function Main() {
 
   return (
