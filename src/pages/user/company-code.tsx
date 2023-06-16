@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 import Image from "next/image";
+import debounce from 'lodash.debounce';
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty("O código da empresa é obrigatorio")
@@ -16,10 +17,29 @@ type TypeCompanyCode = z.infer<typeof shemaCompanyCode>
 
 export default function CompanyCode() {
   const [code, setCode] = useState("")
-  const [codeValid, setCodeValid] = useState("")
   const [imageCompany, setImageCompany] = useState("")
   const { handleSubmit } = useForm<TypeCompanyCode>()
   const router = useRouter()
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const newValue = event.target.value
+    setCode(newValue)
+    debounceRequest(newValue)
+  }
+
+  const debounceRequest = debounce((value: string) => {
+
+    if (value.length === 6) {
+      api.get(`company/code/${value}`).then((response) => {
+        setImageCompany(response.data.logo)
+      }).catch((error) => {
+        if (error.response.status === 404) {
+          return toast.error('Tente novamente')
+        }
+      })
+    }
+  }, 300)
+
 
   function submitForm() {
     if (!code) {
@@ -61,27 +81,31 @@ export default function CompanyCode() {
               type="text"
               maxLength={6}
               value={code}
-              onChange={(e) => (setCode(e.target.value))}
+              onChange={handleInputChange}
               className="w-full bg-zinc-50 border-solid border border-gray-400 rounded-md py-3 p-4 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 mt-1 text-zinc-800" />
           </label>
-          <button className="py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg">Continuar</button>
+          <button disabled={!imageCompany} className={`${!imageCompany && "cursor-not-allowed"} py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg`}>Continuar</button>
         </form>
-
-        {imageCompany ?
+        <div className="flex absolute bottom-10 left-2/3">
+          {
+            imageCompany &&
+            <Image
+              loader={() => imageCompany}
+              width={100}
+              height={100}
+              src={imageCompany}
+              alt="Logo da companhia"
+              className="flex absolute top-12 left-11 z-10 rotate-6 w-auto h-auto max-w-[200px] max-h-[110px] bg-blend-color-burn" />
+          }
           <Image
-            width={128}
-            height={125}
-            src={`${imageCompany}`}
-            alt="Logo"
-          /> : null}
+            width={268}
+            height={268}
+            src="/images/bandeira.png"
+            alt="Bandeira branca"
+            className=""
+          />
+        </div>
 
-        <Image
-          width={268}
-          height={268}
-          src="/images/bandeira.png"
-          alt="Bandeira branca"
-          className="flex absolute bottom-10 left-2/3"
-        />
         <ToastContainer autoClose={2000} limit={3} />
       </main>
     </div>
@@ -91,6 +115,7 @@ export default function CompanyCode() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { ['cosmos.token']: token } = parseCookies(ctx)
+
   if (!token) {
     return {
       redirect: {

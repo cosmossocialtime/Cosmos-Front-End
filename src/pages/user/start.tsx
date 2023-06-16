@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-
 export default function Iniciar() {
   return (
     <main className="bg-espaco bg-cover bg-no-repeat h-screen text-white flex items-center justify-center p-4">
