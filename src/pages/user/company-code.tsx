@@ -30,10 +30,12 @@ export default function CompanyCode() {
   const debounceRequest = debounce((value: string) => {
 
     if (value.length === 6) {
-
-      console.log(value);
       api.get(`company/code/${value}`).then((response) => {
         setImageCompany(response.data.logo)
+      }).catch((error) => {
+        if (error.response.status === 404) {
+          return toast.error('Tente novamente')
+        }
       })
     }
   }, 1000)
@@ -90,11 +92,12 @@ export default function CompanyCode() {
         {
           imageCompany &&
           <Image
-            width={268}
-            height={268}
+            loader={() => imageCompany}
+            width={200}
+            height={238}
             src={imageCompany}
             alt="Bandeira branca"
-            className="flex absolute bottom-10 left-2/3" />
+            className="flex absolute top-1/2 left-[70%] z-10 rotate-12" />
         }
 
         <Image
