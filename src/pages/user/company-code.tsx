@@ -38,9 +38,7 @@ export default function CompanyCode() {
         }
       })
     }
-  }, 1000)
-
-  console.log(imageCompany);
+  }, 300)
 
 
   function submitForm() {
@@ -89,24 +87,26 @@ export default function CompanyCode() {
           </label>
           <button className="py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg">Continuar</button>
         </form>
-        {
-          imageCompany &&
+        <div className="flex absolute bottom-10 left-2/3">
+          {
+            imageCompany &&
+            <Image
+              loader={() => imageCompany}
+              width={200}
+              height={238}
+              src={imageCompany}
+              alt="Bandeira branca"
+              className="flex absolute top-12 left-10 z-10 rotate-12 w-48 h-28" />
+          }
           <Image
-            loader={() => imageCompany}
-            width={200}
-            height={238}
-            src={imageCompany}
+            width={268}
+            height={268}
+            src="/images/bandeira.png"
             alt="Bandeira branca"
-            className="flex absolute top-1/2 left-[70%] z-10 rotate-12" />
-        }
+            className=""
+          />
+        </div>
 
-        <Image
-          width={268}
-          height={268}
-          src="/images/bandeira.png"
-          alt="Bandeira branca"
-          className="flex absolute bottom-10 left-2/3"
-        />
         <ToastContainer autoClose={2000} limit={3} />
       </main>
     </div>
