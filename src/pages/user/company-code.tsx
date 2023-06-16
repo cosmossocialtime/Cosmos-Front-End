@@ -85,7 +85,7 @@ export default function CompanyCode() {
               onChange={handleInputChange}
               className="w-full bg-zinc-50 border-solid border border-gray-400 rounded-md py-3 p-4 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 mt-1 text-zinc-800" />
           </label>
-          <button className="py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg">Continuar</button>
+          <button disabled={!imageCompany} className={`${!imageCompany && "cursor-not-allowed"} py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg`}>Continuar</button>
         </form>
         <div className="flex absolute bottom-10 left-2/3">
           {
