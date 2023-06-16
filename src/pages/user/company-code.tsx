@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BackButton } from "../../components/BackButton";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -30,6 +30,7 @@ export default function CompanyCode() {
   const debounceRequest = debounce((value: string) => {
 
     if (value.length === 6) {
+
       api.get(`company/code/${value}`).then((response) => {
         setImageCompany(response.data.logo)
       }).catch((error) => {
@@ -84,28 +85,32 @@ export default function CompanyCode() {
               onChange={handleInputChange}
               className="w-full bg-zinc-50 border-solid border border-gray-400 rounded-md py-3 p-4 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 mt-1 text-zinc-800" />
           </label>
-          <button disabled={!imageCompany} className={`${!imageCompany && "cursor-not-allowed"} py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg`}>Continuar</button>
+          <button disabled={!imageCompany} className={`${!imageCompany && "cursor-not-allowed bg-purple-400"} py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg`}>Continuar</button>
         </form>
-        <div className="flex absolute bottom-10 left-2/3">
-          {
-            imageCompany &&
+        <div className="absolute bottom-10 left-2/3">
+          <div className="flex max-w-max bottom-0">
+            <div className="mt-7 h-[28%] absolute w-full flex justify-center items-center rotate-6">
+              {
+                imageCompany &&
+                <Image
+                  loader={() => imageCompany}
+                  width={250}
+                  height={250}
+                  src={imageCompany}
+                  alt="Logo da companhia"
+                  className="max-w-[80%] max-h-[80%]" />
+              }
+            </div>
             <Image
-              loader={() => imageCompany}
-              width={100}
-              height={100}
-              src={imageCompany}
-              alt="Logo da companhia"
-              className="flex absolute top-12 left-11 z-10 rotate-6 w-auto h-auto max-w-[200px] max-h-[110px] bg-blend-color-burn" />
-          }
-          <Image
-            width={268}
-            height={268}
-            src="/images/bandeira.png"
-            alt="Bandeira branca"
-            className=""
-          />
-        </div>
+              width={268}
+              height={268}
+              src="/images/bandeira.png"
+              alt="Bandeira branca"
+              className=""
+            />
 
+          </div>
+        </div>
         <ToastContainer autoClose={2000} limit={3} />
       </main>
     </div>
