@@ -151,6 +151,7 @@ export default function EstadoCidade() {
 
             <div className='flex gap-2'>
               <Checkbox.Root
+
                 className={`bg-transparent w-6 h-6 border-2 border-solid border-[#A2ABCC] rounded flex items-center justify-center ${outOfBrazil && "&& bg-gradient-to-r to-[#9D37F2] from-blue-300 border-none"}`}
                 id='checkbox'
                 checked={outOfBrazil}
@@ -168,7 +169,7 @@ export default function EstadoCidade() {
                   <Check size={32} className="p-1 text-zinc-50 font-bold" />
                 </Checkbox.Indicator>
               </Checkbox.Root>
-              <label>Não moro no Brasil</label>
+              <label htmlFor='checkbox'>Não moro no Brasil</label>
             </div>
 
             <button className='bg-violet-600 p-3 rounded-lg hover:bg-violet-500 transition-colors'>Entrar na nave</button>

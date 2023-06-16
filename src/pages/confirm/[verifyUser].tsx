@@ -1,9 +1,7 @@
-
 import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { api } from "../../services/api";
 import { useEffect } from "react";
-
 
 export default function VerifyUser() {
   const { 'cosmos.user': user } = parseCookies()
@@ -19,7 +17,6 @@ export default function VerifyUser() {
       router.push('/user/login')
     } catch (error) {
       console.log(error);
-
     }
 
   }, [verifyUser, user])
