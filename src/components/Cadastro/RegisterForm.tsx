@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Check, Eye, EyeClosed, Question } from "phosphor-react";
 import Link from "next/link";
 import { api } from "../../services/api";
+import { setCookie } from "nookies";
 
 const schema = z.object({
   name: z.string()
@@ -50,10 +51,16 @@ export function UserRegisterForm() {
         "password": data.password,
         "passwordConfirmation": data.confirmPassword
       })
-    } catch (error) {
-      return toast.error("Não foi possivel criar sua conta, por favor tente novamente mais tarde")
+      setCookie(undefined, 'cosmos.user', data.email, { maxAge: 60 * 60 * 12 })
+      return (toast.success("Criado com sucesso"));
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        return toast.error("Não foi possivel criar sua conta, pois este email já existe")
+      }
+      if (error.response.status === 404) {
+        return toast.error("Não foi possivel criar sua conta, por favor tente novamente mais tarde")
+      }
     }
-    return (toast.success("Criado com sucesso"));
   }
 
   return (
@@ -182,7 +189,7 @@ export function UserRegisterForm() {
         <h3>
           Já tem conta?{" "}
           <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
-            <Link href="/usuario/entrar">Fazer login</Link>
+            <Link href="/user/login">Fazer login</Link>
           </strong>
         </h3>
         <ToastContainer autoClose={2000} limit={3} />

@@ -74,7 +74,7 @@ export function UserLoginForm() {
           {errors.password && <span className='text-sm text-rose-600'>{errors.password.message}</span>}
 
           <span className="text-right text-sm  py-3">
-            <Link href="/usuario/recuperar" className="text-purple-500 hover:text-purple-700">Esqueci a minha senha</Link>
+            <Link href="/user/forgot-password" className="text-purple-500 hover:text-purple-700">Esqueci a minha senha</Link>
           </span>
         </div>
 
@@ -86,7 +86,7 @@ export function UserLoginForm() {
         <h3>
           Ainda não tem uma conta?{" "}
           <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
-            <Link href="/usuario/cadastrar">Cadastre-se</Link>
+            <Link href="/user/register">Cadastre-se</Link>
           </strong>
         </h3>
         <ToastContainer autoClose={2000} />

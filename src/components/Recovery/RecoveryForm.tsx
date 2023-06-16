@@ -14,14 +14,15 @@ export function UserRecoveryForm() {
     try {
       api.post('/auth/forgotPassword', {
         "email": email
+      }).then((response) => {
+        if (response.status === 200) {
+          return toast.success('Enviado um link para redefinição de senha no seu email')
+        }
       })
     } catch (error) {
       return toast.error("Não foi possivel recuperar sua senha, por favor tente novamente mais tarde")
     }
-    return toast.success("Conta encontrada, Link de recuperação enviado por email")
   }
-
-  console.log(email);
 
   return (
     <main className="flex flex-col w-full gap-2 justify-center items-center">
@@ -46,7 +47,7 @@ export function UserRecoveryForm() {
       <span className="mt-2">
         Lembrou de sua senha?{" "}
         <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
-          <Link href="/usuario/entrar">Fazer Login</Link>
+          <Link href="/user/login">Fazer Login</Link>
         </strong>
       </span>
 
