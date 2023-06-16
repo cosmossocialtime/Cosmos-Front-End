@@ -92,11 +92,11 @@ export default function CompanyCode() {
             imageCompany &&
             <Image
               loader={() => imageCompany}
-              width={200}
+              width={300}
               height={238}
               src={imageCompany}
-              alt="Bandeira branca"
-              className="flex absolute top-12 left-10 z-10 rotate-12 w-48 h-28" />
+              alt="Logo da companhia"
+              className="flex absolute top-12 left-10 z-10 rotate-12 w-48 h-28 bg-blend-color-burn" />
           }
           <Image
             width={268}
