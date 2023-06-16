@@ -25,12 +25,12 @@ export default function CompanyCode() {
     const newValue = event.target.value
     setCode(newValue)
     debounceRequest(newValue)
+
   }
 
   const debounceRequest = debounce((value: string) => {
 
     if (value.length === 6) {
-
       api.get(`company/code/${value}`).then((response) => {
         setImageCompany(response.data.logo)
       }).catch((error) => {
@@ -39,6 +39,10 @@ export default function CompanyCode() {
         }
       })
     }
+    if (value.length !== 6) {
+      setImageCompany("")
+    }
+
   }, 300)
 
 
