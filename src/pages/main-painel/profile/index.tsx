@@ -98,7 +98,7 @@ export default function Perfil() {
                     />
                 </div>
 
-                <div className='relative top-10 w-32 h-32 bg-slate-400 rounded-full border-4 border-solid border-white'>
+                <div className='relative top-10 w-32 h-32 bg-slate-400 flex items-center justify-center rounded-full border-4 border-solid border-white'>
                     {user.profilePicture ? (
                         <Image
                             className='rounded-full'

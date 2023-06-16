@@ -37,7 +37,7 @@ export default function CurrentMissionsArea({ programs }: currentMissionProps) {
             {programs.filter(program => program.applied).length === 0 ? (
                 <div className='relative mt-10 h-60 flex items-center justify-center bg-currentMission bg-no-repeat bg-cover rounded-lg overflow-hidden'>
                     <h1 className='px-4 z-10 text-center text-xl text-gray-200 font-semibold'>
-                        Atualmente você não está participando de nenhuma missão. Acesse as opções abaixo e inscreva-se em uma nova aventura!
+                        Atualmente você não está participando de nenhuma missão. <br/> Acesse as opções abaixo e inscreva-se em uma nova aventura!
                     </h1>
                 </div>
             ) : (
