@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 import Image from "next/image";
+import debounce from 'lodash.debounce';
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty("O código da empresa é obrigatorio")
@@ -16,13 +17,29 @@ type TypeCompanyCode = z.infer<typeof shemaCompanyCode>
 
 export default function CompanyCode() {
   const [code, setCode] = useState("")
+  const [imageCompany, setImageCompany] = useState("")
   const { handleSubmit } = useForm<TypeCompanyCode>()
   const router = useRouter()
 
-  function getCodeForInput(code: string) {
-    const codeWithoutC = code.split('-')[1]
-    setCode(codeWithoutC)
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const newValue = event.target.value
+    setCode(newValue)
+    debounceRequest(newValue)
   }
+
+  const debounceRequest = debounce((value: string) => {
+
+    if (value.length === 6) {
+
+      console.log(value);
+      api.get(`company/code/${value}`).then((response) => {
+        setImageCompany(response.data.logo)
+      })
+    }
+  }, 1000)
+
+  console.log(imageCompany);
+
 
   function submitForm() {
     if (!code) {
@@ -63,13 +80,19 @@ export default function CompanyCode() {
             Digite o código da empresa
             <input
               type="text"
-              maxLength={8}
-              value={`C-${code}`}
-              onChange={(e) => (getCodeForInput(e.target.value))}
+              maxLength={6}
+              value={code}
+              onChange={handleInputChange}
               className="w-full bg-zinc-50 border-solid border border-gray-400 rounded-md py-3 p-4 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 mt-1 text-zinc-800" />
           </label>
           <button className="py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg">Continuar</button>
         </form>
+        <Image
+          width={268}
+          height={268}
+          src={imageCompany}
+          alt="Bandeira branca"
+          className="flex absolute bottom-10 left-2/3" />
         <Image
           width={268}
           height={268}
@@ -86,7 +109,6 @@ export default function CompanyCode() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { ['cosmos.token']: token } = parseCookies(ctx)
-  console.log(token);
 
   if (!token) {
     return {
