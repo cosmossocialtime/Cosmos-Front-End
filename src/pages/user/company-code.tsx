@@ -28,13 +28,6 @@ export default function CompanyCode() {
     debounceRequest(newValue)
   }
 
-  const handleImageLoad = () => {
-    setTimeout(() => {
-      setImageIsLoad(true);
-    }, 2000);
-
-  };
-
   const debounceRequest = debounce((value: string) => {
 
     if (value.length === 6) {
@@ -51,7 +44,6 @@ export default function CompanyCode() {
     }
 
   }, 300)
-
 
   function submitForm() {
     if (!code) {
@@ -95,7 +87,7 @@ export default function CompanyCode() {
               onChange={handleInputChange}
               className="w-full bg-zinc-50 border-solid border border-gray-400 rounded-md py-3 p-4 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 mt-1 text-zinc-800" />
           </label>
-          <button disabled={imageIsLoad} className={`${imageCompany ? " bg-violet-500" : "bg-violet-700 cursor-not-allowed"} py-4 w-full text-lg font-semibold text-zinc-50 rounded-lg cursor-pointer`}>Continuar</button>
+          <button disabled={!imageIsLoad} className={`${imageCompany ? " bg-violet-500" : "bg-violet-700 cursor-not-allowed"} py-4 w-full text-lg font-semibold text-zinc-50 rounded-lg cursor-pointer`}>Continuar</button>
         </form>
         <div className="absolute bottom-10 left-2/3">
           <div className="flex max-w-max bottom-0">
@@ -105,7 +97,7 @@ export default function CompanyCode() {
                 imageCompany &&
                 <Image
                   loader={() => imageCompany}
-                  onLoad={handleImageLoad}
+                  onLoad={() => setImageIsLoad(true)}
                   width={250}
                   height={250}
                   src={imageCompany}
