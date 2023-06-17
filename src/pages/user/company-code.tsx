@@ -18,6 +18,7 @@ type TypeCompanyCode = z.infer<typeof shemaCompanyCode>
 export default function CompanyCode() {
   const [code, setCode] = useState("")
   const [imageCompany, setImageCompany] = useState("")
+  const [imageIsLoad, setImageIsLoad] = useState(false)
   const { handleSubmit } = useForm<TypeCompanyCode>()
   const router = useRouter()
 
@@ -25,8 +26,14 @@ export default function CompanyCode() {
     const newValue = event.target.value
     setCode(newValue)
     debounceRequest(newValue)
-
   }
+
+  const handleImageLoad = () => {
+    setTimeout(() => {
+      setImageIsLoad(true);
+    }, 2000);
+
+  };
 
   const debounceRequest = debounce((value: string) => {
 
@@ -62,7 +69,6 @@ export default function CompanyCode() {
     })
 
   }
-
   return (
     <div className="relative">
       <BackButton link="/user/gender" />
@@ -89,21 +95,24 @@ export default function CompanyCode() {
               onChange={handleInputChange}
               className="w-full bg-zinc-50 border-solid border border-gray-400 rounded-md py-3 p-4 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200 mt-1 text-zinc-800" />
           </label>
-          <button disabled={!imageCompany} className={`${!imageCompany && "cursor-not-allowed bg-violet-700"} py-4 w-full bg-violet-500 text-lg font-semibold text-zinc-50 rounded-lg`}>Continuar</button>
+          <button disabled={imageIsLoad} className={`${imageCompany ? " bg-violet-500" : "bg-violet-700 cursor-not-allowed"} py-4 w-full text-lg font-semibold text-zinc-50 rounded-lg cursor-pointer`}>Continuar</button>
         </form>
         <div className="absolute bottom-10 left-2/3">
           <div className="flex max-w-max bottom-0">
             <div className="mt-7 h-[28%] absolute w-full flex justify-center items-center rotate-6">
+
               {
                 imageCompany &&
                 <Image
                   loader={() => imageCompany}
+                  onLoad={handleImageLoad}
                   width={250}
                   height={250}
                   src={imageCompany}
                   alt="Logo da companhia"
                   className="max-w-[80%] max-h-[80%]" />
               }
+
             </div>
             <Image
               width={268}
@@ -116,8 +125,8 @@ export default function CompanyCode() {
           </div>
         </div>
         <ToastContainer autoClose={2000} limit={3} />
-      </main>
-    </div>
+      </main >
+    </div >
   )
 }
 
