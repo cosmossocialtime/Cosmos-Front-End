@@ -10,6 +10,7 @@ import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthProvider/useAuth";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
+import { ToastContainer, toast } from "react-toastify";
 
 const schemaGender = z.object({
   gender: z.string().nonempty("Por favor selecione o seu gênero")
@@ -24,11 +25,18 @@ export default function Genero() {
   const { handleSubmit } = useForm<GenderForm>()
 
   function submitFormGender() {
-    api.patch("/user/onboarding", {
-      "gender": gender,
+    if (gender === "") {
+      console.log('Oi');
+      toast.error('Digite um gênero valido')
+
     }
-    )
-    Router.push('/user/company-code')
+    if (gender) {
+      api.patch("/user/onboarding", {
+        "gender": gender,
+      }
+      )
+      Router.push('/user/company-code')
+    }
   }
 
   return (
@@ -88,6 +96,8 @@ export default function Genero() {
           )}
         </form>
       </main>
+      <ToastContainer autoClose={2000} limit={3} />
+
     </div>
   )
 }
@@ -95,8 +105,6 @@ export default function Genero() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { ['cosmos.token']: token } = parseCookies(ctx)
-  console.log(token);
-
   if (!token) {
     return {
       redirect: {

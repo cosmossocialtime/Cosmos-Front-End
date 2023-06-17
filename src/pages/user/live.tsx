@@ -11,7 +11,7 @@ import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
 import { api } from '../../services/api';
 import Router from 'next/router';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface cityProps {
   id: number,
@@ -34,16 +34,13 @@ export default function EstadoCidade() {
     async function fetchCidadesPorEstado() {
       try {
         const estadoEncontrado = statesOfBrazil?.find(e => e.sigla === stateSubmit);
-
         const cidadesResponse = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`);
-
         setCity(cidadesResponse.data);
       } catch (error) {
         console.error('Não foi possível obter a lista de cidades:')
         setCity([]);
       }
     }
-
     fetchCidadesPorEstado();
   }, [stateSubmit, statesOfBrazil]);
 
@@ -176,6 +173,7 @@ export default function EstadoCidade() {
           </div>
         </form>
       </main>
+      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }

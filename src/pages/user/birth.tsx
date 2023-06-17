@@ -8,14 +8,14 @@ import { BackButton } from "../../components/BackButton";
 import { useForm } from 'react-hook-form';
 import { api } from '../../services/api';
 import Router from 'next/router';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { parseCookies } from 'nookies';
 import { GetServerSideProps } from 'next';
 
 export default function Nascimento() {
-  const [dayValue, setDayValue] = useState("20")
-  const [monthValue, setMonthValue] = useState("Julho")
-  const [yearValue, setYearValue] = useState("1969")
+  const [dayValue, setDayValue] = useState("")
+  const [monthValue, setMonthValue] = useState("")
+  const [yearValue, setYearValue] = useState("")
   const { handleSubmit } = useForm()
 
   const currentYear = dayjs().year();
@@ -27,16 +27,22 @@ export default function Nascimento() {
   function monthInNumber(month: string) { { return dayjs().month(Number(month)).format('MM') } }
 
   function submitBirth() {
-    try {
-      api.patch("/user/onboarding", {
-        "birthdate": `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`
-      }).then((response) => {
-        if (response.status === 200) {
-          Router.push('/user/live')
-        }
-      })
-    } catch (error: any) {
-      if (error.response.status === 400) return toast.error("Sem autorização")
+    if (yearValue === "" || yearValue === "") {
+      toast.error("Digite sua idade por favor")
+    }
+
+    if (yearValue && dayValue) {
+      try {
+        api.patch("/user/onboarding", {
+          "birthdate": `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`
+        }).then((response) => {
+          if (response.status === 200) {
+            Router.push('/user/live')
+          }
+        })
+      } catch (error: any) {
+        if (error.response.status === 400) return toast.error("Sem autorização")
+      }
     }
   }
   return (
@@ -165,14 +171,13 @@ export default function Nascimento() {
           <button className='py-4 bg-violet-500 text-zinc-50 text-lg w-full rounded-lg mt-10 hover:bg-violet-600 transition-all duration-200'>Pousar</button>
         </form>
       </main>
+      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { ['cosmos.token']: token } = parseCookies(ctx)
-  console.log(token);
-
   if (!token) {
     return {
       redirect: {

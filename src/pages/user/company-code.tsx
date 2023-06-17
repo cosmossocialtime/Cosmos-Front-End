@@ -91,20 +91,18 @@ export default function CompanyCode() {
         </form>
         <div className="absolute bottom-10 left-2/3">
           <div className="flex max-w-max bottom-0">
-            <div className="mt-7 h-[28%] absolute w-full flex justify-center items-center rotate-6">
-
+            <div className="mt-7 p-2 h-[28%] absolute w-full  flex justify-center items-center rotate-6">
               {
                 imageCompany &&
                 <Image
                   loader={() => imageCompany}
                   onLoad={() => setImageIsLoad(true)}
-                  width={250}
-                  height={250}
+                  width={200}
+                  height={200}
                   src={imageCompany}
                   alt="Logo da companhia"
-                  className="max-w-[80%] max-h-[80%]" />
+                  className="w-[80%] h-[80%] object-contain" />
               }
-
             </div>
             <Image
               width={268}
