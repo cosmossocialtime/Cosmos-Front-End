@@ -1,6 +1,6 @@
-import Head from "next/head";
-import { UserLoginForm } from "../../components/Login/LoginForm";
-import Main from "../../components/Main";
+import Head from 'next/head'
+import { UserLoginForm } from '../../components/Login/LoginForm'
+import Main from '../../components/Main'
 
 const Entrar = () => {
   return (
@@ -13,7 +13,7 @@ const Entrar = () => {
         <UserLoginForm />
       </div>
     </div>
-  );
+  )
 }
 
-export default Entrar;
+export default Entrar

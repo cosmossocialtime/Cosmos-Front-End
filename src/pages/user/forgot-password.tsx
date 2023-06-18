@@ -1,8 +1,6 @@
-import Head from "next/head";
-import Main from "../../components/Main";
-import { UserRecoveryForm } from "../../components/Recovery/RecoveryForm";
-import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
+import Head from 'next/head'
+import Main from '../../components/Main'
+import { UserRecoveryForm } from '../../components/Recovery/RecoveryForm'
 
 export default function ForgotPassword() {
   return (
@@ -15,5 +13,5 @@ export default function ForgotPassword() {
         <UserRecoveryForm />
       </div>
     </div>
-  );
+  )
 }

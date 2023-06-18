@@ -1,6 +1,6 @@
-import Head from "next/head";
-import { UserRegisterForm } from "../../components/Cadastro/RegisterForm";
-import Main from "../../components/Main";
+import Head from 'next/head'
+import { UserRegisterForm } from '../../components/Cadastro/RegisterForm'
+import Main from '../../components/Main'
 
 export default function Cadastrar() {
   return (
@@ -13,5 +13,5 @@ export default function Cadastrar() {
         <UserRegisterForm />
       </div>
     </div>
-  );
+  )
 }

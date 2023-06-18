@@ -1,66 +1,40 @@
-import { getApiClient } from "./axios";
-import {parseCookies, setCookie} from 'nookies'
-import Router from "next/router"
+import { getApiClient } from './axios'
+import { parseCookies, setCookie } from 'nookies'
+import jwtDecode from 'jwt-decode'
+import dayjs from 'dayjs'
+import axios from 'axios'
 
 export const api = getApiClient()
 
-const {'cosmos.refreshToken': refresh_token} = parseCookies()
+const { 'cosmos.refreshToken': RefreshToken } = parseCookies()
+const { 'cosmos.token': Token } = parseCookies()
 
-async function renewToken() {
-  try {
-      const response = await api.post('/auth/refreshToken', {
-        headers: {
-          "RefreshToken": refresh_token
-        }
-      })
-      const {accessToken, refreshToken} = response.data
-      return {accessToken, refreshToken}
-    } catch (error) {
-      console.log(error);
-    }
+type userExpiration = {
+  exp: number
 }
 
-api.interceptors.request.use(config => {
-  
-  // if (error.response.status === 401 && !originalRequest._retry) {
-    //   originalRequest._retry = true;
-    //   try {
-    //     const newToken = await renewToken();
-    //     setCookie(undefined, 'cosmos.refreshToken', newToken?.refreshToken)
-    //     api.defaults.headers['Authorization'] = `Bearer ${newToken?.accessToken}`;
-    //     return api(originalRequest);
-    //   } catch (error) {
-    //     Router.push('/user/login')
-    //     throw error;
-    //   }
-    // }
-    // if(error.response.status === 400){
-    //   return Router.push('/user/login')
-    // }
-    // return Promise.reject(error);
-  return config
-})
-
-api.interceptors.request.use( response => response,
-  async error => {
-    const originalRequest = error.config;
-
-    console.log(originalRequest);
-    
-    // if (error.response.status === 401 && !originalRequest._retry) {
-    //   originalRequest._retry = true;
-    //   try {
-    //     const newToken = await renewToken();
-    //     setCookie(undefined, 'cosmos.refreshToken', newToken?.refreshToken)
-    //     api.defaults.headers['Authorization'] = `Bearer ${newToken?.accessToken}`;
-    //     return api(originalRequest);
-    //   } catch (error) {
-    //     Router.push('/user/login')
-    //     throw error;
-    //   }
-    // }
-    // if(error.response.status === 400){
-    //   return Router.push('/user/login')
-    // }
-    // return Promise.reject(error);
+async function renewToken() {
+  const response = await axios({
+    method: 'post',
+    url: 'https://cosmos-social.cyclic.app/api/auth/refreshToken',
+    headers: { RefreshToken },
   })
+
+  return response
+}
+
+api.interceptors.request.use(async (req) => {
+  if (Token) {
+    const user: userExpiration = jwtDecode(Token)
+    const isExpire = dayjs.unix(user.exp).diff(dayjs()) < 1
+
+    if (isExpire) {
+      const newToken = await renewToken()
+      setCookie(undefined, 'cosmos.token', newToken.data.accessToken)
+      setCookie(undefined, 'cosmos.refreshToken', newToken.data.refreshToken)
+    }
+    if (!isExpire) return req
+  }
+
+  return req
+})
