@@ -39,7 +39,7 @@ export default function Genero() {
   return (
     <div>
       <BackButton link="/user/start" />
-      <main className="bg-bgCadastro h-screen bg-cover bg-no-repeat flex items-center justify-around">
+      <main className="flex h-screen items-center justify-around bg-bgCadastro bg-cover bg-no-repeat">
         <img
           className="h-fit w-1/3 self-end"
           src="/images/astronauta.png"
@@ -48,12 +48,12 @@ export default function Genero() {
         <form
           action=""
           onSubmit={handleSubmit(submitFormGender)}
-          className="flex flex-col items-center justify-center gap-8 py-10 px-8 backdrop-blur-md bg-black/10 rounded-2xl"
+          className="flex flex-col items-center justify-center gap-8 rounded-2xl bg-black/10 py-10 px-8 backdrop-blur-md"
         >
-          <h2 className="text-2xl text-zinc-50 max-w-xs text-center font-semibold">
+          <h2 className="max-w-xs text-center text-2xl font-semibold text-zinc-50">
             Com qual gênero você se identifica?
           </h2>
-          <span className="text-xl text-zinc-50 font-light max-w-lg text-center">
+          <span className="max-w-lg text-center text-xl font-light text-zinc-50">
             Utilizaremos esses dados para mapear o público da nossa plataforma!
           </span>
 
@@ -64,7 +64,7 @@ export default function Genero() {
             type="submit"
             name="Feminino"
             value="Feminino"
-            className="py-4 bg-violet-500 w-full rounded-lg text-lg text-zinc-50 font-semibold cursor-pointer hover:bg-violet-600 transition-all duration-200"
+            className="w-full cursor-pointer rounded-lg bg-violet-500 py-4 text-lg font-semibold text-zinc-50 transition-all duration-200 hover:bg-violet-600"
           />
 
           <input
@@ -74,7 +74,7 @@ export default function Genero() {
             type="submit"
             value="Masculino"
             name="Masculino"
-            className="py-4 bg-violet-500 w-full rounded-lg text-lg text-zinc-50 font-semibold cursor-pointer hover:bg-violet-600 transition-all duration-200"
+            className="w-full cursor-pointer rounded-lg bg-violet-500 py-4 text-lg font-semibold text-zinc-50 transition-all duration-200 hover:bg-violet-600"
           />
 
           {otherGenderActive ? (
@@ -82,19 +82,19 @@ export default function Genero() {
               onClick={() => setOtherGenderActive(!otherGenderActive)}
               type="submit"
               value={'Outro'}
-              className="py-4 bg-violet-500 w-full rounded-lg text-lg text-zinc-50 font-semibold cursor-pointer hover:bg-violet-600 transition-all duration-200"
+              className="w-full cursor-pointer rounded-lg bg-violet-500 py-4 text-lg font-semibold text-zinc-50 transition-all duration-200 hover:bg-violet-600"
             />
           ) : (
-            <div className="flex justify-between w-full">
+            <div className="flex w-full justify-between">
               <input
                 type="text"
                 placeholder="Digite seu gênero"
                 onChange={(e) => setGender(e.target.value)}
-                className="p-4 bg-zinc-50 text-zinc-700 text-lg flex-1 rounded-lg border border-solid focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+                className="flex-1 rounded-lg border border-solid bg-zinc-50 p-4 text-lg text-zinc-700 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
               />
               <button
                 type="submit"
-                className="bg-violet-500 py-3 px-8 ml-4 rounded-lg  text-zinc-50 hover:bg-violet-600 transition-all duration-200"
+                className="ml-4 rounded-lg bg-violet-500 py-3 px-8  text-zinc-50 transition-all duration-200 hover:bg-violet-600"
               >
                 <CaretRight weight="bold" size={32} />
               </button>
@@ -109,6 +109,7 @@ export default function Genero() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { 'cosmos.token': token } = parseCookies(ctx)
+
   if (!token) {
     return {
       redirect: {
@@ -118,6 +119,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
   return {
-    props: { token },
+    props: {},
   }
 }
