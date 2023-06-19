@@ -19,11 +19,11 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
     if (response) {
       setCookie(undefined, 'cosmos.token', response?.accessToken, {
-        maxAge: 60 * 25,
+        maxAge: 60 * 20,
       })
 
       setCookie(undefined, 'cosmos.refreshToken', response?.refreshToken, {
-        maxAge: 60 * 25,
+        maxAge: 60 * 20,
       })
       api.defaults.headers.Authorization = `Bearer ${response?.accessToken}`
       Router.push('/user/start')
