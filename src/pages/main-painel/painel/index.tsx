@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Header from '../../../components/main-painel/Header'
 
 import PerfilArea from '../../../components/main-painel/painel/PerfilArea'
