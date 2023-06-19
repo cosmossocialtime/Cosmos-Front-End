@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Container } from "./style";
+import Link from 'next/link'
+import { Container } from './style'
 
 export function RoleSuccess() {
   return (
@@ -24,5 +24,5 @@ export function RoleSuccess() {
         </span>
       </Container>
     </>
-  );
+  )
 }
