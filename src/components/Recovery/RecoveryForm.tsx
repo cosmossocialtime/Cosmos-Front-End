@@ -1,42 +1,47 @@
-import { FormEvent, useState, useRef } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { api } from "../../services/api";
+import { FormEvent, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import Link from 'next/link'
+import { api } from '../../services/api'
 
 export function UserRecoveryForm() {
-
-  const [email, setEmail] = useState("");
-  const router = useRouter();
+  const [email, setEmail] = useState('')
 
   const SubmitForm = (e: FormEvent) => {
     e.preventDefault()
     try {
-      api.post('/auth/forgotPassword', {
-        "email": email
-      }).then((response) => {
-        if (response.status === 200) {
-          return toast.success('Enviado um link para redefinição de senha no seu email')
-        }
-      })
+      api
+        .post('/auth/forgotPassword', {
+          email,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            return toast.success(
+              'Enviado um link para redefinição de senha no seu email',
+            )
+          }
+        })
     } catch (error) {
-      return toast.error("Não foi possivel recuperar sua senha, por favor tente novamente mais tarde")
+      return toast.error(
+        'Não foi possivel recuperar sua senha, por favor tente novamente mais tarde',
+      )
     }
   }
 
   return (
-    <main className="flex flex-col w-full gap-2 justify-center items-center">
+    <main className="flex w-full flex-col items-center justify-center gap-2">
       <h2 className="text-3xl text-purple-600">Informe o seu email</h2>
-      <form onSubmit={SubmitForm} className="p-10 flex flex-col gap-2 mt-4">
-        <div className="flex flex-col w-full max-w-md gap-3 mb-9">
-          <label htmlFor="email" className="text-lg">Para recuperar sua senha, informe o email com o qual se cadastrou</label>
+      <form onSubmit={SubmitForm} className="mt-4 flex flex-col gap-2 p-10">
+        <div className="mb-9 flex w-full max-w-md flex-col gap-3">
+          <label htmlFor="email" className="text-lg">
+            Para recuperar sua senha, informe o email com o qual se cadastrou
+          </label>
           <input
             onChange={(e) => setEmail(e.target.value)}
             id="email"
             type="email"
             required
             placeholder="Escreva seu email aqui@email.com.br"
-            className="border-solid border border-gray-400 rounded-md p-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 transition-all duration-200"
+            className="rounded-md border border-solid border-gray-400 p-2 transition-all duration-200 valid:border-green-500 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
           />
         </div>
 
@@ -45,8 +50,8 @@ export function UserRecoveryForm() {
         </button>
       </form>
       <span className="mt-2">
-        Lembrou de sua senha?{" "}
-        <strong className="text-purple-700 font-bold hover:text-purple-600 transition-all duration-200">
+        Lembrou de sua senha?{' '}
+        <strong className="font-bold text-purple-700 transition-all duration-200 hover:text-purple-600">
           <Link href="/user/login">Fazer Login</Link>
         </strong>
       </span>
@@ -55,5 +60,5 @@ export function UserRecoveryForm() {
         <ToastContainer></ToastContainer>
       </div>
     </main>
-  );
+  )
 }

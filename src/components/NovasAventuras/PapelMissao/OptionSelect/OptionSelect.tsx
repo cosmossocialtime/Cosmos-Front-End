@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react'
 
 import { HeaderMissao } from '../HeaderMissao'
@@ -37,11 +38,6 @@ export function OptionSelect() {
     router.push('/confirm')
   }
 
-  const Options = {
-    firstOption,
-    secondOption,
-    thirdOption,
-  }
   return (
     <>
       <HeaderMissao closeVisibility={+true} />

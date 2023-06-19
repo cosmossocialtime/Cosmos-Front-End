@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import styled from 'styled-components'
 
 export default function Main() {
   return (
@@ -17,29 +16,3 @@ export default function Main() {
     </div>
   )
 }
-
-// STYLED
-
-const Container = styled.main`
-  height: 100vh;
-`
-
-const CosmoIMG = styled.div`
-  background: url('/images/bgEspaco.png');
-  flex: 60%;
-  max-width: 790px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  img {
-    width: min(448px, 100%);
-    background: #00000034;
-    padding: 7%;
-    border-radius: 20px;
-    backdrop-filter: blur(5px);
-  }
-`
