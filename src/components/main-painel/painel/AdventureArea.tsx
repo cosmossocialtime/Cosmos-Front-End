@@ -40,7 +40,7 @@ export default function AdventureArea({ programs }: AdventureAreaProps) {
                                         <div className="flex items-center gap-2">
                                             <Clock size={32} />
                                             <span className="text-xs">
-                                                {5} horas <br />
+                                                {program.weeklyHours} horas <br />
                                                 semanais
                                             </span>
                                         </div>

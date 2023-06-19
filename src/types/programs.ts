@@ -7,4 +7,5 @@ export type programsProps = {
     name: string;
     startDate: Date;
     updatedAt: Date;
+    weeklyHours: number;
 }[]
