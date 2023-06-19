@@ -64,7 +64,7 @@ export default function EstadoCidade() {
           if (response.status === 200) Router.push('/user/endpoint')
         })
     } catch (error: any) {
-      if (error.response.status === 400) return toast.error('Sem autorização')
+      if (error.response.status === 401) return toast.error('Sem autorização')
     }
   }
   return (
