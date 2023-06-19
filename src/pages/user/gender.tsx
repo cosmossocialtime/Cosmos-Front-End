@@ -25,7 +25,6 @@ export default function Genero() {
 
   function submitFormGender() {
     if (gender === '') {
-      console.log('Oi')
       toast.error('Digite um gênero valido')
     }
     if (gender) {
@@ -88,6 +87,7 @@ export default function Genero() {
             <div className="flex w-full justify-between">
               <input
                 type="text"
+                autoFocus
                 placeholder="Digite seu gênero"
                 onChange={(e) => setGender(e.target.value)}
                 className="flex-1 rounded-lg border border-solid bg-zinc-50 p-4 text-lg text-zinc-700 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"

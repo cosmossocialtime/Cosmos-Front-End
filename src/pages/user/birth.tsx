@@ -13,8 +13,8 @@ import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 
 export default function Nascimento() {
-  const [dayValue, setDayValue] = useState('')
-  const [monthValue, setMonthValue] = useState('')
+  const [dayValue, setDayValue] = useState('20')
+  const [monthValue, setMonthValue] = useState('Julho')
   const [yearValue, setYearValue] = useState('')
   const { handleSubmit } = useForm()
 
@@ -32,7 +32,7 @@ export default function Nascimento() {
 
   function submitBirth() {
     if (yearValue === '' || yearValue === '') {
-      toast.error('Digite sua idade por favor')
+      toast.error('Digite seu ano de nascimento')
     }
 
     if (yearValue && dayValue) {
@@ -74,7 +74,7 @@ export default function Nascimento() {
               <Select.Root onValueChange={setDayValue}>
                 <Select.Trigger
                   id="day"
-                  className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500"
+                  className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500 placeholder:text-zinc-200"
                 >
                   <Select.Value placeholder="20" />
                   <Select.Icon>

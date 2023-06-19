@@ -51,6 +51,9 @@ export default function EstadoCidade() {
   }, [stateSubmit, statesOfBrazil])
 
   function handleSubmitStateAndCity() {
+    if (stateSubmit === '' || citySubmit === '') {
+      return toast.error('Digite seu estado e cidade')
+    }
     try {
       api
         .patch('/user/onboarding', {
@@ -67,24 +70,24 @@ export default function EstadoCidade() {
   return (
     <div>
       <BackButton link="/user/birth" />
-      <main className="w-full h-screen bg-little-nave bg-cover bg-no-repeat flex text-zinc-50 items-center">
+      <main className="flex h-screen w-full items-center bg-little-nave bg-cover bg-no-repeat text-zinc-50">
         <form
           onSubmit={handleSubmit(handleSubmitStateAndCity)}
-          className="flex flex-col items-center justify-center gap-7 lg:ml-72 p-16 backdrop-blur-md bg-black/10 rounded-2xl"
+          className="flex flex-col items-center justify-center gap-7 rounded-2xl bg-black/10 p-16 backdrop-blur-md lg:ml-72"
         >
           <h2 className="text-2xl">Onde a sua nave está estacionada?</h2>
-          <span className="font-light text-xl">
+          <span className="text-xl font-light">
             O local onde você vive atualmente
           </span>
-          <div className="flex flex-col w-full justify-between gap-6">
+          <div className="flex w-full flex-col justify-between gap-6">
             {!outOfBrazil ? (
               <>
-                <div className="w-full flex flex-col gap-2">
+                <div className="flex w-full flex-col gap-2">
                   <label htmlFor="country">Estado</label>
                   <Select.Root onValueChange={setStateSubmit}>
                     <Select.Trigger
                       id="country"
-                      className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
+                      className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500"
                     >
                       <Select.Value placeholder="Selecione seu estado" />
                       <Select.Icon>
@@ -99,15 +102,15 @@ export default function EstadoCidade() {
                     <Select.Portal>
                       <Select.Content
                         position="popper"
-                        className="bg-white text-center rounded mt-2 w-full"
+                        className="mt-2 w-full rounded bg-white text-center"
                       >
-                        <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
+                        <Select.Viewport className="max-h-60 w-full cursor-pointer p-2 text-violet-500">
                           {statesOfBrazil?.map((states) => {
                             return (
                               <Select.Item
                                 key={states.id}
                                 value={states.sigla}
-                                className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50 rounded-lg flex justify-between items-center"
+                                className=" flex items-center justify-between rounded-lg py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50"
                               >
                                 <Select.ItemText>{states.nome}</Select.ItemText>
                                 <Select.ItemIndicator>
@@ -121,12 +124,12 @@ export default function EstadoCidade() {
                     </Select.Portal>
                   </Select.Root>
                 </div>
-                <div className="w-full flex flex-col gap-2">
+                <div className="flex w-full flex-col gap-2">
                   <label htmlFor="City">Cidade</label>
                   <Select.Root onValueChange={setCitySubmit}>
                     <Select.Trigger
                       id="City"
-                      className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
+                      className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500"
                     >
                       <Select.Value placeholder="Selecione sua cidade" />
                       <Select.Icon>
@@ -141,15 +144,15 @@ export default function EstadoCidade() {
                     <Select.Portal>
                       <Select.Content
                         position="popper"
-                        className="bg-white text-center rounded mt-2 w-full"
+                        className="mt-2 w-full rounded bg-white text-center"
                       >
-                        <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
+                        <Select.Viewport className="max-h-60 w-full cursor-pointer p-2 text-violet-500">
                           {city?.map((city) => {
                             return (
                               <Select.Item
                                 key={city.id}
                                 value={city.nome}
-                                className=" py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50 rounded-lg flex justify-between items-center"
+                                className=" flex items-center justify-between rounded-lg py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50"
                               >
                                 <Select.ItemText>{city.nome}</Select.ItemText>
                                 <Select.ItemIndicator>
@@ -168,9 +171,9 @@ export default function EstadoCidade() {
 
             <div className="flex gap-2">
               <Checkbox.Root
-                className={`bg-transparent w-6 h-6 border-2 border-solid border-[#A2ABCC] rounded flex items-center justify-center ${
+                className={`flex h-6 w-6 items-center justify-center rounded border-2 border-solid border-[#A2ABCC] bg-transparent ${
                   outOfBrazil &&
-                  '&& bg-gradient-to-r to-[#9D37F2] from-blue-300 border-none'
+                  '&& border-none bg-gradient-to-r from-blue-300 to-[#9D37F2]'
                 }`}
                 id="checkbox"
                 checked={outOfBrazil}
@@ -183,13 +186,13 @@ export default function EstadoCidade() {
                 }}
               >
                 <Checkbox.Indicator>
-                  <Check size={32} className="p-1 text-zinc-50 font-bold" />
+                  <Check size={32} className="p-1 font-bold text-zinc-50" />
                 </Checkbox.Indicator>
               </Checkbox.Root>
               <label htmlFor="checkbox">Não moro no Brasil</label>
             </div>
 
-            <button className="bg-violet-600 p-3 rounded-lg hover:bg-violet-500 transition-colors">
+            <button className="rounded-lg bg-violet-600 p-3 transition-colors hover:bg-violet-500">
               Entrar na nave
             </button>
           </div>
@@ -202,7 +205,6 @@ export default function EstadoCidade() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { 'cosmos.token': token } = parseCookies(ctx)
-  console.log(token)
 
   if (!token) {
     return {
