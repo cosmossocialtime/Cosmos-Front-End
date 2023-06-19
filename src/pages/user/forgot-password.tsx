@@ -8,7 +8,7 @@ export default function ForgotPassword() {
       <Head>
         <title>Esqueci minha senha | Cosmos</title>
       </Head>
-      <div className="md:flex h-screen">
+      <div className="h-screen md:flex">
         <Main />
         <UserRecoveryForm />
       </div>
