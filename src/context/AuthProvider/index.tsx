@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       setCookie(undefined, 'cosmos.token', response?.accessToken, {
         maxAge: 60 * 20,
       })
-
       setCookie(undefined, 'cosmos.refreshToken', response?.refreshToken, {
         maxAge: 60 * 20,
       })

@@ -4,12 +4,14 @@ import { FormEvent, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import Link from 'next/link'
 import { api } from '../../services/api'
+import { setCookie } from 'nookies'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
 
   const SubmitForm = (e: FormEvent) => {
     e.preventDefault()
+    setCookie(undefined, 'cosmos.u', email)
     try {
       api
         .post('/auth/forgotPassword', {

@@ -15,7 +15,7 @@ import { GetServerSideProps } from 'next'
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState('20')
   const [monthValue, setMonthValue] = useState('Julho')
-  const [yearValue, setYearValue] = useState('')
+  const [yearValue, setYearValue] = useState('1969')
   const { handleSubmit } = useForm()
 
   const currentYear = dayjs().year()
@@ -31,10 +31,6 @@ export default function Nascimento() {
   }
 
   function submitBirth() {
-    if (yearValue === '' || yearValue === '') {
-      toast.error('Digite seu ano de nascimento')
-    }
-
     if (yearValue && dayValue) {
       try {
         api
@@ -63,7 +59,7 @@ export default function Nascimento() {
             Nos conte o dia em que você chegou à Terra
           </h1>
           <span className="text-xl font-extralight text-zinc-50">
-            Informe aqui sua data de nascimento ;
+            Selecione a sua data de nascimento ;)
           </span>
 
           <div className="mt-10 flex w-full justify-between gap-6">

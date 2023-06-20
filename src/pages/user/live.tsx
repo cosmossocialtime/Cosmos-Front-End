@@ -77,7 +77,7 @@ export default function EstadoCidade() {
         >
           <h2 className="text-2xl">Onde a sua nave está estacionada?</h2>
           <span className="text-xl font-light">
-            O local onde você vive atualmente
+            Selecione o local onde você vive atualmente
           </span>
           <div className="flex w-full flex-col justify-between gap-6">
             {!outOfBrazil ? (

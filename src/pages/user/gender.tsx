@@ -25,7 +25,7 @@ export default function Genero() {
 
   function submitFormGender() {
     if (gender === '') {
-      toast.error('Digite um gênero valido')
+      toast.error('Digite um gênero válido')
     }
     if (gender) {
       api.patch('/user/onboarding', {
