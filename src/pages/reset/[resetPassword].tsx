@@ -59,6 +59,7 @@ export default function ResetPassword() {
       .then((response) => {
         if (response.status === 200) {
           Router.push('/user/login')
+          toast.success('Senha alterada com sucesso')
         }
 
         if (response.status === 404) {
