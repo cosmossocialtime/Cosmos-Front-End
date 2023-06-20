@@ -8,7 +8,7 @@ export default function Iniciar() {
           Antes de começarmos, precisamos saber um pouco mais sobre você
         </p>
         <a
-          className=" rounded-lg bg-violet-500 py-3 px-40 text-lg font-semibold transition-all duration-150 hover:bg-violet-600"
+          className=" rounded-lg bg-violet-500 py-4 px-40 text-lg font-semibold transition-all duration-150 hover:bg-violet-600"
           href={'/user/gender'}
         >
           Vamos lá
