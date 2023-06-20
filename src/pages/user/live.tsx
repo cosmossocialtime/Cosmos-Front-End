@@ -192,7 +192,7 @@ export default function EstadoCidade() {
               <label htmlFor="checkbox">Não moro no Brasil</label>
             </div>
 
-            <button className="rounded-lg bg-violet-600 p-3 transition-colors hover:bg-violet-500">
+            <button className="rounded-lg bg-violet-600 p-4 transition-colors hover:bg-violet-500">
               Entrar na nave
             </button>
           </div>
