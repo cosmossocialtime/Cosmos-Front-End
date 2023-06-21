@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import Link from 'next/link'
 import { api } from '../../services/api'
 import { setCookie } from 'nookies'
+import Router from 'next/router'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -19,9 +20,10 @@ export default function ForgotPassword() {
         })
         .then((response) => {
           if (response.status === 200) {
-            return toast.success(
+            toast.success(
               'Enviado um link para redefinição de senha no seu email',
             )
+            Router.push('/user/completed-forgot-password')
           }
         })
     } catch (error) {
