@@ -11,6 +11,7 @@ import { Check, Eye, EyeClosed, Question } from 'phosphor-react'
 import Link from 'next/link'
 import { api } from '../../services/api'
 import { setCookie } from 'nookies'
+import Router from 'next/router'
 
 const schema = z
   .object({
@@ -67,22 +68,30 @@ export default function Cadastrar() {
 
   async function handleForm(data: formProps) {
     try {
-      await api.post('/auth/signup', {
-        byname: data.alias,
-        fullName: data.name,
-        email: data.email,
-        password: data.password,
-        passwordConfirmation: data.confirmPassword,
-      })
-      setCookie(undefined, 'cosmos.user', data.email, { maxAge: 60 * 60 * 12 })
-      return toast.success('Criado com sucesso')
+      await api
+        .post('/auth/signup', {
+          byname: data.alias,
+          fullName: data.name,
+          email: data.email,
+          password: data.password,
+          passwordConfirmation: data.confirmPassword,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            setCookie(undefined, 'cosmos.user', data.email, {
+              maxAge: 60 * 60 * 12,
+            })
+            toast.success('Criado com sucesso')
+            Router.push('/user/completed-registration')
+          }
+        })
     } catch (error: any) {
       if (error.response.status === 400) {
         return toast.error(
           'Não foi possivel criar sua conta, pois este email já existe',
         )
       }
-      if (error.response.status === 404) {
+      if (error.response.status === 404 || error.response.status === 500) {
         return toast.error(
           'Não foi possivel criar sua conta, por favor tente novamente',
         )
