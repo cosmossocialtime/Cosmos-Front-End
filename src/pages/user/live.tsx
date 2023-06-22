@@ -52,7 +52,7 @@ export default function EstadoCidade() {
 
   function handleSubmitStateAndCity() {
     if (stateSubmit === '' || citySubmit === '') {
-      return toast.error('Digite seu estado e cidade')
+      return toast.error('Selecione o local onde você vive atualmente')
     }
     try {
       api
@@ -77,7 +77,7 @@ export default function EstadoCidade() {
         >
           <h2 className="text-2xl">Onde a sua nave está estacionada?</h2>
           <span className="text-xl font-light">
-            Selecione o local onde você vive atualmente
+            O local onde você vive atualmente
           </span>
           <div className="flex w-full flex-col justify-between gap-6">
             {!outOfBrazil ? (

@@ -77,7 +77,7 @@ export default function Cadastrar() {
           passwordConfirmation: data.confirmPassword,
         })
         .then((res) => {
-          if (res.status === 200) {
+          if (res.status === 201) {
             setCookie(undefined, 'cosmos.user', data.email, {
               maxAge: 60 * 60 * 12,
             })

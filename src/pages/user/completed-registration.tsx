@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react'
 import { api } from '../../services/api'
 import { ToastContainer, toast } from 'react-toastify'
 import { GetServerSideProps } from 'next'
+import Router from 'next/router'
 
 export default function CompletedRegistration() {
-  const [secondsAmount, setSecondsAmount] = useState(10)
+  const [secondsAmount, setSecondsAmount] = useState(60)
   const [timeExpire, setTimeExpire] = useState(false)
   const [email, setEmail] = useState('')
 
@@ -61,7 +62,10 @@ export default function CompletedRegistration() {
           Ative sua conta clicando no link que enviamos para o e-mail {''}
           {email} e depois faça seu login
         </span>
-        <button className="mt-10 w-full max-w-md rounded-lg bg-violet-500 p-4 text-zinc-50 transition-colors hover:bg-violet-600">
+        <button
+          onClick={() => Router.push('/user/login')}
+          className="mt-10 w-full max-w-md rounded-lg bg-violet-500 p-4 text-zinc-50 transition-colors hover:bg-violet-600"
+        >
           Fazer login
         </button>
       </main>
@@ -89,18 +93,18 @@ export default function CompletedRegistration() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.user': email } = parseCookies(ctx)
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const { 'cosmos.user': email } = parseCookies(ctx)
 
-  if (!email) {
-    return {
-      redirect: {
-        destination: '/user/register',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
-}
+//   if (!email) {
+//     return {
+//       redirect: {
+//         destination: '/user/register',
+//         permanent: false,
+//       },
+//     }
+//   }
+//   return {
+//     props: {},
+//   }
+// }

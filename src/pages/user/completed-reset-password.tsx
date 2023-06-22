@@ -44,10 +44,13 @@ export default function CompletedResetPassword() {
         <Image src={CheckIcon} height={40} width={40} alt="check icon" />
         <h1 className="text-3xl">Enviamos um email para você</h1>
         <span className="max-w-lg text-center">
-          Redefina sua senha clicando no link que enviamos para o e-mail
-          {email} e depois faça seu login
+          Redefina sua senha clicando no link que enviamos para o e-mail {email}{' '}
+          e depois faça seu login
         </span>
-        <button className="mt-10 w-full max-w-md rounded-lg bg-violet-500 p-4 text-zinc-50 transition-colors hover:bg-violet-600">
+        <button
+          onClick={() => Router.push('/user/login')}
+          className="mt-10 w-full max-w-md rounded-lg bg-violet-500 p-4 text-zinc-50 transition-colors hover:bg-violet-600"
+        >
           Entrar com a minha senha nova
         </button>
       </main>
@@ -75,18 +78,18 @@ export default function CompletedResetPassword() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.user': email } = parseCookies(ctx)
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const { 'cosmos.user': email } = parseCookies(ctx)
 
-  if (!email) {
-    return {
-      redirect: {
-        destination: '/user/register',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
-}
+//   if (!email) {
+//     return {
+//       redirect: {
+//         destination: '/user/register',
+//         permanent: false,
+//       },
+//     }
+//   }
+//   return {
+//     props: {},
+//   }
+// }
