@@ -93,18 +93,18 @@ export default function CompletedRegistration() {
   )
 }
 
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   const { 'cosmos.user': email } = parseCookies(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { 'cosmos.user': email } = parseCookies(ctx)
 
-//   if (!email) {
-//     return {
-//       redirect: {
-//         destination: '/user/register',
-//         permanent: false,
-//       },
-//     }
-//   }
-//   return {
-//     props: {},
-//   }
-// }
+  if (!email) {
+    return {
+      redirect: {
+        destination: '/user/register',
+        permanent: false,
+      },
+    }
+  }
+  return {
+    props: {},
+  }
+}
