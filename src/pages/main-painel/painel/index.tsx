@@ -10,14 +10,10 @@ import { useEffect, useState } from "react";
 import { userProps } from "../../../types/user";
 import { programsProps } from "../../../types/programs";
 import { achievementsProps } from "../../../types/achievements";
-import { desaturate } from "polished";
-import { Description } from "@radix-ui/react-dialog";
-
 
 
 
 export default function Painel() {
-    const date = new Date();
     const [user, setUser] = useState<userProps | null>(null)
     const [achievements, setAchievements] = useState<achievementsProps>([])
     const [programs, setPrograms] = useState<programsProps>([])
@@ -77,7 +73,7 @@ export default function Painel() {
                         </div>
 
                         <AchievementsArea achievements={achievements} />
-                        
+
                         <div className="absolute box-border left-0 right-4 bottom-0 m-6 h-12 bg-gradient-to-t from-[#1E2543]"></div>
                     </div>
                 </div>

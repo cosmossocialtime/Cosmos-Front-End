@@ -19,7 +19,6 @@ export default function Perfil() {
     const [selectedImgSrc, setSelectedImgSrc] = useState("");
     const [cropType, setCroptType] = useState<"profile" | "banner">("profile")
     const [onDialog, setOnDialog] = useState(false);
-    const [enableForm, setEnableForm] = useState(false);
 
     useEffect(() => {
         api.get("/dashboard")
@@ -47,6 +46,10 @@ export default function Perfil() {
                 'Content-Type': 'multipart/form-data',
             }
         })
+    }
+
+    function updateUserData(newUser : userProps) {
+        setUser(newUser)
     }
 
     function updateProfileSrc(source: string) {
@@ -80,7 +83,7 @@ export default function Perfil() {
     }
 
     return (
-        <div >
+        <div className='h-screen flex flex-col'>
             <Header />
 
             <div className='relative pl-40 h-28 flex items-center gap-9'>
@@ -122,11 +125,11 @@ export default function Perfil() {
                         <Dialog.Portal>
                             <Dialog.Overlay className='z-10 top-0 left-0 fixed h-screen w-screen bg-black/40' />
                             <Dialog.Content className='z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-                                {cropType === "profile" &&(
+                                {cropType === "profile" && (
                                     < SettingCropArea
                                         selectedImgSrc={selectedImgSrc}
                                         handleImg={handleProfileImg}
-                                        aspectRatio={1/1}
+                                        aspectRatio={1 / 1}
                                         cropShape={"round"}
                                     />
 
@@ -135,7 +138,7 @@ export default function Perfil() {
                                     < SettingCropArea
                                         selectedImgSrc={selectedImgSrc}
                                         handleImg={handleBannerImg}
-                                        aspectRatio={10/1}
+                                        aspectRatio={10 / 1}
                                         cropShape={"rect"}
                                     />
                                 )}
@@ -147,23 +150,11 @@ export default function Perfil() {
                 <span className='z-[1] font-semibold text-3xl text-white'>{user.byname}</span>
             </div>
 
-            <div className='flex flex-col items-center'>
-                <FormUserData
-                    userData={user}
-                    companyName={company.name}
-                    enableForm={enableForm}
-                    setEnableForm={setEnableForm}
-                />
-                {!enableForm &&
-                    <button
-                        className='py-4 px-36 my-9 mx-auto bg-violet-500 hover:bg-violet-600 text-sm text-white font-semibold rounded-lg transition-colors'
-                        onClick={() => setEnableForm(true)}
-                    >
-                        Editar
-                    </button>
-                }
-            </div>
-
+            <FormUserData
+                userData={user}
+                companyName={company.name}
+                updateUserData={updateUserData}
+            />
         </div>
     )
 }

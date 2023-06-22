@@ -15,12 +15,12 @@ type CurrentAchievementProps = {
 }
 
 export default function CurrentAchievement({ achievements }: CurrentAchievementProps) {
-  const firstAchievementShow = achievements.filter(achievement => achievement.completed).length
-
-  const [currentSlide, setCurrentSlide] = useState(firstAchievementShow)
+  const firstAchievementId = achievements.filter(achievement => achievement.completed).length
+  const idOfAchievementShow = [0,1,2,3,7,7,7,7,7]
+  const [currentSlide, setCurrentSlide] = useState(firstAchievementId)
   const [loaded, setLoaded] = useState(false)
   const [sliderRef, instanceRef] = useKeenSlider({
-    initial: firstAchievementShow,
+    initial: idOfAchievementShow[firstAchievementId],
     slides: {
       perView: 1,
     },
