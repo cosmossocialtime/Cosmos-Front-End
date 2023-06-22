@@ -1,14 +1,14 @@
 const missionsData = [
   {
-    title: "Programa 1",
-    description: "Novo programa",
+    title: 'Programa 1',
+    description: 'Novo programa',
     id: 1,
   },
   {
-    title: "Programa 2",
-    description: "Novo programa",
+    title: 'Programa 2',
+    description: 'Novo programa',
     id: 2,
   },
-];
+]
 
-export default missionsData;
+export default missionsData

@@ -1,5 +1,4 @@
-import React, { ReactNode } from "react"
-// import * as Label from '@radix-ui/react-label'
+import React, { ReactNode } from 'react'
 
 interface LabelItemProps {
     title: string;

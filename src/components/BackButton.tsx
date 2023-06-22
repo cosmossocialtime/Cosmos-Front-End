@@ -1,14 +1,17 @@
-import Link from "next/link";
-import { ArrowLeft } from "phosphor-react";
+import Link from 'next/link'
+import { ArrowLeft } from 'phosphor-react'
 
 interface BackButtonProps {
-  link: string;
+  link: string
 }
 
 export function BackButton({ link }: BackButtonProps) {
   return (
-    <Link href={link} className="fixed top-[10%] left-[5%] p-3 backdrop-blur-md rounded-[50%] text-zinc-50 bg-zinc-800/30 hover:bg-purple-500 focus:bg-purple-500 cursor-pointer">
+    <Link
+      href={link}
+      className="fixed top-[10%] left-[5%] cursor-pointer rounded-[50%] bg-zinc-800/30 p-3 text-zinc-50 backdrop-blur-md hover:bg-purple-500 focus:bg-purple-500"
+    >
       <ArrowLeft weight="bold" />
     </Link>
-  );
+  )
 }

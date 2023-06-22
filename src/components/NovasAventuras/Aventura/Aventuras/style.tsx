@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.section`
   background: #fdfdff;
@@ -22,7 +22,7 @@ export const Container = styled.section`
         font-size: 2.5rem;
         color: var(--gray-600);
         font-weight: 600;
-        margin-bottom: .3rem;
+        margin-bottom: 0.3rem;
       }
       p {
         font-size: 1.25rem;
@@ -36,7 +36,7 @@ export const Container = styled.section`
       padding: 0 1rem;
     }
   }
-`;
+`
 
 export const BackButton = styled.button`
   color: var(--blue-500);
@@ -63,7 +63,7 @@ export const BackButton = styled.button`
     font-size: 1rem;
     padding: 0.5rem;
   }
-`;
+`
 export const Programas = styled.section`
   position: relative;
   height: 75vh;
@@ -71,18 +71,16 @@ export const Programas = styled.section`
   align-items: center;
   padding-left: 4rem;
   overflow-x: auto;
-`;
-
+`
 
 type NavButtonProps = {
-    NavSide: "left" | "right";
+  NavSide: 'left' | 'right'
 }
-  
-export const NavButton = styled.div<NavButtonProps>`
 
+export const NavButton = styled.div<NavButtonProps>`
   position: fixed;
   background: linear-gradient(
-    ${props => props.NavSide === "right" ? "90" : "270"}deg,
+    ${(props) => (props.NavSide === 'right' ? '90' : '270')}deg,
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255) 100%
   );
@@ -90,7 +88,7 @@ export const NavButton = styled.div<NavButtonProps>`
   justify-content: center;
   height: 70%;
   width: 10rem;
-  right: ${props => props.NavSide === "right" ? "0" : ""};
-  left: ${props => props.NavSide === "left" ? "0" : ""};
+  right: ${(props) => (props.NavSide === 'right' ? '0' : '')};
+  left: ${(props) => (props.NavSide === 'left' ? '0' : '')};
   bottom: 0;
-`;
+`

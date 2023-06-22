@@ -1,5 +1,5 @@
-import Cards from "../../../components/NovasAventuras/PapelMissao/Cards/Cards";
-import Especialista from "../../../components/NovasAventuras/PapelMissao/Especialista/Especialista";
+import Cards from '../../../components/NovasAventuras/PapelMissao/Cards/Cards'
+import Especialista from '../../../components/NovasAventuras/PapelMissao/Especialista/Especialista'
 
 const Especialist = () => {
   return (
@@ -7,7 +7,7 @@ const Especialist = () => {
       <Cards />
       <Especialista />
     </>
-  );
-};
+  )
+}
 
-export default Especialist;
+export default Especialist

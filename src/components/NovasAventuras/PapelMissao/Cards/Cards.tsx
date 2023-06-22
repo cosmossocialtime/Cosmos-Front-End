@@ -1,5 +1,5 @@
-import { HeaderMissao } from "../HeaderMissao";
-import { Container } from "./style";
+import { HeaderMissao } from '../HeaderMissao'
+import { Container } from './style'
 
 export default function Cards() {
   return (
@@ -8,5 +8,5 @@ export default function Cards() {
         <HeaderMissao closeVisibility={+false} />
       </Container>
     </>
-  );
+  )
 }

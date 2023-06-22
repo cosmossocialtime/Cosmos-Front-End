@@ -1,5 +1,5 @@
-import { darken } from "polished";
-import styled from "styled-components";
+import { darken } from 'polished'
+import styled from 'styled-components'
 
 export const Container = styled.main`
   display: flex;
@@ -18,7 +18,7 @@ export const Container = styled.main`
     font-size: 1.25rem;
 
     :hover {
-      background: ${darken(0.1, "#f4f4f4")};
+      background: ${darken(0.1, '#f4f4f4')};
     }
 
     @media (max-width: 480px) {
@@ -34,7 +34,7 @@ export const Container = styled.main`
   @media (max-width: 480px) {
     flex-direction: column;
   }
-`;
+`
 
 export const OpCard = styled.div`
   display: flex;
@@ -59,7 +59,7 @@ export const OpCard = styled.div`
       padding: 1rem;
     }
   }
-`;
+`
 
 export const CardContent = styled.div`
   div:first-child {
@@ -116,10 +116,10 @@ export const CardContent = styled.div`
       }
     }
   }
-`;
+`
 
 export const MobileLink = styled.div`
-width: 90%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   a {
@@ -129,4 +129,4 @@ width: 90%;
   @media (min-width: 480px) {
     display: none;
   }
-`;
+`

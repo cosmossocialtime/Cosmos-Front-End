@@ -1,4 +1,5 @@
-import Header from "../../../components/main-painel/Header";
+/* eslint-disable no-unused-vars */
+import Header from '../../../components/main-painel/Header'
 
 import PerfilArea from "../../../components/main-painel/painel/PerfilArea";
 import CurrentAchievement from "../../../components/main-painel/painel/CurrentAchievement";
@@ -19,58 +20,61 @@ export default function Painel() {
     const [programs, setPrograms] = useState<programsProps>([])
     const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
-        api.get("/dashboard")
-            .then(response => {
-                setUser(response.data.user)
-                setAchievements(response.data.achievements)
-                setPrograms(response.data.programs)
-                setIsLoading(false)
-            })
-            .catch(error => {
-                setIsLoading(false)
-                console.error(error)
-            })
-    }, [])
+  useEffect(() => {
+    api
+      .get('/dashboard')
+      .then((response) => {
+        setUser(response.data.user)
+        setAchievements(response.data.achievements)
+        setPrograms(response.data.programs)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        console.error(error)
+      })
+  }, [])
 
-    if (!user || !achievements) {
-        return;
-    }
-    return (
-        <div className="max-w-[100vw] flex flex-col h-screen">
-            <Header />
+  if (!user || !achievements) {
+    return
+  }
+  return (
+    <div className="flex h-screen max-w-[100vw] flex-col">
+      <Header />
 
-            <main className="px-16 py-5 bg-gray-800 flex-1 flex gap-6">
-                <div className="flex flex-col gap-6 flex-1 w-4/6">
-                    <CurrentAchievement
-                        achievements={achievements}
-                    />
+      <main className="flex flex-1 gap-6 bg-gray-800 px-16 py-5">
+        <div className="flex w-4/6 flex-1 flex-col gap-6">
+          <CurrentAchievement achievements={achievements} />
 
-                    {programs.length !== 0 &&
-                        <CurrentMissionsArea
-                            programs={programs}
-                        />
-                    }
+          {programs.length !== 0 && <CurrentMissionsArea programs={programs} />}
 
-                    <AdventureArea
-                        programs={programs}
-                    />
-                </div>
+          <AdventureArea programs={programs} />
+        </div>
 
-                <div className="flex flex-col gap-6 w-1/3">
-                    <PerfilArea
-                        bannerPicture={user.banner}
-                        profilePicture={user.profilePicture}
-                        name={user.byname}
-                    />
+        <div className="flex w-1/3 flex-col gap-6">
+          <PerfilArea
+            bannerPicture={user.banner}
+            profilePicture={user.profilePicture}
+            name={user.byname}
+          />
 
-                    <div className={`${programs.length === 0 ? "h-[17rem]" : "h-[36rem]"} flex flex-col relative p-6 bg-[#1E2543] rounded-lg`}>
-                        <div className="mb-2 flex justify-between">
-                            <span className="text-gray-500">Minhas conquistas:</span>
-                            <span className="text-sm text-gray-500">
-                                <strong className="text-gray-200">{achievements.filter(achievement => achievement.completed).length}</strong> de 8
-                            </span>
-                        </div>
+          <div
+            className={`${
+              programs.length === 0 ? 'h-[17rem]' : 'h-[36rem]'
+            } relative flex flex-col rounded-lg bg-[#1E2543] p-6`}
+          >
+            <div className="mb-2 flex justify-between">
+              <span className="text-gray-500">Minhas conquistas:</span>
+              <span className="text-sm text-gray-500">
+                <strong className="text-gray-200">
+                  {
+                    achievements.filter((achievement) => achievement.completed)
+                      .length
+                  }
+                </strong>{' '}
+                de 8
+              </span>
+            </div>
 
                         <AchievementsArea achievements={achievements} />
 

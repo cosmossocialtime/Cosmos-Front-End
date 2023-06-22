@@ -1,19 +1,22 @@
-import * as Select from "@radix-ui/react-select";
-import { CaretDown } from "phosphor-react";
-import { FormEvent } from "react";
-import styled from "styled-components";
+import * as Select from '@radix-ui/react-select'
+import { CaretDown } from 'phosphor-react'
+import styled from 'styled-components'
 
 type Option = {
-  value: string;
-};
-
-interface SelectInputProps {
-  options: Option[];
-  name?: string;
-  onChangeSelect?: (value: string) => void;
+  value: string
 }
 
-export function SelectInput({ options, name, onChangeSelect }: SelectInputProps) {
+interface SelectInputProps {
+  options: Option[]
+  name?: string
+  onChangeSelect?: (value: string) => void
+}
+
+export function SelectInput({
+  options,
+  name,
+  onChangeSelect,
+}: SelectInputProps) {
   return (
     <Select.Root name={name} onValueChange={onChangeSelect}>
       <SelectTrigger>
@@ -31,13 +34,13 @@ export function SelectInput({ options, name, onChangeSelect }: SelectInputProps)
                 <SelectItem key={option.value} value={option.value}>
                   <Select.ItemText>{option.value}</Select.ItemText>
                 </SelectItem>
-              );
+              )
             })}
           </Select.Viewport>
         </SelectContent>
       </Select.Portal>
     </Select.Root>
-  );
+  )
 }
 
 const SelectTrigger = styled(Select.Trigger)`
@@ -54,12 +57,12 @@ const SelectTrigger = styled(Select.Trigger)`
     color: var(--purple-500);
     font-size: 1rem;
   }
-`;
+`
 
 const SelectContent = styled(Select.Content)`
   background: #5c5c5c;
   border-radius: 4px;
   padding: 0.75rem;
   color: #fff;
-`;
-const SelectItem = styled(Select.Item)``;
+`
+const SelectItem = styled(Select.Item)``

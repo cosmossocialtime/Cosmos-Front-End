@@ -1,8 +1,8 @@
-import { ArrowLeft } from "phosphor-react";
-import { BackButton, Container, Header, Main } from "./style";
-import { HeaderMissao } from "./HeaderMissao";
-import Link from "next/link";
-import Image from "next/image";
+import { ArrowLeft } from 'phosphor-react'
+import { BackButton, Container, Header, Main } from './style'
+import { HeaderMissao } from './HeaderMissao'
+import Link from 'next/link'
+import Image from 'next/image'
 
 export default function PapelMissao() {
   return (
@@ -34,5 +34,5 @@ export default function PapelMissao() {
         </Main>
       </Container>
     </>
-  );
+  )
 }

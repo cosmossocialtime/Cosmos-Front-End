@@ -1,5 +1,5 @@
-import "react-toastify/dist/ReactToastify.css";
-import { createGlobalStyle } from "styled-components";
+import 'react-toastify/dist/ReactToastify.css'
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
     :root{
@@ -75,7 +75,7 @@ export const GlobalStyle = createGlobalStyle`
     background: var(--purple-500);
     color: #fff;
     font-weight: bold;
-    height: 3rem;
+    height: 3.5rem;
     border-radius: .5rem;
     transition: background .2s;
     display: flex;
@@ -90,4 +90,4 @@ export const GlobalStyle = createGlobalStyle`
       cursor: not-allowed;
     }
   }
-`;
+`
