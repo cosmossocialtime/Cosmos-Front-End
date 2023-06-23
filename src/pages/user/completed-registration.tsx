@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { GetServerSideProps } from 'next'
 
 export default function CompletedRegistration() {
-  const [secondsAmount, setSecondsAmount] = useState(10)
+  const [secondsAmount, setSecondsAmount] = useState(60)
   const [timeExpire, setTimeExpire] = useState(false)
   const [email, setEmail] = useState('')
 
