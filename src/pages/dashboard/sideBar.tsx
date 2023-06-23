@@ -42,12 +42,6 @@ export default function SideBar() {
       icon: <Calendar />,
     },
     {
-      id: 5,
-      route: "/dashboard/chat",
-      name: "Chat",
-      icon: <ChatCenteredDots />
-    },
-    {
       id: 6,
       route: "/dashboard/navigation-map",
       name: "Mapa de Navegação",
@@ -67,7 +61,7 @@ export default function SideBar() {
     <div className="relative">
       <aside className={`${showside ? "w-[19rem]" : "w-20 2xl:w-[5.5rem]"} bg-violet-900 min-h-screen flex flex-col relative transition-all duration-300 overflow-hidden`}>
         <div>
-          <div className="mx-auto w-fit my-5">
+          <div className="mx-auto w-fit my-7">
             <Link href={"/main-painel/painel"}>
               {showside ? (
                 <Image
@@ -90,20 +84,20 @@ export default function SideBar() {
           {showside &&
             <Link
               href={"/main-painel/painel"}
-              className="block mx-auto mb-2 text-center text-blue-400 font-semibold"
+              className="block mx-auto text-center text-blue-400 font-semibold"
             >
               Voltar ao Painel Principal
             </Link>
           }
 
-          <div className="flex flex-col px-2 relative">
+          <div className="flex flex-col px-2 mt-2 relative">
 
             {SideBarItems.map((item) => {
               return (
                 <Link
                   key={item.id}
                   href={item.route}
-                  className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-2 flex items-center gap-4 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
+                  className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-3 my-2 flex items-center gap-4 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
                 >
                   <span className={`${pathname === item.route ? "bg-purple-600" : "bg-white/10"} p-3 2xl:p-4 rounded-full text-2xl`}>
                     {item.icon}

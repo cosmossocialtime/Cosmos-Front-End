@@ -1,11 +1,33 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "phosphor-react";
+import { useEffect, useState } from "react";
 
 type NamesPlanet = {
   name: string
 }
 
 export default function ModalSatelite({ name }: NamesPlanet) {
+
+  const [ratting, setRatting] = useState(0)
+  const [rattingSlider, setRattingSlider] = useState('')
+
+  useEffect(()=>{
+  if(ratting >= 1){
+    setRattingSlider('before:w-[50px]')
+  }
+  if(ratting >= 2){
+    setRattingSlider('before:w-[190px]')
+  }
+  if(ratting >= 3){
+    setRattingSlider(' before:w-[300px]')
+  }
+  if(ratting >= 4){
+    setRattingSlider(' before:w-[420px]')
+  }
+  if(ratting >= 5){
+    setRattingSlider(' before:w-[600px]')
+  }
+  },[ratting])
 
   return (
     <>
@@ -26,25 +48,25 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                 De 1 a 5, o quanto a instituição considera que esta área precisa
                 ser trabalhada?
               </h2>
-              <div className="mt-10 flex justify-between w-[500px] relative bg-c-blue-700 h-1 items-center rounded-lg before:rounded-lg before:absolute before:top-0 before:left-2 before:h-1 before:w-[200px] before:bg-c-blue-300 before:content-center">
+              <div className={`mt-10 ml-12 flex justify-between w-[600px] relative bg-c-blue-700 h-1 items-center rounded-lg before:rounded-lg before:absolute before:top-0 before:left-0 before:h-1 ${rattingSlider}  before:bg-c-blue-300 before:content-center`}>
                 <div className="pt-9 flex flex-col items-center z-10 w-24">
-                  <span className="rounded-full bg-c-blue-300 border-2 border-c-blue-300 py-1 px-3">1</span>
+                  <span className={`rounded-full ${ratting >= 1 ? "bg-c-blue-300" : "bg-c-blue-700" }  border-2 border-c-blue-300 py-1 px-3`}>1</span>
                   <span className="pt-3">Muito pouco</span>
                 </div>
                 <div className="pt-9 flex flex-col items-center z-10 w-24">
-                  <span className="rounded-full bg-c-blue-300 border-2 border-c-blue-300 py-1 px-3">2</span>
+                  <span className={`rounded-full ${ratting >= 2 ? "bg-c-blue-300" : "bg-c-blue-700" }  border-2 border-c-blue-300 py-1 px-3`}>2</span>
                   <span className="pt-3">Pouco</span>
                 </div>
                 <div className="pt-9 flex flex-col items-center z-10 w-24">
-                  <span className="rounded-full bg-c-blue-700 border-2 border-c-blue-300 py-1 px-3">3</span>
+                  <span className={`rounded-full ${ratting >= 3 ? "bg-c-blue-300" : "bg-c-blue-700" }  border-2 border-c-blue-300 py-1 px-3`}>3</span>
                   <span className="pt-3">Medio</span>
                 </div>
                 <div className="pt-9 flex flex-col items-center z-10 w-24">
-                  <span className="rounded-full bg-c-blue-700 border-2 border-c-blue-300 py-1 px-3">4</span>
+                  <span className={`rounded-full ${ratting >= 4 ? "bg-c-blue-300" : "bg-c-blue-700" }  border-2 border-c-blue-300 py-1 px-3`}>4</span>
                   <span className="pt-3">Intermediario</span>
                 </div>
                 <div className="pt-9 flex flex-col items-center z-10 w-24">
-                  <span className="rounded-full bg-c-blue-700 border-2 border-c-blue-300 py-1 px-3">5</span>
+                  <span className={`rounded-full ${ratting >= 5 ? "bg-c-blue-300" : "bg-c-blue-700" }  border-2 border-c-blue-300 py-1 px-3`}>5</span>
                   <span className="pt-3">Muito</span>
                 </div>
               </div>
