@@ -1,10 +1,10 @@
-import Link from 'next/link'
-import { Calendar, Clock, X } from 'phosphor-react'
-import styled from 'styled-components'
+import Link from "next/link";
+import { Calendar, Clock, X } from "phosphor-react";
+import styled from "styled-components";
 
 interface HeaderAventuraProps {
-  closeVisibility?: number
-  title?: string
+  closeVisibility?: number;
+  title?: string;
 }
 
 export function HeaderAventura({
@@ -36,7 +36,7 @@ export function HeaderAventura({
       </Header>
       <Separador />
     </>
-  )
+  );
 }
 
 const Header = styled.div`
@@ -56,19 +56,19 @@ const Header = styled.div`
   p {
     color: var(--gray-500);
   }
-`
+`;
 
 interface CloseButtonProps {
-  visibility: number
+  visibility: number;
 }
 
 const CloseButton = styled(Link)<CloseButtonProps>`
-  display: ${(props) => (props.visibility ? 'block' : 'none')};
+  display: ${(props) => (props.visibility ? "block" : "none")};
   margin-right: 5%;
   margin-left: auto;
   font-size: 1.2rem;
   color: #363f63;
-`
+`;
 
 const Separador = styled.div`
   background: linear-gradient(
@@ -78,7 +78,7 @@ const Separador = styled.div`
   );
   height: 0.4rem;
   width: 100%;
-`
+`;
 
 const Datas = styled.div`
   display: flex;
@@ -88,7 +88,8 @@ const Datas = styled.div`
 
   p {
     max-width: 170px;
-    font-size: 0.9rem;
+    font-size: .9rem;
+
   }
 
   svg {
@@ -96,4 +97,4 @@ const Datas = styled.div`
     width: 2.5rem;
     height: fit-content;
   }
-`
+`;

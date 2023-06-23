@@ -1,11 +1,12 @@
-import Confirm from '../../../components/NovasAventuras/Confirm/Confirm'
+import Confirm from "../../../components/NovasAventuras/Confirm/Confirm";
+
 
 const ConfirmOp = () => {
   return (
     <>
       <Confirm />
     </>
-  )
-}
+  );
+};
 
-export default ConfirmOp
+export default ConfirmOp;

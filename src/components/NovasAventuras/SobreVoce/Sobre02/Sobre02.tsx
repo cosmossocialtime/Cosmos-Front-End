@@ -1,24 +1,24 @@
-import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { ForwardArrow } from '../ForwardArrow/ForwardArrow'
-import { Container, TextArea } from '../style'
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { ForwardArrow } from "../ForwardArrow/ForwardArrow";
+import { Container, TextArea } from "../style";
 
 export function Sobre02() {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [motivacao, setMotivacao] = useState('')
-  const [jaMentorou, setJaMentorou] = useState('')
+  const [motivacao, setMotivacao] = useState("");
+  const [jaMentorou, setJaMentorou] = useState("");
 
   function handleSubmit() {
-    const data = { motivacao, jaMentorou }
-    const expLength = motivacao.length
-    const compLength = jaMentorou.length
+    const data = { motivacao, jaMentorou };
+    const expLength = motivacao.length;
+    const compLength = jaMentorou.length;
 
     if ((expLength && compLength) < 100 || (expLength && compLength) > 300) {
-      alert('termine2')
+      alert("termine2");
     } else {
-      console.log(data)
-      router.push('/missao')
+      console.log(data);
+      router.push("/missao");
     }
   }
 
@@ -66,5 +66,5 @@ export function Sobre02() {
         onClickForward={handleSubmit}
       />
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const Container = styled.main`
   width: 100vw;
@@ -7,7 +7,7 @@ export const Container = styled.main`
   justify-content: center;
   align-items: center;
 
-  background: url('/images/bgEspaco.png');
+  background: url("/images/bgEspaco.png");
 
   div {
     background: #fff;
@@ -44,6 +44,6 @@ export const Container = styled.main`
     background-clip: content-box, border-box;
 
     width: 70%;
-    max-width: 780px;
+    max-width: 780px
   }
-`
+`;

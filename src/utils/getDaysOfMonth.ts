@@ -1,17 +1,17 @@
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 
 export default function getDaysOfMonth(month: dayjs.Dayjs) {
-  const days = []
+  const days = [];
 
-  const firstDayOfMonth = month.startOf('M')
-  const lastDayOfMonth = month.endOf('M')
+  const firstDayOfMonth = month.startOf("M");
+  const lastDayOfMonth = month.endOf("M");
 
-  let compareDate = firstDayOfMonth
+  let compareDate = firstDayOfMonth;
 
   while (compareDate.isBefore(lastDayOfMonth)) {
-    days.push(compareDate)
-    compareDate = compareDate.add(1, 'day')
+    days.push(compareDate);
+    compareDate = compareDate.add(1, "day");
   }
 
-  return days
+  return days;
 }

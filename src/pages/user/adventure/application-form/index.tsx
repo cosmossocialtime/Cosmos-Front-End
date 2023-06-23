@@ -1,22 +1,20 @@
-import Link from 'next/link'
-import { ArrowLeft, ArrowRight, X } from 'phosphor-react'
-import TermsOfUse from './TermsOfUse'
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, CaretDown, X } from "phosphor-react";
+import TermsOfUse from "./TermsOfUse";
 
 export default function ApplicationForm() {
-  return (
-    <div>
-      <header className="relative flex items-center gap-7 px-20 py-7 shadow-lg after:absolute after:left-0 after:bottom-0 after:h-[6px] after:w-full after:bg-gradient-to-l after:from-violet-400 after:to-blue-300">
-        <div className="flex-1">
-          <span className="text-xl text-gray-500">formulário de inscrição</span>
-          <h1 className="text-3xl font-semibold text-gray-600">
-            [Nome do programa]
-          </h1>
-        </div>
-        <X size={24} className="cursor-pointer" />
-      </header>
-      <TermsOfUse />
+    return (
+        <div>
+            <header className="relative px-20 py-7 flex gap-7 items-center shadow-lg after:w-full after:h-[6px] after:absolute after:left-0 after:bottom-0 after:bg-gradient-to-l after:from-violet-400 after:to-blue-300">
+                <div className="flex-1">
+                    <span className="text-gray-500 text-xl">formulário de inscrição</span>
+                    <h1 className="text-gray-600 text-3xl font-semibold">[Nome do programa]</h1>
+                </div>
+                <X size={24} className="cursor-pointer" />
+            </header>
+            <TermsOfUse />
 
-      {/* <form className="mt-14 w-[29rem] mx-auto text-gray-800 flex flex-col gap-10">
+            {/* <form className="mt-14 w-[29rem] mx-auto text-gray-800 flex flex-col gap-10">
                 <div className="">
                     <span className="block">Quanto tempo de experiência profissional você possui? </span>
                     <div className="px-3 h-12 w-full flex items-center justify-between border border-solid border-gray-400 rounded cursor-pointer">
@@ -69,16 +67,11 @@ export default function ApplicationForm() {
                 </label>
             </form> */}
 
-      <Link href="/usuario/adventure">
-        <ArrowLeft
-          size={64}
-          className="absolute left-36 bottom-16 cursor-pointer rounded-full bg-gray-400/10 p-4 text-blue-800 transition-colors hover:bg-violet-600 hover:text-white"
-        />
-      </Link>
-      <ArrowRight
-        size={64}
-        className="absolute right-36 bottom-16 cursor-pointer rounded-full bg-gray-400/10 p-4 text-blue-800 transition-colors hover:bg-violet-600 hover:text-white"
-      />
-    </div>
-  )
+
+            <Link href="/usuario/adventure">
+                <ArrowLeft size={64} className="absolute left-36 bottom-16 p-4 text-blue-800 bg-gray-400/10 hover:bg-violet-600 hover:text-white transition-colors rounded-full cursor-pointer" />
+            </Link>
+            <ArrowRight size={64} className="absolute right-36 bottom-16 p-4 text-blue-800 bg-gray-400/10 hover:bg-violet-600 hover:text-white transition-colors rounded-full cursor-pointer" />
+        </div>
+    )
 }

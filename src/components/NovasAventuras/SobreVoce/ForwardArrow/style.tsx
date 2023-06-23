@@ -1,11 +1,16 @@
-import Link from 'next/link'
-import styled from 'styled-components'
+import Link from "next/link";
+import styled from "styled-components";
+
+
+
+
 
 export const Container = styled.div`
   /* margin-top: auto; */
   display: grid;
   place-items: center;
   /* margin-bottom: 2rem; */
+
 
   div {
     width: 80%;
@@ -15,23 +20,23 @@ export const Container = styled.div`
     color: var(--purple-500);
     font-weight: bolder;
   }
-`
+`;
 
 interface LinkButtonForwardsProps {
-  disable?: number
+  disable?: number;
 }
 
 export const LinkButtonForwards = styled(Link)<LinkButtonForwardsProps>`
-  cursor: ${(props) => !props.disable && 'not-allowed'};
+  cursor: ${(props) => !props.disable && "not-allowed"};
   display: flex;
   background: ${(props) =>
-    !props.disable ? 'var(--gray-400)' : 'var(--purple-500)'};
+    !props.disable ? "var(--gray-400)" : "var(--purple-500)"};
 
   padding: 1rem;
   border-radius: 100%;
   transition: background 0.2s;
   :hover {
-    background: ${(props) => (props.disable ? '#642bbb' : 'var(--gray-400)')};
+    background: ${(props) => (props.disable ? "#642bbb" : "var(--gray-400)")};
   }
 
   svg {
@@ -39,7 +44,7 @@ export const LinkButtonForwards = styled(Link)<LinkButtonForwardsProps>`
     font-weight: bolder;
     color: #fff;
   }
-`
+`;
 
 export const LinkButtonBackward = styled(LinkButtonForwards)`
   cursor: pointer;
@@ -47,4 +52,4 @@ export const LinkButtonBackward = styled(LinkButtonForwards)`
   :hover {
     background: var(--gray-500);
   }
-`
+`;
