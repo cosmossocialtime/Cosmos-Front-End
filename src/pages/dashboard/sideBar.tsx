@@ -97,7 +97,7 @@ export default function SideBar() {
                 <Link
                   key={item.id}
                   href={item.route}
-                  className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-3 my-2 flex items-center gap-4 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
+                  className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-3 my-1 flex items-center gap-4 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
                 >
                   <span className={`${pathname === item.route ? "bg-purple-600" : "bg-white/10"} p-3 2xl:p-4 rounded-full text-2xl`}>
                     {item.icon}
@@ -111,7 +111,7 @@ export default function SideBar() {
           </div>
         </div>
 
-        <div className={`${showside ? "" : "hidden"} mt-auto flex flex-col bg-blue-900 text-white p-2`}>
+        <div className={`${showside ? "" : "hidden"} mt-auto flex flex-col gap-2 bg-blue-900 text-white px-2 py-4`}>
           <Link href="/">
             Precisa de ajuda?
           </Link>
