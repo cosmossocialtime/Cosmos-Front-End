@@ -1,26 +1,24 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
-import * as Checkbox from '@radix-ui/react-checkbox'
-import { useState } from 'react'
-import { Check } from 'phosphor-react'
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { useState } from "react";
+import { Check } from "phosphor-react";
+
+
 
 interface CheckboxItemProps {
-  valueName: string
-  label: string
-  functionClick?: () => void
+    valueName: string;
+    label: string;
+    functionClick?: () => void;
 }
 
-export function CheckboxItem({
-  valueName,
-  label,
-  functionClick,
-}: CheckboxItemProps) {
-  const [checked, setChecked] = useState(false)
+export function CheckboxItem({valueName, label, functionClick}:CheckboxItemProps) {
+  const [checked, setChecked] = useState(false);
 
   return (
     <CheckboxContainer ischecked={+checked}>
       <CheckboxRoot
-        onClick={functionClick}
+      onClick={functionClick}
         name={valueName}
         value={label}
         ischecked={+checked}
@@ -31,13 +29,15 @@ export function CheckboxItem({
           <Check />
         </CheckboxIndicator>
       </CheckboxRoot>
-      <label htmlFor={valueName}>{label}</label>
+      <label htmlFor={valueName}>
+        {label}
+      </label>
     </CheckboxContainer>
-  )
+  );
 }
 
 interface CheckboxProps {
-  ischecked?: number
+  ischecked?: number;
 }
 
 const CheckboxContainer = styled.section<CheckboxProps>`
@@ -46,9 +46,9 @@ const CheckboxContainer = styled.section<CheckboxProps>`
   gap: 0.5rem;
 
   label {
-    color: ${(props) => (props.ischecked ? '#363F63' : '#A2ABCC')};
+    color:${props => props.ischecked ? "#363F63" : "#A2ABCC"};
   }
-`
+`;
 
 const CheckboxRoot = styled(Checkbox.Root)<CheckboxProps>`
   display: flex;
@@ -60,12 +60,12 @@ const CheckboxRoot = styled(Checkbox.Root)<CheckboxProps>`
 
   background: ${(props) =>
     props.ischecked
-      ? 'linear-gradient(270deg, #9D37F2 7.35%, #65BAFA 99.98%)'
-      : '#D0D5E5'};
+      ? "linear-gradient(270deg, #9D37F2 7.35%, #65BAFA 99.98%)"
+      : "#D0D5E5"};
   border-radius: 4px;
-`
+`;
 
 const CheckboxIndicator = styled(Checkbox.Indicator)`
   font-size: 1.2rem;
   color: #fff;
-`
+`;

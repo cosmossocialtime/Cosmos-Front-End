@@ -1,11 +1,11 @@
-import Link from 'next/link'
-import { Calendar, Clock } from 'phosphor-react'
+import Link from "next/link";
+import { Calendar, Clock } from "phosphor-react";
 
-import { Container, Content, Footer, Header, Main } from './style'
+import { Container, Content, Footer, Header, Main } from "./style";
 
 interface ItemProgramaProps {
-  Nome: string
-  Descricao: string
+  Nome: string;
+  Descricao: string;
 }
 
 export function ItemPrograma({ Nome, Descricao }: ItemProgramaProps) {
@@ -39,5 +39,5 @@ export function ItemPrograma({ Nome, Descricao }: ItemProgramaProps) {
         </Footer>
       </Content>
     </Container>
-  )
+  );
 }

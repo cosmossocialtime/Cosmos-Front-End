@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import { HeaderAventura } from './HeaderAventura'
-import { Container, DisplayText, InscricaoBtn } from './style'
+import Link from "next/link";
+import { HeaderAventura } from "./HeaderAventura";
+import { Container, DisplayText, InscricaoBtn } from "./style";
 
 export default function NovaAventuras() {
   return (
@@ -42,5 +42,5 @@ export default function NovaAventuras() {
         </InscricaoBtn>
       </Container>
     </>
-  )
+  );
 }

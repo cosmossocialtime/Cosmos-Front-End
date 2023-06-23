@@ -19,7 +19,7 @@ export default function Perfil() {
   const [selectedImgSrc, setSelectedImgSrc] = useState('')
   const [cropType, setCroptType] = useState<'profile' | 'banner'>('profile')
   const [onDialog, setOnDialog] = useState(false)
-  const [enableForm, setEnableForm] = useState(false)
+  const [enableForm, setEnableForm] = useState(true)
 
   useEffect(() => {
     api
@@ -48,6 +48,10 @@ export default function Perfil() {
         'Content-Type': 'multipart/form-data',
       },
     })
+  }
+
+  function updateUserData(newUser: userProps) {
+    setUser(newUser)
   }
 
   function updateProfileSrc(source: string) {
@@ -149,8 +153,7 @@ export default function Perfil() {
         <FormUserData
           userData={user}
           companyName={company.name}
-          enableForm={enableForm}
-          setEnableForm={setEnableForm}
+          updateUserData={updateUserData}
         />
         {!enableForm && (
           <button

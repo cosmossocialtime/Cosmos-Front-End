@@ -23,7 +23,7 @@ export default function ForgotPassword() {
             toast.success(
               'Enviado um link para redefinição de senha no seu email',
             )
-            Router.push('/user/completed-forgot-password')
+            Router.push('/user/completed-reset-password')
           }
         })
     } catch (error) {
