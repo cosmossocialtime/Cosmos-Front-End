@@ -1,63 +1,76 @@
 /* eslint-disable @next/next/no-img-element */
-import * as Select from '@radix-ui/react-select';
-import { Check } from 'phosphor-react';
-import { useState } from 'react';
-import dayjs from "dayjs"
+import * as Select from '@radix-ui/react-select'
+import { Check } from 'phosphor-react'
+import { useState } from 'react'
+import dayjs from 'dayjs'
 
-import { BackButton } from "../../components/BackButton";
-import { useForm } from 'react-hook-form';
-import { api } from '../../services/api';
-import Router from 'next/router';
-import { toast } from 'react-toastify';
-import { parseCookies } from 'nookies';
-import { GetServerSideProps } from 'next';
+import { BackButton } from '../../components/BackButton'
+import { useForm } from 'react-hook-form'
+import { api } from '../../services/api'
+import Router from 'next/router'
+import { ToastContainer, toast } from 'react-toastify'
+import { parseCookies } from 'nookies'
+import { GetServerSideProps } from 'next'
 
 export default function Nascimento() {
-  const [dayValue, setDayValue] = useState("20")
-  const [monthValue, setMonthValue] = useState("Julho")
-  const [yearValue, setYearValue] = useState("1969")
+  const [dayValue, setDayValue] = useState('20')
+  const [monthValue, setMonthValue] = useState('Julho')
+  const [yearValue, setYearValue] = useState('1969')
   const { handleSubmit } = useForm()
 
-  const currentYear = dayjs().year();
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const months = Array.from({ length: 12 }, (_, i) => i);
-  const years = Array.from({ length: currentYear - 1930 }, (_, i) => i + 1930);
+  const currentYear = dayjs().year()
+  const days = Array.from({ length: 31 }, (_, i) => i + 1)
+  const months = Array.from({ length: 12 }, (_, i) => i)
+  const years = Array.from({ length: currentYear - 1930 }, (_, i) => i + 1930)
 
-  function monthFormated(dateMonth: number) { return dayjs().month(dateMonth).format('MMMM') }
-  function monthInNumber(month: string) { { return dayjs().month(Number(month)).format('MM') } }
+  function monthFormated(dateMonth: number) {
+    return dayjs().month(dateMonth).format('MMMM')
+  }
+  function monthInNumber(month: string) {
+    return dayjs().month(Number(month)).format('MM')
+  }
 
   function submitBirth() {
-    try {
-      api.patch("/user/onboarding", {
-        "birthdate": `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`
-      }).then((response) => {
-        if (response.status === 200) {
-          Router.push('/user/live')
-        }
-      })
-    } catch (error: any) {
-      if (error.response.status === 400) return toast.error("Sem autorização")
+    if (yearValue && dayValue) {
+      try {
+        api
+          .patch('/user/onboarding', {
+            birthdate: `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              Router.push('/user/live')
+            }
+          })
+      } catch (error: any) {
+        if (error.response.status === 400) return toast.error('Sem autorização')
+      }
     }
   }
   return (
     <div>
       <BackButton link="/user/company-code" />
-      <main className="h-screen w-full bg-bgTerra bg-no-repeat bg-cover flex items-center justify-center">
+      <main className="flex h-screen w-full items-center justify-center bg-bgTerra bg-cover bg-no-repeat">
         <form
           onSubmit={handleSubmit(submitBirth)}
-          className="flex flex-col items-center justify-center gap-3 p-16 backdrop-blur-md bg-black/10 rounded-2xl ">
-          <h1
-            className="text-zinc-50 text-2xl font-semibold">Nos conte o dia em que você chegou à Terra</h1>
-          <span
-            className="text-zinc-50 text-xl font-extralight">Informe aqui sua data de nascimento ;)</span>
+          className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-black/10 p-16 backdrop-blur-md "
+        >
+          <h1 className="text-2xl font-semibold text-zinc-50">
+            Nos conte o dia em que você chegou à Terra
+          </h1>
+          <span className="text-xl font-extralight text-zinc-50">
+            Selecione a sua data de nascimento ;)
+          </span>
 
-          <div className='flex w-full justify-between gap-6 mt-10'>
-            <div className='w-full flex flex-col gap-2'>
-              <label htmlFor="day" className='text-zinc-50 font-light'>Dia</label>
-              <Select.Root onValueChange={setDayValue} >
+          <div className="mt-10 flex w-full justify-between gap-6">
+            <div className="flex w-full flex-col gap-2">
+              <label htmlFor="day" className="font-light text-zinc-50">
+                Dia
+              </label>
+              <Select.Root onValueChange={setDayValue}>
                 <Select.Trigger
                   id="day"
-                  className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
+                  className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500 placeholder:text-zinc-200"
                 >
                   <Select.Value placeholder="20" />
                   <Select.Icon>
@@ -65,18 +78,19 @@ export default function Nascimento() {
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
-                  <Select.Content position='popper' className="bg-white text-center rounded mt-2 w-32">
-                    <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
+                  <Select.Content
+                    position="popper"
+                    className="mt-2 w-32 rounded bg-white text-center"
+                  >
+                    <Select.Viewport className="max-h-60 w-full cursor-pointer p-2 text-violet-500">
                       {days.map((days, index) => (
                         <Select.Item
                           key={index}
                           value={`${days}`}
-                          className="py-2 px-4 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                          className="flex items-center justify-between rounded-lg py-2 px-4 outline-none hover:bg-violet-500 hover:text-white"
                         >
-                          <Select.ItemText>
-                            {days}
-                          </Select.ItemText>
-                          <Select.ItemIndicator >
+                          <Select.ItemText>{days}</Select.ItemText>
+                          <Select.ItemIndicator>
                             <Check size={18} />
                           </Select.ItemIndicator>
                         </Select.Item>
@@ -87,12 +101,14 @@ export default function Nascimento() {
               </Select.Root>
             </div>
 
-            <div className='w-full flex flex-col gap-2'>
-              <label htmlFor="month" className='text-zinc-50 font-light'>Mês</label>
+            <div className="flex w-full flex-col gap-2">
+              <label htmlFor="month" className="font-light text-zinc-50">
+                Mês
+              </label>
               <Select.Root onValueChange={setMonthValue}>
                 <Select.Trigger
                   id="month"
-                  className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
+                  className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500"
                 >
                   <Select.Value placeholder="Julho" />
                   <Select.Icon>
@@ -100,16 +116,18 @@ export default function Nascimento() {
                   </Select.Icon>
                 </Select.Trigger>
                 <Select.Portal>
-                  <Select.Content position='popper' className="bg-white text-center rounded overflow-hidden mt-2 w-32">
-                    <Select.Viewport className="bg-zinc-50 text-violet-500 p-2 cursor-pointer max-h-60 w-full">
-
+                  <Select.Content
+                    position="popper"
+                    className="mt-2 w-32 overflow-hidden rounded bg-white text-center"
+                  >
+                    <Select.Viewport className="max-h-60 w-full cursor-pointer bg-zinc-50 p-2 text-violet-500">
                       {months.map((month, index) => (
                         <Select.Item
                           key={index}
                           value={`${month}`}
-                          className="py-2 px-2  outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                          className="flex items-center  justify-between rounded-lg py-2 px-2 outline-none hover:bg-violet-500 hover:text-white"
                         >
-                          <Select.ItemText >
+                          <Select.ItemText>
                             {monthFormated(month)}
                           </Select.ItemText>
                           <Select.ItemIndicator className="">
@@ -123,12 +141,14 @@ export default function Nascimento() {
               </Select.Root>
             </div>
 
-            <div className='w-full flex flex-col gap-2'>
-              <label htmlFor="year" className='text-zinc-50 font-light'>Ano</label>
+            <div className="flex w-full flex-col gap-2">
+              <label htmlFor="year" className="font-light text-zinc-50">
+                Ano
+              </label>
               <Select.Root onValueChange={setYearValue}>
                 <Select.Trigger
                   id="year"
-                  className="bg-zinc-50 rounded text-sm text-zinc-500 w-full flex py-3 px-4 justify-between items-center"
+                  className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500"
                 >
                   <Select.Value placeholder="1969" />
                   <Select.Icon>
@@ -137,19 +157,17 @@ export default function Nascimento() {
                 </Select.Trigger>
                 <Select.Portal>
                   <Select.Content
-                    position='popper'
-                    className="bg-white text-center rounded mt-2 w-32">
-                    <Select.Viewport className="text-violet-500 p-2 cursor-pointer max-h-60 w-full">
-
+                    position="popper"
+                    className="mt-2 w-32 rounded bg-white text-center"
+                  >
+                    <Select.Viewport className="max-h-60 w-full cursor-pointer p-2 text-violet-500">
                       {years.reverse().map((year, index) => (
                         <Select.Item
                           key={year}
                           value={`${year}`}
-                          className="py-2 px-2 outline-none hover:bg-violet-500 hover:text-white rounded-lg flex justify-between items-center"
+                          className="flex items-center justify-between rounded-lg py-2 px-2 outline-none hover:bg-violet-500 hover:text-white"
                         >
-                          <Select.ItemText className="">
-                            {year}
-                          </Select.ItemText>
+                          <Select.ItemText className="">{year}</Select.ItemText>
                           <Select.ItemIndicator className="">
                             <Check size={18} />
                           </Select.ItemIndicator>
@@ -162,26 +180,26 @@ export default function Nascimento() {
             </div>
           </div>
 
-          <button className='py-4 bg-violet-500 text-zinc-50 text-lg w-full rounded-lg mt-10 hover:bg-violet-600 transition-all duration-200'>Pousar</button>
+          <button className="mt-10 w-full rounded-lg bg-violet-500 py-4 text-lg text-zinc-50 transition-all duration-200 hover:bg-violet-600">
+            Pousar
+          </button>
         </form>
       </main>
+      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
-  const { ['cosmos.token']: token } = parseCookies(ctx)
-  console.log(token);
-
+  const { 'cosmos.token': token } = parseCookies(ctx)
   if (!token) {
     return {
       redirect: {
         destination: '/user/login',
-        permanent: false
-      }
+        permanent: false,
+      },
     }
   }
   return {
-    props: {}
+    props: {},
   }
 }
