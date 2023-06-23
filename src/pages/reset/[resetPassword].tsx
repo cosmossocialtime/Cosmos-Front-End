@@ -73,10 +73,13 @@ export default function ResetPassword() {
   return (
     <div className="flex">
       <Main />
-      <div className="flex h-screen w-full max-w-lg flex-col items-center justify-center bg-zinc-50 text-zinc-900">
+      <div
+        className="flex h-screen w-full
+       flex-col items-center justify-center bg-zinc-50 text-zinc-900"
+      >
         <form
           onSubmit={handleSubmit(SubmitForm)}
-          className="mt-4 flex w-full flex-col gap-3 p-10"
+          className="mt-4 flex w-full max-w-lg flex-col gap-3 p-10"
         >
           <div className="flex items-start gap-1 text-left">
             <label htmlFor="password">Nova senha</label>
