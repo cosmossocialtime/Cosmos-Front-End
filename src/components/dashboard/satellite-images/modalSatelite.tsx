@@ -1,7 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import * as Slider from '@radix-ui/react-slider';
 import { X } from "phosphor-react";
-import { Slide } from "react-toastify";
+
 type NamesPlanet = {
   name: string
 }
@@ -13,7 +12,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
       <Dialog.Portal >
         <Dialog.Overlay className="fixed bg-black/70 inset-0 z-[2]" />
 
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-c-blue-800 flex w-[70%] h-[95%] rounded-xl flex-col p-5 text-white z-10">
+        <Dialog.Content className="fixed pl-11 overflow-y-auto scrollbar-thin scrollbar-w-1 scrollbar-h-1/2 scrollbar-thumb-blue-300 scrollbar-track-[#8779B5]/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-c-blue-800 flex w-[80%] h-[95%] rounded-xl flex-col p-5 text-white z-10">
           <Dialog.Title>
             <p className="text-[50px] self-end">{name}</p>
           </Dialog.Title>
@@ -64,7 +63,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                 enim, sapiente veniam non ullam!
               </p>
             </div>
-            <div className="flex flex-col pt-20 gap-5">
+            <div className="flex flex-col mt-10 gap-5">
               <h2 className="flex items-center gap-4 text-xl">
                 <span className="bg-white/10 p-2 rounded-full aspect-square flex justify-center items-center h-8">
                   3
