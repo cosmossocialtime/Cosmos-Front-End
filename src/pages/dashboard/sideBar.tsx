@@ -66,7 +66,7 @@ export default function SideBar() {
               {showside ? (
                 <Image
                   width={160}
-                  height={32}
+                  height={30}
                   src="/images/logoCosmosBranco.svg"
                   alt="Logo Cosmos"
                 />
@@ -99,7 +99,7 @@ export default function SideBar() {
                   href={item.route}
                   className={`${pathname === item.route ? "bg-white/10" : ""} z-[1] p-3 my-1 flex items-center gap-4 text-white rounded-lg border border-transparent border-solid hover:border-violet-500 transition-colors`}
                 >
-                  <span className={`${pathname === item.route ? "bg-purple-600" : "bg-white/10"} p-3 2xl:p-4 rounded-full text-2xl`}>
+                  <span className={`${pathname === item.route ? "bg-purple-600" : "bg-white/10"} p-2 2xl:p-4 rounded-full text-2xl`}>
                     {item.icon}
                   </span>
                   <strong>
@@ -111,7 +111,7 @@ export default function SideBar() {
           </div>
         </div>
 
-        <div className={`${showside ? "" : "hidden"} mt-auto flex flex-col gap-2 bg-blue-900 text-white px-2 py-4`}>
+        <div className={`${showside ? "" : "hidden"} mt-auto flex flex-col gap-1 bg-blue-900 text-white px-2 py-4`}>
           <Link href="/">
             Precisa de ajuda?
           </Link>
