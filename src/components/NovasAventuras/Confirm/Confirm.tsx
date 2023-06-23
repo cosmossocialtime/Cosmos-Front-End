@@ -1,23 +1,23 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { ArrowLeft } from 'phosphor-react'
-import { FormEvent } from 'react'
-import { HeaderMissao } from '../PapelMissao/HeaderMissao'
-import { Footer } from '../PapelMissao/OptionSelect/style'
-import { CheckboxItem } from './CheckboxItem/CheckboxItem'
-import { Container, Form } from './style'
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { ArrowLeft } from "phosphor-react";
+import { FormEvent } from "react";
+import { HeaderMissao } from "../PapelMissao/HeaderMissao";
+import { Footer } from "../PapelMissao/OptionSelect/style";
+import { CheckboxItem } from "./CheckboxItem/CheckboxItem";
+import { Container, Form } from "./style";
 
 export default function Confirm() {
-  const router = useRouter()
+  const router = useRouter();
 
   function handleSubmit(e: FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const formData = new FormData(e.target as HTMLFormElement)
-    const data = Object.fromEntries(formData)
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData);
 
-    console.log(data)
-    router.push('/rolesuccess')
+    console.log(data);
+    router.push("/rolesuccess");
   }
 
   return (
@@ -57,5 +57,5 @@ export default function Confirm() {
         </Footer>
       </Container>
     </>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { darken } from 'polished'
+import styled from "styled-components";
+import { darken } from "polished";
 
 export const Container = styled.main`
   width: 100%;
@@ -15,11 +15,11 @@ export const Container = styled.main`
   h2 {
     padding-top: 0.5rem;
     font-size: 1.25rem;
-    margin: 0 auto;
+    margin:0 auto;
     color: #535353;
     font-weight: 400;
   }
-`
+`;
 
 export const Content = styled.div`
   width: 100%;
@@ -31,7 +31,7 @@ export const Content = styled.div`
     flex-direction: column;
     align-items: center;
   }
-`
+`;
 
 export const Footer = styled.footer`
   width: 100%;
@@ -55,7 +55,7 @@ export const Footer = styled.footer`
     left: 9%;
 
     :hover {
-      background: ${darken(0.1, '#D0D5E5')};
+      background: ${darken(0.1, "#D0D5E5")};
     }
 
     @media (max-width: 768px) {
@@ -64,7 +64,7 @@ export const Footer = styled.footer`
       margin-right: 1rem;
     }
   }
-`
+`;
 
 export const CardOp = styled.button`
   width: min(320px, 100%);
@@ -72,4 +72,4 @@ export const CardOp = styled.button`
   @media (max-width: 768px) {
     width: min(200px, 100%);
   }
-`
+`;

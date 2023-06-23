@@ -1,13 +1,13 @@
-import { ArrowLeft, ArrowRight } from 'phosphor-react'
-import { FormEvent } from 'react'
-import { Container, LinkButtonBackward, LinkButtonForwards } from './style'
+import { ArrowLeft, ArrowRight } from "phosphor-react";
+import { FormEvent } from "react";
+import { Container, LinkButtonBackward, LinkButtonForwards } from "./style";
 
 interface ForwardArrowProps {
-  to: string
-  back: string
-  page: number
-  isActive?: number
-  onClickForward?(e: FormEvent): void
+  to: string;
+  back: string;
+  page: number;
+  isActive?: number;
+  onClickForward?(e: FormEvent): void;
 }
 
 export function ForwardArrow({
@@ -15,21 +15,23 @@ export function ForwardArrow({
   back,
   page,
   isActive,
-  onClickForward,
+  onClickForward
 }: ForwardArrowProps) {
   return (
     <>
       <Container>
+
         <div>
           <LinkButtonBackward href={back}>
             <ArrowLeft />
           </LinkButtonBackward>
 
-          {page === 0 ? '' : <p>{page}/4</p>}
+          {page === 0 ? "" : <p>{page}/4</p>}
+          
 
           <LinkButtonForwards
             onClick={onClickForward}
-            href={isActive ? to : '#'}
+            href={isActive ? to : "#"}
             disable={isActive}
           >
             <ArrowRight />
@@ -37,5 +39,5 @@ export function ForwardArrow({
         </div>
       </Container>
     </>
-  )
+  );
 }

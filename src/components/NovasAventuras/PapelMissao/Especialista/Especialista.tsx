@@ -1,9 +1,10 @@
-import { CardContent, OpCard } from './style'
-import { CaretLeft, CaretRight } from 'phosphor-react'
-import { Dots } from '../Cards/Dots'
-import { Container, MobileLink } from '../Piloto/style'
-import Link from 'next/link'
-import Image from 'next/image'
+import { CardContent, OpCard } from "./style";
+import { HeaderMissao } from "../HeaderMissao";
+import { CaretLeft, CaretRight } from "phosphor-react";
+import { Dots } from "../Cards/Dots";
+import { Container, MobileLink } from "../Piloto/style";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Especialista() {
   return (
@@ -14,12 +15,7 @@ export default function Especialista() {
         </Link>
 
         <OpCard>
-          <Image
-            src="/images/papelMissao/especialista.png"
-            alt=""
-            width={200}
-            height={200}
-          />
+          <Image src="/images/papelMissao/especialista.png" alt="" width={200} height={200}/>
 
           <CardContent>
             <div>
@@ -53,5 +49,5 @@ export default function Especialista() {
         </MobileLink>
       </Container>
     </>
-  )
+  );
 }

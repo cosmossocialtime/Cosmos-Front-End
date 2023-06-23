@@ -1,24 +1,24 @@
-import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { ForwardArrow } from '../ForwardArrow/ForwardArrow'
-import { Container, TextArea } from '../style'
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { ForwardArrow } from "../ForwardArrow/ForwardArrow";
+import { Container, TextArea } from "../style";
 
 export function Sobre01() {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [principaisExperiencias, setPrincipaisExperiencias] = useState('')
-  const [competencias, setCompetencias] = useState('')
+  const [principaisExperiencias, setPrincipaisExperiencias] = useState("");
+  const [competencias, setCompetencias] = useState("");
 
   function handleSubmit() {
-    const data = { principaisExperiencias, competencias }
-    const expLength = principaisExperiencias.length
-    const compLength = competencias.length
+    const data = { principaisExperiencias, competencias };
+    const expLength = principaisExperiencias.length;
+    const compLength = competencias.length;
 
     if ((expLength && compLength) < 100 || (expLength && compLength) > 300) {
-      alert('termine')
+      alert("termine");
     } else {
-      console.log(data)
-      router.push('/sobrevoce/2')
+      console.log(data);
+      router.push("/sobrevoce/2");
     }
   }
 
@@ -65,5 +65,5 @@ export function Sobre01() {
         onClickForward={handleSubmit}
       />
     </>
-  )
+  );
 }

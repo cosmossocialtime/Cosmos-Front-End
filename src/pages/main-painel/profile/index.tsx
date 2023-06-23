@@ -14,11 +14,12 @@ import SettingCropArea from '../../../components/main-painel/profile/SettingCrop
 import { companyProps } from '../../../types/company'
 
 export default function Perfil() {
-    const [user, setUser] = useState<userProps | null>(null)
-    const [company, setCompany] = useState<companyProps | null>(null)
-    const [selectedImgSrc, setSelectedImgSrc] = useState("");
-    const [cropType, setCroptType] = useState<"profile" | "banner">("profile")
-    const [onDialog, setOnDialog] = useState(false);
+  const [user, setUser] = useState<userProps | null>(null)
+  const [company, setCompany] = useState<companyProps | null>(null)
+  const [selectedImgSrc, setSelectedImgSrc] = useState('')
+  const [cropType, setCroptType] = useState<'profile' | 'banner'>('profile')
+  const [onDialog, setOnDialog] = useState(false)
+  const [enableForm, setEnableForm] = useState(true)
 
   useEffect(() => {
     api
@@ -49,16 +50,20 @@ export default function Perfil() {
     })
   }
 
-    function updateProfileSrc(source: string) {
-        setSelectedImgSrc(source);
-        setCroptType("profile");
-        setOnDialog(true)
-    }
-    function updateBannerSrc(source: string) {
-        setSelectedImgSrc(source);
-        setCroptType("banner");
-        setOnDialog(true)
-    }
+  function updateUserData(newUser: userProps) {
+    setUser(newUser)
+  }
+
+  function updateProfileSrc(source: string) {
+    setSelectedImgSrc(source)
+    setCroptType('profile')
+    setOnDialog(true)
+  }
+  function updateBannerSrc(source: string) {
+    setSelectedImgSrc(source)
+    setCroptType('banner')
+    setOnDialog(true)
+  }
 
   function handleProfileImg(image: string) {
     if (user) {
@@ -79,9 +84,9 @@ export default function Perfil() {
     setOnDialog(false)
   }
 
-    return (
-        <div >
-            <Header />
+  return (
+    <div>
+      <Header />
 
       <div className="relative flex h-28 items-center gap-9 pl-40">
         <Image
@@ -114,54 +119,51 @@ export default function Perfil() {
             <UploadImage updateImgSrc={updateProfileSrc} />
           </div>
 
-                    <Dialog.Root open={onDialog}>
-                        <Dialog.Portal>
-                            <Dialog.Overlay className='z-10 top-0 left-0 fixed h-screen w-screen bg-black/40' />
-                            <Dialog.Content className='z-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-                                {cropType === "profile" &&(
-                                    < SettingCropArea
-                                        selectedImgSrc={selectedImgSrc}
-                                        handleImg={handleProfileImg}
-                                        aspectRatio={1/1}
-                                        cropShape={"round"}
-                                    />
-
-                                )}
-                                {cropType === "banner" && (
-                                    < SettingCropArea
-                                        selectedImgSrc={selectedImgSrc}
-                                        handleImg={handleBannerImg}
-                                        aspectRatio={10/1}
-                                        cropShape={"rect"}
-                                    />
-                                )}
-                            </Dialog.Content>
-                        </Dialog.Portal>
-                    </Dialog.Root>
-                </div>
+          <Dialog.Root open={onDialog}>
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed top-0 left-0 z-10 h-screen w-screen bg-black/40" />
+              <Dialog.Content className="fixed top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+                {cropType === 'profile' && (
+                  <SettingCropArea
+                    selectedImgSrc={selectedImgSrc}
+                    handleImg={handleProfileImg}
+                    aspectRatio={1 / 1}
+                    cropShape={'round'}
+                  />
+                )}
+                {cropType === 'banner' && (
+                  <SettingCropArea
+                    selectedImgSrc={selectedImgSrc}
+                    handleImg={handleBannerImg}
+                    aspectRatio={10 / 1}
+                    cropShape={'rect'}
+                  />
+                )}
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+        </div>
 
         <span className="z-[1] text-3xl font-semibold text-white">
           {user.byname}
         </span>
       </div>
 
-            <div className='flex flex-col items-center'>
-                <FormUserData
-                    userData={user}
-                    companyName={company.name}
-                    enableForm={enableForm}
-                    setEnableForm={setEnableForm}
-                />
-                {!enableForm &&
-                    <button
-                        className='py-4 px-36 my-9 mx-auto bg-violet-500 hover:bg-violet-600 text-sm text-white font-semibold rounded-lg transition-colors'
-                        onClick={() => setEnableForm(true)}
-                    >
-                        Editar
-                    </button>
-                }
-            </div>
-
-        </div>
-    )
+      <div className="flex flex-col items-center">
+        <FormUserData
+          userData={user}
+          companyName={company.name}
+          updateUserData={updateUserData}
+        />
+        {!enableForm && (
+          <button
+            className="my-9 mx-auto rounded-lg bg-violet-500 py-4 px-36 text-sm font-semibold text-white transition-colors hover:bg-violet-600"
+            onClick={() => setEnableForm(true)}
+          >
+            Editar
+          </button>
+        )}
+      </div>
+    </div>
+  )
 }

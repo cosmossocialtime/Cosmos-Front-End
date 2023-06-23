@@ -1,10 +1,10 @@
-import Link from 'next/link'
-import { X } from 'phosphor-react'
-import styled from 'styled-components'
+import Link from "next/link";
+import { X } from "phosphor-react";
+import styled from "styled-components";
 
 interface HeaderMissaoProps {
-  closeVisibility?: number
-  title?: string
+  closeVisibility?: number;
+  title?: string;
 }
 
 export function HeaderMissao({ closeVisibility, title }: HeaderMissaoProps) {
@@ -12,7 +12,7 @@ export function HeaderMissao({ closeVisibility, title }: HeaderMissaoProps) {
     <Header>
       <div>
         <p>Formulário de Inscrição</p>
-        <h2>{title || 'Seu papel na missão'}</h2>
+        <h2>{title || "Seu papel na missão"}</h2>
       </div>
       <Link href="/aventuras">
         <CloseButton visibility={closeVisibility || +true}>
@@ -22,7 +22,7 @@ export function HeaderMissao({ closeVisibility, title }: HeaderMissaoProps) {
 
       <Separador />
     </Header>
-  )
+  );
 }
 
 const Header = styled.div`
@@ -44,19 +44,19 @@ const Header = styled.div`
   p {
     color: var(--gray-500);
   }
-`
+`;
 
 interface CloseButtonProps {
-  visibility: number
+  visibility: number;
 }
 
 const CloseButton = styled.button<CloseButtonProps>`
-  display: ${(props) => (props.visibility ? 'block' : 'none')};
+  display: ${(props) => (props.visibility ? "block" : "none")};
   margin-right: 5%;
   margin-left: auto;
   font-size: 1.2rem;
   color: #363f63;
-`
+`;
 
 const Separador = styled.div`
   background: linear-gradient(
@@ -66,4 +66,4 @@ const Separador = styled.div`
   );
   height: 0.4rem;
   width: 100%;
-`
+`;

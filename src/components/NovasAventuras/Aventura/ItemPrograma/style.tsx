@@ -1,8 +1,9 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const Container = styled.div`
+  
   min-width: 32rem;
-`
+`;
 
 export const Content = styled.div`
   width: 30rem;
@@ -23,9 +24,10 @@ export const Header = styled.div`
     font-weight: bold;
     color: var(--purple-500);
   }
-`
+`;
 
 export const Main = styled.div`
+
   position: relative;
   p {
     color: var(--gray-500);
@@ -35,14 +37,14 @@ export const Main = styled.div`
     -webkit-box-orient: vertical;
   }
 
-  a {
+  a{
     color: var(--blue-300);
     position: absolute;
     bottom: 0;
     right: 0;
     background: #fff;
   }
-`
+`;
 
 export const Footer = styled.div`
   display: flex;
@@ -58,4 +60,4 @@ export const Footer = styled.div`
       font-size: 0.8rem;
     }
   }
-`
+`;

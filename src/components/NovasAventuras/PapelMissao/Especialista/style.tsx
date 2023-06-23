@@ -1,4 +1,7 @@
-import styled from 'styled-components'
+import { darken } from "polished";
+import styled from "styled-components";
+
+
 
 export const OpCard = styled.div`
   display: flex;
@@ -23,7 +26,7 @@ export const OpCard = styled.div`
       padding: 1rem;
     }
   }
-`
+`;
 
 export const CardContent = styled.div`
   div:first-child {
@@ -50,4 +53,4 @@ export const CardContent = styled.div`
       color: #535353;
     }
   }
-`
+`;

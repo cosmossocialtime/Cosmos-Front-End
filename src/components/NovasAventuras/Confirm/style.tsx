@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const Container = styled.section`
   padding: 0 2rem;
@@ -24,7 +24,9 @@ export const Container = styled.section`
     button {
     }
   }
-`
+
+
+`;
 
 export const Form = styled.form`
   width: 100%;
@@ -50,4 +52,4 @@ export const Form = styled.form`
       width: 170px;
     }
   }
-`
+`;

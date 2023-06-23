@@ -1,9 +1,12 @@
-import { HeaderMissao } from '../PapelMissao/HeaderMissao'
+import { HeaderMissao } from "../PapelMissao/HeaderMissao";
 
 export function SobreVoce() {
+  
+
+
   return (
     <>
       <HeaderMissao />
     </>
-  )
+  );
 }
