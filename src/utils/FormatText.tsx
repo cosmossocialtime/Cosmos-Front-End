@@ -1,15 +1,15 @@
 type FormatTextType = {
-    text: string
+  text: string
 }
 
-export default function FormatText({ text }: FormatTextType){
-    const paragraphs = text.split("\n")
+export default function FormatText({ text }: FormatTextType) {
+  const paragraphs = text.split('\n')
 
-    return (
-        <>
-            {paragraphs.map((paragraph, key)=> (
-                <p key={key}>{paragraph}</p>
-            ))}
-        </>
-    )
+  return (
+    <>
+      {paragraphs.map((paragraph, key) => (
+        <p key={key}>{paragraph}</p>
+      ))}
+    </>
+  )
 }
