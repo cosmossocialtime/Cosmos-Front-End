@@ -1,14 +1,11 @@
-import { Check } from "phosphor-react";
-import { useState } from "react";
-import { CheckboxItem } from "../Confirm/CheckboxItem/CheckboxItem";
-import { HeaderMissao } from "../PapelMissao/HeaderMissao";
-import { ForwardArrow } from "../SobreVoce/ForwardArrow/ForwardArrow";
-import {
-  Container,
-} from "./style";
+import { useState } from 'react'
+import { CheckboxItem } from '../Confirm/CheckboxItem/CheckboxItem'
+import { HeaderMissao } from '../PapelMissao/HeaderMissao'
+import { ForwardArrow } from '../SobreVoce/ForwardArrow/ForwardArrow'
+import { Container } from './style'
 
 export default function Termos() {
-  const [isLGPDchecked, setIsLGPDcheck] = useState(false);
+  const [isLGPDchecked, setIsLGPDcheck] = useState(false)
 
   function handleLGPD() {
     setIsLGPDcheck(!isLGPDchecked)
@@ -37,7 +34,7 @@ export default function Termos() {
 
           <p>
             Para mais informações sobre como as suas informações serão tratadas,
-            acesse o{" "}
+            acesse o{' '}
             <a href="#">Termo de Consentimento ao Tratamento de Dados</a>.
           </p>
         </div>
@@ -48,7 +45,12 @@ export default function Termos() {
           label="Aceito que minhas respostas sejam compartilhadas"
         />
       </Container>
-      <ForwardArrow to="/forminscricao" back="/aventuras" page={0} isActive={+isLGPDchecked} />
+      <ForwardArrow
+        to="/forminscricao"
+        back="/aventuras"
+        page={0}
+        isActive={+isLGPDchecked}
+      />
     </>
-  );
+  )
 }

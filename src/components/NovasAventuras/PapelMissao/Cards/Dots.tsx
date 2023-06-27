@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export function Dots() {
   return (
@@ -7,7 +7,7 @@ export function Dots() {
       <Dot color="#AEDF55" />
       <Dot color="#FD6062" />
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -15,11 +15,10 @@ const Container = styled.div`
   gap: 0.8rem;
   width: fit-content;
   margin: 2rem auto 0 auto;
-  
-`;
+`
 
 interface DotProps {
-  color: string;
+  color: string
 }
 
 const Dot = styled.span<DotProps>`
@@ -28,4 +27,4 @@ const Dot = styled.span<DotProps>`
   border-radius: 50%;
   padding: 5px;
   background: ${(props) => props.color};
-`;
+`

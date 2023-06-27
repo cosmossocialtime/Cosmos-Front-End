@@ -1,6 +1,6 @@
-import Head from "next/head";
-import SideBar from "../sideBar";
-import Slider from "../../../components/dashboard/crew/Slider"
+import Head from 'next/head'
+import SideBar from '../sideBar'
+import Slider from '../../../components/dashboard/crew/Slider'
 const TripulacaoPage = () => {
   return (
     <div className="flex">
@@ -9,13 +9,13 @@ const TripulacaoPage = () => {
         <Head>
           <title>Tripulação</title>
         </Head>
-        <main className="bg-gray-100 h-screen">
-          <header className="border border-b-gray-50 drop-shadow-sm p-4">
+        <main className="h-screen bg-gray-100">
+          <header className="border border-b-gray-50 p-4 drop-shadow-sm">
             <div className="pl-20">
-              <h1 className="text-[40px] text-indigo-500 font-semibold">
+              <h1 className="text-[40px] font-semibold text-indigo-500">
                 Tripulação
               </h1>
-              <span className="text-indigo-200 text-[18px]">
+              <span className="text-[18px] text-indigo-200">
                 A equipe que estará com você nesta aventura
               </span>
             </div>
@@ -27,7 +27,7 @@ const TripulacaoPage = () => {
         </main>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default TripulacaoPage
