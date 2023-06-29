@@ -5,7 +5,7 @@ export type userProps = {
     byname: string,
     fullName: string,
     gender: string,
-    birthdate: Date,
+    birthdate: string,
     country: string,
     state: string,
     city: string,

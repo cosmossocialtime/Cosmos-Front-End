@@ -34,7 +34,11 @@ export default function Painel() {
     }, [])
 
     if (!user || !achievements) {
-        return;
+        return (
+            <div className='h-screen w-screen bg-zinc-900 text-zinc-50 flex items-center justify-center'>
+                <h1 className='text-lg'>Carregando...</h1>
+            </div>
+        )
     }
     return (
         <div className="max-w-[100vw] flex flex-col h-screen">
