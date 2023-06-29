@@ -19,7 +19,6 @@ export default function Perfil() {
   const [selectedImgSrc, setSelectedImgSrc] = useState('')
   const [cropType, setCroptType] = useState<'profile' | 'banner'>('profile')
   const [onDialog, setOnDialog] = useState(false)
-  const [enableForm, setEnableForm] = useState(true)
 
   useEffect(() => {
     api
@@ -34,7 +33,11 @@ export default function Perfil() {
   }, [])
 
   if (!user || !company) {
-    return
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-zinc-900 text-zinc-50">
+        <h1 className="text-lg">Carregando...</h1>
+      </div>
+    )
   }
 
   async function updateImgServer(base64Image: string, route: string) {
@@ -85,11 +88,12 @@ export default function Perfil() {
   }
 
   return (
-    <div>
+    <div className="flex h-screen flex-col">
       <Header />
 
       <div className="relative flex h-28 items-center gap-9 pl-40">
         <Image
+          draggable="false"
           className="absolute left-0 h-28 w-full object-cover"
           src={user.banner ? user.banner : defaultBannerPerfil}
           width={2000}
@@ -149,21 +153,7 @@ export default function Perfil() {
         </span>
       </div>
 
-      <div className="flex flex-col items-center">
-        <FormUserData
-          userData={user}
-          companyName={company.name}
-          updateUserData={updateUserData}
-        />
-        {!enableForm && (
-          <button
-            className="my-9 mx-auto rounded-lg bg-violet-500 py-4 px-36 text-sm font-semibold text-white transition-colors hover:bg-violet-600"
-            onClick={() => setEnableForm(true)}
-          >
-            Editar
-          </button>
-        )}
-      </div>
+      <FormUserData userData={user} updateUserData={updateUserData} />
     </div>
   )
 }
