@@ -34,8 +34,8 @@ export default function Perfil() {
 
   if (!user || !company) {
     return (
-      <div className='h-screen w-screen bg-zinc-900 text-zinc-50 flex items-center justify-center'>
-        <h1 className='text-lg'>Carregando...</h1>
+      <div className="flex h-screen w-screen items-center justify-center bg-zinc-900 text-zinc-50">
+        <h1 className="text-lg">Carregando...</h1>
       </div>
     )
   }
@@ -88,7 +88,7 @@ export default function Perfil() {
   }
 
   return (
-    <div className='h-screen flex flex-col'>
+    <div className="flex h-screen flex-col">
       <Header />
 
       <div className="relative flex h-28 items-center gap-9 pl-40">
@@ -153,10 +153,7 @@ export default function Perfil() {
         </span>
       </div>
 
-      <FormUserData
-        userData={user}
-        updateUserData={updateUserData}
-      />
+      <FormUserData userData={user} updateUserData={updateUserData} />
     </div>
   )
 }

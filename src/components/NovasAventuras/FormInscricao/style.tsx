@@ -1,14 +1,14 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.section`
   color: var(--gray-600);
   padding: 0 1rem;
   height: 60vh;
-`;
+`
 
 export const FormContainer = styled.div`
   margin: 0 auto;
-  font-family: "inter";
+  font-family: 'inter';
   max-width: 450px;
 
   form {
@@ -17,13 +17,12 @@ export const FormContainer = styled.div`
     gap: 2rem;
 
     div {
-      p{
-        margin-bottom: .3rem;
+      p {
+        margin-bottom: 0.3rem;
         white-space: nowrap;
 
-        @media (max-width: 640px){
-        white-space: normal;
-          
+        @media (max-width: 640px) {
+          white-space: normal;
         }
       }
     }
@@ -35,9 +34,9 @@ export const FormContainer = styled.div`
     width: 100%;
     padding: 0.75rem;
   }
-`;
+`
 
 export const DoubleInput = styled.div`
   display: flex;
-  gap: .75rem;
-`;
+  gap: 0.75rem;
+`

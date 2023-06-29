@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.div`
   color: var(--gray-600);
@@ -8,12 +8,9 @@ export const Container = styled.div`
 
   h2 {
     font-size: 2.5rem;
-      font-weight: bold;
+    font-weight: bold;
   }
-
-
-`;
-
+`
 
 export const DisplayText = styled.div`
   margin: 0rem auto 2rem auto;
@@ -39,13 +36,12 @@ export const DisplayText = styled.div`
     background-color: #65bafa;
     border-radius: 20px;
   }
-
-`;
+`
 
 export const InscricaoBtn = styled.div`
-    display: flex;
-    justify-content: center;
-`;
+  display: flex;
+  justify-content: center;
+`
 
 export const Data = styled.div`
   display: flex;

@@ -1,10 +1,7 @@
-"use client"
-
+'use client'
 
 const DashboardHome = () => {
-    return(
-        <h1>ola</h1>
-    );
-};
+  return <h1>ola</h1>
+}
 
-export default DashboardHome    
+export default DashboardHome
