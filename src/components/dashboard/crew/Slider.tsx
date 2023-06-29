@@ -43,7 +43,7 @@ export default function Slider() {
                 setOpenModal(Modal)
               }}
             >
-              <div className="keen-slider__slide rounded border border-gray-50 bg-gray-100 p-8 drop-shadow">
+              <div className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-10 drop-shadow lg:py-20">
                 <Dialog.Trigger>
                   <div className="flex justify-between pb-12">
                     <div className="flex flex-col">

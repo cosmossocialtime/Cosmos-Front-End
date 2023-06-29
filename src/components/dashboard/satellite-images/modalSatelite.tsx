@@ -7,7 +7,7 @@ type NamesPlanet = {
 }
 
 export default function ModalSatelite({ name }: NamesPlanet) {
-  const [ratting] = useState(0)
+  const [ratting] = useState(2)
   const [rattingSlider, setRattingSlider] = useState('')
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                   >
                     1
                   </span>
-                  <span className="pt-3">Muito pouco</span>
+                  <span className="pt-3">Não precisa</span>
                 </div>
                 <div className="z-10 flex w-24 flex-col items-center pt-9">
                   <span
@@ -78,7 +78,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                   >
                     3
                   </span>
-                  <span className="pt-3">Medio</span>
+                  <span className="pt-3">Médio</span>
                 </div>
                 <div className="z-10 flex w-24 flex-col items-center pt-9">
                   <span
@@ -88,7 +88,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                   >
                     4
                   </span>
-                  <span className="pt-3">Intermediario</span>
+                  <span className="pt-3">Muito</span>
                 </div>
                 <div className="z-10 flex w-24 flex-col items-center pt-9">
                   <span
@@ -98,7 +98,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                   >
                     5
                   </span>
-                  <span className="pt-3">Muito</span>
+                  <span className="pt-3">Urgentemente</span>
                 </div>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                 <span className="flex aspect-square h-8 items-center justify-center rounded-full bg-white/10 p-2">
                   2
                 </span>
-                Como é feito o marketing (comunicação) na instituição hoje?
+                Como é feito(a) o(a) {name} na instituição hoje?
               </h2>
               <p className="ml-12 w-3/4">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -121,8 +121,8 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                 <span className="flex aspect-square h-8 items-center justify-center rounded-full bg-white/10 p-2">
                   3
                 </span>
-                A forma como o marketing (comunicação) é feito atualmente atende
-                às necessidades da instituição? O que poderia melhorar?
+                A forma como o(a) {name} é feito(a) atualmente atende às
+                necessidades da instituição? O que poderia melhorar?
               </h2>
               <p className="ml-12 w-3/4">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac
