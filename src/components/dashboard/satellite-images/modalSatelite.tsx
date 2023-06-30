@@ -122,7 +122,8 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                   3
                 </span>
                 A forma como o(a) {name} é feito(a) atualmente atende às
-                necessidades da instituição? O que poderia melhorar?
+                necessidades da instituição?
+                <br /> O que poderia melhorar?
               </h2>
               <p className="ml-12 w-3/4">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac
