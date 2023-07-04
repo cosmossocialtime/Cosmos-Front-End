@@ -74,6 +74,5 @@ module.exports = {
         decolar: 'url(/images/decolar.png)',
       },
     },
-    plugins: [require('tailwind-scrollbar')({ nocompatible: true })],
   },
 }

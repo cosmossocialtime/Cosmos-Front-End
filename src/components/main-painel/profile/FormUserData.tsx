@@ -10,6 +10,8 @@ import { api } from '../../../services/api'
 import { LocationInput } from './LocationInput'
 import { PasswordInput } from './PasswordInput'
 import { ToastContainer, toast } from 'react-toastify'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 interface FormUserDataProps {
   userData: userProps
@@ -83,7 +85,7 @@ export default function FormUserData({
 
   return (
     <div className="mx-auto flex max-w-max flex-1 flex-col justify-between py-8">
-      <form className="relative grid w-max grid-cols-2 items-center justify-center gap-x-16 gap-y-5">
+      <form className="relative grid w-max grid-cols-2 items-center justify-center gap-x-16 gap-y-5 ">
         <LabelItem title="Nome Completo" enableForm={enableForm}>
           <Input
             type="text"
@@ -98,16 +100,18 @@ export default function FormUserData({
           />
         </LabelItem>
         <LabelItem title="Data de nascimento" enableForm={enableForm}>
-          <Input
-            type="date"
-            value={dayjs(newUserData.birthdate).utc().format('YYYY-MM-DD')}
+          <DatePicker
             disabled={!enableForm}
-            onChange={(e) => {
-              setNewUserData((prevState) => ({
-                ...prevState,
-                birthdate: e.target.value,
-              }))
+            className="flex-1 py-4 px-6 outline-none"
+            selected={dayjs(newUserData.birthdate).toDate()}
+            onChange={(date) => {
+              date &&
+                setNewUserData((prevState) => ({
+                  ...prevState,
+                  birthdate: date,
+                }))
             }}
+            dateFormat={'dd/MM/yyyy'}
           />
         </LabelItem>
 
@@ -205,7 +209,7 @@ export default function FormUserData({
           </button>
         )}
       </form>
-      {enableForm ? (
+      {enableForm && (
         <div className="flex gap-16 self-end">
           <button
             className="rounded-lg py-3 font-semibold text-red-400 transition-colors hover:text-red-500"
@@ -221,14 +225,6 @@ export default function FormUserData({
             Salvar edição
           </button>
         </div>
-      ) : (
-        <button
-          className="absolute right-16 top-0 my-9 flex max-w-max items-center gap-2 rounded-lg border-2 border-solid border-violet-600 py-4 px-8 text-lg font-semibold text-violet-600 transition-colors hover:bg-violet-600 hover:text-white"
-          onClick={() => setEnableForm(true)}
-        >
-          <Pencil size={22} />
-          Editar perfil
-        </button>
       )}
       <ToastContainer autoClose={2000} limit={3} />
     </div>

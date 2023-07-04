@@ -96,7 +96,7 @@ export default function Perfil() {
           draggable="false"
           className="absolute left-0 h-28 w-full object-cover"
           src={user.banner ? user.banner : defaultBannerPerfil}
-          width={2000}
+          width={1500}
           height={112}
           quality={100}
           alt=""

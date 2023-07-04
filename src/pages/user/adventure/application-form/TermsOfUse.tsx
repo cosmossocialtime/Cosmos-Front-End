@@ -1,4 +1,9 @@
+import { useState } from 'react'
+import { CheckInput } from '../../../../components/CheckInput'
+
 export default function TermsOfUse() {
+  const [onCheck, setOnCheck] = useState(false)
+
   return (
     <div className="py-16 px-44">
       <h2 className="mb-14 text-center text-2xl font-semibold text-gray-800">
@@ -22,11 +27,12 @@ export default function TermsOfUse() {
         Para mais informações sobre como as suas informações serão tratadas,
         acesse o<a href="">Termo de Consentimento ao Tratamento de Dados.</a>
       </p>
-      <label className="flex items-center gap-2 ">
-        <input type="checkbox" className="h-6 w-6 rounded bg-red-500" />
-        {/* <span className=" block w-6 h-6 rounded border bg-gray-200 border-gray-400 border-solid cursor-pointer"/> */}
-        Aceito que minhas respostas sejam compartilhadas
-      </label>
+      <CheckInput
+        className="mt-11"
+        content="Aceito que minhas respostas sejam compartilhadas"
+        onChangeChecked={setOnCheck}
+        checked={onCheck}
+      />
     </div>
   )
 }
