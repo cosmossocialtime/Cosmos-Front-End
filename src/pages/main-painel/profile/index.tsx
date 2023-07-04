@@ -5,7 +5,7 @@ import defaultBannerPerfil from '../../../assets/default-banner-perfil.png'
 
 import { api } from '../../../services/api'
 import { userProps } from '../../../types/user'
-import { Camera } from 'phosphor-react'
+import { Camera, X } from 'phosphor-react'
 
 import Header from '../../../components/main-painel/Header'
 import UploadImage from '../../../components/main-painel/profile/UploadImage'
@@ -123,10 +123,16 @@ export default function Perfil() {
             <UploadImage updateImgSrc={updateProfileSrc} />
           </div>
 
-          <Dialog.Root open={onDialog}>
+          <Dialog.Root open={onDialog} onOpenChange={setOnDialog}>
             <Dialog.Portal>
               <Dialog.Overlay className="fixed top-0 left-0 z-10 h-screen w-screen bg-black/40" />
-              <Dialog.Content className="fixed top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+              <Dialog.Content className="fixed top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-gray-800">
+                <Dialog.Close>
+                  <X
+                    size={24}
+                    className=" absolute top-4 right-4 text-gray-100"
+                  />
+                </Dialog.Close>
                 {cropType === 'profile' && (
                   <SettingCropArea
                     selectedImgSrc={selectedImgSrc}

@@ -83,7 +83,7 @@ export function LocationInput({
                 position="popper"
                 className="w-full rounded bg-white p-2 shadow"
               >
-                <Select.Viewport className="max-h-32">
+                <Select.Viewport className="max-h-52">
                   {statesOfBrazil?.map((state) => (
                     <Select.Item
                       className="flex cursor-pointer justify-between gap-4 rounded-md p-3 text-violet-500 hover:bg-violet-500 hover:text-white"
@@ -121,7 +121,7 @@ export function LocationInput({
                 position="popper"
                 className="w-full rounded bg-white p-2 shadow"
               >
-                <Select.Viewport className="max-h-32">
+                <Select.Viewport className="max-h-52">
                   {city?.map((city) => (
                     <Select.Item
                       className="flex cursor-pointer justify-between gap-4 rounded-md p-3 text-violet-500 hover:bg-violet-500 hover:text-white"

@@ -46,7 +46,6 @@ export default function ModalTask({
   const [localTasks, setLocalTasks] = useState(objective!.tasks)
 
   function createNewTask() {
-    console.log(localTasks)
     const id = uuidv4()
     setLocalTasks((prevLocalTasks) => [
       { id, content: '', checked: false },

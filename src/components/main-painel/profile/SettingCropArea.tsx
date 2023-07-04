@@ -37,7 +37,7 @@ export default function SettingCropArea({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-6 rounded-lg bg-gray-800 py-8 px-4">
+    <div className="flex flex-col items-center justify-center gap-6 py-8 px-4">
       <div className="relative h-96 w-96">
         <Cropper
           image={selectedImgSrc}
