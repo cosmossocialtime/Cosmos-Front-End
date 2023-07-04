@@ -31,14 +31,12 @@ api.interceptors.request.use(async (req) => {
     if (isExpire) {
       const newToken = await renewToken()
       api.defaults.headers.Authorization = `Bearer ${newToken.data.accessToken}`
-      setCookie(undefined, 'cosmos.token', newToken.data.accessToken, {
-        maxAge: 60 * 25,
-      })
-      setCookie(undefined, 'cosmos.refreshToken', newToken.data.refreshToken, {
-        maxAge: 60 * 25,
-      })
+      setCookie(undefined, 'cosmos.token', newToken.data.accessToken)
+      setCookie(undefined, 'cosmos.refreshToken', newToken.data.refreshToken)
     }
-    if (!isExpire) return req
+    if (!isExpire) {
+      api.defaults.headers.Authorization = `Bearer ${Token}`
+    }
   }
 
   return req

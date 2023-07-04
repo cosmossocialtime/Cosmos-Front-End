@@ -5,8 +5,33 @@ import SideBar from '../sideBar'
 import ModalSatelite from '../../../components/dashboard/satellite-images/modalSatelite'
 import { DatasPlanets } from '../../../data/datasPlanets'
 import ModalInstitute from '../../../components/dashboard/satellite-images/modalInstitute'
+import useFetch from '../../../hooks/useFetch'
+
+interface User {
+  user: {
+    id: string
+    socialOrganizationId: string
+  }
+}
+interface SateliteInfo {
+  name: string
+  state?: string
+  totalColaborator?: number
+}
 
 const SatelitesPage = () => {
+  const { data } = useFetch<User>(
+    'https://cosmos-social.cyclic.app/api/dashboard',
+  )
+  const socialOrganizationId = data?.user.socialOrganizationId
+  console.log(data)
+
+  const responseSatelite = useFetch<SateliteInfo>(
+    `https://cosmos-social.cyclic.app/api/socialOrganization/${2}/satellite`,
+  )
+
+  console.log(responseSatelite.data)
+
   return (
     <div className="flex overflow-x-hidden">
       <SideBar />
@@ -30,7 +55,7 @@ const SatelitesPage = () => {
                           height={planet.size}
                           alt="Images "
                         />
-                        <h1>{planet.name}</h1>
+                        <h1>{responseSatelite.data?.name}</h1>
                       </ItemSatelite>
                       <ModalInstitute name={planet.name} />
                     </div>
