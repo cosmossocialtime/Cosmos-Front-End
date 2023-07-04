@@ -1,5 +1,5 @@
-import "react-toastify/dist/ReactToastify.css";
-import { createGlobalStyle } from "styled-components";
+import 'react-toastify/dist/ReactToastify.css'
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
     :root{
@@ -90,4 +90,4 @@ export const GlobalStyle = createGlobalStyle`
       cursor: not-allowed;
     }
   }
-`;
+`

@@ -1,47 +1,48 @@
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useState } from 'react'
 
-import { HeaderMissao } from "../HeaderMissao";
-import { CardOp, Container, Content, Footer } from "./style";
+import { HeaderMissao } from '../HeaderMissao'
+import { CardOp, Container, Content, Footer } from './style'
 
-import { Card } from "./Card";
-import { CaretLeft } from "phosphor-react";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import { Card } from './Card'
+import { CaretLeft } from 'phosphor-react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 const Cards = [
-  { Name: "Comandante", img: "/images/papelMissao/cards/comandante.png" },
-  { Name: "Especialista", img: "/images/papelMissao/cards/especialista.png" },
-  { Name: "Piloto", img: "/images/papelMissao/cards/piloto.png" },
-];
+  { Name: 'Comandante', img: '/images/papelMissao/cards/comandante.png' },
+  { Name: 'Especialista', img: '/images/papelMissao/cards/especialista.png' },
+  { Name: 'Piloto', img: '/images/papelMissao/cards/piloto.png' },
+]
 
 export function OptionSelect() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [option, setOption] = useState("");
+  const [option, setOption] = useState('')
 
-  const [firstOption, setFirstOption] = useState("");
-  const [secondOption, setSecondOption] = useState("");
-  const [thirdOption, setThirdOption] = useState("");
-  const [third, setThird] = useState(["Comandante", "Especialista", "Piloto"]);
+  const [firstOption, setFirstOption] = useState('')
+  const [secondOption, setSecondOption] = useState('')
+  const [thirdOption, setThirdOption] = useState('')
+  const [third, setThird] = useState(['Comandante', 'Especialista', 'Piloto'])
 
   function setFirstOp() {
-    setFirstOption(option);
-    setThird((prev) => prev.filter((op) => op !== option));
-    setOption("");
+    setFirstOption(option)
+    setThird((prev) => prev.filter((op) => op !== option))
+    setOption('')
   }
 
   async function setSecondOp() {
-    await setSecondOption(option);
-    await setThird((prev) => prev.filter((op) => op !== option));
-    await setThirdOption(third[0]);
-    router.push("/confirm");
+    await setSecondOption(option)
+    await setThird((prev) => prev.filter((op) => op !== option))
+    await setThirdOption(third[0])
+    router.push('/confirm')
   }
 
   const Options = {
     firstOption,
     secondOption,
     thirdOption,
-  };
+  }
   return (
     <>
       <HeaderMissao closeVisibility={+true} />
@@ -70,19 +71,17 @@ export function OptionSelect() {
 
         <Footer>
           <Link href="/cards/piloto">
-            
-              <CaretLeft />
-            
+            <CaretLeft />
           </Link>
           <button
-            disabled={option === ""}
+            disabled={option === ''}
             className="cBtn"
-            onClick={firstOption === "" ? setFirstOp : setSecondOp}
+            onClick={firstOption === '' ? setFirstOp : setSecondOp}
           >
-            {firstOption === "" ? "Confirmar 1ª opção" : "Confirmar 2ª opção"}
+            {firstOption === '' ? 'Confirmar 1ª opção' : 'Confirmar 2ª opção'}
           </button>
         </Footer>
       </Container>
     </>
-  );
+  )
 }

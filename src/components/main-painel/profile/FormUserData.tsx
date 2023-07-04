@@ -1,135 +1,232 @@
-import { CaretDown, Eye, EyeSlash, Lock, Pencil } from 'phosphor-react';
-import LabelItem from './LabelItem';
-import Input from './Input';
-import { useState } from 'react';
-import { userProps } from '../../../types/user';
-import dayjs from 'dayjs';
-import { api } from '../../../services/api';
-import { toast } from 'react-toastify';
+import { CaretDown, Check, Pencil } from 'phosphor-react'
+import * as Select from '@radix-ui/react-select'
+import LabelItem from './LabelItem'
+import Input from './Input'
+import { useEffect, useState } from 'react'
+import { userProps } from '../../../types/user'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import { api } from '../../../services/api'
+import { LocationInput } from './LocationInput'
+import { PasswordInput } from './PasswordInput'
+import { ToastContainer, toast } from 'react-toastify'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 interface FormUserDataProps {
-    userData: userProps
-    companyName: string
-    updateUserData: (newUser: userProps) => void
+  userData: userProps
+  updateUserData: (newUser: userProps) => void
 }
+dayjs.extend(utc)
 
-export default function FormUserData({ userData, companyName, updateUserData }: FormUserDataProps) {
-    const [enableForm, setEnableForm] = useState(false);
-    const [newUserData, setNewUserData] = useState(userData)
-    const genders = ["Masculino", "Feminino", "Outro"]
+export default function FormUserData({
+  userData,
+  updateUserData,
+}: FormUserDataProps) {
+  const gendersOpt = ['Masculino', 'Feminino', 'Outro']
+  const [otherGenderEnable, setOtherGenderEnable] = useState(false)
+  const [enableForm, setEnableForm] = useState(false)
+  const [newUserData, setNewUserData] = useState(userData)
 
-    function sendNewInfo() {
-        api.patch("/user/onboarding", {
-            companyCode: newUserData.company,
-            birthdate: newUserData.birthdate,
-            gender: newUserData.gender,
-            country: newUserData.country,
-            state: newUserData.state,
-            city: newUserData.city
-        }).then(response => {
-            if (response.status === 200) {
-                updateUserData(newUserData)
-                setEnableForm(false)
-                toast.success("Dados atualizados com sucesso!")
-            }
-        }).catch((error: any) => {
-            if (error.response.status === 400) return toast.error("Error")
-        })
+  useEffect(() => {
+    if (!gendersOpt.includes(newUserData.gender)) {
+      setOtherGenderEnable(true)
+    }
+  }, [])
+
+  function cancelChanges() {
+    setNewUserData(userData)
+    setEnableForm(false)
+  }
+
+  function handleLocation(state: string, city: string) {
+    setNewUserData({ ...newUserData, city, state })
+  }
+
+  function defGender(gender: string) {
+    if (gender === 'Outro') {
+      setNewUserData({ ...newUserData, gender: '' })
+      setOtherGenderEnable(true)
+      return
     }
 
-    return (
-        <div className='py-8 flex-1 mx-auto max-w-max flex flex-col justify-between'>
-            <form className='w-max grid grid-cols-2 gap-x-16 gap-y-5 items-center justify-center'>
-                <LabelItem title='Nome Completo' enableForm={enableForm}>
-                    <Input
-                        type="text"
-                        value={newUserData.fullName}
-                        disabled={!enableForm}
-                        onChange={(e) => { setNewUserData(prevState => ({ ...prevState, fullName: e.target.value })) }} />
-                </LabelItem>
-                <LabelItem title='Data de nascimento' enableForm={enableForm}>
-                    <Input
-                        type="date"
-                        value={dayjs(newUserData.birthdate).format("YYYY-MM-DD")}
-                        disabled={!enableForm}
-                        onChange={(e) => { setNewUserData(prevState => ({ ...prevState, birthdate: dayjs(e.target.value).toDate() })) }} />
-                </LabelItem>
+    setOtherGenderEnable(false)
+    setNewUserData({ ...newUserData, gender })
+  }
 
-                <LabelItem title='Nome pelo qual gostaria de ser chamando(a)' enableForm={enableForm}>
-                    <Input
-                        type="text"
-                        value={newUserData.byname}
-                        disabled={!enableForm}
-                        onChange={(e) => { setNewUserData(prevState => ({ ...prevState, byname: e.target.value })) }} />
-                </LabelItem>
-                <LabelItem title='Código da empresa em que trabalha' enableForm={enableForm}>
-                    <Input
-                        type="text"
-                        value={companyName}
-                        disabled={!enableForm}
-                        onChange={(e) => { setNewUserData(prevState => ({ ...prevState, companyName: e.target.value })) }} />
-                </LabelItem>
+  function sendNewInfo() {
+    const noData = Object.values(newUserData).some((data) => data === '')
+    if (noData) {
+      toast.error('Por favor, preencha todos os campos')
+      return
+    }
 
-                <LabelItem title='Gênero' enableForm={enableForm} className='relative cursor-pointer'>
-                    <>
-                        {enableForm ? (
-                            <input
-                                className='w-0 flex-1 outline-none bg-transparent'
-                                type="text"
-                                value={newUserData.gender}
-                                disabled={!enableForm}
-                                onChange={(e) => { setNewUserData(prevState => ({ ...prevState, genre: e.target.value })) }} />
-                        ) : (
-                            <span className='flex-1'>{newUserData.gender}</span>
-                        )}
-                        <CaretDown weight='fill' />
-                        <div className='absolute inset-x-0 top-full '>
-                            {genders.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className='flex-1 cursor-pointer hover:bg-violet-500'
-                                    onClick={() => { setNewUserData(prevState => ({...prevState, gender: item })) }}>
-                                    {item}
-                                </div>
-                            ))}
-                        </div>
-                    </>
-                </LabelItem>
-                <LabelItem title='Senha' enableForm={enableForm}>
-                    <>
-                        <Lock size={24} />
-                        <Input type='text' value="*****" />
-                    </>
-                </LabelItem>
+    api
+      .put('/user', {
+        fullName: newUserData.fullName,
+        byname: newUserData.byname,
+        birthdate: newUserData.birthdate,
+        gender: newUserData.gender,
+        country: newUserData.country,
+        state: newUserData.state,
+        city: newUserData.city,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          updateUserData(newUserData)
+          setEnableForm(false)
+          toast.success('Dados atualizados com sucesso!')
+        }
+      })
+      .catch((error: any) => {
+        if (error.response.status === 400) return toast.error('Sem Autorização')
+      })
+  }
 
-            </form>
-            {enableForm &&
-                <div className='self-end flex gap-16'>
-                    <button
-                        className='py-3 text-red-400 hover:text-red-500 font-semibold rounded-lg transition-colors'
-                        onClick={() => setEnableForm(false)}
-                    >
+  return (
+    <div className="mx-auto flex max-w-max flex-1 flex-col justify-between py-8">
+      <form className="relative grid w-max grid-cols-2 items-center justify-center gap-x-16 gap-y-5 ">
+        <LabelItem title="Nome Completo" enableForm={enableForm}>
+          <Input
+            type="text"
+            value={newUserData.fullName}
+            disabled={!enableForm}
+            onChange={(e) => {
+              setNewUserData((prevState) => ({
+                ...prevState,
+                fullName: e.target.value,
+              }))
+            }}
+          />
+        </LabelItem>
+        <LabelItem title="Data de nascimento" enableForm={enableForm}>
+          <DatePicker
+            disabled={!enableForm}
+            className="flex-1 py-4 px-6 outline-none"
+            selected={dayjs(newUserData.birthdate).toDate()}
+            onChange={(date) => {
+              date &&
+                setNewUserData((prevState) => ({
+                  ...prevState,
+                  birthdate: date,
+                }))
+            }}
+            dateFormat={'dd/MM/yyyy'}
+          />
+        </LabelItem>
 
-                        Cancelar
-                    </button>
-                    <button
-                        className='py-4 px-8 bg-violet-500 hover:bg-violet-600 text-white font-semibold rounded-lg transition-colors'
-                        type='submit'
-                        onClick={sendNewInfo}
-                    >
-                        Salvar edição
-                    </button>
-                </div>
+        <LabelItem
+          title="Nome pelo qual gostaria de ser chamando(a)"
+          enableForm={enableForm}
+        >
+          <Input
+            type="text"
+            value={newUserData.byname}
+            disabled={!enableForm}
+            onChange={(e) => {
+              setNewUserData((prevState) => ({
+                ...prevState,
+                byname: e.target.value,
+              }))
+            }}
+          />
+        </LabelItem>
+        <LocationInput
+          cityData={newUserData.city}
+          stateData={newUserData.state}
+          handleLocation={handleLocation}
+          enableForm={enableForm}
+        />
+
+        <LabelItem title="Gênero" enableForm={enableForm}>
+          <Select.Root
+            defaultValue={
+              gendersOpt.includes(newUserData.gender)
+                ? newUserData.gender
+                : 'Outro'
             }
-            {!enableForm &&
-                <button
-                    className='absolute right-16 top-0 py-4 px-8 my-9 max-w-max flex items-center gap-2 hover:bg-violet-600 hover:text-white text-lg text-violet-600 font-semibold border-2 border-solid border-violet-600 rounded-lg transition-colors'
-                    onClick={() => setEnableForm(true)}
-                >
-                    <Pencil size={22} />
-                    Editar perfil
-                </button>
-            }
+            disabled={!enableForm}
+            onValueChange={(value) => defGender(value)}
+          >
+            <Select.Trigger className="group flex w-full items-center justify-between px-6 py-4">
+              <Select.Value placeholder="Selecione seu gênero" />
+              <Select.Icon>
+                <CaretDown
+                  weight="fill"
+                  className="text-violet-500 group-data-[disabled]:opacity-20"
+                />
+              </Select.Icon>
+            </Select.Trigger>
+
+            <Select.Content
+              side="bottom"
+              sideOffset={16}
+              position="popper"
+              className="w-full rounded bg-white p-2 shadow"
+            >
+              <Select.Viewport>
+                {gendersOpt.map((item, index) => (
+                  <Select.Item
+                    key={index}
+                    value={item}
+                    className="flex cursor-pointer justify-between gap-6 rounded-md p-3 text-violet-500 hover:bg-violet-500 hover:text-white"
+                  >
+                    <Select.ItemText>{item}</Select.ItemText>
+                    <Select.ItemIndicator>
+                      <Check size={18} />
+                    </Select.ItemIndicator>
+                  </Select.Item>
+                ))}
+              </Select.Viewport>
+            </Select.Content>
+          </Select.Root>
+        </LabelItem>
+
+        <LabelItem title="Senha" enableForm={enableForm}>
+          <PasswordInput enableForm={enableForm} />
+        </LabelItem>
+
+        {otherGenderEnable && (
+          <LabelItem title="Digite seu gênero" enableForm={enableForm}>
+            <Input
+              disabled={!enableForm}
+              type="text"
+              value={newUserData.gender}
+              onChange={(e) =>
+                setNewUserData({ ...newUserData, gender: e.target.value })
+              }
+            />
+          </LabelItem>
+        )}
+
+        {!enableForm && (
+          <button
+            className="absolute -right-11 top-0 flex max-w-max translate-x-full items-center gap-2 rounded-lg border border-solid border-violet-600 py-3 px-8 text-lg font-semibold text-violet-600 transition-colors hover:bg-violet-600 hover:text-white"
+            onClick={() => setEnableForm(true)}
+          >
+            <Pencil size={22} />
+            Editar perfil
+          </button>
+        )}
+      </form>
+      {enableForm && (
+        <div className="flex gap-16 self-end">
+          <button
+            className="rounded-lg py-3 font-semibold text-red-400 transition-colors hover:text-red-500"
+            onClick={cancelChanges}
+          >
+            Cancelar
+          </button>
+          <button
+            className="rounded-lg bg-violet-500 py-4 px-8 font-semibold text-white transition-colors hover:bg-violet-600"
+            type="submit"
+            onClick={sendNewInfo}
+          >
+            Salvar edição
+          </button>
         </div>
-    )
+      )}
+      <ToastContainer autoClose={2000} limit={3} />
+    </div>
+  )
 }

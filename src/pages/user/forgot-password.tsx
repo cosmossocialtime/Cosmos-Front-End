@@ -1,11 +1,8 @@
 import Head from 'next/head'
 import Main from '../../components/Main'
-import { FormEvent, useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
-import Link from 'next/link'
-import { api } from '../../services/api'
-import { setCookie } from 'nookies'
-import Router from 'next/router'
+import { UserRecoveryForm } from '../../components/Recovery/RecoveryForm'
+import { GetServerSideProps } from 'next'
+import { parseCookies } from 'nookies'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
