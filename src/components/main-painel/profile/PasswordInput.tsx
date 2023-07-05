@@ -98,6 +98,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
               <X size={24} className="absolute top-6 right-6" />
             </Dialog.Close>
             <form
+              autoComplete="off"
               ref={changePasswordRef}
               onSubmit={handleSubmit(submitForm)}
               className="flex w-full flex-col gap-6"
@@ -109,7 +110,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
                 <div className=" group relative flex w-full max-w-md justify-between gap-2">
                   <input
                     {...register('currentPassword')}
-                    autoComplete="new-password"
+                    autoComplete="off"
                     required
                     id="current-password"
                     type={showPassword ? 'text' : 'password'}

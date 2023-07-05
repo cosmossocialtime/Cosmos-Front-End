@@ -8,13 +8,13 @@ import AchievementsArea from '../../../components/main-painel/painel/Achievement
 import { api } from '../../../services/api'
 import { useEffect, useState } from 'react'
 import { userProps } from '../../../types/user'
-import { programsProps } from '../../../types/programs'
+import { programProps } from '../../../types/program'
 import { achievementsProps } from '../../../types/achievements'
 
 export default function Painel() {
   const [user, setUser] = useState<userProps | null>(null)
   const [achievements, setAchievements] = useState<achievementsProps>([])
-  const [programs, setPrograms] = useState<programsProps>([])
+  const [programs, setPrograms] = useState<programProps[]>([])
   //   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {

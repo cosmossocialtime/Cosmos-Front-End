@@ -19,6 +19,8 @@ export function CheckInput({
   return (
     <label htmlFor="checkbox" className={`${className} flex gap-2`}>
       <Checkbox.Root
+        checked={checked}
+        onCheckedChange={onChangeChecked}
         id="checkbox"
         className={`${
           isLineThrough ? 'line-through' : ''

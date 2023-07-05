@@ -5,10 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useKeenSlider } from 'keen-slider/react'
-import { programsProps } from '../../../types/programs'
+import { programProps } from '../../../types/program'
 
 interface currentMissionProps {
-  programs: programsProps
+  programs: programProps[]
 }
 
 export default function CurrentMissionsArea({ programs }: currentMissionProps) {

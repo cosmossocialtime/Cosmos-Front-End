@@ -61,6 +61,9 @@ module.exports = {
           800: '#141E59',
           900: '#0B1340',
         },
+        green: {
+          300: '#46CE9D',
+        },
       },
       backgroundImage: {
         bgnave: "url('/images/bgOnboarding.png')",

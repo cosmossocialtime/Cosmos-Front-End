@@ -1,4 +1,4 @@
-export type programsProps = {
+export type programProps = {
   applied: boolean
   createdAt: Date
   description: string
@@ -8,4 +8,4 @@ export type programsProps = {
   startDate: Date
   updatedAt: Date
   weeklyHours: number
-}[]
+}
