@@ -16,7 +16,7 @@ type userExpiration = {
 async function renewToken() {
   const response = await axios({
     method: 'post',
-    url: 'https://cosmos-social.cyclic.app/api/auth/refreshToken',
+    url: 'http://18.222.112.130:8080/api/auth/refreshToken',
     headers: { RefreshToken },
   })
 
@@ -31,8 +31,12 @@ api.interceptors.request.use(async (req) => {
     if (isExpire) {
       const newToken = await renewToken()
       api.defaults.headers.Authorization = `Bearer ${newToken.data.accessToken}`
-      setCookie(undefined, 'cosmos.token', newToken.data.accessToken)
-      setCookie(undefined, 'cosmos.refreshToken', newToken.data.refreshToken)
+      setCookie(undefined, 'cosmos.token', newToken.data.accessToken, {
+        path: '/',
+      })
+      setCookie(undefined, 'cosmos.refreshToken', newToken.data.refreshToken, {
+        path: '/',
+      })
     }
     if (!isExpire) {
       api.defaults.headers.Authorization = `Bearer ${Token}`

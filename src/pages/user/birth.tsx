@@ -9,12 +9,10 @@ import { useForm } from 'react-hook-form'
 import { api } from '../../services/api'
 import Router from 'next/router'
 import { ToastContainer, toast } from 'react-toastify'
-import { parseCookies } from 'nookies'
-import { GetServerSideProps } from 'next'
 
 export default function Nascimento() {
-  const [dayValue, setDayValue] = useState('20')
-  const [monthValue, setMonthValue] = useState('Julho')
+  const [dayValue, setDayValue] = useState('21')
+  const [monthValue, setMonthValue] = useState('06')
   const [yearValue, setYearValue] = useState('1969')
   const { handleSubmit } = useForm()
 
@@ -188,18 +186,4 @@ export default function Nascimento() {
       <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
-}
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.token': token } = parseCookies(ctx)
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/user/login',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
 }

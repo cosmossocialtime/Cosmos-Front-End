@@ -6,31 +6,45 @@ import ModalSatelite from '../../../components/dashboard/satellite-images/modalS
 import { DatasPlanets } from '../../../data/datasPlanets'
 import ModalInstitute from '../../../components/dashboard/satellite-images/modalInstitute'
 import useFetch from '../../../hooks/useFetch'
+import { useEffect, useState } from 'react'
+import { api } from '../../../services/api'
 
 interface User {
   user: {
     id: string
-    socialOrganizationId: string
+    companyId: number
   }
 }
 interface SateliteInfo {
   name: string
   state?: string
   totalColaborator?: number
+  sectors: [
+    {
+      ranking?: number
+      currentlyWorking?: string
+      effectiveness?: string
+    },
+  ]
 }
 
 const SatelitesPage = () => {
-  const { data } = useFetch<User>(
-    'https://cosmos-social.cyclic.app/api/dashboard',
-  )
-  // const socialOrganizationId = data?.user.socialOrganizationId
-  console.log(data)
+  const [company, setCompany] = useState<SateliteInfo>()
+  const { data } = useFetch<User>('http://18.222.112.130:8080/api/dashboard')
+  const socialOrganizationId = data?.user.companyId
 
-  const responseSatelite = useFetch<SateliteInfo>(
-    `https://cosmos-social.cyclic.app/api/socialOrganization/${2}/satellite`,
-  )
+  useEffect(() => {
+    if (socialOrganizationId) {
+      api
+        .get(`/socialOrganization/${socialOrganizationId}/satellite`)
+        .then((response) => setCompany(response.data))
+    }
+  }, [socialOrganizationId])
 
-  console.log(responseSatelite.data)
+  // const responseSatelite = useFetch<SateliteInfo>(
+  //   `http://18.222.112.130:8080/api/socialOrganization/${socialOrganizationId}/satellite`,
+  // )
+  console.log(company?.sectors)
 
   return (
     <div className="flex overflow-x-hidden">
@@ -43,35 +57,28 @@ const SatelitesPage = () => {
         </h3>
         <div>
           <div className="flex justify-center gap-2 lg:grid lg:grid-cols-12 lg:grid-rows-6">
-            {DatasPlanets.map((planet) => {
-              if (planet.id === 6) {
-                return (
-                  <Dialog.Root key={planet.id}>
-                    <div className={planet.style}>
-                      <ItemSatelite className="h-full w-full">
-                        <Image
-                          src={planet.imageUrl}
-                          width={planet.size}
-                          height={planet.size}
-                          alt="Images "
-                        />
-                        <h1>
-                          {responseSatelite
-                            ? responseSatelite.data?.name
-                            : ' ONG'}
-                        </h1>
-                      </ItemSatelite>
-                      <ModalInstitute
-                        name={
-                          responseSatelite
-                            ? responseSatelite.data?.name
-                            : ' ONG'
-                        }
-                      />
-                    </div>
-                  </Dialog.Root>
-                )
+            {DatasPlanets.map((planet, index) => {
+              if (company) {
+                if (planet.id === 5) {
+                  return (
+                    <Dialog.Root key={planet.id}>
+                      <div className={planet.style}>
+                        <ItemSatelite className="h-full w-full">
+                          <Image
+                            src={planet.imageUrl}
+                            width={planet.size}
+                            height={planet.size}
+                            alt="Images "
+                          />
+                          <h1>{company ? company.name : ' ONG'}</h1>
+                        </ItemSatelite>
+                        <ModalInstitute name={company.name} />
+                      </div>
+                    </Dialog.Root>
+                  )
+                }
               }
+
               return (
                 <Dialog.Root key={planet.id}>
                   <div className={planet.style}>
@@ -85,7 +92,13 @@ const SatelitesPage = () => {
                       <h1>{planet.name}</h1>
                     </ItemSatelite>
 
-                    <ModalSatelite name={planet.name} />
+                    <ModalSatelite
+                      name={planet.name}
+                      ranking={company?.sectors[index]?.ranking}
+                      currentlyWorking={
+                        company?.sectors[index]?.currentlyWorking
+                      }
+                    />
                   </div>
                 </Dialog.Root>
               )
