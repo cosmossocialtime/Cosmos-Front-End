@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import { Check, DotsSixVertical, Trash } from 'phosphor-react'
 import { TasksProps } from '../../../../data/objectiveCardsData'
