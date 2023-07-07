@@ -3,7 +3,6 @@ import logo from '../../../public/images/logo.png'
 import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
-import { GetServerSideProps } from 'next'
 import CheckIcon from '../../../public/images/CheckCircle.svg'
 import Router from 'next/router'
 
@@ -76,20 +75,4 @@ export default function CompletedResetPassword() {
       <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.user': email } = parseCookies(ctx)
-
-  if (!email) {
-    return {
-      redirect: {
-        destination: '/user/register',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
 }

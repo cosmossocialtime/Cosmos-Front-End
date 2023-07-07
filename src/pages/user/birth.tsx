@@ -13,8 +13,8 @@ import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 
 export default function Nascimento() {
-  const [dayValue, setDayValue] = useState('20')
-  const [monthValue, setMonthValue] = useState('Julho')
+  const [dayValue, setDayValue] = useState('21')
+  const [monthValue, setMonthValue] = useState('06')
   const [yearValue, setYearValue] = useState('1969')
   const { handleSubmit } = useForm()
 

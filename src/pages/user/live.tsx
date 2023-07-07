@@ -7,8 +7,6 @@ import { useForm } from 'react-hook-form'
 import useFetch from '../../hooks/useFetch'
 import Image from 'next/image'
 import axios from 'axios'
-import { GetServerSideProps } from 'next'
-import { parseCookies } from 'nookies'
 import { api } from '../../services/api'
 import Router from 'next/router'
 import { ToastContainer, toast } from 'react-toastify'
@@ -17,7 +15,6 @@ interface cityProps {
   id: number
   nome: string
 }
-
 interface stateProps extends cityProps {
   sigla: string
 }
@@ -51,7 +48,17 @@ export default function EstadoCidade() {
   }, [stateSubmit, statesOfBrazil])
 
   function handleSubmitStateAndCity() {
-    if (stateSubmit === '' || citySubmit === '') {
+    if (outOfBrazil) {
+      api
+        .patch('/user/onboarding', {
+          country: true,
+        })
+        .then((response) => {
+          if (response.status === 200) Router.push('/user/endpoint')
+        })
+    }
+
+    if (outOfBrazil === false && stateSubmit === '' && citySubmit === '') {
       return toast.error('Selecione o local onde você vive atualmente')
     }
     try {
@@ -201,20 +208,4 @@ export default function EstadoCidade() {
       <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.token': token } = parseCookies(ctx)
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/user/login',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
 }

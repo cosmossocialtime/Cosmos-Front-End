@@ -1,9 +1,18 @@
-import Link from 'next/link'
 import { BackButton } from '../../components/BackButton'
-import { GetServerSideProps } from 'next'
-import { parseCookies } from 'nookies'
+import { api } from '../../services/api'
+import Router from 'next/router'
 
 export default function Decolar() {
+  function handleSubmitCompletedOnboarding() {
+    api
+      .patch('/user/onboarding', {
+        completed: true,
+      })
+      .finally(() => {
+        Router.push('/main-painel/painel')
+      })
+  }
+
   return (
     <>
       <BackButton link="/user/live" />
@@ -14,29 +23,14 @@ export default function Decolar() {
             Viajaremos juntos para aprender e fazer o bem, ajudando organizações
             sociais a brilharem ainda mais!
           </p>
-          <Link
-            href="/main-painel/painel"
+          <button
+            onClick={handleSubmitCompletedOnboarding}
             className="mt-5 w-full rounded-lg bg-violet-500 py-4 text-center text-lg transition-colors hover:bg-violet-600"
           >
             Decolar!
-          </Link>
+          </button>
         </div>
       </main>
     </>
   )
-}
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.token': token } = parseCookies(ctx)
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/user/login',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
 }

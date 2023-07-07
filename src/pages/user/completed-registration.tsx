@@ -4,7 +4,6 @@ import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import { api } from '../../services/api'
 import { ToastContainer, toast } from 'react-toastify'
-import { GetServerSideProps } from 'next'
 import Router from 'next/router'
 
 export default function CompletedRegistration() {
@@ -91,20 +90,4 @@ export default function CompletedRegistration() {
       <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.user': email } = parseCookies(ctx)
-
-  if (!email) {
-    return {
-      redirect: {
-        destination: '/user/register',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
 }

@@ -5,8 +5,6 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { api } from '../../services/api'
 import { ToastContainer, toast } from 'react-toastify'
-import { GetServerSideProps } from 'next'
-import { parseCookies } from 'nookies'
 import Image from 'next/image'
 import debounce from 'lodash.debounce'
 
@@ -128,20 +126,4 @@ export default function CompanyCode() {
       </main>
     </div>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { 'cosmos.token': token } = parseCookies(ctx)
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/user/login',
-        permanent: false,
-      },
-    }
-  }
-  return {
-    props: {},
-  }
 }
