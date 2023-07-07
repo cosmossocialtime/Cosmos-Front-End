@@ -1,4 +1,3 @@
 {
-  "extends": ["next/core-web-vitals", "@rocketseat/eslint-config/react"],
-  "rules": {"exhaustive-deps": false}
+  "extends": ["next/core-web-vitals", "@rocketseat/eslint-config/react"]
 }

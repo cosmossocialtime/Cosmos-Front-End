@@ -2,7 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Cake, Coins, Heart, MapPin, UsersFour, X } from 'phosphor-react'
 
 type NamesPlanet = {
-  name: string
+  name?: string
 }
 
 export default function ModalInstitute({ name }: NamesPlanet) {

@@ -4,10 +4,18 @@ import { useEffect, useState } from 'react'
 
 type NamesPlanet = {
   name: string
+  ranking?: number
+  currentlyWorking?: string
+  effectiveness?: string
 }
 
-export default function ModalSatelite({ name }: NamesPlanet) {
-  const [ratting] = useState(2)
+export default function ModalSatelite({
+  name,
+  ranking = 0,
+  currentlyWorking,
+  effectiveness,
+}: NamesPlanet) {
+  const [ratting] = useState(ranking)
   const [rattingSlider, setRattingSlider] = useState('')
 
   useEffect(() => {
@@ -109,12 +117,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                 </span>
                 Como é feito(a) o(a) {name} na instituição hoje?
               </h2>
-              <p className="ml-12 w-3/4">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Placeat eos amet voluptatibus ipsa, atque dolorem fugit nobis
-                molestias, dolorum animi ipsam neque? Similique dicta assumenda
-                enim, sapiente veniam non ullam!
-              </p>
+              <p className="ml-12 w-3/4">{currentlyWorking}</p>
             </div>
             <div className="mt-10 flex flex-col gap-5">
               <h2 className="flex items-center gap-4 text-xl">
@@ -125,12 +128,7 @@ export default function ModalSatelite({ name }: NamesPlanet) {
                 necessidades da instituição?
                 <br /> O que poderia melhorar?
               </h2>
-              <p className="ml-12 w-3/4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac
-                quam eu ex faucibus ornare non non urna. Cras malesuada et nunc
-                at laoreet. Vivamus odio felis, feugiat In ac quam eu ex
-                faucibus ornare non non urna. Cras malesuada et nunc at laoreet.
-              </p>
+              <p className="ml-12 w-3/4">{effectiveness}</p>
             </div>
           </div>
 

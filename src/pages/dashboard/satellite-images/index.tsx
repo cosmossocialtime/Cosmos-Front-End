@@ -10,27 +10,30 @@ import useFetch from '../../../hooks/useFetch'
 interface User {
   user: {
     id: string
-    socialOrganizationId: string
+    companyId: number
   }
 }
 interface SateliteInfo {
   name: string
   state?: string
   totalColaborator?: number
+  sectors: [
+    {
+      ranking?: number
+      currentlyWorking?: string
+      effectiveness?: string
+    },
+  ]
 }
 
 const SatelitesPage = () => {
-  const { data } = useFetch<User>(
-    'https://cosmos-social.cyclic.app/api/dashboard',
-  )
-  const socialOrganizationId = data?.user.socialOrganizationId
-  console.log(data)
+  const { data } = useFetch<User>('http://18.222.112.130:8080/api/dashboard')
+  const socialOrganizationId = data?.user.companyId
 
   const responseSatelite = useFetch<SateliteInfo>(
-    `https://cosmos-social.cyclic.app/api/socialOrganization/${2}/satellite`,
+    `http://18.222.112.130:8080/api/socialOrganization/${socialOrganizationId}/satellite`,
   )
-
-  console.log(responseSatelite.data)
+  console.log(socialOrganizationId)
 
   return (
     <div className="flex overflow-x-hidden">
@@ -44,7 +47,7 @@ const SatelitesPage = () => {
         <div>
           <div className="flex justify-center gap-2 lg:grid lg:grid-cols-12 lg:grid-rows-6">
             {DatasPlanets.map((planet) => {
-              if (planet.id === 6) {
+              if (planet.id === 5) {
                 return (
                   <Dialog.Root key={planet.id}>
                     <div className={planet.style}>
@@ -57,11 +60,12 @@ const SatelitesPage = () => {
                         />
                         <h1>{responseSatelite.data?.name}</h1>
                       </ItemSatelite>
-                      <ModalInstitute name={planet.name} />
+                      <ModalInstitute name={responseSatelite.data?.name} />
                     </div>
                   </Dialog.Root>
                 )
               }
+
               return (
                 <Dialog.Root key={planet.id}>
                   <div className={planet.style}>
