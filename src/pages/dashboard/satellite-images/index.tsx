@@ -23,7 +23,7 @@ const SatelitesPage = () => {
   const { data } = useFetch<User>(
     'https://cosmos-social.cyclic.app/api/dashboard',
   )
-  const socialOrganizationId = data?.user.socialOrganizationId
+  // const socialOrganizationId = data?.user.socialOrganizationId
   console.log(data)
 
   const responseSatelite = useFetch<SateliteInfo>(
@@ -55,9 +55,19 @@ const SatelitesPage = () => {
                           height={planet.size}
                           alt="Images "
                         />
-                        <h1>{responseSatelite.data?.name}</h1>
+                        <h1>
+                          {responseSatelite
+                            ? responseSatelite.data?.name
+                            : ' ONG'}
+                        </h1>
                       </ItemSatelite>
-                      <ModalInstitute name={planet.name} />
+                      <ModalInstitute
+                        name={
+                          responseSatelite
+                            ? responseSatelite.data?.name
+                            : ' ONG'
+                        }
+                      />
                     </div>
                   </Dialog.Root>
                 )

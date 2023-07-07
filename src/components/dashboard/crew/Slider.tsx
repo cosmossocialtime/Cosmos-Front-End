@@ -16,7 +16,7 @@ export default function Slider() {
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
-      perView: 2,
+      perView: 3,
       spacing: 15,
     },
 
@@ -45,7 +45,7 @@ export default function Slider() {
             >
               <div className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-10 drop-shadow lg:py-20">
                 <Dialog.Trigger>
-                  <div className="flex justify-between pb-12">
+                  <div className="flex justify-between">
                     <div className="flex flex-col">
                       <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
                         {card.Title}
