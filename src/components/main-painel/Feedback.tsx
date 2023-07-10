@@ -15,8 +15,8 @@ export function Feedback() {
     }
     setIsSubmitting(true)
     await api
-      .post('/feedback', {
-        content: feedbackContent,
+      .post('/user/feedback', {
+        feedback: feedbackContent,
       })
       .then((response) => {
         if (response.status === 200) {

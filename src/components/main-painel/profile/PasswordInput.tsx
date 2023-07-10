@@ -76,7 +76,11 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
   }
 
   return (
-    <div className="flex w-full justify-between px-6 py-4">
+    <div
+      className={`${
+        enableForm ? 'border' : 'border-0 border-b'
+      } flex w-full justify-between rounded border-solid border-gray-400 px-4 py-3`}
+    >
       <div className="flex gap-4">
         <Lock size={24} />
         <span>••••••••</span>

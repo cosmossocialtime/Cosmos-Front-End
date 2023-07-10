@@ -1,7 +1,4 @@
-import { CaretDown, Check, Pencil } from 'phosphor-react'
-import * as Select from '@radix-ui/react-select'
-import LabelItem from './LabelItem'
-import Input from './Input'
+import { Pencil } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { userProps } from '../../../types/user'
 import dayjs from 'dayjs'
@@ -10,8 +7,9 @@ import { api } from '../../../services/api'
 import { LocationInput } from './LocationInput'
 import { PasswordInput } from './PasswordInput'
 import { ToastContainer, toast } from 'react-toastify'
-import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { Input } from '../../Input'
+import { Button } from '../../Button'
 
 interface FormUserDataProps {
   userData: userProps
@@ -86,8 +84,8 @@ export default function FormUserData({
   return (
     <div className="mx-auto flex max-w-max flex-1 flex-col justify-between py-8">
       <form className="relative grid w-max grid-cols-2 items-center justify-center gap-x-16 gap-y-5 ">
-        <LabelItem title="Nome Completo" enableForm={enableForm}>
-          <Input
+        <Input.Root ariaLabel="Nome Completo">
+          <Input.Content
             type="text"
             value={newUserData.fullName}
             disabled={!enableForm}
@@ -98,11 +96,11 @@ export default function FormUserData({
               }))
             }}
           />
-        </LabelItem>
-        <LabelItem title="Data de nascimento" enableForm={enableForm}>
-          <DatePicker
+        </Input.Root>
+
+        <Input.Root ariaLabel="Data de nascimento">
+          <Input.Date
             disabled={!enableForm}
-            className="flex-1 py-4 px-6 outline-none"
             selected={dayjs(newUserData.birthdate).toDate()}
             onChange={(date) => {
               date &&
@@ -111,15 +109,11 @@ export default function FormUserData({
                   birthdate: date,
                 }))
             }}
-            dateFormat={'dd/MM/yyyy'}
           />
-        </LabelItem>
+        </Input.Root>
 
-        <LabelItem
-          title="Nome pelo qual gostaria de ser chamando(a)"
-          enableForm={enableForm}
-        >
-          <Input
+        <Input.Root ariaLabel="Nome pelo qual gostaria de ser chamando(a)">
+          <Input.Content
             type="text"
             value={newUserData.byname}
             disabled={!enableForm}
@@ -130,7 +124,8 @@ export default function FormUserData({
               }))
             }}
           />
-        </LabelItem>
+        </Input.Root>
+
         <LocationInput
           cityData={newUserData.city}
           stateData={newUserData.state}
@@ -138,57 +133,23 @@ export default function FormUserData({
           enableForm={enableForm}
         />
 
-        <LabelItem title="Gênero" enableForm={enableForm}>
-          <Select.Root
-            defaultValue={
-              gendersOpt.includes(newUserData.gender)
-                ? newUserData.gender
-                : 'Outro'
-            }
+        <Input.Root ariaLabel="Gênero">
+          <Input.Select
             disabled={!enableForm}
-            onValueChange={(value) => defGender(value)}
-          >
-            <Select.Trigger className="group flex w-full items-center justify-between px-6 py-4">
-              <Select.Value placeholder="Selecione seu gênero" />
-              <Select.Icon>
-                <CaretDown
-                  weight="fill"
-                  className="text-violet-500 group-data-[disabled]:opacity-20"
-                />
-              </Select.Icon>
-            </Select.Trigger>
+            items={gendersOpt}
+            option={newUserData.gender}
+            changeOption={defGender}
+            placeholder="Selecione..."
+          />
+        </Input.Root>
 
-            <Select.Content
-              side="bottom"
-              sideOffset={16}
-              position="popper"
-              className="w-full rounded bg-white p-2 shadow"
-            >
-              <Select.Viewport>
-                {gendersOpt.map((item, index) => (
-                  <Select.Item
-                    key={index}
-                    value={item}
-                    className="flex cursor-pointer justify-between gap-6 rounded-md p-3 text-violet-500 hover:bg-violet-500 hover:text-white"
-                  >
-                    <Select.ItemText>{item}</Select.ItemText>
-                    <Select.ItemIndicator>
-                      <Check size={18} />
-                    </Select.ItemIndicator>
-                  </Select.Item>
-                ))}
-              </Select.Viewport>
-            </Select.Content>
-          </Select.Root>
-        </LabelItem>
-
-        <LabelItem title="Senha" enableForm={enableForm}>
+        <Input.Root ariaLabel="Senha">
           <PasswordInput enableForm={enableForm} />
-        </LabelItem>
+        </Input.Root>
 
         {otherGenderEnable && (
-          <LabelItem title="Digite seu gênero" enableForm={enableForm}>
-            <Input
+          <Input.Root ariaLabel="Digite seu gênero">
+            <Input.Content
               disabled={!enableForm}
               type="text"
               value={newUserData.gender}
@@ -196,7 +157,7 @@ export default function FormUserData({
                 setNewUserData({ ...newUserData, gender: e.target.value })
               }
             />
-          </LabelItem>
+          </Input.Root>
         )}
 
         {!enableForm && (
@@ -217,13 +178,14 @@ export default function FormUserData({
           >
             Cancelar
           </button>
-          <button
+          <Button.Primary className="py-4 px-8" content="Salvar edição" />
+          {/* <button
             className="rounded-lg bg-violet-500 py-4 px-8 font-semibold text-white transition-colors hover:bg-violet-600"
             type="submit"
             onClick={sendNewInfo}
           >
             Salvar edição
-          </button>
+          </button> */}
         </div>
       )}
       <ToastContainer autoClose={2000} limit={3} />
