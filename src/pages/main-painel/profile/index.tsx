@@ -5,12 +5,12 @@ import defaultBannerPerfil from '../../../assets/default-banner-perfil.png'
 
 import { api } from '../../../services/api'
 import { userProps } from '../../../types/user'
-import { Camera, X } from 'phosphor-react'
+import { Camera, Pencil, X } from 'phosphor-react'
 
 import Header from '../../../components/main-painel/Header'
-import UploadImage from '../../../components/main-painel/profile/UploadImage'
+import UploadImage from '../../../components/Crop/UploadImage'
 import FormUserData from '../../../components/main-painel/profile/FormUserData'
-import SettingCropArea from '../../../components/main-painel/profile/SettingCropArea'
+import SettingCropArea from '../../../components/Crop/SettingCropArea'
 import { companyProps } from '../../../types/company'
 
 export default function Perfil() {
@@ -102,7 +102,12 @@ export default function Perfil() {
           alt=""
         />
         <div className="absolute right-5 -bottom-4">
-          <UploadImage updateImgSrc={updateBannerSrc} />
+          <UploadImage updateImgSrc={updateBannerSrc}>
+            <Pencil
+              size={24}
+              className=" h-10 w-10 cursor-pointer rounded-full border-2 border-solid border-white bg-[#5200AB] p-2 text-white"
+            />
+          </UploadImage>
         </div>
 
         <div className="relative top-10 flex h-32 w-32 items-center justify-center rounded-full border-4 border-solid border-white bg-slate-400">
@@ -120,7 +125,12 @@ export default function Perfil() {
           )}
 
           <div className="absolute right-0 -bottom-2 ">
-            <UploadImage updateImgSrc={updateProfileSrc} />
+            <UploadImage updateImgSrc={updateProfileSrc}>
+              <Pencil
+                size={24}
+                className=" h-10 w-10 cursor-pointer rounded-full border-2 border-solid border-white bg-[#5200AB] p-2 text-white"
+              />
+            </UploadImage>
           </div>
 
           <Dialog.Root open={onDialog} onOpenChange={setOnDialog}>
