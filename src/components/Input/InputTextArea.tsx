@@ -8,12 +8,14 @@ interface InputTextAreaProps
 
 export function InputTextArea({ className, ...rest }: InputTextAreaProps) {
   return (
-    <textarea
-      {...rest}
-      className={twMerge(
-        'placeholder:gray-500 flex-1 resize-none rounded border border-solid border-gray-400 p-4',
-        className,
-      )}
-    ></textarea>
+    <div className="rounded border border-solid border-gray-400 p-4 outline-violet-500">
+      <textarea
+        {...rest}
+        className={twMerge(
+          'relative flex-1 resize-none border-none outline-none placeholder:text-gray-500',
+          className,
+        )}
+      />
+    </div>
   )
 }
