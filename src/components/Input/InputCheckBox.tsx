@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge'
 interface CheckInputProps {
   content: string
   checked: boolean
+  disabled?: boolean
   onChangeChecked: (checked: boolean) => void
   isLineThrough?: boolean
   className?: string
@@ -13,6 +14,7 @@ interface CheckInputProps {
 export function InputCheckBox({
   content,
   checked,
+  disabled = false,
   onChangeChecked,
   className,
   isLineThrough = false,
@@ -28,6 +30,7 @@ export function InputCheckBox({
       )}
     >
       <Checkbox.Root
+        disabled={disabled}
         checked={checked}
         onCheckedChange={onChangeChecked}
         id="checkbox"

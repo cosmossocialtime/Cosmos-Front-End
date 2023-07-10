@@ -19,7 +19,7 @@ export function Feedback() {
         feedback: feedbackContent,
       })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
           toast.success('Seu feedback foi enviado! Vamos analiza-lo em breve.')
           setFeedbackContent('')
         }

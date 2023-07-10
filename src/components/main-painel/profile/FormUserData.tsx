@@ -1,5 +1,5 @@
 import { Pencil } from 'phosphor-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { userProps } from '../../../types/user'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Input } from '../../Input'
 import { Button } from '../../Button'
+import { useForm } from 'react-hook-form'
 
 interface FormUserDataProps {
   userData: userProps
@@ -21,41 +22,35 @@ export default function FormUserData({
   userData,
   updateUserData,
 }: FormUserDataProps) {
+  const { register } = useForm()
   const gendersOpt = ['Masculino', 'Feminino', 'Outro']
-  const [otherGenderEnable, setOtherGenderEnable] = useState(false)
+  const [otherGender, setOtherGender] = useState('')
   const [enableForm, setEnableForm] = useState(false)
   const [newUserData, setNewUserData] = useState(userData)
-
-  useEffect(() => {
-    if (!gendersOpt.includes(newUserData.gender)) {
-      setOtherGenderEnable(true)
-    }
-  }, [])
 
   function cancelChanges() {
     setNewUserData(userData)
     setEnableForm(false)
   }
 
-  function handleLocation(state: string, city: string) {
-    setNewUserData({ ...newUserData, city, state })
-  }
-
-  function defGender(gender: string) {
-    if (gender === 'Outro') {
-      setNewUserData({ ...newUserData, gender: '' })
-      setOtherGenderEnable(true)
-      return
-    }
-
-    setOtherGenderEnable(false)
-    setNewUserData({ ...newUserData, gender })
+  function handleLocation(country: boolean, state: string, city: string) {
+    setNewUserData({ ...newUserData, country, state, city })
   }
 
   function sendNewInfo() {
-    const noData = Object.values(newUserData).some((data) => data === '')
-    if (noData) {
-      toast.error('Por favor, preencha todos os campos')
+    const gender =
+      newUserData.gender === 'Outro' ? otherGender : newUserData.gender
+
+    if (
+      !newUserData.fullName ||
+      !newUserData.byname ||
+      !newUserData.birthdate ||
+      !gender ||
+      newUserData.country === null ||
+      (newUserData.country && (!newUserData.state || !newUserData.city)) ||
+      (!newUserData.country && (newUserData.state || newUserData.city))
+    ) {
+      toast.error('Por favor, preencha todos os campos!')
       return
     }
 
@@ -64,7 +59,7 @@ export default function FormUserData({
         fullName: newUserData.fullName,
         byname: newUserData.byname,
         birthdate: newUserData.birthdate,
-        gender: newUserData.gender,
+        gender,
         country: newUserData.country,
         state: newUserData.state,
         city: newUserData.city,
@@ -73,6 +68,7 @@ export default function FormUserData({
         if (response.status === 200) {
           updateUserData(newUserData)
           setEnableForm(false)
+          setNewUserData({ ...newUserData, gender })
           toast.success('Dados atualizados com sucesso!')
         }
       })
@@ -102,6 +98,7 @@ export default function FormUserData({
           <Input.Date
             disabled={!enableForm}
             selected={dayjs(newUserData.birthdate).toDate()}
+            {...register('birthdate')}
             onChange={(date) => {
               date &&
                 setNewUserData((prevState) => ({
@@ -129,6 +126,7 @@ export default function FormUserData({
         <LocationInput
           cityData={newUserData.city}
           stateData={newUserData.state}
+          livesInBrasil={newUserData.country}
           handleLocation={handleLocation}
           enableForm={enableForm}
         />
@@ -138,7 +136,9 @@ export default function FormUserData({
             disabled={!enableForm}
             items={gendersOpt}
             option={newUserData.gender}
-            changeOption={defGender}
+            changeOption={(option) =>
+              setNewUserData({ ...newUserData, gender: option })
+            }
             placeholder="Selecione..."
           />
         </Input.Root>
@@ -147,45 +147,38 @@ export default function FormUserData({
           <PasswordInput enableForm={enableForm} />
         </Input.Root>
 
-        {otherGenderEnable && (
+        {newUserData.gender === 'Outro' && (
           <Input.Root ariaLabel="Digite seu gênero">
             <Input.Content
               disabled={!enableForm}
               type="text"
-              value={newUserData.gender}
-              onChange={(e) =>
-                setNewUserData({ ...newUserData, gender: e.target.value })
-              }
+              value={otherGender}
+              onChange={(e) => setOtherGender(e.target.value)}
             />
           </Input.Root>
         )}
 
         {!enableForm && (
-          <button
-            className="absolute -right-11 top-0 flex max-w-max translate-x-full items-center gap-2 rounded-lg border border-solid border-violet-600 py-3 px-8 text-lg font-semibold text-violet-600 transition-colors hover:bg-violet-600 hover:text-white"
+          <Button.Secondary
+            className="absolute -right-11 top-0 flex max-w-max translate-x-full items-center gap-2 py-3 px-8"
             onClick={() => setEnableForm(true)}
           >
             <Pencil size={22} />
             Editar perfil
-          </button>
+          </Button.Secondary>
         )}
       </form>
       {enableForm && (
-        <div className="flex gap-16 self-end">
+        <div className="mt-16 flex gap-16 self-end">
           <button
             className="rounded-lg py-3 font-semibold text-red-400 transition-colors hover:text-red-500"
             onClick={cancelChanges}
           >
             Cancelar
           </button>
-          <Button.Primary className="py-4 px-8" content="Salvar edição" />
-          {/* <button
-            className="rounded-lg bg-violet-500 py-4 px-8 font-semibold text-white transition-colors hover:bg-violet-600"
-            type="submit"
-            onClick={sendNewInfo}
-          >
+          <Button.Primary className="py-4 px-8" onClick={sendNewInfo}>
             Salvar edição
-          </button> */}
+          </Button.Primary>
         </div>
       )}
       <ToastContainer autoClose={2000} limit={3} />

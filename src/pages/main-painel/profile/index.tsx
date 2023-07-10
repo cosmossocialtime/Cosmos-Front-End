@@ -1,38 +1,35 @@
-import * as Dialog from '@radix-ui/react-dialog'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import defaultBannerPerfil from '../../../assets/default-banner-perfil.png'
 
 import { api } from '../../../services/api'
 import { userProps } from '../../../types/user'
-import { Camera, Pencil, X } from 'phosphor-react'
+import { Camera, Pencil } from 'phosphor-react'
 
 import Header from '../../../components/main-painel/Header'
 import UploadImage from '../../../components/Crop/UploadImage'
 import FormUserData from '../../../components/main-painel/profile/FormUserData'
 import SettingCropArea from '../../../components/Crop/SettingCropArea'
-import { companyProps } from '../../../types/company'
+import { DialogCrop } from '../../../components/Crop/DialogCrop'
 
 export default function Perfil() {
   const [user, setUser] = useState<userProps | null>(null)
-  const [company, setCompany] = useState<companyProps | null>(null)
   const [selectedImgSrc, setSelectedImgSrc] = useState('')
   const [cropType, setCroptType] = useState<'profile' | 'banner'>('profile')
   const [onDialog, setOnDialog] = useState(false)
 
   useEffect(() => {
     api
-      .get('/dashboard')
+      .get('/user')
       .then((response) => {
-        setUser(response.data.user)
-        setCompany(response.data.company)
+        setUser(response.data)
       })
       .catch((error) => {
         console.error(error)
       })
   }, [])
 
-  if (!user || !company) {
+  if (!user) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-zinc-900 text-zinc-50">
         <h1 className="text-lg">Carregando...</h1>
@@ -133,35 +130,24 @@ export default function Perfil() {
             </UploadImage>
           </div>
 
-          <Dialog.Root open={onDialog} onOpenChange={setOnDialog}>
-            <Dialog.Portal>
-              <Dialog.Overlay className="fixed top-0 left-0 z-10 h-screen w-screen bg-black/40" />
-              <Dialog.Content className="fixed top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-gray-800">
-                <Dialog.Close>
-                  <X
-                    size={24}
-                    className=" absolute top-4 right-4 text-gray-100"
-                  />
-                </Dialog.Close>
-                {cropType === 'profile' && (
-                  <SettingCropArea
-                    selectedImgSrc={selectedImgSrc}
-                    handleImg={handleProfileImg}
-                    aspectRatio={1 / 1}
-                    cropShape={'round'}
-                  />
-                )}
-                {cropType === 'banner' && (
-                  <SettingCropArea
-                    selectedImgSrc={selectedImgSrc}
-                    handleImg={handleBannerImg}
-                    aspectRatio={10 / 1}
-                    cropShape={'rect'}
-                  />
-                )}
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog.Root>
+          <DialogCrop onDialog={onDialog} setOnDialog={setOnDialog}>
+            {cropType === 'profile' && (
+              <SettingCropArea
+                selectedImgSrc={selectedImgSrc}
+                handleImg={handleProfileImg}
+                aspectRatio={1 / 1}
+                cropShape={'round'}
+              />
+            )}
+            {cropType === 'banner' && (
+              <SettingCropArea
+                selectedImgSrc={selectedImgSrc}
+                handleImg={handleBannerImg}
+                aspectRatio={10 / 1}
+                cropShape={'rect'}
+              />
+            )}
+          </DialogCrop>
         </div>
 
         <span className="z-[1] text-3xl font-semibold text-white">

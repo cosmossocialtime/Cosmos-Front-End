@@ -14,17 +14,19 @@ interface stateProps extends cityProps {
 interface LocationInputProps {
   cityData: string
   stateData: string
-  handleLocation: (state: string, city: string) => void
+  livesInBrasil: boolean
+  handleLocation: (country: boolean, state: string, city: string) => void
   enableForm: boolean
 }
 
 export function LocationInput({
   cityData,
   stateData,
+  livesInBrasil,
   handleLocation,
   enableForm,
 }: LocationInputProps) {
-  const [liveOutside, setLiveOutside] = useState(false)
+  const liveOutside = !livesInBrasil
   const [city, setCity] = useState<cityProps[]>()
   const { data: statesOfBrazil } = useFetch<stateProps[]>(
     'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome',
@@ -53,7 +55,7 @@ export function LocationInput({
   return (
     <div className="">
       <Input.Root ariaLabel="Localização" className="w-full">
-        {!liveOutside && (
+        {livesInBrasil && (
           <>
             <Input.Select
               className="flex-none rounded-r-none"
@@ -61,7 +63,9 @@ export function LocationInput({
               placeholder="Estado"
               option={stateData}
               items={statesOfBrazil?.map((state) => state.sigla) || []}
-              changeOption={(option) => handleLocation(option, '')}
+              changeOption={(option) =>
+                handleLocation(livesInBrasil, option, '')
+              }
               maxHeightView="13rem"
             />
             <Input.Select
@@ -70,7 +74,9 @@ export function LocationInput({
               placeholder="Cidade"
               option={cityData}
               items={city?.map((city) => city.nome) || []}
-              changeOption={(option) => handleLocation(stateData, option)}
+              changeOption={(option) =>
+                handleLocation(livesInBrasil, stateData, option)
+              }
               maxHeightView="13rem"
             />
           </>
@@ -80,7 +86,8 @@ export function LocationInput({
       <Input.CheckBox
         content="Não moro no Brasil"
         checked={liveOutside}
-        onChangeChecked={setLiveOutside}
+        disabled={!enableForm}
+        onChangeChecked={(checked) => handleLocation(!checked, '', '')}
         className={`${!enableForm && !liveOutside ? 'hidden' : ''} mt-5`}
       />
     </div>

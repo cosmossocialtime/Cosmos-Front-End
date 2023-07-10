@@ -15,7 +15,7 @@ export function SecondaryButton({
     <button
       {...rest}
       className={twMerge(
-        'rounded-lg border-2 border-solid border-violet-600 bg-white text-violet-600 transition-colors hover:bg-violet-600 hover:text-gray-100',
+        'rounded-lg border-2 border-solid border-violet-600 bg-white text-lg font-semibold text-violet-600 transition-colors hover:bg-violet-600 hover:text-gray-100',
         className,
       )}
     >
