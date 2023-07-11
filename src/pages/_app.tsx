@@ -7,7 +7,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 
 import '../lib/dayjs'
 import '../styles/mainTailwind.css'
-import './dashboard/satellite-images/planets.css'
+import './user/dashboard/satellite-images/planets.css'
 import 'keen-slider/keen-slider.min.css'
 
 registerLocale('ptBR', ptBR)

@@ -1,12 +1,14 @@
 import Link from 'next/link'
-import { BackButton } from '../../components/BackButton'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
+import { Button } from '../../../components/Button'
 
 export default function Decolar() {
   return (
     <>
-      <BackButton link="/user/live" />
+      <Link href={'/user/live'}>
+        <Button.ArrowLeft position="top" />
+      </Link>
       <main className="flex h-screen items-center justify-center bg-decolar bg-cover bg-bottom bg-no-repeat text-zinc-50">
         <div className="flex w-fit flex-col items-center gap-5 rounded-2xl bg-black/10 p-16 backdrop-blur-md">
           <h2 className="text-2xl">Tudo pronto para a decolagem!</h2>

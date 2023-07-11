@@ -1,6 +1,5 @@
 import * as Select from '@radix-ui/react-select'
 import * as Checkbox from '@radix-ui/react-checkbox'
-import { BackButton } from '../../components/BackButton'
 import { Check } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -12,6 +11,8 @@ import { parseCookies } from 'nookies'
 import { api } from '../../services/api'
 import Router from 'next/router'
 import { ToastContainer, toast } from 'react-toastify'
+import Link from 'next/link'
+import { Button } from '../../components/Button'
 
 interface cityProps {
   id: number
@@ -69,7 +70,9 @@ export default function EstadoCidade() {
   }
   return (
     <div>
-      <BackButton link="/user/birth" />
+      <Link href={'/user/birth'}>
+        <Button.ArrowLeft position="top" />
+      </Link>
       <main className="flex h-screen w-full items-center bg-little-nave bg-cover bg-no-repeat text-zinc-50">
         <form
           onSubmit={handleSubmit(handleSubmitStateAndCity)}

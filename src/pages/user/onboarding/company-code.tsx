@@ -1,5 +1,4 @@
 import { ChangeEvent, useState } from 'react'
-import { BackButton } from '../../components/BackButton'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -9,6 +8,8 @@ import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import Image from 'next/image'
 import debounce from 'lodash.debounce'
+import Link from 'next/link'
+import { Button } from '../../components/Button'
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty('O código da empresa é obrigatorio'),
@@ -66,7 +67,9 @@ export default function CompanyCode() {
   }
   return (
     <div className="relative">
-      <BackButton link="/user/gender" />
+      <Link href={'/user/gender'}>
+        <Button.ArrowLeft position="top" />
+      </Link>
       <main className="flex h-screen items-center justify-around bg-bgCadastro bg-cover bg-bottom bg-no-repeat ">
         <form
           onSubmit={handleSubmit(submitForm)}

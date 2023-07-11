@@ -1,5 +1,5 @@
-import { Button } from '../../../../../../components/Button'
-import { Header } from '../../../../../../components/adventure/Header'
+import { Button } from '../../../../../components/Button'
+import { Header } from '../../../../../components/adventure/Header'
 import Commander from '../../../../../../../public/images/mission-role/commander.png'
 import Specialist from '../../../../../../../public/images/mission-role/specialist.png'
 import Pilot from '../../../../../../../public/images/mission-role/pilot.png'

@@ -1,6 +1,6 @@
-import { Input } from '../../../../../../components/Input'
-import { BackButton } from '../../../../../../components/adventure/BackButton'
-import { NextButton } from '../../../../../../components/adventure/NextButton'
+import { Input } from '../../../../../components/Input'
+import { BackButton } from '../../../../../components/adventure/BackButton'
+import { NextButton } from '../../../../../components/adventure/NextButton'
 
 export default function AboutYou1() {
   return (

@@ -1,5 +1,5 @@
-import { Button } from '../../../../../../components/Button'
-import { Header } from '../../../../../../components/adventure/Header'
+import { Button } from '../../../../../components/Button'
+import { Header } from '../../../../../components/adventure/Header'
 import AstronautCommander from '../../../../../../../public/images/mission-role/commander.png'
 import Image from 'next/image'
 

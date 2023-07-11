@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { CheckInput } from '../../../../../../components/CheckInput'
-import { Header } from '../../../../../../components/adventure/Header'
-import { BackButton } from '../../../../../../components/adventure/BackButton'
-import { NextButton } from '../../../../../../components/adventure/NextButton'
+import { Header } from '../../../../../components/adventure/Header'
+import { BackButton } from '../../../../../components/adventure/BackButton'
+import { NextButton } from '../../../../../components/adventure/NextButton'
+import { Input } from '../../../../../components/Input'
 
 export default function TermsOfUse() {
   const [isAcceptTerms, setIsAcceptTerms] = useState(false)
@@ -34,12 +34,11 @@ export default function TermsOfUse() {
             </a>
           </p>
         </div>
-
-        <CheckInput
+        <Input.CheckBox
           className="mt-11"
           content="Aceito que minhas respostas sejam compartilhadas"
-          onChangeChecked={setIsAcceptTerms}
           checked={isAcceptTerms}
+          onChangeChecked={setIsAcceptTerms}
         />
       </div>
       <BackButton href="./" />

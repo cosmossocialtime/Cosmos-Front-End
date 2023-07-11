@@ -1,11 +1,11 @@
-import { Header } from '../../../../../../components/adventure/Header'
-import { BackButton } from '../../../../../../components/adventure/BackButton'
-import { NextButton } from '../../../../../../components/adventure/NextButton'
+import { Header } from '../../../../../components/adventure/Header'
+import { BackButton } from '../../../../../components/adventure/BackButton'
+import { NextButton } from '../../../../../components/adventure/NextButton'
 import { PersonalData } from './PersonalData'
 import { ElementType, useEffect, useState } from 'react'
-import { api } from '../../../../../../services/api'
+import { api } from '../../../../../services/api'
 import AboutYou from './AboutYou2'
-import { programProps } from '../../../../../../types/program'
+import { programProps } from '../../../../../types/program'
 
 type stepProps = {
   id: number

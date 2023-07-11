@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Input } from '../../../../../../components/Input'
-import { Header } from '../../../../../../components/adventure/Header'
+import { Input } from '../../../../../components/Input'
+import { Header } from '../../../../../components/adventure/Header'
 import { ToastContainer, toast } from 'react-toastify'
-import { Button } from '../../../../../../components/Button'
+import { Button } from '../../../../../components/Button'
 
 export default function Confirmation() {
   const [selectedAreas, setSelectedAreas] = useState<string[]>([])
