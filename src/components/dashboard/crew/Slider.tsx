@@ -8,6 +8,7 @@ import { useKeenSlider } from 'keen-slider/react'
 import ModalContent from './CreateModal'
 import Modal from './Modal'
 import { cardTripulation } from '../../../data/cardTripulation'
+import useFetch from '../../../hooks/useFetch'
 
 export default function Slider() {
   const [openModal, setOpenModal] = useState(false)
@@ -28,6 +29,10 @@ export default function Slider() {
       setLoaded(true)
     },
   })
+
+  const { data } = useFetch('https://api.cosmossocial.com.br/api/dashboard')
+  console.log(data)
+
   return (
     <div>
       {!openModal && (
