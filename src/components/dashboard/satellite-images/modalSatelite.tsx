@@ -3,7 +3,7 @@ import { X } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 
 type NamesPlanet = {
-  name: string
+  name?: string
   ranking?: number | undefined
   currentlyWorking?: string | undefined
   effectiveness?: string | undefined
@@ -15,7 +15,7 @@ export default function ModalSatelite({
   currentlyWorking,
   effectiveness,
 }: NamesPlanet) {
-  const [ratting] = useState(Number(ranking))
+  const [ratting] = useState(ranking)
   const [working] = useState(currentlyWorking)
   const [effective] = useState(effectiveness)
   const [rattingSlider, setRattingSlider] = useState('')
@@ -37,7 +37,8 @@ export default function ModalSatelite({
       setRattingSlider('before:w-[600px]')
     }
   }, [ratting])
-  console.log(ratting, working, effective)
+  console.log(ratting)
+
   return (
     <>
       <Dialog.Portal>
@@ -48,8 +49,6 @@ export default function ModalSatelite({
             <p className="self-end text-[50px]">{name}</p>
           </Dialog.Title>
           {ratting}
-          {working}
-          {effective}
           <div className="pt-10">
             <div>
               <h2 className="flex items-center gap-4 text-xl">

@@ -19,6 +19,8 @@ interface SateliteInfo {
   name: string
   state?: string
   totalColaborator?: number
+}
+interface SectorProps {
   sectors: [
     {
       ranking?: number
@@ -30,79 +32,58 @@ interface SateliteInfo {
 
 const SatelitesPage = () => {
   const [company, setCompany] = useState<SateliteInfo>()
-  const { data } = useFetch<User>('http://18.222.112.130:8080/api/dashboard')
+  const [sectors, setSectors] = useState<SectorProps>()
+  const { data } = useFetch<User>(
+    'https://api.cosmossocial.com.br/api/dashboard',
+  )
   const socialOrganizationId = data?.user.companyId
 
   useEffect(() => {
     if (socialOrganizationId) {
       api
         .get(`/socialOrganization/${socialOrganizationId}/satellite`)
-        .then((response) => setCompany(response.data))
+        .then((response) => {
+          setCompany(response.data)
+          setSectors(response.data.sectors)
+        })
     }
   }, [socialOrganizationId])
 
-  // const responseSatelite = useFetch<SateliteInfo>(
-  //   `http://18.222.112.130:8080/api/socialOrganization/${socialOrganizationId}/satellite`,
-  // )
-  console.log(company?.sectors)
+  console.log(sectors)
 
   return (
     <div className="flex overflow-x-hidden">
       <SideBar />
-      <div className="flex h-screen w-auto flex-col items-center gap-16 bg-bgsatelites bg-cover bg-center px-20 pt-10 lg:overflow-y-auto">
+      <div className="flex h-screen w-full flex-col items-center gap-16 bg-bgsatelites bg-cover bg-center px-20 pt-10 lg:overflow-y-auto">
         <h3 className="text-center text-2xl font-semibold text-white">
           Clique sobre a Estrela e os planetas para conhecer mais sobre a
           <br />
           instituição que você irá mentorar
         </h3>
-        <div>
-          <div className="flex justify-center gap-2 lg:grid lg:grid-cols-12 lg:grid-rows-6">
-            {DatasPlanets.map((planet, index) => {
-              if (company) {
-                if (planet.id === 5) {
-                  return (
-                    <Dialog.Root key={planet.id}>
-                      <div className={planet.style}>
-                        <ItemSatelite className="h-full w-full">
-                          <Image
-                            src={planet.imageUrl}
-                            width={planet.size}
-                            height={planet.size}
-                            alt="Images "
-                          />
-                          <h1>{company ? company.name : ' ONG'}</h1>
-                        </ItemSatelite>
-                        <ModalInstitute name={company.name} />
-                      </div>
-                    </Dialog.Root>
-                  )
-                }
-              }
-
-              return (
-                <Dialog.Root key={planet.id}>
-                  <div className={planet.style}>
-                    <ItemSatelite className="h-full w-full">
-                      <Image
-                        src={planet.imageUrl}
-                        width={planet.size}
-                        height={planet.size}
-                        alt="Images "
-                      />
-                      <h1>{planet.name}</h1>
-                    </ItemSatelite>
-
-                    <ModalSatelite
-                      name={planet.name}
-                      ranking={company?.sectors[index]?.ranking}
-                      currentlyWorking={
-                        company?.sectors[index]?.currentlyWorking
-                      }
-                    />
-                  </div>
-                </Dialog.Root>
-              )
-            })}
+        <div className="flex w-full justify-around">
+          <div className="flex items-end">
+            <Dialog.Root>
+              <ItemSatelite className="h-32 w-32">
+                <h1>Teste</h1>
+                <ModalSatelite />
+              </ItemSatelite>
+            </Dialog.Root>
+          </div>
+          <div>
+            <Dialog.Root>
+              <ItemSatelite>
+                <h1>Teste</h1>
+                <ModalSatelite name="teste" />
+              </ItemSatelite>
+            </Dialog.Root>
+          </div>
+          <div>
+            <Dialog.Root>
+              <ItemSatelite>
+                <h1>Teste</h1>
+                <ModalSatelite name="teste" />
+              </ItemSatelite>
+            </Dialog.Root>
           </div>
         </div>
       </div>
