@@ -16,8 +16,6 @@ export default function ModalSatelite({
   effectiveness,
 }: NamesPlanet) {
   const [ratting] = useState(ranking)
-  const [working] = useState(currentlyWorking)
-  const [effective] = useState(effectiveness)
   const [rattingSlider, setRattingSlider] = useState('')
 
   useEffect(() => {
@@ -37,7 +35,6 @@ export default function ModalSatelite({
       setRattingSlider('before:w-[600px]')
     }
   }, [ratting])
-  console.log(ratting)
 
   return (
     <>
@@ -48,7 +45,6 @@ export default function ModalSatelite({
           <Dialog.Title>
             <p className="self-end text-[50px]">{name}</p>
           </Dialog.Title>
-          {ratting}
           <div className="pt-10">
             <div>
               <h2 className="flex items-center gap-4 text-xl">
@@ -120,7 +116,7 @@ export default function ModalSatelite({
                 </span>
                 Como é feito(a) o(a) {name} na instituição hoje?
               </h2>
-              <p className="ml-12 w-3/4">{working}</p>
+              <p className="ml-12 w-3/4">{currentlyWorking}</p>
             </div>
             <div className="mt-10 flex flex-col gap-5">
               <h2 className="flex items-center gap-4 text-xl">
@@ -131,7 +127,7 @@ export default function ModalSatelite({
                 necessidades da instituição?
                 <br /> O que poderia melhorar?
               </h2>
-              <p className="ml-12 w-3/4">{effective}</p>
+              <p className="ml-12 w-3/4">{effectiveness}</p>
             </div>
           </div>
 
