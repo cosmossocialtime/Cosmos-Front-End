@@ -1,0 +1,127 @@
+import { z } from 'zod'
+import { Input } from '../../../../../../components/Input'
+import { Controller, useForm } from 'react-hook-form'
+import { api } from '../../../../../../services/api'
+import Router, { useRouter } from 'next/router'
+import { ToastContainer, toast } from 'react-toastify'
+import { Button } from '../../../../../../components/Button'
+import { Header } from '../../../../../../components/adventure/Header'
+import { useEffect, useState } from 'react'
+import { userProps } from '../../../../../../types/user'
+import { Loading } from '../../../../../../components/Loading'
+import Link from 'next/link'
+
+const schema = z.object({
+  reasonToJoin: z
+    .string()
+    .min(100, 'O campo precisa de ao menos 100 caracteres!')
+    .max(300),
+  previousMentorship: z.string(),
+})
+
+type formProps = z.infer<typeof schema>
+
+export default function AboutYou2() {
+  const router = useRouter()
+  const { programId } = router.query
+
+  const [user, setUser] = useState<userProps | null>(null)
+  const { handleSubmit, control } = useForm<formProps>()
+
+  useEffect(() => {
+    if (programId) {
+      api
+        .get(`/user`)
+        .then((response) => {
+          setUser(response.data)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [programId])
+
+  function submitForm({ reasonToJoin, previousMentorship }: formProps) {
+    api
+      .patch('/user/volunteering', {
+        reasonToJoin,
+        previousMentorship,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          Router.push(
+            `/user/adventure/${programId}/subscribe/application-form/mission-role`,
+          )
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        toast.error(
+          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+        )
+      })
+  }
+
+  if (!user) {
+    return <Loading />
+  }
+
+  return (
+    <div>
+      <Header
+        title="Conte um pouco sobre você"
+        subtitle="Formulário de Inscrição"
+      >
+        <span className="mr-24 flex-1 text-end text-violet-600">3/5</span>
+      </Header>
+
+      <form
+        onSubmit={handleSubmit(submitForm)}
+        className="flex flex-col gap-12 py-14 px-32"
+      >
+        <Input.Root ariaLabel="O que motiva você a querer participar desse programa?">
+          <Controller
+            name="reasonToJoin"
+            control={control}
+            render={({ field }) => (
+              <Input.TextArea
+                required
+                className="h-32"
+                placeholder="Descreva aqui"
+                defaultValue={user.reasonToJoin || ''}
+                minChar={100}
+                maxChar={300}
+                text={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </Input.Root>
+
+        <Input.Root ariaLabel="Você já mentorou alguma pessoa ou organização antes? Se sim, como foi esta experiência? (Opcional) ">
+          <Controller
+            name="previousMentorship"
+            control={control}
+            render={({ field }) => (
+              <Input.TextArea
+                className="h-32"
+                defaultValue={user.previousMentorship || ''}
+                placeholder="Descreva aqui"
+                text={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </Input.Root>
+        <Link
+          href={`/user/adventure/${programId}/subscribe/application-form/about-you-1`}
+        >
+          <Button.ArrowLeft type="button" />
+        </Link>
+        <Button.ArrowRight type="submit" />
+      </form>
+
+      <ToastContainer limit={3} />
+    </div>
+  )
+}

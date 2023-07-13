@@ -1,8 +1,13 @@
 import Head from 'next/head'
 import Main from '../../components/Main'
-import { UserRecoveryForm } from '../../components/Recovery/RecoveryForm'
-import { GetServerSideProps } from 'next'
-import { parseCookies } from 'nookies'
+// import { UserRecoveryForm } from '../../components/Recovery/RecoveryForm'
+// import { GetServerSideProps } from 'next'
+// import { parseCookies } from 'nookies'
+import { ToastContainer, toast } from 'react-toastify'
+import Link from 'next/link'
+import { api } from '../../services/api'
+import { FormEvent, useState } from 'react'
+import { setCookie } from 'nookies'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -66,7 +71,7 @@ export default function ForgotPassword() {
           </span>
 
           <div>
-            <ToastContainer></ToastContainer>
+            <ToastContainer />
           </div>
         </main>
       </div>

@@ -48,7 +48,7 @@ export function InputSelect({
           side="bottom"
           sideOffset={16}
           position="popper"
-          className="w-full rounded bg-white p-2"
+          className="w-full rounded bg-white p-2 shadow-xl"
         >
           <Select.Viewport style={{ maxHeight: maxHeightView }}>
             {items.map((item, key) => (

@@ -1,39 +1,29 @@
-import { ArrowLeft, Calendar, Check, Clock } from 'phosphor-react'
-import FormatText from '../../../../utils/FormatText'
+import { Calendar, Check, Clock } from 'phosphor-react'
+import FormatText from '../../../../../utils/FormatText'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Header } from '../../../../components/adventure/Header'
-import { api } from '../../../../services/api'
+import { Header } from '../../../../../components/adventure/Header'
+import { api } from '../../../../../services/api'
 import { useRouter } from 'next/router'
-import { Loading } from '../../../../components/Loading'
+import { Loading } from '../../../../../components/Loading'
 import dayjs from 'dayjs'
-import { programProps } from '../../../../types/program'
+import { programProps } from '../../../../../types/program'
+import { Button } from '../../../../../components/Button'
 
 export default function Adventure() {
   const [program, setProgram] = useState<programProps | null>(null)
-  const [programNotFound, setProgramNotFound] = useState(false)
-  const [isRegistered, setIsRegistered] = useState(false)
   const router = useRouter()
   const { programId } = router.query
 
   useEffect(() => {
     if (programId) {
       api
-        .get('/dashboard')
+        .get(`/program/${programId}`)
         .then((response) => {
-          const programFound = response.data.programs.find(
-            (program: programProps) => String(program.id) === programId,
-          )
-
-          if (programFound) {
-            setProgram(programFound)
-            setIsRegistered(programFound.applied)
-          } else {
-            setProgramNotFound(true)
-          }
+          setProgram(response.data)
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
         })
     }
   }, [programId])
@@ -47,19 +37,6 @@ export default function Adventure() {
   Serão realizados encontros semanais de mentoria, em que a equipe de mentores aconselhará os líderes da organização mentorada em temas relacionados à gestão, como finanças, marketing, recursos humanos, estratégia, entre outros.
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque cursus ornare dignissim. Mauris et consectetur nibh. Sed nec sem ante. Phasellus faucibus scelerisque eleifend. Pellentesque sapien sem, elementum et blandit id, aliquet id ex. Para se inscrever, clique no botão a seguir.
   `
-  if (programNotFound) {
-    return (
-      <div className="flex h-screen w-screen flex-col items-center justify-center gap-3 bg-zinc-900 text-gray-100">
-        <h1 className="text-2xl">Programa não encontrado</h1>
-        <Link
-          href={'/main-painel/painel'}
-          className="rounded bg-violet-400 px-4 py-3 hover:bg-violet-500"
-        >
-          Voltar ao painel
-        </Link>
-      </div>
-    )
-  }
 
   if (!program) {
     return <Loading />
@@ -88,14 +65,7 @@ export default function Adventure() {
       </div>
 
       <div className="relative mb-14 flex justify-center">
-        <Link href="/main-painel/painel">
-          <ArrowLeft
-            size={64}
-            className="absolute left-36 cursor-pointer rounded-full bg-gray-400/10 p-4 text-blue-800 transition-colors hover:bg-violet-600 hover:text-white"
-          />
-        </Link>
-
-        {isRegistered ? (
+        {program.applied ? (
           <div className="flex items-center gap-4 rounded border border-solid border-gray-300 p-4">
             <Check
               size={56}
@@ -112,13 +82,22 @@ export default function Adventure() {
             </div>
           </div>
         ) : (
-          <Link href={`${programId}/TermsOfUse`}>
-            <button className="rounded-lg bg-violet-500 px-20 py-4 text-lg font-semibold text-white transition-colors hover:bg-violet-600">
+          <Link
+            href={{
+              pathname: 'subscribe/terms-of-use',
+              query: { programId },
+            }}
+          >
+            <Button.Primary className="px-20 py-4">
               Embarcar nessa jornada
-            </button>
+            </Button.Primary>
           </Link>
         )}
       </div>
+
+      <Link href="/user/main-painel/painel">
+        <Button.ArrowLeft />
+      </Link>
     </div>
   )
 }

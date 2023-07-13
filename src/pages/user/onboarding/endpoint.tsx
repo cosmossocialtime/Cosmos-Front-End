@@ -6,7 +6,7 @@ import { Button } from '../../../components/Button'
 export default function Decolar() {
   return (
     <>
-      <Link href={'/user/live'}>
+      <Link href={'/user/onboarding/live'}>
         <Button.ArrowLeft position="top" />
       </Link>
       <main className="flex h-screen items-center justify-center bg-decolar bg-cover bg-bottom bg-no-repeat text-zinc-50">
@@ -17,7 +17,7 @@ export default function Decolar() {
             sociais a brilharem ainda mais!
           </p>
           <Link
-            href="/main-painel/painel"
+            href="/user/main-painel/painel"
             className="mt-5 w-full rounded-lg bg-violet-500 py-4 text-center text-lg transition-colors hover:bg-violet-600"
           >
             Decolar!

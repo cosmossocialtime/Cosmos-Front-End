@@ -3,16 +3,16 @@ import * as Checkbox from '@radix-ui/react-checkbox'
 import { Check } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import useFetch from '../../hooks/useFetch'
+import useFetch from '../../../hooks/useFetch'
 import Image from 'next/image'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import { api } from '../../services/api'
+import { api } from '../../../services/api'
 import Router from 'next/router'
 import { ToastContainer, toast } from 'react-toastify'
 import Link from 'next/link'
-import { Button } from '../../components/Button'
+import { Button } from '../../../components/Button'
 
 interface cityProps {
   id: number
@@ -62,7 +62,7 @@ export default function EstadoCidade() {
           city: citySubmit,
         })
         .then((response) => {
-          if (response.status === 200) Router.push('/user/endpoint')
+          if (response.status === 200) Router.push('/user/onboarding/endpoint')
         })
     } catch (error: any) {
       if (error.response.status === 401) return toast.error('Sem autorização')
@@ -70,7 +70,7 @@ export default function EstadoCidade() {
   }
   return (
     <div>
-      <Link href={'/user/birth'}>
+      <Link href={'/user/onboarding/birth'}>
         <Button.ArrowLeft position="top" />
       </Link>
       <main className="flex h-screen w-full items-center bg-little-nave bg-cover bg-no-repeat text-zinc-50">

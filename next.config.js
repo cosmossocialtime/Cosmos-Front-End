@@ -6,7 +6,7 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    domains: ['cyclic-wild-red-clam-tie-eu-west-3.s3.eu-west-3.amazonaws.com'],
+    domains: ['cosmos-social-bucket.s3.us-east-2.amazonaws.com'],
   },
 }
 

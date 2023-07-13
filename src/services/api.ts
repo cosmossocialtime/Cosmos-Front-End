@@ -16,7 +16,7 @@ type userExpiration = {
 async function renewToken() {
   const response = await axios({
     method: 'post',
-    url: 'https://cosmos-social.cyclic.app/api/auth/refreshToken',
+    url: 'https://api.cosmossocial.com.br/api/auth/refreshToken',
     headers: { RefreshToken },
   })
 

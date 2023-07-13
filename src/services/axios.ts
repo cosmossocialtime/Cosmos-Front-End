@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { parseCookies } from 'nookies'
 
-const BASE_URL = 'https://cosmos-social.cyclic.app/api'
+const BASE_URL = 'https://api.cosmossocial.com.br/api'
 
 export function getApiClient(ctx?: any) {
   const { 'cosmos.token': token } = parseCookies(ctx)

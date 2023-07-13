@@ -1,15 +1,39 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../../../../../components/adventure/Header'
-import { BackButton } from '../../../../../components/adventure/BackButton'
-import { NextButton } from '../../../../../components/adventure/NextButton'
 import { Input } from '../../../../../components/Input'
+import Link from 'next/link'
+import { Button } from '../../../../../components/Button'
+import { useRouter } from 'next/router'
+import { api } from '../../../../../services/api'
+import { Loading } from '../../../../../components/Loading'
 
 export default function TermsOfUse() {
   const [isAcceptTerms, setIsAcceptTerms] = useState(false)
+  const [programTitle, setProgramTitle] = useState('')
+
+  const router = useRouter()
+  const { programId } = router.query
+
+  useEffect(() => {
+    if (programId) {
+      api
+        .get(`/program/${programId}`)
+        .then((response) => {
+          setProgramTitle(response.data.name)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [programId])
+
+  if (!programTitle) {
+    return <Loading />
+  }
 
   return (
     <div>
-      <Header title="Vo colocar dps" />
+      <Header title={programTitle} subtitle="Formulário de Inscrição" />
       <div className="py-16 px-44">
         <h2 className="mb-14 text-center text-2xl font-semibold text-gray-800">
           Coloque seu capacete, ajuste seu traje e se prepare para uma aventura!
@@ -29,7 +53,7 @@ export default function TermsOfUse() {
           <p>
             Para mais informações sobre como as suas informações serão tratadas,
             acesse o{' '}
-            <a href="" className="font-semibold text-blue-400">
+            <a href="" className="font-semibold text-blue-400 hover:underline">
               Termo de Consentimento ao Tratamento de Dados.
             </a>
           </p>
@@ -41,8 +65,15 @@ export default function TermsOfUse() {
           onChangeChecked={setIsAcceptTerms}
         />
       </div>
-      <BackButton href="./" />
-      <NextButton href="application-form" disabled={!isAcceptTerms} />
+      <Link href={`/user/adventure/${programId}/subscribe`}>
+        <Button.ArrowLeft />
+      </Link>
+      <Link
+        href={{ pathname: 'application-form', query: { programId } }}
+        className={`${!isAcceptTerms ? 'pointer-events-none' : ''}`}
+      >
+        <Button.ArrowRight />
+      </Link>
     </div>
   )
 }

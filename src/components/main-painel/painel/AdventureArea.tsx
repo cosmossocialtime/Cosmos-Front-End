@@ -23,7 +23,7 @@ export default function AdventureArea({ programs }: AdventureAreaProps) {
           </p>
         ) : (
           programs.map((program, key) => (
-            <Link key={key} href={`/user/adventure/${program.id}`}>
+            <Link key={key} href={`/user/adventure/${program.id}/subscribe`}>
               <div
                 key={key}
                 className="mt-4 flex items-center rounded-lg bg-[#151B36] px-6 py-5"

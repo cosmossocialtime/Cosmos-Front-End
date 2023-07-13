@@ -1,15 +1,16 @@
-import Header from '../../../components/main-painel/Header'
-
-import PerfilArea from '../../../components/main-painel/painel/PerfilArea'
-import CurrentAchievement from '../../../components/main-painel/painel/CurrentAchievement'
-import CurrentMissionsArea from '../../../components/main-painel/painel/CurrentMissionsArea'
-import AdventureArea from '../../../components/main-painel/painel/AdventureArea'
-import AchievementsArea from '../../../components/main-painel/painel/AchievementsArea'
-import { api } from '../../../services/api'
 import { useEffect, useState } from 'react'
-import { userProps } from '../../../types/user'
-import { programProps } from '../../../types/program'
-import { achievementsProps } from '../../../types/achievements'
+import { api } from '../../../../services/api'
+
+import { userProps } from '../../../../types/user'
+import { achievementsProps } from '../../../../types/achievements'
+import { programProps } from '../../../../types/program'
+
+import Header from '../../../../components/main-painel/Header'
+import CurrentAchievement from '../../../../components/main-painel/painel/CurrentAchievement'
+import CurrentMissionsArea from '../../../../components/main-painel/painel/CurrentMissionsArea'
+import AdventureArea from '../../../../components/main-painel/painel/AdventureArea'
+import PerfilArea from '../../../../components/main-painel/painel/PerfilArea'
+import AchievementsArea from '../../../../components/main-painel/painel/AchievementsArea'
 
 export default function Painel() {
   const [user, setUser] = useState<userProps | null>(null)

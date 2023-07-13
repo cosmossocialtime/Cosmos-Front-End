@@ -21,7 +21,6 @@ export function InputCheckBox({
 }: CheckInputProps) {
   return (
     <label
-      htmlFor="checkbox"
       className={twMerge(
         ` ${
           isLineThrough && checked ? 'text-gray-400 line-through' : ''
@@ -33,7 +32,6 @@ export function InputCheckBox({
         disabled={disabled}
         checked={checked}
         onCheckedChange={onChangeChecked}
-        id="checkbox"
         className={`flex h-6 w-6 items-center gap-2 rounded border border-solid border-gray-400 bg-gray-300/20 data-[state=checked]:border-none data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-blue-300 data-[state=checked]:to-violet-400`}
       >
         <Checkbox.Indicator>

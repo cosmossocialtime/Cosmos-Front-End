@@ -107,7 +107,7 @@ export default function GenerateBanner() {
         Continuar
       </Button.Primary>
 
-      <Link href={`/user/adventure/onboarding/${programId}`}>
+      <Link href={`/user/adventure/${programId}/onboarding`}>
         <Button.ArrowLeft
           position="center"
           className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"

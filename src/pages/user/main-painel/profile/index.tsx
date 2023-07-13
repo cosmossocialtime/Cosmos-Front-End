@@ -1,16 +1,16 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import defaultBannerPerfil from '../../../assets/default-banner-perfil.png'
+import defaultBannerPerfil from '../../../../assets/default-banner-perfil.png'
 
-import { api } from '../../../services/api'
-import { userProps } from '../../../types/user'
+import { api } from '../../../../services/api'
+import { userProps } from '../../../../types/user'
 import { Camera, Pencil } from 'phosphor-react'
 
-import Header from '../../../components/main-painel/Header'
-import UploadImage from '../../../components/Crop/UploadImage'
-import FormUserData from '../../../components/main-painel/profile/FormUserData'
-import SettingCropArea from '../../../components/Crop/SettingCropArea'
-import { DialogCrop } from '../../../components/Crop/DialogCrop'
+import Header from '../../../../components/main-painel/Header'
+import UploadImage from '../../../../components/Crop/UploadImage'
+import FormUserData from '../../../../components/main-painel/profile/FormUserData'
+import SettingCropArea from '../../../../components/Crop/SettingCropArea'
+import { DialogCrop } from '../../../../components/Crop/DialogCrop'
 
 export default function Perfil() {
   const [user, setUser] = useState<userProps | null>(null)
@@ -83,7 +83,6 @@ export default function Perfil() {
 
     setOnDialog(false)
   }
-
   return (
     <div className="flex h-screen flex-col">
       <Header />

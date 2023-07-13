@@ -5,13 +5,13 @@ import { useState } from 'react'
 import dayjs from 'dayjs'
 
 import { useForm } from 'react-hook-form'
-import { api } from '../../services/api'
+import { api } from '../../../services/api'
 import Router from 'next/router'
 import { ToastContainer, toast } from 'react-toastify'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
-import { Button } from '../../components/Button'
+import { Button } from '../../../components/Button'
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState('20')
@@ -40,7 +40,7 @@ export default function Nascimento() {
           })
           .then((response) => {
             if (response.status === 200) {
-              Router.push('/user/live')
+              Router.push('/user/onboarding/live')
             }
           })
       } catch (error: any) {
@@ -50,7 +50,7 @@ export default function Nascimento() {
   }
   return (
     <div>
-      <Link href={'/user/company-code'}>
+      <Link href={'/user/onboarding/company-code'}>
         <Button.ArrowLeft position="top" />
       </Link>
       <main className="flex h-screen w-full items-center justify-center bg-bgTerra bg-cover bg-no-repeat">

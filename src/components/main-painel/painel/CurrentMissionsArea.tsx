@@ -57,7 +57,7 @@ export default function CurrentMissionsArea({ programs }: currentMissionProps) {
                     <p className="mb-6 text-gray-200">{program.description}</p>
                     <Link
                       className="block max-w-max rounded-lg bg-violet-400 py-4 px-24 text-lg font-semibold text-white transition-colors hover:bg-violet-600"
-                      href={'/dashboard/mission-painel'}
+                      href={`/user/adventure/${program.id}/dashboard/mission-painel`}
                     >
                       Vamos lá!
                     </Link>

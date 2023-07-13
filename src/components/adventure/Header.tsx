@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { X } from 'phosphor-react'
 import { ReactNode } from 'react'
 
@@ -15,7 +16,12 @@ export function Header({ title, subtitle, children }: HeaderProps) {
         <h1 className="text-3xl font-semibold text-gray-600">{title}</h1>
       </div>
       {children}
-      <X size={24} className="absolute right-20 cursor-pointer" />
+      <Link
+        href={'/user/main-painel/painel'}
+        className="absolute right-20 cursor-pointer"
+      >
+        <X size={24} />
+      </Link>
     </header>
   )
 }

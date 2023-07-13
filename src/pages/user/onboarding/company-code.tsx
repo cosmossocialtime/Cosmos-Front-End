@@ -2,14 +2,14 @@ import { ChangeEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { api } from '../../services/api'
+import { api } from '../../../services/api'
 import { ToastContainer, toast } from 'react-toastify'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import Image from 'next/image'
 import debounce from 'lodash.debounce'
 import Link from 'next/link'
-import { Button } from '../../components/Button'
+import { Button } from '../../../components/Button'
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty('O código da empresa é obrigatorio'),
@@ -57,7 +57,7 @@ export default function CompanyCode() {
       })
       .then((response) => {
         if (response.status === 200) {
-          router.push('/user/birth')
+          router.push('/user/onboarding/birth')
         }
       })
       .catch((error) => {
@@ -67,7 +67,7 @@ export default function CompanyCode() {
   }
   return (
     <div className="relative">
-      <Link href={'/user/gender'}>
+      <Link href={'/user/onboarding/gender'}>
         <Button.ArrowLeft position="top" />
       </Link>
       <main className="flex h-screen items-center justify-around bg-bgCadastro bg-cover bg-bottom bg-no-repeat ">

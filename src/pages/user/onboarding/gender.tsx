@@ -5,12 +5,12 @@ import Router from 'next/router'
 import { useState } from 'react'
 import { CaretRight } from 'phosphor-react'
 
-import { api } from '../../services/api'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import { ToastContainer, toast } from 'react-toastify'
 import Link from 'next/link'
-import { Button } from '../../components/Button'
+import { Button } from '../../../components/Button'
+import { api } from '../../../services/api'
 
 const schemaGender = z.object({
   gender: z.string().nonempty('Por favor selecione o seu gênero'),
@@ -32,13 +32,13 @@ export default function Genero() {
       api.patch('/user/onboarding', {
         gender,
       })
-      Router.push('/user/company-code')
+      Router.push('/user/onboarding/company-code')
     }
   }
 
   return (
     <div>
-      <Link href={'/user/start'}>
+      <Link href={'/user/onboarding/start'}>
         <Button.ArrowLeft position="top" />
       </Link>
       <main className="flex h-screen items-center justify-around bg-bgCadastro bg-cover bg-no-repeat">
