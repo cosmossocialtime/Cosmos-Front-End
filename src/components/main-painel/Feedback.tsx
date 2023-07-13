@@ -4,7 +4,11 @@ import { useState } from 'react'
 import { api } from '../../services/api'
 import { toast } from 'react-toastify'
 
-export function Feedback() {
+interface FeedbackProps {
+  closeFeedback: () => void
+}
+
+export function Feedback({ closeFeedback }: FeedbackProps) {
   const [feedbackContent, setFeedbackContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -20,8 +24,8 @@ export function Feedback() {
       })
       .then((response) => {
         if (response.status === 201) {
-          toast.success('Seu feedback foi enviado! Vamos analiza-lo em breve.')
-          setFeedbackContent('')
+          toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
+          closeFeedback()
         }
       })
       .catch((error) => {

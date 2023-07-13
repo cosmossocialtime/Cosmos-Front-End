@@ -102,7 +102,7 @@ export default function Menu() {
 
       <Dialog.Root open={onFeedback} onOpenChange={setOnFeedback}>
         <Dialog.Trigger></Dialog.Trigger>
-        <Feedback />
+        <Feedback closeFeedback={() => setOnFeedback(false)} />
       </Dialog.Root>
     </div>
   )
