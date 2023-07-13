@@ -103,9 +103,11 @@ export default function GenerateBanner() {
         </div>
       </div>
 
-      <Button.Primary className="absolute bottom-7 left-1/2 -translate-x-1/2 bg-gray-100/10 px-[7.5rem] py-4 backdrop-blur-[20px] hover:bg-blue-700">
-        Continuar
-      </Button.Primary>
+      <Link href={`/user/adventure/${programId}/onboarding/your-role`}>
+        <Button.Primary className="absolute bottom-7 left-1/2 -translate-x-1/2 bg-gray-100/10 px-[7.5rem] py-4 backdrop-blur-[20px] hover:bg-blue-700">
+          Continuar
+        </Button.Primary>
+      </Link>
 
       <Link href={`/user/adventure/${programId}/onboarding`}>
         <Button.ArrowLeft
@@ -113,10 +115,12 @@ export default function GenerateBanner() {
           className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
         />
       </Link>
-      <Button.ArrowRight
-        position="center"
-        className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
-      />
+      <Link href={`/user/adventure/${programId}/onboarding/your-role`}>
+        <Button.ArrowRight
+          position="center"
+          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+        />
+      </Link>
     </div>
   )
 }

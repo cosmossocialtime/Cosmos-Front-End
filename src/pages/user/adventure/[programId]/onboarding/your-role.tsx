@@ -1,8 +1,13 @@
 import { Button } from '../../../../../components/Button'
 import LogoCosmos from '../../../../../../public/images/logoCosmosBranco.svg'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 export default function YourRole() {
+  const router = useRouter()
+  const { programId } = router.query
+
   return (
     <div className="h-screen w-screen bg-bgAstronautaDeFrente bg-cover bg-center">
       <Image
@@ -18,19 +23,25 @@ export default function YourRole() {
           realizadas.
         </p>
 
-        <Button.Primary className="mt-8 py-3 px-28">
-          Aquecer os motores
-        </Button.Primary>
+        <Link href={`/user/adventure/${programId}/onboarding/take-off`}>
+          <Button.Primary className="mt-8 py-3 px-28">
+            Aquecer os motores
+          </Button.Primary>
+        </Link>
       </div>
 
-      <Button.ArrowLeft
-        position="center"
-        className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
-      />
-      <Button.ArrowRight
-        position="center"
-        className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
-      />
+      <Link href={`/user/adventure/${programId}/onboarding/generate-banner`}>
+        <Button.ArrowLeft
+          position="center"
+          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+        />
+      </Link>
+      <Link href={`/user/adventure/${programId}/onboarding/take-off`}>
+        <Button.ArrowRight
+          position="center"
+          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+        />
+      </Link>
     </div>
   )
 }

@@ -23,9 +23,11 @@ export default function AdventuresOnboarding() {
           você está começando!
         </p>
 
-        <Button.Primary className="py-4 px-20">
-          <Link href={`${programId}/generateBanner`}>Conhecer jornada</Link>
-        </Button.Primary>
+        <Link href={`/user/adventure/${programId}/onboarding/generate-banner`}>
+          <Button.Primary className="py-4 px-20">
+            Conhecer jornada
+          </Button.Primary>
+        </Link>
       </div>
     </div>
   )
