@@ -11,27 +11,30 @@ import Main from '../../components/Main'
 import * as HoverCard from '@radix-ui/react-hover-card'
 import { parseCookies } from 'nookies'
 
-const schema = z.object({
-  email: z
-    .string()
-    .nonempty('O campo e-mail é obrigatório')
-    .email('O formato do email esta incorreto'),
-  password: z
-    .string()
-    .nonempty('O campo senha é obrigatório')
-    .min(
-      8,
-      'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
-    )
-    .regex(
-      /[A-Z]/,
-      'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
-    )
-    .regex(
-      /\d/,
-      'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
-    ),
-})
+const schema = z
+  .object({
+    password: z
+      .string()
+      .nonempty('O campo senha é obrigatório')
+      .min(
+        8,
+        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
+      )
+      .regex(
+        /[A-Z]/,
+        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
+      )
+      .regex(
+        /\d/,
+        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((fields) => fields.password === fields.confirmPassword, {
+    message: 'As senhas não são iguais',
+    path: ['confirmPassword'],
+  })
+
 type formProps = z.infer<typeof schema>
 
 export default function ResetPassword() {
