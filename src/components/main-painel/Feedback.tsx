@@ -24,6 +24,7 @@ export function Feedback({ closeFeedback }: FeedbackProps) {
       })
       .then((response) => {
         if (response.status === 201) {
+          setFeedbackContent('')
           toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
           closeFeedback()
         }
