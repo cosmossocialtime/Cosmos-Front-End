@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import Cropper, { Area, Point } from 'react-easy-crop'
 import CropImage from './CropImage'
+import { Button } from '../Button'
 
 interface SettingCropAreaProps {
   selectedImgSrc: string
@@ -54,12 +55,9 @@ export default function SettingCropArea({
         />
       </div>
 
-      <button
-        className="rounded bg-violet-400 p-4 text-white transition-colors hover:bg-violet-600"
-        onClick={() => cropImg()}
-      >
+      <Button.Primary className="p-4 text-base" onClick={() => cropImg()}>
         Cortar imagem
-      </button>
+      </Button.Primary>
     </div>
   )
 }
