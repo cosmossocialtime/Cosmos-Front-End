@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Input } from '../../../../../../components/Input'
 import { Header } from '../../../../../../components/adventure/Header'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { Button } from '../../../../../../components/Button'
 import { api } from '../../../../../../services/api'
 import Router, { useRouter } from 'next/router'
@@ -103,8 +103,6 @@ export default function Confirmation() {
       >
         <Button.ArrowLeft />
       </Link>
-
-      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }

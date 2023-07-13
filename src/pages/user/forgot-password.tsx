@@ -3,7 +3,7 @@ import Main from '../../components/Main'
 // import { UserRecoveryForm } from '../../components/Recovery/RecoveryForm'
 // import { GetServerSideProps } from 'next'
 // import { parseCookies } from 'nookies'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { api } from '../../services/api'
 import { FormEvent, useState } from 'react'
@@ -71,9 +71,7 @@ export default function ForgotPassword() {
             </strong>
           </span>
 
-          <div>
-            <ToastContainer />
-          </div>
+          <div></div>
         </main>
       </div>
     </div>

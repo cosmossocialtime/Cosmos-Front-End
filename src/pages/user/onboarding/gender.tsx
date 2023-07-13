@@ -7,7 +7,7 @@ import { CaretRight } from 'phosphor-react'
 
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
 import { api } from '../../../services/api'
@@ -105,7 +105,6 @@ export default function Genero() {
           )}
         </form>
       </main>
-      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }

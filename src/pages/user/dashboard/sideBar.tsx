@@ -18,37 +18,37 @@ export default function SideBar() {
   const SideBarItems = [
     {
       id: 1,
-      route: '/dashboard/mission-painel',
+      route: '/user/dashboard/mission-painel',
       name: 'Painel da Missão',
       icon: <HouseLine />,
     },
     {
       id: 2,
-      route: '/dashboard/log-book',
+      route: '/user/dashboard/log-book',
       name: 'Diário de Bordo',
       icon: <File />,
     },
     {
       id: 3,
-      route: '/dashboard/satellite-images',
+      route: '/user/dashboard/satellite-images',
       name: 'Imagens de Satétile',
       icon: <Star />,
     },
     {
       id: 4,
-      route: '/dashboard/events-calendar',
+      route: '/user/dashboard/events-calendar',
       name: 'Calendário de Eventos',
       icon: <Calendar />,
     },
     {
       id: 6,
-      route: '/dashboard/navigation-map',
+      route: '/user/dashboard/navigation-map',
       name: 'Mapa de Navegação',
       icon: <MapTrifold />,
     },
     {
       id: 7,
-      route: '/dashboard/crew',
+      route: '/user/dashboard/crew',
       name: 'Tripulação',
       icon: <UsersThree />,
     },

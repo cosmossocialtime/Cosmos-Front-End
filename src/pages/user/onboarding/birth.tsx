@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import { useForm } from 'react-hook-form'
 import { api } from '../../../services/api'
 import Router from 'next/router'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
@@ -188,7 +188,6 @@ export default function Nascimento() {
           </button>
         </form>
       </main>
-      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }

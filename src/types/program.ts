@@ -1,4 +1,5 @@
 export type programProps = {
+  companyName: string
   applied: boolean
   createdAt: Date
   description: string

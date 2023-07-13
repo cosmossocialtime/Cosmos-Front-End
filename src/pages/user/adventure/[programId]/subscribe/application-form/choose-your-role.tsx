@@ -8,7 +8,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
 import { api } from '../../../../../../services/api'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 type crew = {
   id: number
@@ -129,8 +129,6 @@ export default function ChooseYourRole() {
       >
         <Button.ArrowLeft />
       </Link>
-
-      <ToastContainer limit={3} />
     </div>
   )
 }

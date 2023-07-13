@@ -9,7 +9,7 @@ import Router, { useRouter } from 'next/router'
 import { userProps } from '../../../../../../types/user'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 const schema = z.object({
   professionalExperience: z.string(),
@@ -172,7 +172,7 @@ export default function ApplicationForm() {
                 type="text"
                 value={field.value}
                 onChange={field.onChange}
-                placeholder="Cargo"
+                placeholder="Setor"
                 className="w-1/2"
               />
             )}
@@ -205,7 +205,7 @@ export default function ApplicationForm() {
                 type="text"
                 value={field.value}
                 onChange={field.onChange}
-                placeholder="Cargo"
+                placeholder="https://linkedin.com.br"
                 className="w-1/2"
               />
             )}
@@ -218,8 +218,6 @@ export default function ApplicationForm() {
 
         <Button.ArrowRight type="submit" />
       </form>
-
-      <ToastContainer limit={3} />
     </div>
   )
 }

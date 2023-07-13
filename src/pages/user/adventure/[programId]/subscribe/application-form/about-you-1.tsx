@@ -4,7 +4,7 @@ import { Header } from '../../../../../../components/adventure/Header'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '../../../../../../services/api'
 import Router, { useRouter } from 'next/router'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { z } from 'zod'
 import { useEffect, useState } from 'react'
 import { userProps } from '../../../../../../types/user'
@@ -121,8 +121,6 @@ export default function AboutYou1() {
         </Link>
         <Button.ArrowRight type="submit" />
       </form>
-
-      <ToastContainer limit={3} />
     </div>
   )
 }

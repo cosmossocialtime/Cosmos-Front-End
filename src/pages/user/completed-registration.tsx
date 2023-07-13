@@ -3,7 +3,7 @@ import logo from '../../../public/images/logo.png'
 import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import { api } from '../../services/api'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { GetServerSideProps } from 'next'
 import Router from 'next/router'
 
@@ -88,7 +88,6 @@ export default function CompletedRegistration() {
           <span>{String(seconds).padStart(2, '0')}</span>
         </button>
       </footer>
-      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }

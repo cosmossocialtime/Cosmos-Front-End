@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { api } from '../../../services/api'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import Image from 'next/image'
@@ -127,7 +127,6 @@ export default function CompanyCode() {
             />
           </div>
         </div>
-        <ToastContainer autoClose={2000} limit={3} />
       </main>
     </div>
   )

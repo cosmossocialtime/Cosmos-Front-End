@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc'
 import { api } from '../../../services/api'
 import { LocationInput } from './LocationInput'
 import { PasswordInput } from './PasswordInput'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Input } from '../../Input'
 import { Button } from '../../Button'
@@ -181,7 +181,6 @@ export default function FormUserData({
           </Button.Primary>
         </div>
       )}
-      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }

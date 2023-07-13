@@ -10,7 +10,7 @@ import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import { api } from '../../../services/api'
 import Router from 'next/router'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
 
@@ -201,7 +201,6 @@ export default function EstadoCidade() {
           </div>
         </form>
       </main>
-      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }

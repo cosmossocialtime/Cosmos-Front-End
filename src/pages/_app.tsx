@@ -9,6 +9,7 @@ import '../lib/dayjs'
 import '../styles/mainTailwind.css'
 import './user/dashboard/satellite-images/planets.css'
 import 'keen-slider/keen-slider.min.css'
+import { ToastContainer } from 'react-toastify'
 
 registerLocale('ptBR', ptBR)
 setDefaultLocale('ptBR')
@@ -25,6 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
       <AuthProvider>
         <Component {...pageProps} />
+        <ToastContainer autoClose={2000} limit={3} />
       </AuthProvider>
       <GlobalStyle />
     </>

@@ -2,7 +2,6 @@ import Image from 'next/image'
 import logo from '../../../public/images/logo.png'
 import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
 import { GetServerSideProps } from 'next'
 import CheckIcon from '../../../public/images/CheckCircle.svg'
 import Router from 'next/router'
@@ -73,7 +72,6 @@ export default function CompletedResetPassword() {
           <span>{String(seconds).padStart(2, '0')}</span>
         </button>
       </footer>
-      <ToastContainer autoClose={2000} limit={3} />
     </div>
   )
 }
