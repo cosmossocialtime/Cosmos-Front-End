@@ -1,10 +1,10 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import ItemSatelite from '../../../components/dashboard/satellite-images/ItemSatelite'
+import ItemSatelite from '../../../../components/dashboard/satellite-images/ItemSatelite'
 import Image from 'next/image'
 import SideBar from '../sideBar'
-import ModalSatelite from '../../../components/dashboard/satellite-images/modalSatelite'
-import { DatasPlanets } from '../../../data/datasPlanets'
-import ModalInstitute from '../../../components/dashboard/satellite-images/modalInstitute'
+import ModalSatelite from '../../../../components/dashboard/satellite-images/modalSatelite'
+import { DatasPlanets } from '../../../../data/datasPlanets'
+import ModalInstitute from '../../../../components/dashboard/satellite-images/modalInstitute'
 
 const SatelitesPage = () => {
   return (

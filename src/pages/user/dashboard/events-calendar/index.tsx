@@ -3,9 +3,9 @@ import dayjs from 'dayjs'
 import { CaretLeft, CaretRight } from 'phosphor-react'
 
 import { useState } from 'react'
-import getDaysOfMonth from '../../../utils/getDaysOfMonth'
+import getDaysOfMonth from '../../../../utils/getDaysOfMonth'
 import SideBar from '../sideBar'
-import CardOfDaysWeek from '../../../components/dashboard/events-calendar/CardOfDaysWeek'
+import CardOfDaysWeek from '../../../../components/dashboard/events-calendar/CardOfDaysWeek'
 
 const daysOfWeek = [
   'Domingo',

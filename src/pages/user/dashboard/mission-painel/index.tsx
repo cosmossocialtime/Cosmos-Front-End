@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { Calendar, Check } from 'phosphor-react'
 import SideBar from '../sideBar'
-import { stagesData, stage } from '../../../data/StagesData'
+import { stagesData, stage } from '../../../../data/StagesData'
 
 export default function painelDaMissão() {
   const stagesLength = stagesData.length

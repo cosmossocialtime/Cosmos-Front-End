@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 import SideBar from '../sideBar'
-import { objectiveCardsData } from '../../../data/objectiveCardsData'
-import DialogObjective from '../../../components/dashboard/navigation-map/DialogObjective'
+import { objectiveCardsData } from '../../../../data/objectiveCardsData'
+import DialogObjective from '../../../../components/dashboard/navigation-map/DialogObjective'
 const { v4: uuidv4 } = require('uuid')
 
 export default function MapaNavegacaoPage() {
@@ -37,7 +37,7 @@ export default function MapaNavegacaoPage() {
     <div className="flex">
       <SideBar />
 
-      <div className="flex h-screen w-screen flex-col bg-art-board bg-cover bg-center bg-no-repeat">
+      <div className="bg-art-board flex h-screen w-screen flex-col bg-cover bg-center bg-no-repeat">
         <header className="bg-blue-900 bg-opacity-50 py-4 px-20 text-slate-100">
           <h1 className="mb-2 text-4xl font-semibold">Mapa da Navegação</h1>
           <span>
