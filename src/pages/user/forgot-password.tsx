@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { api } from '../../services/api'
 import { FormEvent, useState } from 'react'
 import { setCookie } from 'nookies'
+import Router from 'next/router'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
