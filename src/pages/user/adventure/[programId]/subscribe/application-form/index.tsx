@@ -31,14 +31,13 @@ export default function ApplicationForm() {
   const timeExperienceOpts = [
     'Menos de 2 anos',
     'Entre 2 e 5 anos',
-    'Entre 5 e 10 anos',
+    'Entre 6 e 10 anos',
     'Mais de 10 anos',
   ]
   const timesAvaiable = [
     'Menos de 2 horas por mês',
-    '2 horas por mês',
-    '4 horas por mês',
-    '8 horas por mês',
+    'Entre 2 e 4 horas por mês',
+    'Entre 5 e 8 horas por mês',
     'Mais de 8 horas por mês',
   ]
 
@@ -121,7 +120,9 @@ export default function ApplicationForm() {
   return (
     <div>
       <Header title={program.name} subtitle="Formulário de Inscrição">
-        <span className="mr-24 flex-1 text-end text-violet-600">1/5</span>
+        <span className="mr-24 flex-1 text-end text-violet-600">
+          <strong className="font-bold">1</strong>/5
+        </span>
       </Header>
 
       <form
@@ -135,6 +136,7 @@ export default function ApplicationForm() {
             defaultValue={defaultTimeExperience}
             render={({ field }) => (
               <Input.Select
+                required
                 placeholder="Opções"
                 items={timeExperienceOpts}
                 option={field.value}
@@ -154,6 +156,7 @@ export default function ApplicationForm() {
             defaultValue={user.professionalRole || ''}
             render={({ field }) => (
               <Input.Content
+                required
                 type="text"
                 value={field.value}
                 onChange={field.onChange}
@@ -169,6 +172,7 @@ export default function ApplicationForm() {
             defaultValue={user.professionalSector || ''}
             render={({ field }) => (
               <Input.Content
+                required
                 type="text"
                 value={field.value}
                 onChange={field.onChange}
@@ -186,6 +190,7 @@ export default function ApplicationForm() {
             defaultValue={defaultAvaiable}
             render={({ field }) => (
               <Input.Select
+                required
                 placeholder="Opções"
                 items={timesAvaiable}
                 option={field.value}
@@ -202,6 +207,7 @@ export default function ApplicationForm() {
             defaultValue={user.linkedinUrl || ''}
             render={({ field }) => (
               <Input.Content
+                required
                 type="text"
                 value={field.value}
                 onChange={field.onChange}

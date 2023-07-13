@@ -3,9 +3,10 @@ import { Header } from '../../../../../components/adventure/Header'
 import { Input } from '../../../../../components/Input'
 import Link from 'next/link'
 import { Button } from '../../../../../components/Button'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { api } from '../../../../../services/api'
 import { Loading } from '../../../../../components/Loading'
+import { toast } from 'react-toastify'
 
 export default function TermsOfUse() {
   const [isAcceptTerms, setIsAcceptTerms] = useState(false)
@@ -29,6 +30,15 @@ export default function TermsOfUse() {
 
   if (!programTitle) {
     return <Loading />
+  }
+
+  function changePage() {
+    if (!isAcceptTerms) {
+      toast.error('Aceite os termos de uso antes de continuar!')
+      return
+    }
+
+    Router.push(`/user/adventure/${programId}/subscribe/application-form`)
   }
 
   return (
@@ -68,12 +78,8 @@ export default function TermsOfUse() {
       <Link href={`/user/adventure/${programId}/subscribe`}>
         <Button.ArrowLeft />
       </Link>
-      <Link
-        href={{ pathname: 'application-form', query: { programId } }}
-        className={`${!isAcceptTerms ? 'pointer-events-none' : ''}`}
-      >
-        <Button.ArrowRight />
-      </Link>
+
+      <Button.ArrowRight onClick={changePage} />
     </div>
   )
 }

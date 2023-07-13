@@ -42,8 +42,8 @@ export default function Confirmation() {
   }
 
   function sendData() {
-    if (selectedAreas.length !== 3) {
-      toast.error('Selecione ao menos 3 áreas!')
+    if (selectedAreas.length === 0) {
+      toast.error('Selecione ao menos 1 área!')
       return
     }
     api
@@ -68,8 +68,8 @@ export default function Confirmation() {
   return (
     <div>
       <Header title="Confirmação" subtitle="Formulário de Inscrição">
-        <span className="mr-24 flex-1 text-end font-semibold text-violet-600">
-          5/5
+        <span className="mr-24 flex-1 text-end text-violet-600">
+          <strong className="font-bold">5</strong>/5
         </span>
       </Header>
       <div className="mt-10 mb-20 grid justify-center">
@@ -82,7 +82,6 @@ export default function Confirmation() {
         <div className="mt-14 grid grid-cols-2 items-center justify-between gap-y-10 gap-x-28">
           {knowledgeAreas.map((knowledge) => (
             <Input.CheckBox
-              isLineThrough
               checked={selectedAreas.includes(knowledge)}
               onChangeChecked={() => selectArea(knowledge)}
               key={knowledge}

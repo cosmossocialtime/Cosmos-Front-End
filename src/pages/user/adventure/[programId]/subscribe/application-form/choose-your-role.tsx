@@ -1,8 +1,8 @@
 import { Button } from '../../../../../../components/Button'
 import { Header } from '../../../../../../components/adventure/Header'
-import Commander from '../../../../../../../public/images/mission-role/commander.png'
-import Specialist from '../../../../../../../public/images/mission-role/specialist.png'
-import Pilot from '../../../../../../../public/images/mission-role/pilot.png'
+import Commander from '../../../../../../../public/images/mission-role/cards/commander.png'
+import Specialist from '../../../../../../../public/images/mission-role/cards/specialist.png'
+import Pilot from '../../../../../../../public/images/mission-role/cards/pilot.png'
 import Image, { StaticImageData } from 'next/image'
 import { useState } from 'react'
 import Link from 'next/link'
@@ -42,21 +42,19 @@ export default function ChooseYourRole() {
   ]
 
   function sendData() {
-    if (rolesSelected.length < 2) {
-      selectRole()
-      return
-    }
-
     const numbersIds = [1, 2, 3]
-    numbersIds.find(
-      (number) =>
-        !rolesSelected.includes(number) &&
-        setRolesSelect([...rolesSelected, number]),
+    const firstOption = rolesSelected[0]
+    const secondOption = rolesSelected[1]
+    const thirdOption = numbersIds.find(
+      (number) => !rolesSelected.includes(number),
     )
 
     api
-      .patch('user/volunteering', {
-        rolesSelected,
+      .patch('/volunteer/prefferedRoles', {
+        applicationId: programId,
+        firstRole: firstOption,
+        secondRole: secondOption,
+        thirdRole: thirdOption,
       })
       .then((response) => {
         if (response.status === 200) {
@@ -73,30 +71,41 @@ export default function ChooseYourRole() {
       })
   }
 
-  function selectRole() {
-    if (rolesSelected.includes(selectedCrew)) {
-      return
-    }
-    if (!selectedCrew) {
-      return
-    }
+  function selectFirtOpt() {
+    setRolesSelect((prevRolesSelect) => {
+      const updatedRolesSelected = prevRolesSelect
+      updatedRolesSelected[0] = selectedCrew
 
-    setRolesSelect([...rolesSelected, selectedCrew])
+      return updatedRolesSelected
+    })
     setSelectedCrew(0)
+  }
+
+  function selectSecondOpt() {
+    setRolesSelect((prevRolesSelect) => {
+      const updatedRolesSelected = prevRolesSelect
+      updatedRolesSelected[1] = selectedCrew
+
+      return updatedRolesSelected
+    })
+    setSelectedCrew(0)
+
+    sendData()
   }
 
   return (
     <div>
       <Header title="Seu papel na missão" subtitle="Formulário de Inscrição">
-        <span className="mr-24 flex-1 text-end font-semibold text-violet-600">
-          4/5
+        <span className="mr-24 flex-1 text-end text-violet-600">
+          <strong className="font-bold">4</strong>/5
         </span>
       </Header>
 
       <div className="flex flex-col items-center px-36 pt-10 pb-20 text-gray-800">
         <span className="text-xl">
-          Agora que você já conhece todos os papéis, escolha aquele que mais
-          gostaria de exercer ao longo da jornada:
+          {!rolesSelected[0]
+            ? 'Agora que você já conhece todos os papéis, escolha aquele que mais gostaria de exercer ao longo da jornada:'
+            : 'Maravilha! E caso não seja possível exercer a sua 1ª opção, qual seria a sua 2ª escolha?'}
         </span>
         <div className="mt-9 flex items-center justify-center gap-12 text-center text-lg">
           {shipCrew.map((crew) => (
@@ -105,7 +114,7 @@ export default function ChooseYourRole() {
               onClick={() => setSelectedCrew(crew.id)}
               data-selected={crew.id === selectedCrew}
               key={crew.role}
-              className="group cursor-pointer rounded-[14px] p-1 outline-none transition-colors hover:bg-gray-500 aria-disabled:pointer-events-none aria-disabled:bg-transparent data-[selected=true]:bg-gradient-to-l data-[selected=true]:from-violet-400 data-[selected=true]:to-blue-300 data-[selected=true]:shadow-2xl"
+              className="group cursor-pointer rounded-[14px] p-1 outline-none transition-all hover:scale-105 hover:shadow-2xl aria-disabled:pointer-events-none aria-disabled:bg-transparent data-[selected=true]:scale-105 data-[selected=true]:bg-gradient-to-l data-[selected=true]:from-violet-400 data-[selected=true]:to-blue-300 data-[selected=true]:shadow-2xl"
             >
               <div className="max-w-max rounded-xl bg-white py-3 px-3">
                 <Image
@@ -119,16 +128,27 @@ export default function ChooseYourRole() {
             </button>
           ))}
         </div>
-        <Button.Primary onClick={sendData} className="mt-16 py-3 px-28">
-          Confirmar {rolesSelected.length + 1}ª opção
+        <Button.Primary
+          onClick={!rolesSelected[0] ? selectFirtOpt : selectSecondOpt}
+          className="mt-16 py-3 px-28"
+        >
+          {!rolesSelected[0] ? 'Confirmar 1ª opção' : 'Confirmar 2ª opção'}
         </Button.Primary>
         <span>{rolesSelected}</span>
       </div>
-      <Link
-        href={`/user/adventure/${programId}/subscribe/application-form/pilot`}
-      >
-        <Button.ArrowLeft />
-      </Link>
+      {!rolesSelected[0] ? (
+        <Link
+          href={`/user/adventure/${programId}/subscribe/application-form/pilot`}
+        >
+          <Button.ArrowLeft />
+        </Link>
+      ) : (
+        <Button.ArrowLeft
+          onClick={() =>
+            setRolesSelect((prevRolesSelect) => prevRolesSelect.slice(0, -1))
+          }
+        />
+      )}
     </div>
   )
 }

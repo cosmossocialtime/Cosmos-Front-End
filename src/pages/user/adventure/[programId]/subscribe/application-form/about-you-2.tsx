@@ -72,7 +72,9 @@ export default function AboutYou2() {
         title="Conte um pouco sobre você"
         subtitle="Formulário de Inscrição"
       >
-        <span className="mr-24 flex-1 text-end text-violet-600">3/5</span>
+        <span className="mr-24 flex-1 text-end text-violet-600">
+          <strong className="font-bold">3</strong>/5
+        </span>
       </Header>
 
       <form
