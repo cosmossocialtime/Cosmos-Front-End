@@ -72,6 +72,11 @@ export default function ChooseYourRole() {
   }
 
   function selectFirtOpt() {
+    if (!selectedCrew) {
+      toast.error('Selecione um papel!')
+      return
+    }
+
     setRolesSelect((prevRolesSelect) => {
       const updatedRolesSelected = prevRolesSelect
       updatedRolesSelected[0] = selectedCrew
@@ -82,6 +87,11 @@ export default function ChooseYourRole() {
   }
 
   function selectSecondOpt() {
+    if (!selectedCrew) {
+      toast.error('Selecione um papel!')
+      return
+    }
+
     setRolesSelect((prevRolesSelect) => {
       const updatedRolesSelected = prevRolesSelect
       updatedRolesSelected[1] = selectedCrew
@@ -134,7 +144,6 @@ export default function ChooseYourRole() {
         >
           {!rolesSelected[0] ? 'Confirmar 1ª opção' : 'Confirmar 2ª opção'}
         </Button.Primary>
-        <span>{rolesSelected}</span>
       </div>
       {!rolesSelected[0] ? (
         <Link

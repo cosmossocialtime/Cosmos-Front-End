@@ -207,7 +207,6 @@ export default function ApplicationForm() {
             defaultValue={user.linkedinUrl || ''}
             render={({ field }) => (
               <Input.Content
-                required
                 type="text"
                 value={field.value}
                 onChange={field.onChange}

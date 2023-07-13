@@ -1,25 +1,25 @@
 import Link from 'next/link'
-import FormatText from '../../../utils/FormatText'
 import { Button } from '../../Button'
 import { Header } from '../Header'
 import Image, { StaticImageData } from 'next/image'
+import { ReactNode } from 'react'
 
 interface AstronaltRuleProps {
   astronaltImg: StaticImageData
   color: string
   title: string
-  text: string
   linkBack: string
   linkNext: string
+  children: ReactNode
 }
 
 export function AstronaltRule({
   astronaltImg,
   color,
   title,
-  text,
   linkBack,
   linkNext,
+  children,
 }: AstronaltRuleProps) {
   return (
     <div className="flex h-screen flex-col">
@@ -39,7 +39,7 @@ export function AstronaltRule({
           />
           <h2 className="mb-3 text-4xl font-black text-gray-100">{title}</h2>
           <div className="flex flex-col gap-7 text-xl text-gray-800">
-            <FormatText text={text} />
+            {children}
           </div>
         </div>
 
