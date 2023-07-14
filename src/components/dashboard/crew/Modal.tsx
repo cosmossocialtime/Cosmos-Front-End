@@ -2,17 +2,20 @@ import * as Dialog from '@radix-ui/react-dialog'
 import * as Tabs from '@radix-ui/react-tabs'
 import Close from '../../../../public/images/tripulacao/Close.svg'
 import BackgroundModal from '../../../../public/images/tripulacao/backgroundModal.png'
+import Astronauta from '../../../../public/images/astronauta.png'
 import Image from 'next/image'
-import ProfilePhoto from '../../../../public/images/tripulacao/ProfileIcon.jpg'
 import Astro from '../../../../public/images/tripulacao/Astro.png'
 import Retangulo from '../../../../public/images/tripulacao/Retangulo.svg'
 
 type DatasProfile = {
-  title: string
-  name: string
-  charge: string
-  sector: string
-  description: string
+  id: number
+  byname: string
+  professionalPreviousExperiences: string
+  mainCompetencies: string
+  reasonToJoin: string
+  role: string
+  profilePicture: string
+  banner: string
 }
 
 export default function Modal(ModalProps: DatasProfile) {
@@ -20,12 +23,25 @@ export default function Modal(ModalProps: DatasProfile) {
     <div className="overflow-hidden rounded-2xl">
       <div className="flex">
         <div className="w-full">
-          <Image
-            src={BackgroundModal}
-            alt="background modal"
-            quality={100}
-            className="cover w-full "
-          />
+          {ModalProps.banner ? (
+            <Image
+              width={600}
+              height={600}
+              src={ModalProps.banner}
+              alt="background modal"
+              quality={100}
+              className="cover w-full "
+            />
+          ) : (
+            <Image
+              width={300}
+              height={300}
+              src={BackgroundModal}
+              alt="background modal"
+              quality={100}
+              className="cover w-full "
+            />
+          )}
         </div>
         <Dialog.Close className="absolute top-10 right-8">
           <Image src={Close} alt="Button Close" className="rounded-md" />
@@ -34,12 +50,27 @@ export default function Modal(ModalProps: DatasProfile) {
       <div className="relative flex items-center justify-center gap-24 px-2">
         <div className="relative flex gap-12">
           <div className="relative -top-8 h-36 w-36 overflow-hidden rounded-full border-4 border-gray-50 shadow-lg shadow-black/20 drop-shadow-sm">
-            <Image
-              src={ProfilePhoto}
-              alt="Profile photo"
-              quality={100}
-              className="w-full"
-            />
+            {ModalProps.profilePicture ? (
+              <Image
+                width={300}
+                height={300}
+                src={ModalProps.profilePicture}
+                onLoad={() => ModalProps.profilePicture}
+                alt="Profile photo"
+                quality={100}
+                className="w-full"
+              />
+            ) : (
+              <Image
+                width={300}
+                height={300}
+                src={Astronauta}
+                onLoad={() => Astronauta}
+                alt="Profile photo"
+                quality={100}
+                className="w-full"
+              />
+            )}
           </div>
           <div className="absolute bottom-2 left-0 z-10 flex items-center">
             <div>
@@ -49,20 +80,20 @@ export default function Modal(ModalProps: DatasProfile) {
             <div className="relative">
               <Image src={Retangulo} alt="Retangulo" />
               <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-xs shadow-lg shadow-black/20 drop-shadow-sm">
-                {ModalProps.charge}
+                {ModalProps.role}
               </span>
             </div>
           </div>
           <div className="flex flex-col justify-center">
             <span className="text-lg font-medium text-indigo-500">
-              {ModalProps.name}
+              {ModalProps.byname}
             </span>
             <span className="text-sm text-indigo-500">
-              Cargo: {ModalProps.charge}
+              Cargo: {ModalProps.role}
             </span>
-            <span className="text-sm text-indigo-500">
+            {/* <span className="text-sm text-indigo-500">
               Setor: {ModalProps.sector}
-            </span>
+            </span> */}
           </div>
         </div>
         <div className="flex h-8 items-center gap-2">
@@ -118,13 +149,13 @@ export default function Modal(ModalProps: DatasProfile) {
               </span>
             </Tabs.Content>
             <Tabs.Content value="tab2">
-              <span>Competências</span>
+              <span className="break-words">{ModalProps.mainCompetencies}</span>
             </Tabs.Content>
-            <Tabs.Content value="tab3">
-              <span>Motivação</span>
+            <Tabs.Content className="break-words" value="tab3">
+              <span>{ModalProps.reasonToJoin}</span>
             </Tabs.Content>
-            <Tabs.Content value="tab4">
-              <span>Voluntariado</span>
+            <Tabs.Content className="break-words" value="tab4">
+              <span>{ModalProps.professionalPreviousExperiences}</span>
             </Tabs.Content>
           </div>
         </div>
