@@ -16,9 +16,17 @@ interface User {
   }
 }
 interface SateliteInfo {
-  name: string
+  name?: string
+  creationDate?: string
+  totalCollaborators?: number
+  beneficiaries?: string
+  annualRevenue?: number
+  city?: string
+  mainChallenges?: string
+  socialImpact?: string
+  history?: string
+  causes?: [string]
   state?: string
-  totalColaborator?: number
 }
 interface SectorProps {
   id: string
@@ -45,8 +53,6 @@ const SatelitesPage = () => {
         })
     }
   }, [socialOrganizationId])
-
-  console.log(company)
 
   return (
     <div className="flex overflow-x-hidden">
@@ -95,9 +101,21 @@ const SatelitesPage = () => {
                   height={200}
                   alt="Images "
                 />
-                <h1>{company ? company.name : ' ONG'}</h1>
+                <h1>{company ? company.name : ''}</h1>
               </ItemSatelite>
-              <ModalInstitute name={company?.name} />
+              <ModalInstitute
+                name={company?.name}
+                totalCollaborators={company?.totalCollaborators}
+                annualRevenue={company?.annualRevenue}
+                beneficiaries={company?.beneficiaries}
+                city={company?.city}
+                creationDate={company?.creationDate}
+                history={company?.history}
+                mainChallenges={company?.mainChallenges}
+                socialImpact={company?.socialImpact}
+                state={company?.state}
+                causes={company?.causes}
+              />
             </div>
           </Dialog.Root>
         </div>

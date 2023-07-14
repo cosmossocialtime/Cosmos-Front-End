@@ -114,7 +114,7 @@ export default function ModalSatelite({
                 <span className="flex aspect-square h-8 items-center justify-center rounded-full bg-white/10 p-2">
                   2
                 </span>
-                Como é feito(a) o(a) {name} na instituição hoje?
+                Como a organização desenvolve a área {name} atualmente?
               </h2>
               <p className="ml-12 w-3/4">{currentlyWorking}</p>
             </div>
@@ -123,8 +123,8 @@ export default function ModalSatelite({
                 <span className="flex aspect-square h-8 items-center justify-center rounded-full bg-white/10 p-2">
                   3
                 </span>
-                A forma como o(a) {name} é feito(a) atualmente atende às
-                necessidades da instituição?
+                A forma como a área {name} é desenvolvida atende às necessidades
+                da instituição?
                 <br /> O que poderia melhorar?
               </h2>
               <p className="ml-12 w-3/4">{effectiveness}</p>
