@@ -1,13 +1,57 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { Cake, Coins, Heart, MapPin, UsersFour, X } from 'phosphor-react'
+import dayjs from 'dayjs'
+import Head from 'next/head'
 
 type NamesPlanet = {
   name?: string
+  creationDate?: string
+  totalCollaborators?: number
+  beneficiaries?: string
+  annualRevenue?: number
+  city?: string
+  mainChallenges?: string
+  socialImpact?: string
+  history?: string
+  causes?: [string]
+  state?: string
 }
 
-export default function ModalInstitute({ name }: NamesPlanet) {
+export default function ModalInstitute({
+  name,
+  annualRevenue,
+  city,
+  creationDate,
+  beneficiaries,
+  mainChallenges,
+  socialImpact,
+  totalCollaborators,
+  history,
+  causes,
+  state,
+}: NamesPlanet) {
+  const dataFormated = dayjs(creationDate).format('DD/MM/YYYY')
+  const integerPart = String(annualRevenue).slice(0, -2)
+  const decimalPart = String(annualRevenue).slice(-2)
+  const annualRevenueInteger = String(integerPart).replace(
+    /(\d)(?=(\d{3})+(?!\d))/g,
+    '$1.',
+  )
+  const beneficiariesFormated = String(beneficiaries).replace(
+    /(\d)(?=(\d{3})+(?!\d))/g,
+    '$1.',
+  )
+
+  const collaboratorsFormated = String(totalCollaborators).replace(
+    /(\d)(?=(\d{3})+(?!\d))/g,
+    '$1.',
+  )
+
   return (
     <>
+      <Head>
+        <title>Imagem de satelite</title>
+      </Head>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[2] bg-black/70" />
 
@@ -18,19 +62,21 @@ export default function ModalInstitute({ name }: NamesPlanet) {
 
           <div className="mt-3 flex gap-4">
             <span className="flex gap-2">
-              <Cake size={24} /> 10/01/2023
+              <Cake size={24} /> {dataFormated || '10/01/2000'}
             </span>
             <span className="flex gap-2">
-              <MapPin size={24} /> João Pessoa - PB
+              <MapPin size={24} /> {`${city} - ${state}` || ''}
             </span>
             <span className="flex gap-2">
-              <UsersFour size={24} /> 18 Colaboradores
+              <UsersFour size={24} /> {collaboratorsFormated || '0'}{' '}
+              Colaboradores
             </span>
             <span className="flex gap-2">
-              <Coins size={24} /> 85.0000,00 receita anual
+              <Coins size={24} /> ${' '}
+              {`${annualRevenueInteger},${decimalPart}` || '0'} receita anual
             </span>
             <span className="flex gap-2">
-              <Heart size={24} /> 32 Beneficiários
+              <Heart size={24} /> {beneficiariesFormated || '0'} Beneficiários
             </span>
           </div>
           <div className="mt-10 flex flex-col gap-5">
@@ -40,9 +86,15 @@ export default function ModalInstitute({ name }: NamesPlanet) {
               </span>
               Causa em que atua
             </h2>
-            <span className="ml-12 w-fit rounded-lg bg-white/5 p-3">
-              Proteção animal
-            </span>
+            <div className="ml-12 flex gap-3">
+              {causes?.map((cause) => {
+                return (
+                  <span key={cause} className="w-fit rounded-lg bg-white/5 p-3">
+                    {cause}
+                  </span>
+                )
+              })}
+            </div>
           </div>
           <div className="mt-10 flex flex-col gap-5">
             <h2 className="flex items-center gap-4 text-xl">
@@ -51,12 +103,7 @@ export default function ModalInstitute({ name }: NamesPlanet) {
               </span>
               História
             </h2>
-            <p className="ml-12 w-3/4">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat
-              eos amet voluptatibus ipsa, atque dolorem fugit nobis molestias,
-              dolorum animi ipsam neque? Similique dicta assumenda enim,
-              sapiente veniam non ullam!
-            </p>
+            <p className="ml-12 w-3/4">{history}</p>
           </div>
           <div className="mt-10 flex flex-col  gap-5">
             <h2 className="flex items-center gap-4 text-xl">
@@ -65,12 +112,7 @@ export default function ModalInstitute({ name }: NamesPlanet) {
               </span>
               Atuação e impacto social
             </h2>
-            <p className="ml-12 w-3/4">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat
-              eos amet voluptatibus ipsa, atque dolorem fugit nobis molestias,
-              dolorum animi ipsam neque? Similique dicta assumenda enim,
-              sapiente veniam non ullam!
-            </p>
+            <p className="ml-12 w-3/4">{socialImpact}</p>
           </div>
           <div className="mt-10 flex flex-col gap-5">
             <h2 className="flex items-center gap-4 text-xl">
@@ -79,12 +121,7 @@ export default function ModalInstitute({ name }: NamesPlanet) {
               </span>
               Principais necessidades e desafios
             </h2>
-            <p className="ml-12 w-3/4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac
-              quam eu ex faucibus ornare non non urna. Cras malesuada et nunc at
-              laoreet. Vivamus odio felis, feugiat In ac quam eu ex faucibus
-              ornare non non urna. Cras malesuada et nunc at laoreet.
-            </p>
+            <p className="ml-12 w-3/4">{mainChallenges}</p>
           </div>
 
           <Dialog.Close className="absolute top-8 right-6 text-xl text-white">
