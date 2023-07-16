@@ -11,11 +11,13 @@ import CurrentMissionsArea from '../../../../components/main-painel/painel/Curre
 import AdventureArea from '../../../../components/main-painel/painel/AdventureArea'
 import PerfilArea from '../../../../components/main-painel/painel/PerfilArea'
 import AchievementsArea from '../../../../components/main-painel/painel/AchievementsArea'
+import { mentorshipProps } from '../../../../types/mentorship'
 
 export default function Painel() {
   const [user, setUser] = useState<userProps | null>(null)
   const [achievements, setAchievements] = useState<achievementsProps>([])
   const [programs, setPrograms] = useState<programProps[]>([])
+  const [mentorships, setMentorships] = useState<mentorshipProps[]>([])
   //   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -25,6 +27,7 @@ export default function Painel() {
         setUser(response.data.user)
         setAchievements(response.data.achievements)
         setPrograms(response.data.programs)
+        setMentorships([response.data.currentMentorship])
         // setIsLoading(false)
       })
       .catch((error) => {
@@ -33,7 +36,7 @@ export default function Painel() {
       })
   }, [])
 
-  if (!user || !achievements) {
+  if (!user || !achievements || !mentorships) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-zinc-900 text-zinc-50">
         <h1 className="text-lg">Carregando...</h1>
@@ -48,7 +51,9 @@ export default function Painel() {
         <div className="flex w-4/6 flex-1 flex-col gap-6">
           <CurrentAchievement achievements={achievements} />
 
-          {programs.length !== 0 && <CurrentMissionsArea programs={programs} />}
+          {programs.length !== 0 && (
+            <CurrentMissionsArea mentorships={mentorships} />
+          )}
 
           <AdventureArea programs={programs} />
         </div>
