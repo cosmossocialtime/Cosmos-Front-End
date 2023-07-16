@@ -7,10 +7,11 @@ import Router, { useRouter } from 'next/router'
 import { api } from '../../../../../services/api'
 import { Loading } from '../../../../../components/Loading'
 import { toast } from 'react-toastify'
+import { programProps } from '../../../../../types/program'
 
 export default function TermsOfUse() {
   const [isAcceptTerms, setIsAcceptTerms] = useState(false)
-  const [programTitle, setProgramTitle] = useState('')
+  const [program, setProgram] = useState<programProps | null>(null)
 
   const router = useRouter()
   const { programId } = router.query
@@ -20,7 +21,8 @@ export default function TermsOfUse() {
       api
         .get(`/program/${programId}`)
         .then((response) => {
-          setProgramTitle(response.data.name)
+          setProgram(response.data)
+          setIsAcceptTerms(Boolean(response.data.volunteerApplicationId))
         })
         .catch((error) => {
           console.error(error)
@@ -28,22 +30,42 @@ export default function TermsOfUse() {
     }
   }, [programId])
 
-  if (!programTitle) {
+  if (!program) {
     return <Loading />
   }
 
-  function changePage() {
+  function appliedProgram() {
     if (!isAcceptTerms) {
       toast.error('Aceite os termos de uso antes de continuar!')
       return
     }
+    if (program?.volunteerApplicationId) {
+      Router.push(`/user/adventure/${programId}/subscribe/application-form`)
+      return
+    }
 
-    Router.push(`/user/adventure/${programId}/subscribe/application-form`)
+    api
+      .post('/volunteer/apply', {
+        agreed: isAcceptTerms,
+        agreedAt: new Date(),
+        programId: Number(programId),
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          Router.push(`/user/adventure/${programId}/subscribe/application-form`)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        toast.error(
+          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+        )
+      })
   }
 
   return (
     <div>
-      <Header title={programTitle} subtitle="Formulário de Inscrição" />
+      <Header title={program.name} subtitle="Formulário de Inscrição" />
       <div className="py-16 px-44">
         <h2 className="mb-14 text-center text-2xl font-semibold text-gray-800">
           Coloque seu capacete, ajuste seu traje e se prepare para uma aventura!
@@ -79,7 +101,7 @@ export default function TermsOfUse() {
         <Button.ArrowLeft />
       </Link>
 
-      <Button.ArrowRight onClick={changePage} />
+      <Button.ArrowRight onClick={appliedProgram} />
     </div>
   )
 }

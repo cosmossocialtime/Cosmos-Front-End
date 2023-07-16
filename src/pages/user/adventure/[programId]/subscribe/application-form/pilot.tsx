@@ -29,7 +29,7 @@ export default function Pilot() {
             <p>
               O Mapa da Navegação é o plano de objetivos e atividades que serão
               desenvolvidos ao longo do projeto. Ele será criado em conjunto com
-              a equipe da instituição mentorada
+              a equipe da instituição mentorada.
             </p>
           </HoverCard.Content>
         </HoverCard.Root>{' '}

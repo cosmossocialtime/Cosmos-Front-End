@@ -1,20 +1,17 @@
-import { InputHTMLAttributes } from 'react'
-import { UseFormRegisterReturn } from 'react-hook-form'
+import { InputHTMLAttributes, forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-interface inputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
-  register?: UseFormRegisterReturn<any>
 }
 
-export default function InputContent({
-  className,
-  register,
-  ...rest
-}: inputProps) {
+export default forwardRef<HTMLInputElement, InputProps>(function InputContent(
+  { className, ...rest }: InputProps,
+  ref,
+) {
   return (
     <input
-      ref={register?.ref}
+      ref={ref}
       {...rest}
       className={twMerge(
         'flex-1 rounded border border-solid border-gray-400 py-3 px-4 outline-none placeholder:text-gray-800 placeholder:opacity-25 disabled:border-0 disabled:border-b',
@@ -22,4 +19,4 @@ export default function InputContent({
       )}
     />
   )
-}
+})

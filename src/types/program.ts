@@ -5,6 +5,7 @@ export type programProps = {
   description: string
   endDate: Date
   id: number
+  volunteerApplicationId: number
   name: string
   startDate: Date
   updatedAt: Date

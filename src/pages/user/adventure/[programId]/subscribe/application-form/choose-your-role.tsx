@@ -4,11 +4,12 @@ import Commander from '../../../../../../../public/images/mission-role/cards/com
 import Specialist from '../../../../../../../public/images/mission-role/cards/specialist.png'
 import Pilot from '../../../../../../../public/images/mission-role/cards/pilot.png'
 import Image, { StaticImageData } from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
 import { api } from '../../../../../../services/api'
 import { toast } from 'react-toastify'
+import { programProps } from '../../../../../../types/program'
 
 type crew = {
   id: number
@@ -20,6 +21,7 @@ export default function ChooseYourRole() {
   const router = useRouter()
   const { programId } = router.query
 
+  const [program, setProgram] = useState<programProps>()
   const [rolesSelected, setRolesSelect] = useState<number[]>([])
   const [selectedCrew, setSelectedCrew] = useState(0)
 
@@ -41,35 +43,53 @@ export default function ChooseYourRole() {
     },
   ]
 
-  function sendData() {
-    const numbersIds = [1, 2, 3]
-    const firstOption = rolesSelected[0]
-    const secondOption = rolesSelected[1]
-    const thirdOption = numbersIds.find(
-      (number) => !rolesSelected.includes(number),
-    )
+  useEffect(() => {
+    if (programId) {
+      api
+        .get(`/program/${programId}`)
+        .then((response) => {
+          setProgram(response.data)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [programId])
 
-    api
-      .patch('/volunteer/prefferedRoles', {
-        applicationId: programId,
-        firstRole: firstOption,
-        secondRole: secondOption,
-        thirdRole: thirdOption,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/confirmation`,
+  useEffect(() => {
+    function sendData() {
+      const numbersIds = [1, 2, 3]
+      const firstOption = rolesSelected[0]
+      const secondOption = rolesSelected[1]
+      const thirdOption = numbersIds.find(
+        (number) => !rolesSelected.includes(number),
+      )
+
+      api
+        .patch('/volunteer/prefferedRoles', {
+          applicationId: program?.volunteerApplicationId,
+          firstRole: firstOption,
+          secondRole: secondOption,
+          thirdRole: thirdOption,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            Router.push(
+              `/user/adventure/${programId}/subscribe/application-form/confirmation`,
+            )
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          toast.error(
+            'Não foi possível enviar os dados. Tente novamente mais tarde!',
           )
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-        toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
-        )
-      })
-  }
+        })
+    }
+    if (rolesSelected.length === 2) {
+      sendData()
+    }
+  }, [rolesSelected])
 
   function selectFirtOpt() {
     if (!selectedCrew) {
@@ -99,8 +119,14 @@ export default function ChooseYourRole() {
       return updatedRolesSelected
     })
     setSelectedCrew(0)
+  }
 
-    sendData()
+  function backSelection() {
+    const rolesSelectedUpdate = rolesSelected
+    const optionDeleted = rolesSelectedUpdate.pop()
+
+    setRolesSelect(rolesSelectedUpdate)
+    setSelectedCrew(optionDeleted!)
   }
 
   return (
@@ -152,11 +178,7 @@ export default function ChooseYourRole() {
           <Button.ArrowLeft />
         </Link>
       ) : (
-        <Button.ArrowLeft
-          onClick={() =>
-            setRolesSelect((prevRolesSelect) => prevRolesSelect.slice(0, -1))
-          }
-        />
+        <Button.ArrowLeft onClick={backSelection} />
       )}
     </div>
   )

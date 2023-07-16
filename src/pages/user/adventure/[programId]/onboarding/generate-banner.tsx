@@ -52,7 +52,7 @@ export default function GenerateBanner() {
       </header>
 
       <div className="card flex min-h-screen min-w-[1080px] flex-col items-center gap-5 bg-bgNaveDeFundo bg-cover bg-center py-28">
-        <div className="w-80 rounded-[20px] border-2 border-solid border-[#193D9C] bg-blue-600/30 p-5 backdrop-blur-lg">
+        <div className="w-80 rounded-[20px] border-2 border-solid border-blue-900 bg-blue-800/90 p-5">
           <UploadImage updateImgSrc={receiveImg}>
             <div className="relative aspect-square w-full cursor-pointer overflow-hidden rounded-[10px] border-2 border-solid border-blue-700 bg-gray-100">
               {profilePhoto ? (
@@ -89,7 +89,7 @@ export default function GenerateBanner() {
             />
           </DialogCrop>
 
-          <h1 className="relative mx-3 -mt-7 mb-5 text-4xl font-semibold text-gray-100">
+          <h1 className="mx-3 mb-5 mt-2 text-4xl font-semibold text-gray-100">
             Nome da pessoa
           </h1>
 

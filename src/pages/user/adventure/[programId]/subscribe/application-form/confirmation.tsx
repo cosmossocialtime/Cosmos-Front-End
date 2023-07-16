@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '../../../../../../components/Input'
 import { Header } from '../../../../../../components/adventure/Header'
 import { toast } from 'react-toastify'
@@ -6,29 +6,74 @@ import { Button } from '../../../../../../components/Button'
 import { api } from '../../../../../../services/api'
 import Router, { useRouter } from 'next/router'
 import Link from 'next/link'
+import { programProps } from '../../../../../../types/program'
 
 export default function Confirmation() {
   const router = useRouter()
   const { programId } = router.query
+  const [program, setProgram] = useState<programProps>()
 
-  const [selectedAreas, setSelectedAreas] = useState<string[]>([])
+  const [selectedAreas, setSelectedAreas] = useState<number[]>([])
   const knowledgeAreas = [
-    'Análise de Dados',
-    'Comercial',
-    'Comunicação e Marketing',
-    'Finanças',
-    'Gestão de Pessoas',
-    'Gestão de Projetos',
-    'Desenvolvimento de Lideranças',
-    'Estratégia',
-    'Jurídico',
-    'Sustentabilidade',
+    {
+      id: 1,
+      name: 'Análise de Dados',
+    },
+    {
+      id: 2,
+      name: 'Comercial',
+    },
+    {
+      id: 3,
+      name: 'Comunicação e Marketing',
+    },
+    {
+      id: 4,
+      name: 'Finanças',
+    },
+    {
+      id: 5,
+      name: 'Gestão de Pessoas',
+    },
+    {
+      id: 6,
+      name: 'Gestão de Projetos',
+    },
+    {
+      id: 7,
+      name: 'Desenvolvimento de Lideranças',
+    },
+    {
+      id: 8,
+      name: 'Estratégia',
+    },
+    {
+      id: 9,
+      name: 'Jurídico',
+    },
+    {
+      id: 10,
+      name: 'Sustentabilidade',
+    },
   ]
 
-  function selectArea(area: string) {
-    if (selectedAreas.includes(area)) {
+  useEffect(() => {
+    if (programId) {
+      api
+        .get(`/program/${programId}`)
+        .then((response) => {
+          setProgram(response.data)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [programId])
+
+  function selectArea(areaId: number) {
+    if (selectedAreas.includes(areaId)) {
       setSelectedAreas((prevSelectedAreas) =>
-        prevSelectedAreas.filter((selectedArea) => selectedArea !== area),
+        prevSelectedAreas.filter((selectedArea) => selectedArea !== areaId),
       )
       return
     }
@@ -38,7 +83,7 @@ export default function Confirmation() {
       return
     }
 
-    setSelectedAreas((prevSelectedAreas) => [...prevSelectedAreas, area])
+    setSelectedAreas((prevSelectedAreas) => [...prevSelectedAreas, areaId])
   }
 
   function sendData() {
@@ -47,7 +92,7 @@ export default function Confirmation() {
       return
     }
     api
-      .patch('user/volunteering', {
+      .patch(`/volunteer/completed/${program?.volunteerApplicationId}`, {
         sectorIds: selectedAreas,
       })
       .then((response) => {
@@ -82,10 +127,10 @@ export default function Confirmation() {
         <div className="mt-14 grid grid-cols-2 items-center justify-between gap-y-10 gap-x-28">
           {knowledgeAreas.map((knowledge) => (
             <Input.CheckBox
-              checked={selectedAreas.includes(knowledge)}
-              onChangeChecked={() => selectArea(knowledge)}
-              key={knowledge}
-              content={knowledge}
+              checked={selectedAreas.includes(knowledge.id)}
+              onChangeChecked={() => selectArea(knowledge.id)}
+              key={knowledge.id}
+              content={knowledge.name}
             />
           ))}
         </div>

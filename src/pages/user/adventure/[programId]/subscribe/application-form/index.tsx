@@ -49,7 +49,7 @@ export default function ApplicationForm() {
     ? timesAvaiable[user.availableTime]
     : undefined
 
-  const { control, handleSubmit } = useForm<formProps>()
+  const { control, handleSubmit, register } = useForm<formProps>()
 
   useEffect(() => {
     api
@@ -87,7 +87,6 @@ export default function ApplicationForm() {
     const avaiableId = timesAvaiable.findIndex(
       (option) => option === availableTime,
     )
-
     api
       .patch('user/volunteering', {
         professionalExperience: professionalExperienceId,
@@ -150,36 +149,22 @@ export default function ApplicationForm() {
           ariaLabel="Em que cargo e em que setor você atua?"
           className="gap-4"
         >
-          <Controller
-            name="professionalRole"
-            control={control}
+          <Input.Content
+            required
+            type="text"
             defaultValue={user.professionalRole || ''}
-            render={({ field }) => (
-              <Input.Content
-                required
-                type="text"
-                value={field.value}
-                onChange={field.onChange}
-                placeholder="Cargo"
-                className="w-1/2"
-              />
-            )}
+            placeholder="Cargo"
+            className="w-1/2"
+            {...register('professionalRole')}
           />
 
-          <Controller
-            name="professionalSector"
-            control={control}
+          <Input.Content
+            required
+            type="text"
             defaultValue={user.professionalSector || ''}
-            render={({ field }) => (
-              <Input.Content
-                required
-                type="text"
-                value={field.value}
-                onChange={field.onChange}
-                placeholder="Setor"
-                className="w-1/2"
-              />
-            )}
+            placeholder="Setor"
+            className="w-1/2"
+            {...register('professionalSector')}
           />
         </Input.Root>
 
@@ -201,19 +186,12 @@ export default function ApplicationForm() {
         </Input.Root>
 
         <Input.Root ariaLabel="Link para o LinkedIn (opcional)">
-          <Controller
-            name="linkedinUrl"
-            control={control}
+          <Input.Content
+            type="text"
             defaultValue={user.linkedinUrl || ''}
-            render={({ field }) => (
-              <Input.Content
-                type="text"
-                value={field.value}
-                onChange={field.onChange}
-                placeholder="https://linkedin.com.br"
-                className="w-1/2"
-              />
-            )}
+            placeholder="https://linkedin.com.br"
+            className="w-1/2"
+            {...register('linkedinUrl')}
           />
         </Input.Root>
 
