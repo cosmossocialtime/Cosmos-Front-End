@@ -22,7 +22,7 @@ export default function ChooseYourRole() {
   const { programId } = router.query
 
   const [program, setProgram] = useState<programProps>()
-  const [rolesSelected, setRolesSelect] = useState<number[]>([])
+  const [rolesSelected, setRolesSelected] = useState<number[]>([])
   const [selectedCrew, setSelectedCrew] = useState(0)
 
   const shipCrew: Array<crew> = [
@@ -57,7 +57,7 @@ export default function ChooseYourRole() {
   }, [programId])
 
   useEffect(() => {
-    function sendData() {
+    if (rolesSelected.length === 2) {
       const numbersIds = [1, 2, 3]
       const firstOption = rolesSelected[0]
       const secondOption = rolesSelected[1]
@@ -86,9 +86,6 @@ export default function ChooseYourRole() {
           )
         })
     }
-    if (rolesSelected.length === 2) {
-      sendData()
-    }
   }, [rolesSelected])
 
   function selectFirtOpt() {
@@ -97,8 +94,8 @@ export default function ChooseYourRole() {
       return
     }
 
-    setRolesSelect((prevRolesSelect) => {
-      const updatedRolesSelected = prevRolesSelect
+    setRolesSelected((prevRolesSelect) => {
+      const updatedRolesSelected = [...prevRolesSelect]
       updatedRolesSelected[0] = selectedCrew
 
       return updatedRolesSelected
@@ -112,8 +109,8 @@ export default function ChooseYourRole() {
       return
     }
 
-    setRolesSelect((prevRolesSelect) => {
-      const updatedRolesSelected = prevRolesSelect
+    setRolesSelected((prevRolesSelect) => {
+      const updatedRolesSelected = [...prevRolesSelect]
       updatedRolesSelected[1] = selectedCrew
 
       return updatedRolesSelected
@@ -125,7 +122,7 @@ export default function ChooseYourRole() {
     const rolesSelectedUpdate = rolesSelected
     const optionDeleted = rolesSelectedUpdate.pop()
 
-    setRolesSelect(rolesSelectedUpdate)
+    setRolesSelected(rolesSelectedUpdate)
     setSelectedCrew(optionDeleted!)
   }
 
