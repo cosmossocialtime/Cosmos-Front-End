@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import defaultBannerPerfil from '../../../../assets/default-banner-perfil.png'
+import defaultBannerPerfil from '../../../assets/default-banner-perfil.png'
 
 import { api } from '../../../services/api'
 import { userProps } from '../../../types/user'
