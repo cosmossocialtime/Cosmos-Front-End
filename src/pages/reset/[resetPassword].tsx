@@ -34,6 +34,7 @@ const schema = z
     message: 'As senhas não são iguais',
     path: ['confirmPassword'],
   })
+
 type formProps = z.infer<typeof schema>
 
 export default function ResetPassword() {

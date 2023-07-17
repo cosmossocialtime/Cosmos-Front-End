@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         path: '/',
       })
       api.defaults.headers.Authorization = `Bearer ${response?.accessToken}`
-      Router.push('/user/start')
+      Router.push('/user/onboarding/start')
     }
     if (!response) {
       throw new Error('Sem dados de resposta para salvar nos cookies')

@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { completeAchievements } from '../../../data/completeAchievements'
 import { incompleteAchievements } from '../../../data/incompleteAchievements'
-import { achievementsProps } from '../../../types/achievements'
+import { achievementProps } from '../../../types/achievement'
 
 interface AchievementsAreaProps {
-  achievements: achievementsProps
+  achievements: achievementProps[]
 }
 
 export default function AchievementsArea({
