@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Camera, DownloadSimple, UploadSimple } from 'phosphor-react'
 import { Button } from '../../../../../components/Button'
 import UploadImage from '../../../../../components/Crop/UploadImage'
@@ -8,7 +8,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import html2canvas from 'html2canvas'
-import LogoCosmos from '../../../../../../public/images/logoCosmosBranco.svg'
+import LogoCosmos from '../../../../../../public/images/cosmos-logo-white.png'
+import { dashboardProps } from '../../../../../types/dashboard'
+import { api } from '../../../../../services/api'
+import { Loading } from '../../../../../components/Loading'
 
 export default function GenerateBanner() {
   const router = useRouter()
@@ -18,6 +21,23 @@ export default function GenerateBanner() {
   const [profilePhoto, setProfilePhoto] = useState('')
   const [onDialog, setOnDialog] = useState(false)
   const [printImage, setPrintImage] = useState('')
+  const [dashboard, setDashboard] = useState<dashboardProps>()
+
+  useEffect(() => {
+    if (programId) {
+      api
+        .get('/dashboard')
+        .then((response) => {
+          if (response.status === 200) {
+            setDashboard(response.data)
+            setProfilePhoto(response.data.user.profilePicture)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [programId])
 
   function receiveImg(source: string) {
     setSelectedImg(source)
@@ -34,6 +54,10 @@ export default function GenerateBanner() {
     const base64Image = canvas.toDataURL('image/jpg')
 
     setPrintImage(base64Image)
+  }
+
+  if (!dashboard) {
+    return <Loading />
   }
 
   return (
@@ -90,16 +114,27 @@ export default function GenerateBanner() {
           </DialogCrop>
 
           <h1 className="mx-3 mb-5 mt-2 text-4xl font-semibold text-gray-100">
-            Nome da pessoa
+            {dashboard.user.byname}
           </h1>
 
           <p className="mx-3 text-gray-100">
-            [Função] em uma jornada para mentorar a organização social [Nome da
-            Instituição]
+            [Função] em uma jornada para mentorar a organização social{' '}
+            {dashboard.currentMentorship.name}
           </p>
         </div>
-        <div className="mt-5">
-          <Image className="h-7" alt="Logo Cosmos" src={LogoCosmos} />
+
+        <div className="mt-5 flex w-80 items-end justify-between px-4">
+          {dashboard.company.logo && (
+            <Image
+              className="max-h-14 w-auto"
+              alt="Logo da empresa"
+              src={dashboard.company.logo}
+              width={100}
+              height={56}
+              quality={100}
+            />
+          )}
+          <Image className="h-7 w-auto" alt="Logo Cosmos" src={LogoCosmos} />
         </div>
       </div>
 

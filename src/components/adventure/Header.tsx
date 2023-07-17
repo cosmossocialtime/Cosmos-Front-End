@@ -16,10 +16,7 @@ export function Header({ title, subtitle, children }: HeaderProps) {
         <h1 className="text-3xl font-semibold text-gray-600">{title}</h1>
       </div>
       {children}
-      <Link
-        href={'/user/main-painel/painel'}
-        className="absolute right-20 cursor-pointer"
-      >
+      <Link href={'/user/painel'} className="absolute right-20 cursor-pointer">
         <X size={24} />
       </Link>
     </header>

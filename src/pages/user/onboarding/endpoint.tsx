@@ -17,7 +17,7 @@ export default function Decolar() {
             sociais a brilharem ainda mais!
           </p>
           <Link
-            href="/user/main-painel/painel"
+            href="/user/painel"
             className="mt-5 w-full rounded-lg bg-violet-500 py-4 text-center text-lg transition-colors hover:bg-violet-600"
           >
             Decolar!

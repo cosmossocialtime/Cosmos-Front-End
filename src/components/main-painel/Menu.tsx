@@ -13,11 +13,11 @@ export default function Menu() {
   const pagesRoutes = [
     {
       title: 'Painel Principal',
-      route: '/user/main-painel/painel',
+      route: '/user/painel',
     },
     {
       title: 'Meu Perfil',
-      route: '/user/main-painel/profile',
+      route: '/user/profile',
     },
   ]
 

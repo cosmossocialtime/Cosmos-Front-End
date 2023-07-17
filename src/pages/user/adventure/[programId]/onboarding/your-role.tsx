@@ -3,10 +3,34 @@ import LogoCosmos from '../../../../../../public/images/logoCosmosBranco.svg'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useEffect } from 'react'
+import { api } from '../../../../../services/api'
 
 export default function YourRole() {
   const router = useRouter()
   const { programId } = router.query
+  // const [role, setRole] = useState()
+
+  useEffect(() => {
+    if (programId) {
+      api
+        .get('/dashboard')
+        .then((response) => {
+          if (response.status === 200) {
+            // setRole(response.data.currentMentorship.role)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [programId])
+
+  // const roleText = {
+  //   commander: `Seu papel na equipe será o de Comandante. Nesta função, você será responsável por organizar o time, delegando as tarefas a serem realizadas.`,
+  //   specialist: `Seu papel na equipe será o de Especialista. Nesta função, você será responsável por executar as tarefas que condizerem com suas habilidades.`,
+  //   pilot: `Seu papel na equipe será o de Piloto(a). Nesta função, você será responsável por garantir que todas as etapas estejam sendo seguidas corretamente. `,
+  // }
 
   return (
     <div className="h-screen w-screen bg-bgAstronautaDeFrente bg-cover bg-center">

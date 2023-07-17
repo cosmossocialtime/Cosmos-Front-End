@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
-import { api } from '../../../../services/api'
+import { api } from '../../../services/api'
 
-import { userProps } from '../../../../types/user'
-import { achievementsProps } from '../../../../types/achievements'
-import { programProps } from '../../../../types/program'
+import { userProps } from '../../../types/user'
+import { achievementProps } from '../../../types/achievement'
+import { programProps } from '../../../types/program'
 
-import Header from '../../../../components/main-painel/Header'
-import CurrentAchievement from '../../../../components/main-painel/painel/CurrentAchievement'
-import CurrentMissionsArea from '../../../../components/main-painel/painel/CurrentMissionsArea'
-import AdventureArea from '../../../../components/main-painel/painel/AdventureArea'
-import PerfilArea from '../../../../components/main-painel/painel/PerfilArea'
-import AchievementsArea from '../../../../components/main-painel/painel/AchievementsArea'
-import { mentorshipProps } from '../../../../types/mentorship'
+import Header from '../../../components/main-painel/Header'
+import CurrentAchievement from '../../../components/main-painel/painel/CurrentAchievement'
+import CurrentMissionsArea from '../../../components/main-painel/painel/CurrentMissionsArea'
+import AdventureArea from '../../../components/main-painel/painel/AdventureArea'
+import PerfilArea from '../../../components/main-painel/painel/PerfilArea'
+import AchievementsArea from '../../../components/main-painel/painel/AchievementsArea'
+import { mentorshipProps } from '../../../types/mentorship'
 
 export default function Painel() {
   const [user, setUser] = useState<userProps | null>(null)
-  const [achievements, setAchievements] = useState<achievementsProps>([])
+  const [achievements, setAchievements] = useState<achievementProps[]>([])
   const [programs, setPrograms] = useState<programProps[]>([])
   const [mentorships, setMentorships] = useState<mentorshipProps[]>([])
   //   const [isLoading, setIsLoading] = useState(true)

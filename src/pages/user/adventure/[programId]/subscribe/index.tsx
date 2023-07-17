@@ -86,7 +86,7 @@ export default function Adventure() {
         )}
       </div>
 
-      <Link href="/user/main-painel/painel">
+      <Link href="/user/painel">
         <Button.ArrowLeft />
       </Link>
     </div>

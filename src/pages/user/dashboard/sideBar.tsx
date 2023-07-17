@@ -65,7 +65,7 @@ export default function SideBar() {
       >
         <div>
           <div className="mx-auto my-7 w-fit">
-            <Link href={'/user/main-painel/painel'}>
+            <Link href={'/user/painel'}>
               {showside ? (
                 <Image
                   width={160}
@@ -86,7 +86,7 @@ export default function SideBar() {
 
           {showside && (
             <Link
-              href={'/user/main-painel/painel'}
+              href={'/user/painel'}
               className="mx-auto block text-center font-semibold text-blue-400"
             >
               Voltar ao Painel Principal
