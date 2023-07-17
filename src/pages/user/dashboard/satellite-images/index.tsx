@@ -103,6 +103,7 @@ const SatelitesPage = () => {
                 />
                 <h1>{company ? company.name : ''}</h1>
               </ItemSatelite>
+
               <ModalInstitute
                 name={company?.name}
                 totalCollaborators={company?.totalCollaborators}
