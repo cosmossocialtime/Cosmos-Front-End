@@ -2,13 +2,12 @@ import * as Dialog from '@radix-ui/react-dialog'
 import ItemSatelite from '../../../../components/dashboard/satellite-images/ItemSatelite'
 import Image from 'next/image'
 import SideBar from '../sideBar'
-<<<<<<< HEAD:src/pages/dashboard/satellite-images/index.tsx
-import ModalSatelite from '../../../components/dashboard/satellite-images/modalSatelite'
-import { DatasPlanets } from '../../../data/datasPlanets'
-import ModalInstitute from '../../../components/dashboard/satellite-images/modalInstitute'
-import useFetch from '../../../hooks/useFetch'
+import ModalSatelite from '../../../../components/dashboard/satellite-images/modalSatelite'
+import { DatasPlanets } from '../../../../data/datasPlanets'
+import ModalInstitute from '../../../../components/dashboard/satellite-images/modalInstitute'
+import useFetch from '../../../../hooks/useFetch'
 import { useEffect, useState } from 'react'
-import { api } from '../../../services/api'
+import { api } from '../../../../services/api'
 
 interface User {
   user: {
@@ -35,11 +34,6 @@ interface SectorProps {
   currentlyWorking?: string
   effectiveness?: string
 }
-=======
-import ModalSatelite from '../../../../components/dashboard/satellite-images/modalSatelite'
-import { DatasPlanets } from '../../../../data/datasPlanets'
-import ModalInstitute from '../../../../components/dashboard/satellite-images/modalInstitute'
->>>>>>> erickh:src/pages/user/dashboard/satellite-images/index.tsx
 
 const SatelitesPage = () => {
   const [company, setCompany] = useState<SateliteInfo>()
