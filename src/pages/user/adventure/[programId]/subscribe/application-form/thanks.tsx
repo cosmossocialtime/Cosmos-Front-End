@@ -4,6 +4,7 @@ import { programProps } from '../../../../../../types/program'
 import { useRouter } from 'next/router'
 import { api } from '../../../../../../services/api'
 import { Loading } from '../../../../../../components/Loading'
+import Link from 'next/link'
 
 export default function Thanks() {
   const [program, setProgram] = useState<programProps | null>(null)
@@ -23,7 +24,6 @@ export default function Thanks() {
     }
   }, [programId])
 
-  console.log(program)
   if (!program) {
     return <Loading />
   }
@@ -47,10 +47,11 @@ export default function Thanks() {
             {program.name} na aba “Missões Atuais” e poderá dar início à sua
             jornada.
           </p>
-
-          <Button.Primary className="mt-8 py-3 px-20">
-            Voltar ao Painel Principal
-          </Button.Primary>
+          <Link href="/user/painel">
+            <Button.Primary className="mt-8 py-3 px-20">
+              Voltar ao Painel Principal
+            </Button.Primary>
+          </Link>
         </div>
       </div>
     </div>

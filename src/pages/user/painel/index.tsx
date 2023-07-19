@@ -27,7 +27,8 @@ export default function Painel() {
         setUser(response.data.user)
         setAchievements(response.data.achievements)
         setPrograms(response.data.programs)
-        setMentorships([response.data.currentMentorship])
+        response.data.currentMentorship &&
+          setMentorships([response.data.currentMentorship])
         // setIsLoading(false)
       })
       .catch((error) => {

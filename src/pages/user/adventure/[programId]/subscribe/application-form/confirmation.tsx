@@ -7,6 +7,7 @@ import { api } from '../../../../../../services/api'
 import Router, { useRouter } from 'next/router'
 import Link from 'next/link'
 import { programProps } from '../../../../../../types/program'
+import axiosInstance from '../../../../../../services/apiMock'
 
 export default function Confirmation() {
   const router = useRouter()
@@ -91,7 +92,7 @@ export default function Confirmation() {
       toast.error('Selecione ao menos 1 área!')
       return
     }
-    api
+    axiosInstance
       .patch(`/volunteer/completed/${program?.volunteerApplicationId}`, {
         sectorIds: selectedAreas,
       })
@@ -119,7 +120,7 @@ export default function Confirmation() {
       </Header>
       <div className="mt-10 mb-20 grid justify-center">
         <h2 className="text-center">
-          Ufa! Chegamos na última etapa! Agora, escolha{' '}
+          Ufa! Chegamos à última etapa! Agora, escolha{' '}
           <strong>até 3 áreas</strong> do conhecimento <br /> com as quais você
           pode contribuir para a organização mentorada:
         </h2>

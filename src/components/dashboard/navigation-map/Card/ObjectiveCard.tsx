@@ -2,6 +2,7 @@ import moonIcon from '../../../../assets/moon-icon.svg'
 import darkMoonIcon from '../../../../assets/dark-moon-icon.svg'
 import ProgressBar from './ProgressBar'
 import Image from 'next/image'
+import { Button } from '../../../Button'
 
 interface ObjectiveCardProps {
   description: string
@@ -21,7 +22,7 @@ export default function ObjectiveCard({
   const percentageDistanceCenterImg = -(completedPercentage - 50)
 
   return (
-    <div className="group flex h-[320px] cursor-pointer flex-col justify-between">
+    <div className="group flex cursor-pointer flex-col justify-between">
       <div className="flex h-[270px] w-[200px] flex-col items-center gap-1 rounded-lg bg-blue-100 bg-opacity-5 from-blue-400/70 to-violet-600/70 px-2 pt-4 text-white group-hover:bg-gradient-to-b">
         <div className="relative flex h-36 w-36 items-center justify-center">
           <div className="relative flex h-20 w-20 items-center justify-center">
@@ -51,9 +52,9 @@ export default function ObjectiveCard({
         </div>
       </div>
 
-      <button className="hidden h-10 w-full items-center justify-center rounded-lg bg-violet-500 font-semibold text-white group-hover:flex">
+      <Button.Primary className="mt-2 w-full py-2 font-semibold opacity-0 group-hover:opacity-100">
         Descobrir tarefas
-      </button>
+      </Button.Primary>
     </div>
   )
 }

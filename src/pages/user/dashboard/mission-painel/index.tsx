@@ -3,7 +3,7 @@ import { Calendar, Check } from 'phosphor-react'
 import SideBar from '../sideBar'
 import { stagesData, stage } from '../../../../data/StagesData'
 
-export default function painelDaMissão() {
+export default function PainelDaMissão() {
   const stagesLength = stagesData.length
   const stageWidth = 100 / stagesLength
   const barGrayWidth = 100 - stageWidth
@@ -50,7 +50,7 @@ export default function painelDaMissão() {
         </header>
 
         <div className="flex flex-col items-center px-20">
-          <div className="my-2 flex items-center gap-2 self-start">
+          <div className="my-5 flex items-center gap-2 self-start">
             <Calendar size={40} weight="light" />
             <div>
               <span className="block">De dd/mm/aaaa</span>
@@ -58,21 +58,28 @@ export default function painelDaMissão() {
             </div>
           </div>
 
-          <div className="flex w-full flex-col gap-8 overflow-auto rounded-md p-5 pr-[20%] text-lg shadow-[0_0_24px] shadow-black/10">
-            <p>
-              No Programa Mentoria 1, você atuará como mentor(a) voluntário(a)
-              de uma organização social que atua na causa da educação ou da
-              saúde.
-            </p>
-            <p>
-              Você trabalhará em equipe com outros voluntários da Empresa X para
-              apoiar o desenvolvimento da instituição e contribuir para aumentar
-              o seu impacto social.
-            </p>
-            <p>
-              Serão realizados encontros semanais de mentoria, em que a equipe
-              de mentores aconselhará os
-            </p>
+          <div className=" w-full rounded-md p-5 text-lg shadow-[0_0_24px] shadow-black/10">
+            <div className="flex h-64 flex-col gap-8 overflow-y-auto pr-[20%]">
+              <p>
+                No Programa Mentoria 1, você atuará como mentor(a) voluntário(a)
+                de uma organização social que atua na causa da educação ou da
+                saúde.
+              </p>
+              <p>
+                Você trabalhará em equipe com outros voluntários da Empresa X
+                para apoiar o desenvolvimento da instituição e contribuir para
+                aumentar o seu impacto social.
+              </p>
+              <p>
+                Serão realizados encontros semanais de mentoria, em que a equipe
+                de mentores aconselhará os
+              </p>
+              <p>
+                Você trabalhará em equipe com outros voluntários da Empresa X
+                para apoiar o desenvolvimento da instituição e contribuir para
+                aumentar o seu impacto social.
+              </p>
+            </div>
           </div>
 
           <div className="mt-12">
