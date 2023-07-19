@@ -76,7 +76,11 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
   }
 
   return (
-    <div className="flex w-full justify-between px-6 py-4">
+    <div
+      className={`${
+        enableForm ? 'border' : 'border-0 border-b'
+      } flex w-full justify-between rounded border-solid border-gray-400 px-4 py-3`}
+    >
       <div className="flex gap-4">
         <Lock size={24} />
         <span>••••••••</span>
@@ -98,6 +102,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
               <X size={24} className="absolute top-6 right-6" />
             </Dialog.Close>
             <form
+              autoComplete="off"
               ref={changePasswordRef}
               onSubmit={handleSubmit(submitForm)}
               className="flex w-full flex-col gap-6"
@@ -109,7 +114,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
                 <div className=" group relative flex w-full max-w-md justify-between gap-2">
                   <input
                     {...register('currentPassword')}
-                    autoComplete="new-password"
+                    autoComplete="off"
                     required
                     id="current-password"
                     type={showPassword ? 'text' : 'password'}

@@ -13,11 +13,11 @@ export default function Menu() {
   const pagesRoutes = [
     {
       title: 'Painel Principal',
-      route: '/main-painel/painel',
+      route: '/user/painel',
     },
     {
       title: 'Meu Perfil',
-      route: '/main-painel/profile',
+      route: '/user/profile',
     },
   ]
 
@@ -102,7 +102,7 @@ export default function Menu() {
 
       <Dialog.Root open={onFeedback} onOpenChange={setOnFeedback}>
         <Dialog.Trigger></Dialog.Trigger>
-        <Feedback />
+        <Feedback closeFeedback={() => setOnFeedback(false)} />
       </Dialog.Root>
     </div>
   )

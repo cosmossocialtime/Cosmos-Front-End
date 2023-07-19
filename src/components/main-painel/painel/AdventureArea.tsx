@@ -1,11 +1,11 @@
 import { Calendar, CaretRight, Check, Clock } from 'phosphor-react'
 import adventuresData from '../../../data/AdventuresData'
 import Link from 'next/link'
-import { programsProps } from '../../../types/programs'
+import { programProps } from '../../../types/program'
 import dayjs from 'dayjs'
 
 interface AdventureAreaProps {
-  programs: programsProps
+  programs: programProps[]
 }
 
 export default function AdventureArea({ programs }: AdventureAreaProps) {
@@ -23,7 +23,7 @@ export default function AdventureArea({ programs }: AdventureAreaProps) {
           </p>
         ) : (
           programs.map((program, key) => (
-            <Link key={key} href="/usuario/adventure">
+            <Link key={key} href={`/user/adventure/${program.id}/subscribe`}>
               <div
                 key={key}
                 className="mt-4 flex items-center rounded-lg bg-[#151B36] px-6 py-5"

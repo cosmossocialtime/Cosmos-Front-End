@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { Eye, EyeClosed } from 'phosphor-react'
 import { useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useAuth } from '../../context/AuthProvider/useAuth'
@@ -119,7 +119,6 @@ export default function Login() {
                 <Link href="/user/register">Cadastre-se</Link>
               </strong>
             </h3>
-            <ToastContainer autoClose={2000} />
           </div>
         </main>
       </div>

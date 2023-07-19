@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { Check, Eye, EyeClosed, Question } from 'phosphor-react'
 import Link from 'next/link'
 import { api } from '../../services/api'
@@ -274,7 +274,6 @@ export default function Cadastrar() {
                 <Link href="/user/login">Fazer login</Link>
               </strong>
             </h3>
-            <ToastContainer autoClose={2000} limit={3} />
           </div>
         </main>
       </div>

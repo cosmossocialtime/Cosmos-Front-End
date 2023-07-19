@@ -8,10 +8,10 @@ import { CaretLeft, CaretRight } from 'phosphor-react'
 import { useState } from 'react'
 import { completeAchievements } from '../../../data/completeAchievements'
 import { incompleteAchievements } from '../../../data/incompleteAchievements'
-import { achievementsProps } from '../../../types/achievements'
+import { achievementProps } from '../../../types/achievement'
 
 type CurrentAchievementProps = {
-  achievements: achievementsProps
+  achievements: achievementProps[]
 }
 
 export default function CurrentAchievement({
