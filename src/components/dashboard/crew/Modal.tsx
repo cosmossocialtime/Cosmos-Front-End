@@ -14,6 +14,7 @@ type DatasProfile = {
   mainCompetencies: string
   reasonToJoin: string
   role: string
+  roleName: string
   profilePicture: string
   banner: string
 }
@@ -80,7 +81,7 @@ export default function Modal(ModalProps: DatasProfile) {
             <div className="relative">
               <Image src={Retangulo} alt="Retangulo" />
               <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-xs shadow-lg shadow-black/20 drop-shadow-sm">
-                {ModalProps.role}
+                {ModalProps.roleName}
               </span>
             </div>
           </div>
@@ -89,7 +90,7 @@ export default function Modal(ModalProps: DatasProfile) {
               {ModalProps.byname}
             </span>
             <span className="text-sm text-indigo-500">
-              Cargo: {ModalProps.role}
+              Cargo: {ModalProps.roleName}
             </span>
             {/* <span className="text-sm text-indigo-500">
               Setor: {ModalProps.sector}

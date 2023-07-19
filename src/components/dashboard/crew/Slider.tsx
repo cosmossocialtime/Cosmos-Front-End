@@ -16,6 +16,7 @@ interface MentorshipProps {
   mainCompetencies: string
   reasonToJoin: string
   role: string
+  roleName: string
   profilePicture: string
   banner: string
 }
@@ -81,13 +82,13 @@ export default function Slider() {
                   <div className="flex justify-between">
                     <div className="flex flex-col">
                       <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
-                        {volunteer.role}
+                        {volunteer.roleName}
                       </h2>
                       <span className="text-left text-[18px] font-medium text-indigo-500">
                         {volunteer.byname}
                       </span>
                       <span className="text-left text-indigo-500">
-                        Cargo: {volunteer.role}
+                        Cargo: {volunteer.roleName}
                       </span>
                       {/* <span className="text-left text-indigo-500">
                         Setor: [{card.sector}]
@@ -133,6 +134,7 @@ export default function Slider() {
                     profilePicture={volunteer.profilePicture}
                     reasonToJoin={volunteer.reasonToJoin}
                     banner={volunteer.banner}
+                    roleName={volunteer.roleName}
                   />
                 </ModalContent>
               </div>
@@ -148,7 +150,7 @@ export default function Slider() {
             }
             disabled={
               currentSlide ===
-              instanceRef.current.track.details?.slides.length - 1
+              instanceRef.current.track.details?.slides?.length - 1
             }
           />
         </>
