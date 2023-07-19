@@ -1,19 +1,38 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
-
-import ProfilePhoto from '../../../../public/images/tripulacao/ProfileIcon.jpg'
+import Astronauta from '../../../../public/images/astronauta.png'
 import Arrow from './ArrowSlider'
 import { useKeenSlider } from 'keen-slider/react'
 import ModalContent from './CreateModal'
 import Modal from './Modal'
-import { cardTripulation } from '../../../data/cardTripulation'
 import useFetch from '../../../hooks/useFetch'
+import { api } from '../../../services/api'
 
+interface MentorshipProps {
+  id: number
+  byname: string
+  professionalPreviousExperiences: string
+  mainCompetencies: string
+  reasonToJoin: string
+  role: string
+  roleName: string
+  profilePicture: string
+  banner: string
+}
+
+interface currentMentorship {
+  currentMentorship: {
+    mentorshipId: number
+  }
+}
 export default function Slider() {
   const [openModal, setOpenModal] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [mentorshipVolunteers, setMentorshipVolunteers] = useState<
+    MentorshipProps[]
+  >([])
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
@@ -29,10 +48,20 @@ export default function Slider() {
       setLoaded(true)
     },
   })
+  const { data } = useFetch<currentMentorship>(
+    'https://api.cosmossocial.com.br/api/dashboard',
+  )
+  const mentorshipId = data?.currentMentorship.mentorshipId
 
-  const { data } = useFetch('https://api.cosmossocial.com.br/api/dashboard')
-  console.log(data)
+  useEffect(() => {
+    if (mentorshipId) {
+      api.get(`/mentorship/${mentorshipId}/volunteers`).then((response) => {
+        setMentorshipVolunteers(response.data)
+      })
+    }
+  }, [mentorshipId])
 
+  console.log(mentorshipVolunteers)
   return (
     <div>
       {!openModal && (
@@ -40,10 +69,10 @@ export default function Slider() {
       )}
 
       <div ref={sliderRef} className="keen-slider flex py-2">
-        {cardTripulation.map((card) => {
+        {mentorshipVolunteers.map((volunteer) => {
           return (
             <Dialog.Root
-              key={card.Title}
+              key={volunteer.id}
               onOpenChange={(Modal) => {
                 setOpenModal(Modal)
               }}
@@ -53,39 +82,59 @@ export default function Slider() {
                   <div className="flex justify-between">
                     <div className="flex flex-col">
                       <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
-                        {card.Title}
+                        {volunteer.roleName}
                       </h2>
                       <span className="text-left text-[18px] font-medium text-indigo-500">
-                        {card.name}
+                        {volunteer.byname}
                       </span>
                       <span className="text-left text-indigo-500">
-                        Cargo: [{card.charge}]
+                        Cargo: {volunteer.roleName}
                       </span>
-                      <span className="text-left text-indigo-500">
+                      {/* <span className="text-left text-indigo-500">
                         Setor: [{card.sector}]
-                      </span>
+                      </span> */}
                     </div>
                     <div className="h-28 w-28 overflow-hidden rounded-md">
-                      <Image
-                        src={ProfilePhoto}
-                        alt="Imagem de perfil"
-                        className="w-full"
-                      />
+                      {volunteer.profilePicture ? (
+                        <Image
+                          width={300}
+                          height={300}
+                          onLoad={() => volunteer.profilePicture}
+                          src={volunteer.profilePicture}
+                          alt="Imagem de perfil"
+                          className="w-full"
+                        />
+                      ) : (
+                        <Image
+                          width={300}
+                          height={300}
+                          onLoad={() => Astronauta}
+                          src={Astronauta}
+                          alt="Imagem de perfil"
+                          className="w-full"
+                        />
+                      )}
                     </div>
                   </div>
                   <p className="text-left text-indigo-500">
-                    {card.description}
+                    {volunteer.professionalPreviousExperiences}
                   </p>
                 </Dialog.Trigger>
 
                 <ModalContent>
                   <Modal
-                    key={card.name}
-                    title={card.Title}
-                    name={card.name}
-                    charge={card.charge}
-                    description={card.description}
-                    sector={card.sector}
+                    key={volunteer.id}
+                    role={volunteer.role}
+                    byname={volunteer.byname}
+                    professionalPreviousExperiences={
+                      volunteer.professionalPreviousExperiences
+                    }
+                    id={volunteer.id}
+                    mainCompetencies={volunteer.mainCompetencies}
+                    profilePicture={volunteer.profilePicture}
+                    reasonToJoin={volunteer.reasonToJoin}
+                    banner={volunteer.banner}
+                    roleName={volunteer.roleName}
                   />
                 </ModalContent>
               </div>
@@ -101,7 +150,7 @@ export default function Slider() {
             }
             disabled={
               currentSlide ===
-              instanceRef.current.track.details.slides.length - 1
+              instanceRef.current.track.details?.slides?.length - 1
             }
           />
         </>
