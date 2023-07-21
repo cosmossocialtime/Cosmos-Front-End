@@ -1,3 +1,4 @@
+'use client'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
@@ -38,9 +39,8 @@ export default function Slider() {
   const [openModal, setOpenModal] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [mentorshipVolunteers, setMentorshipVolunteers] = useState<
-    MentorshipProps[]
-  >([])
+  const [mentorshipVolunteers, setMentorshipVolunteers] =
+    useState<MentorshipProps[]>()
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
@@ -69,6 +69,9 @@ export default function Slider() {
   }, [mentorshipId])
 
   console.log(mentorshipVolunteers)
+  if (!mentorshipVolunteers) {
+    return <span>Carregando..</span>
+  }
   return (
     <div>
       {!openModal && (
@@ -79,15 +82,13 @@ export default function Slider() {
         {mentorshipVolunteers &&
           mentorshipVolunteers.map((volunteer) => {
             return (
-              <div
+              <Dialog.Root
+                onOpenChange={(Modal) => {
+                  setOpenModal(Modal)
+                }}
                 key={volunteer.id}
-                className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-20"
               >
-                <Dialog.Root
-                  onOpenChange={(Modal) => {
-                    setOpenModal(Modal)
-                  }}
-                >
+                <div className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-20">
                   <Dialog.Trigger>
                     <div className="flex justify-between">
                       <div className="flex flex-col">
@@ -155,8 +156,8 @@ export default function Slider() {
                       roleId={volunteer.roleId}
                     />
                   </ModalContent>
-                </Dialog.Root>
-              </div>
+                </div>
+              </Dialog.Root>
             )
           })}
       </div>
