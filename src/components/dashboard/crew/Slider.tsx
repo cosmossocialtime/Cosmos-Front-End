@@ -19,6 +19,14 @@ interface MentorshipProps {
   roleName: string
   profilePicture: string
   banner: string
+  knowledgeAreas: [
+    {
+      sectorId: number
+      sector: string
+    },
+  ]
+  previousMentorship: string
+  roleId: number
 }
 
 interface currentMentorship {
@@ -40,7 +48,6 @@ export default function Slider() {
       spacing: 15,
     },
 
-    initial: 0,
     slideChanged(slider) {
       setCurrentSlide(slider.track.details.rel)
     },
@@ -65,88 +72,99 @@ export default function Slider() {
   return (
     <div>
       {!openModal && (
-        <div className="absolute right-0 top-0 z-10 h-full bg-gradient-to-l from-white lg:w-80" />
+        <div className="absolute right-0 top-0 z-10 h-full bg-gradient-to-l from-white lg:w-96" />
       )}
 
-      <div ref={sliderRef} className="keen-slider flex py-2">
-        {mentorshipVolunteers.map((volunteer) => {
-          return (
-            <Dialog.Root
-              key={volunteer.id}
-              onOpenChange={(Modal) => {
-                setOpenModal(Modal)
-              }}
-            >
-              <div className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-10 drop-shadow lg:py-20">
-                <Dialog.Trigger>
-                  <div className="flex justify-between">
-                    <div className="flex flex-col">
-                      <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
-                        {volunteer.roleName}
-                      </h2>
-                      <span className="text-left text-[18px] font-medium text-indigo-500">
-                        {volunteer.byname}
-                      </span>
-                      <span className="text-left text-indigo-500">
-                        Cargo: {volunteer.roleName}
-                      </span>
-                      {/* <span className="text-left text-indigo-500">
+      <div ref={sliderRef} className="keen-slider w-full py-14">
+        {mentorshipVolunteers &&
+          mentorshipVolunteers.map((volunteer) => {
+            return (
+              <div
+                key={volunteer.id}
+                className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-20"
+              >
+                <Dialog.Root
+                  onOpenChange={(Modal) => {
+                    setOpenModal(Modal)
+                  }}
+                >
+                  <Dialog.Trigger>
+                    <div className="flex justify-between">
+                      <div className="flex flex-col">
+                        <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
+                          {volunteer.roleName}
+                        </h2>
+                        <span className="text-left text-[18px] font-medium text-indigo-500">
+                          {volunteer.byname}
+                        </span>
+                        <span className="text-left text-indigo-500">
+                          Cargo: {volunteer.roleName}
+                        </span>
+                        {/* <span className="text-left text-indigo-500">
                         Setor: [{card.sector}]
                       </span> */}
+                      </div>
+                      <div className="h-28 w-28 overflow-hidden rounded-md">
+                        {volunteer.profilePicture ? (
+                          <Image
+                            width={300}
+                            height={300}
+                            onLoad={() => volunteer.profilePicture}
+                            src={volunteer.profilePicture}
+                            alt="Imagem de perfil"
+                            className="w-full"
+                          />
+                        ) : (
+                          <Image
+                            width={300}
+                            height={300}
+                            onLoad={() => Astronauta}
+                            src={Astronauta}
+                            alt="Imagem de perfil"
+                            className="w-full"
+                          />
+                        )}
+                      </div>
                     </div>
-                    <div className="h-28 w-28 overflow-hidden rounded-md">
-                      {volunteer.profilePicture ? (
-                        <Image
-                          width={300}
-                          height={300}
-                          onLoad={() => volunteer.profilePicture}
-                          src={volunteer.profilePicture}
-                          alt="Imagem de perfil"
-                          className="w-full"
-                        />
-                      ) : (
-                        <Image
-                          width={300}
-                          height={300}
-                          onLoad={() => Astronauta}
-                          src={Astronauta}
-                          alt="Imagem de perfil"
-                          className="w-full"
-                        />
-                      )}
+                    <div className="mt-2 flex max-w-md flex-col gap-3">
+                      <p className="break-words text-left text-indigo-500">
+                        {volunteer.professionalPreviousExperiences}
+                      </p>
+                      <p className="break-words text-left text-indigo-500">
+                        {volunteer.mainCompetencies}
+                      </p>
                     </div>
-                  </div>
-                  <p className="text-left text-indigo-500">
-                    {volunteer.professionalPreviousExperiences}
-                  </p>
-                </Dialog.Trigger>
+                  </Dialog.Trigger>
 
-                <ModalContent>
-                  <Modal
-                    key={volunteer.id}
-                    role={volunteer.role}
-                    byname={volunteer.byname}
-                    professionalPreviousExperiences={
-                      volunteer.professionalPreviousExperiences
-                    }
-                    id={volunteer.id}
-                    mainCompetencies={volunteer.mainCompetencies}
-                    profilePicture={volunteer.profilePicture}
-                    reasonToJoin={volunteer.reasonToJoin}
-                    banner={volunteer.banner}
-                    roleName={volunteer.roleName}
-                  />
-                </ModalContent>
+                  <ModalContent>
+                    <Modal
+                      key={volunteer.id}
+                      role={volunteer.role}
+                      byname={volunteer.byname}
+                      professionalPreviousExperiences={
+                        volunteer.professionalPreviousExperiences
+                      }
+                      id={volunteer.id}
+                      mainCompetencies={volunteer.mainCompetencies}
+                      profilePicture={volunteer.profilePicture}
+                      reasonToJoin={volunteer.reasonToJoin}
+                      banner={volunteer.banner}
+                      roleName={volunteer.roleName}
+                      knowledgeAreas={volunteer.knowledgeAreas}
+                      previousMentorship={volunteer.previousMentorship}
+                      roleId={volunteer.roleId}
+                    />
+                  </ModalContent>
+                </Dialog.Root>
               </div>
-            </Dialog.Root>
-          )
-        })}
+            )
+          })}
       </div>
       {loaded && instanceRef.current && (
         <>
           <Arrow
             onClick={(e: any) =>
-              e.stopPropagation() || instanceRef.current?.next()
+              e.stopPropagation() || instanceRef?.current?.next()
             }
             disabled={
               currentSlide ===

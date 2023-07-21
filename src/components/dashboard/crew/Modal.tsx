@@ -4,8 +4,12 @@ import Close from '../../../../public/images/tripulacao/Close.svg'
 import BackgroundModal from '../../../../public/images/tripulacao/backgroundModal.png'
 import Astronauta from '../../../../public/images/astronauta.png'
 import Image from 'next/image'
-import Astro from '../../../../public/images/tripulacao/Astro.png'
-import Retangulo from '../../../../public/images/tripulacao/Retangulo.svg'
+import AstroPilot from '../../../../public/images/tripulacao/Astro.png'
+import AstroLeader from '../../../../public/images/tripulacao/leader.png'
+import AstroSpecialist from '../../../../public/images/tripulacao/specialist.png'
+import RetactanglePiloto from '../../../../public/images/tripulacao/Retangulo.svg'
+import RetactangleLeader from '../../../../public/images/tripulacao/rectangleLeader.svg'
+import RetactangleSpecialist from '../../../../public/images/tripulacao/RectangleSpecialist.svg'
 
 type DatasProfile = {
   id: number
@@ -17,7 +21,17 @@ type DatasProfile = {
   roleName: string
   profilePicture: string
   banner: string
+  roleId: number
+  knowledgeAreas: [
+    {
+      sectorId: number
+      sector: string
+    },
+  ]
+  previousMentorship: string
 }
+
+const arrayColors = ['bg-blue-500', 'bg-[#18A6AC]', 'bg-violet-500']
 
 export default function Modal(ModalProps: DatasProfile) {
   return (
@@ -48,7 +62,7 @@ export default function Modal(ModalProps: DatasProfile) {
           <Image src={Close} alt="Button Close" className="rounded-md" />
         </Dialog.Close>
       </div>
-      <div className="relative flex items-center justify-center gap-24 px-2">
+      <div className="relative flex items-center justify-around gap-24 px-10">
         <div className="relative flex gap-12">
           <div className="relative -top-8 h-36 w-36 overflow-hidden rounded-full border-4 border-gray-50 shadow-lg shadow-black/20 drop-shadow-sm">
             {ModalProps.profilePicture ? (
@@ -75,11 +89,28 @@ export default function Modal(ModalProps: DatasProfile) {
           </div>
           <div className="absolute bottom-2 left-0 z-10 flex items-center">
             <div>
-              <Image src={Astro} alt="Asto" quality={100} />
+              {ModalProps.roleId === 1 && (
+                <Image src={AstroSpecialist} alt="Retangulo" />
+              )}
+              {ModalProps.roleId === 2 && (
+                <Image src={AstroPilot} alt="Retangulo" />
+              )}
+              {ModalProps.roleId === 3 && (
+                <Image src={AstroLeader} alt="Retangulo" />
+              )}
             </div>
 
             <div className="relative">
-              <Image src={Retangulo} alt="Retangulo" />
+              {ModalProps.roleId === 1 && (
+                <Image src={RetactangleSpecialist} alt="Retangulo" />
+              )}
+              {ModalProps.roleId === 2 && (
+                <Image src={RetactanglePiloto} alt="Retangulo" />
+              )}
+              {ModalProps.roleId === 3 && (
+                <Image src={RetactangleLeader} alt="Retangulo" />
+              )}
+
               <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-xs shadow-lg shadow-black/20 drop-shadow-sm">
                 {ModalProps.roleName}
               </span>
@@ -98,15 +129,15 @@ export default function Modal(ModalProps: DatasProfile) {
           </div>
         </div>
         <div className="flex h-8 items-center gap-2">
-          <span className="rounded-lg bg-blue-300 px-6 py-2 text-center text-xs font-semibold">
-            Marketing
-          </span>
-          <span className="rounded-lg bg-cian-300 px-6 py-2 text-center text-xs font-semibold">
-            Gestão de projetos
-          </span>
-          <span className="rounded-lg bg-violet-700 px-6 py-2 text-center text-xs font-semibold">
-            Analise de dados
-          </span>
+          {ModalProps.knowledgeAreas &&
+            ModalProps.knowledgeAreas.map((areas, index) => (
+              <span
+                key={areas.sectorId}
+                className={`${arrayColors[index]} rounded-lg px-6 py-2 text-center text-xs font-semibold`}
+              >
+                {areas.sector}
+              </span>
+            ))}
         </div>
       </div>
       <Tabs.Root
@@ -142,12 +173,7 @@ export default function Modal(ModalProps: DatasProfile) {
         <div className="mb-10 flex w-3/4 items-center justify-center rounded border border-gray-300 px-2 text-black lg:w-full lg:max-w-4xl ">
           <div className="w-full px-3 py-3">
             <Tabs.Content value="tab1">
-              <span>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ut
-                vero nesciunt a libero dicta quo omnis debitis. Modi qui facilis
-                sapiente itaque ex nam, accusamus officia quod. Sed, numquam
-                similique?
-              </span>
+              {ModalProps.professionalPreviousExperiences}
             </Tabs.Content>
             <Tabs.Content value="tab2">
               <span className="break-words">{ModalProps.mainCompetencies}</span>
@@ -156,7 +182,7 @@ export default function Modal(ModalProps: DatasProfile) {
               <span>{ModalProps.reasonToJoin}</span>
             </Tabs.Content>
             <Tabs.Content className="break-words" value="tab4">
-              <span>{ModalProps.professionalPreviousExperiences}</span>
+              <span>{ModalProps.previousMentorship}</span>
             </Tabs.Content>
           </div>
         </div>

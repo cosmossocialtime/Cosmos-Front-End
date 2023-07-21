@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { api } from '../../../services/api'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import Image from 'next/image'
@@ -68,7 +68,7 @@ export default function CompanyCode() {
   return (
     <div className="relative">
       <Link href={'/user/onboarding/gender'}>
-        <Button.ArrowLeft position="top" />
+        <Button.ArrowLeft />
       </Link>
       <main className="flex h-screen items-center justify-around bg-bgCadastro bg-cover bg-bottom bg-no-repeat ">
         <form
@@ -127,6 +127,7 @@ export default function CompanyCode() {
             />
           </div>
         </div>
+        <ToastContainer autoClose={2000} limit={3} />
       </main>
     </div>
   )
