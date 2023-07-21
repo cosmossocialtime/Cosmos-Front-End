@@ -33,7 +33,7 @@ export default function YourRole() {
   // }
 
   return (
-    <div className="h-screen w-screen bg-bgAstronautaDeFrente bg-cover bg-center">
+    <div className="h-screen w-screen bg-bgAstronautaDeFrente bg-cover bg-bottom">
       <Image
         className="absolute top-16 left-16"
         alt="Logo Cosmos"
