@@ -111,7 +111,7 @@ export default function Modal(ModalProps: DatasProfile) {
                 <Image src={RetactangleLeader} alt="Retangulo" />
               )}
 
-              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-xs shadow-lg shadow-black/20 drop-shadow-sm">
+              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-base font-semibold">
                 {ModalProps.roleName}
               </span>
             </div>

@@ -130,7 +130,7 @@ export default function SideBar() {
       </aside>
       <button
         onClick={() => setShowSide(!showside)}
-        className={`absolute left-full top-1/2 h-fit  -translate-y-1/2 rounded-r-lg bg-violet-900 py-5 px-1 text-lg text-white`}
+        className={`absolute left-full top-1/2 z-10 h-fit  -translate-y-1/2 rounded-r-lg bg-violet-900 py-5 px-1 text-lg text-white`}
       >
         <ArrowLeft
           className={`${
