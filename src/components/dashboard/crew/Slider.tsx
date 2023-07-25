@@ -28,6 +28,8 @@ interface MentorshipProps {
   ]
   previousMentorship: string
   roleId: number
+  professionalRole: string
+  professionalSector: string
 }
 
 interface currentMentorship {
@@ -103,11 +105,11 @@ export default function Slider() {
                           {volunteer.byname}
                         </span>
                         <span className="text-left text-indigo-500">
-                          Cargo: {volunteer.roleName}
+                          Cargo: {volunteer.professionalRole}
                         </span>
-                        {/* <span className="text-left text-indigo-500">
-                        Setor: [{card.sector}]
-                      </span> */}
+                        <span className="text-left text-indigo-500">
+                          Setor: {volunteer.professionalSector}
+                        </span>
                       </div>
                       <div className="h-28 w-28 overflow-hidden rounded-md">
                         {volunteer.profilePicture ? (
@@ -158,6 +160,8 @@ export default function Slider() {
                       knowledgeAreas={volunteer.knowledgeAreas}
                       previousMentorship={volunteer.previousMentorship}
                       roleId={volunteer.roleId}
+                      professionalRole={volunteer.professionalRole}
+                      professionalSector={volunteer.professionalSector}
                     />
                   </ModalContent>
                 </div>

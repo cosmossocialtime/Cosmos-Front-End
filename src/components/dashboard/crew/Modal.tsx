@@ -29,6 +29,8 @@ type DatasProfile = {
     },
   ]
   previousMentorship: string
+  professionalRole: string
+  professionalSector: string
 }
 
 const arrayColors = ['bg-blue-500', 'bg-[#18A6AC]', 'bg-violet-500']
@@ -102,16 +104,31 @@ export default function Modal(ModalProps: DatasProfile) {
 
             <div className="relative">
               {ModalProps.roleId === 1 && (
-                <Image src={RetactangleSpecialist} alt="Retangulo" />
+                <Image
+                  width={120}
+                  height={120}
+                  src={RetactangleSpecialist}
+                  alt="Retangulo"
+                />
               )}
               {ModalProps.roleId === 2 && (
-                <Image src={RetactanglePiloto} alt="Retangulo" />
+                <Image
+                  width={120}
+                  height={120}
+                  src={RetactanglePiloto}
+                  alt="Retangulo"
+                />
               )}
               {ModalProps.roleId === 3 && (
-                <Image src={RetactangleLeader} alt="Retangulo" />
+                <Image
+                  width={120}
+                  height={120}
+                  src={RetactangleLeader}
+                  alt="Retangulo"
+                />
               )}
 
-              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-base font-semibold">
+              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-sm font-semibold">
                 {ModalProps.roleName}
               </span>
             </div>
@@ -121,11 +138,11 @@ export default function Modal(ModalProps: DatasProfile) {
               {ModalProps.byname}
             </span>
             <span className="text-sm text-indigo-500">
-              Cargo: {ModalProps.roleName}
+              Cargo: {ModalProps.professionalRole}
             </span>
-            {/* <span className="text-sm text-indigo-500">
-              Setor: {ModalProps.sector}
-            </span> */}
+            <span className="text-sm text-indigo-500">
+              Setor: {ModalProps.professionalSector}
+            </span>
           </div>
         </div>
         <div className="flex h-8 items-center gap-2">
