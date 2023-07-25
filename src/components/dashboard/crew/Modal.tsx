@@ -10,6 +10,7 @@ import AstroSpecialist from '../../../../public/images/tripulacao/specialist.png
 import RetactanglePiloto from '../../../../public/images/tripulacao/Retangulo.svg'
 import RetactangleLeader from '../../../../public/images/tripulacao/rectangleLeader.svg'
 import RetactangleSpecialist from '../../../../public/images/tripulacao/RectangleSpecialist.svg'
+import { Suspense } from 'react'
 
 type DatasProfile = {
   id: number
@@ -39,27 +40,29 @@ export default function Modal(ModalProps: DatasProfile) {
   return (
     <div className="overflow-hidden rounded-2xl">
       <div className="flex">
-        <div className="w-full">
-          {ModalProps.banner ? (
-            <Image
-              width={600}
-              height={600}
-              src={ModalProps.banner}
-              alt="background modal"
-              quality={100}
-              className="cover w-full "
-            />
-          ) : (
-            <Image
-              width={300}
-              height={300}
-              src={BackgroundModal}
-              alt="background modal"
-              quality={100}
-              className="cover w-full "
-            />
-          )}
-        </div>
+        <Suspense fallback={<span>Carregando...</span>}>
+          <div className="w-full">
+            {ModalProps.banner ? (
+              <Image
+                width={600}
+                height={600}
+                src={ModalProps.banner}
+                alt="background modal"
+                quality={100}
+                className="cover w-full "
+              />
+            ) : (
+              <Image
+                width={300}
+                height={300}
+                src={BackgroundModal}
+                alt="background modal"
+                quality={100}
+                className="cover w-full "
+              />
+            )}
+          </div>
+        </Suspense>
         <Dialog.Close className="absolute top-10 right-8">
           <Image src={Close} alt="Button Close" className="rounded-md" />
         </Dialog.Close>
@@ -133,7 +136,7 @@ export default function Modal(ModalProps: DatasProfile) {
               </span>
             </div>
           </div>
-          <div className="flex flex-col justify-center">
+          <div className="ml-3 flex flex-col justify-center">
             <span className="text-lg font-medium text-indigo-500">
               {ModalProps.byname}
             </span>

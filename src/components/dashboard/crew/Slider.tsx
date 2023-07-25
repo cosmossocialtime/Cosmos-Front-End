@@ -79,7 +79,7 @@ export default function Slider() {
     )
   }
   return (
-    <div className="relative mt-32 flex items-center">
+    <div className="relative mt-10 flex items-center medium:mt-32">
       {!openModal && (
         <div className="absolute right-0 top-0 z-10 bg-gradient-to-l from-white lg:w-96" />
       )}
@@ -95,8 +95,8 @@ export default function Slider() {
                 key={volunteer.id}
               >
                 <div className="keen-slider__slide rounded border  border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-32">
-                  <Dialog.Trigger>
-                    <div className="flex justify-between">
+                  <Dialog.Trigger className="w-full">
+                    <div className="flex w-full justify-between">
                       <div className="flex flex-col">
                         <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
                           {volunteer.roleName}
@@ -111,11 +111,11 @@ export default function Slider() {
                           Setor: {volunteer.professionalSector}
                         </span>
                       </div>
-                      <div className="h-28 w-28 overflow-hidden rounded-md">
+                      <div className="overflow-hidden rounded-full">
                         {volunteer.profilePicture ? (
                           <Image
-                            width={300}
-                            height={300}
+                            width={125}
+                            height={125}
                             onLoad={() => volunteer.profilePicture}
                             src={volunteer.profilePicture}
                             alt="Imagem de perfil"
@@ -133,7 +133,7 @@ export default function Slider() {
                         )}
                       </div>
                     </div>
-                    <div className="mt-2 flex max-w-md flex-col gap-3">
+                    <div className="mt-2 flex max-w-[20rem] flex-col gap-3">
                       <p className="break-words text-left text-indigo-500">
                         {volunteer.professionalPreviousExperiences}
                       </p>
