@@ -1,15 +1,13 @@
 import { Header } from '../../../../../../components/adventure/Header'
-import { useEffect, useState } from 'react'
 import { api } from '../../../../../../services/api'
-import { programProps } from '../../../../../../types/program'
 import Link from 'next/link'
 import { Button } from '../../../../../../components/Button'
 import { Input } from '../../../../../../components/Input'
-import Router, { useRouter } from 'next/router'
-import { userProps } from '../../../../../../types/user'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'react-toastify'
+import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+import Router from 'next/router'
 
 const schema = z.object({
   professionalExperience: z.string(),
@@ -22,11 +20,7 @@ const schema = z.object({
 type formProps = z.infer<typeof schema>
 
 export default function ApplicationForm() {
-  const [program, setProgram] = useState<programProps>()
-  const [user, setUser] = useState<userProps>()
-
-  const router = useRouter()
-  const { programId } = router.query
+  const { program, user, programId } = useSubscribe()
 
   const timeExperienceOpts = [
     'Menos de 2 anos',
@@ -50,29 +44,6 @@ export default function ApplicationForm() {
     : undefined
 
   const { control, handleSubmit, register } = useForm<formProps>()
-
-  useEffect(() => {
-    api
-      .get('/user')
-      .then((response) => {
-        setUser(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
-  useEffect(() => {
-    if (programId) {
-      api
-        .get(`/program/${programId}`)
-        .then((response) => {
-          setProgram(response.data)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
 
   function submitForm({
     professionalExperience,

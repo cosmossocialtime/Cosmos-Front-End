@@ -6,10 +6,10 @@ import Pilot from '../../../../../../../public/images/mission-role/cards/pilot.p
 import Image, { StaticImageData } from 'next/image'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import { api } from '../../../../../../services/api'
 import { toast } from 'react-toastify'
-import { programProps } from '../../../../../../types/program'
+import { useSubscribe } from '../../../../../../hooks/useSubscribe'
 
 type crew = {
   id: number
@@ -18,10 +18,8 @@ type crew = {
 }
 
 export default function ChooseYourRole() {
-  const router = useRouter()
-  const { programId } = router.query
+  const { program, programId } = useSubscribe()
 
-  const [program, setProgram] = useState<programProps>()
   const [rolesSelected, setRolesSelected] = useState<number[]>([])
   const [selectedCrew, setSelectedCrew] = useState(0)
 
@@ -42,19 +40,6 @@ export default function ChooseYourRole() {
       photo: Pilot,
     },
   ]
-
-  useEffect(() => {
-    if (programId) {
-      api
-        .get(`/program/${programId}`)
-        .then((response) => {
-          setProgram(response.data)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
 
   useEffect(() => {
     if (rolesSelected.length === 2) {

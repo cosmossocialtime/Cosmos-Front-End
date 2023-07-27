@@ -1,28 +1,11 @@
-import { useEffect, useState } from 'react'
 import { Button } from '../../../../../../components/Button'
-import { programProps } from '../../../../../../types/program'
-import { useRouter } from 'next/router'
-import { api } from '../../../../../../services/api'
 import { Loading } from '../../../../../../components/Loading'
 import Link from 'next/link'
+import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+import dayjs from 'dayjs'
 
 export default function Thanks() {
-  const [program, setProgram] = useState<programProps | null>(null)
-  const router = useRouter()
-  const { programId } = router.query
-
-  useEffect(() => {
-    if (programId) {
-      api
-        .get(`/program/${programId}`)
-        .then((response) => {
-          setProgram(response.data)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
+  const { program } = useSubscribe({ disableRedirect: true })
 
   if (!program) {
     return <Loading />
@@ -38,8 +21,8 @@ export default function Thanks() {
 
           <p className="mb-7 text-xl">
             O processo de seleção será feito pela empresa {program.companyName}.
-            O resultado será enviado para seu e-mail cadastrado até o dia
-            dd/mm/aa.
+            O resultado será enviado para seu e-mail cadastrado até o dia{' '}
+            {dayjs(program.updatedAt).format('DD/MM/YYYY')}
           </p>
 
           <p className="text-xl">
