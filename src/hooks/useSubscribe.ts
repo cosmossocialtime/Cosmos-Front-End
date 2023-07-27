@@ -1,7 +1,11 @@
 import Router, { useRouter } from 'next/router'
 import { useDashboard } from './useDashboard'
 
-export function useSubscribe(disableRedirect?: boolean) {
+export function useSubscribe({
+  disableRedirect = false,
+}: Partial<{
+  disableRedirect?: boolean
+}> = {}) {
   const { dashboard } = useDashboard()
   const router = useRouter()
   const { programId } = router.query
