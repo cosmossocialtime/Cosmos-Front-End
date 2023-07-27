@@ -1,4 +1,4 @@
-export type volunteeringProps = {
+export type VolunteeringProps = {
   professionalExperience: number
   professionalSector: string
   professionalRole: string
