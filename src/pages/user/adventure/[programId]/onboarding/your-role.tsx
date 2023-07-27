@@ -57,13 +57,13 @@ export default function YourRole() {
       <Link href={`/user/adventure/${programId}/onboarding/generate-banner`}>
         <Button.ArrowLeft
           position="center"
-          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+          className="bg-blue-800/10 text-white backdrop-blur-lg"
         />
       </Link>
       <Link href={`/user/adventure/${programId}/onboarding/take-off`}>
         <Button.ArrowRight
           position="center"
-          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+          className="bg-blue-800/10 text-white backdrop-blur-lg"
         />
       </Link>
     </div>

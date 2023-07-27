@@ -22,7 +22,7 @@ export default function Portal() {
       <Link href={`/user/adventure/${programId}/onboarding/take-off`}>
         <Button.ArrowLeft
           position="center"
-          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+          className="bg-blue-800/10 text-white backdrop-blur-lg"
         />
       </Link>
     </div>

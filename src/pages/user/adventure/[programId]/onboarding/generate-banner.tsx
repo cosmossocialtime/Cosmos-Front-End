@@ -6,38 +6,23 @@ import { DialogCrop } from '../../../../../components/Crop/DialogCrop'
 import SettingCropArea from '../../../../../components/Crop/SettingCropArea'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import html2canvas from 'html2canvas'
 import LogoCosmos from '../../../../../../public/images/cosmos-logo-white.png'
-import { dashboardProps } from '../../../../../types/dashboard'
-import { api } from '../../../../../services/api'
 import { Loading } from '../../../../../components/Loading'
+import { useOnboarding } from '../../../../../hooks/useOnboarding'
+// import { ToShare } from '../../../../../components/adventure/onboarding/ToShare'
 
 export default function GenerateBanner() {
-  const router = useRouter()
-  const { programId } = router.query
+  const { user, currentMentorship, company, programId } = useOnboarding()
 
   const [selectedImg, setSelectedImg] = useState('')
   const [profilePhoto, setProfilePhoto] = useState('')
   const [onDialog, setOnDialog] = useState(false)
   const [printImage, setPrintImage] = useState('')
-  const [dashboard, setDashboard] = useState<dashboardProps>()
 
   useEffect(() => {
-    if (programId) {
-      api
-        .get('/dashboard')
-        .then((response) => {
-          if (response.status === 200) {
-            setDashboard(response.data)
-            setProfilePhoto(response.data.user.profilePicture)
-          }
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
+    setProfilePhoto(user?.profilePicture || '')
+  }, [user])
 
   function receiveImg(source: string) {
     setSelectedImg(source)
@@ -56,7 +41,7 @@ export default function GenerateBanner() {
     setPrintImage(base64Image)
   }
 
-  if (!dashboard) {
+  if (!user || !currentMentorship || !company || !programId) {
     return <Loading />
   }
 
@@ -72,7 +57,7 @@ export default function GenerateBanner() {
         >
           <DownloadSimple size={40} />
         </a>
-        <Button.Primary className="py-4 px-7">Compartilhar</Button.Primary>
+        {/* <ToShare /> */}
       </header>
 
       <div className="card flex min-h-screen min-w-[1080px] flex-col items-center gap-5 bg-bgNaveDeFundo bg-cover bg-center py-28">
@@ -114,21 +99,21 @@ export default function GenerateBanner() {
           </DialogCrop>
 
           <h1 className="mx-3 mb-5 mt-2 text-4xl font-semibold text-gray-100">
-            {dashboard.user.byname}
+            {user.byname}
           </h1>
 
           <p className="mx-3 text-gray-100">
             [Função] em uma jornada para mentorar a organização social{' '}
-            {dashboard.currentMentorship.name}
+            {currentMentorship.name}
           </p>
         </div>
 
         <div className="mt-5 flex w-80 items-end justify-between px-4">
-          {dashboard.company.logo && (
+          {company.logo && (
             <Image
               className="max-h-14 w-auto"
               alt="Logo da empresa"
-              src={dashboard.company.logo}
+              src={company.logo}
               width={100}
               height={56}
               quality={100}
@@ -139,7 +124,7 @@ export default function GenerateBanner() {
       </div>
 
       <Link href={`/user/adventure/${programId}/onboarding/your-role`}>
-        <Button.Primary className="absolute bottom-7 left-1/2 -translate-x-1/2 bg-gray-100/10 px-[7.5rem] py-4 backdrop-blur-[20px] hover:bg-blue-700">
+        <Button.Primary className="absolute bottom-7 left-1/2 -translate-x-1/2 bg-gray-100/10 px-[7.5rem] py-4 backdrop-blur-[20px]">
           Continuar
         </Button.Primary>
       </Link>
@@ -147,13 +132,13 @@ export default function GenerateBanner() {
       <Link href={`/user/adventure/${programId}/onboarding`}>
         <Button.ArrowLeft
           position="center"
-          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+          className="bg-blue-700 text-white"
         />
       </Link>
       <Link href={`/user/adventure/${programId}/onboarding/your-role`}>
         <Button.ArrowRight
           position="center"
-          className="bg-blue-800/10 text-white backdrop-blur-lg hover:bg-blue-700"
+          className="bg-blue-700 text-white"
         />
       </Link>
     </div>
