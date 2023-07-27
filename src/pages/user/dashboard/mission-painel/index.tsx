@@ -1,43 +1,51 @@
+import * as Dialog from '@radix-ui/react-dialog'
 import dayjs from 'dayjs'
-import { Calendar, Check } from 'phosphor-react'
+import { Calendar } from 'phosphor-react'
 import SideBar from '../sideBar'
-import { stagesData, stage } from '../../../../data/StagesData'
+// import { useDashboard } from '../../../../hooks/useDashboard'
+import { Loading } from '../../../../components/Loading'
+import FormatText from '../../../../utils/FormatText'
+import { useEffect, useState } from 'react'
+import axiosInstance from '../../../../services/apiMock'
+import { MentorshipProps } from '../../../../types/mentorship'
+import { StagesLine } from '../../../../components/dashboard/mission-painel/StagesLine'
+import { VideoPopUp } from '../../../../components/dashboard/mission-painel/VideoPopUp'
+import { StepProps } from '../../../../types/step'
+import Router from 'next/router'
 
-export default function PainelDaMissão() {
-  const stagesLength = stagesData.length
-  const stageWidth = 100 / stagesLength
-  const barGrayWidth = 100 - stageWidth
+export default function MissionPainel() {
+  // const { dashboard } = useDashboard()
 
-  const marginBar = stageWidth / 2
+  // const currentMentorship = dashboard?.currentMentorship
+  // console.log(currentMentorShip)
+  const [openDialog, setOpenDialog] = useState(true)
+  const [currentMentorship, setCurrentMentorship] =
+    useState<MentorshipProps | null>(null)
+  const [selectedStep, setSelectedStep] = useState<StepProps | null>(null)
 
-  const completedStages = stagesData.filter((stage) => stage.completed === true)
-  const completedStagesLength = completedStages.length
+  // Dados tempórários aguardando o back-end
+  useEffect(() => {
+    axiosInstance
+      .get('/mentorships')
+      .then((response) => {
+        setCurrentMentorship(response.data.mentorships[0])
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
 
-  const barCompletedWidth = completedStagesLength * stageWidth
-
-  const currentStage = stagesData.find((stage) => stage.completed === false)
-
-  function setMessage(stage: stage) {
-    const now = dayjs()
-    const { completed, availabilityDate } = stage
-
-    if (completed) {
-      return 'Ver instruções'
+  function openPopUp(step: StepProps) {
+    if (step.step === 'Introdução') {
+      Router.push('/user/adventure/1/onboarding')
     }
-    if (stage === currentStage && availabilityDate.isBefore(now)) {
-      return 'Etapa atual'
-    }
-    if (availabilityDate == null) {
-      return 'Data de disponibilidade não definida'
-    }
-    if (availabilityDate.isBefore(now)) {
-      return 'Já disponível'
-    }
-    if (availabilityDate.isAfter(now)) {
-      return `Disponível em ${stage.availabilityDate.format('DD/MM/YYYY')}`
-    }
 
-    throw new Error('Não foi possível definir uma mensagem para esta etapa.')
+    setSelectedStep(step)
+    setOpenDialog(true)
+  }
+
+  if (!currentMentorship) {
+    return <Loading />
   }
 
   return (
@@ -46,126 +54,44 @@ export default function PainelDaMissão() {
 
       <div className="scroll max-h-screen flex-1 overflow-y-auto text-gray-600">
         <header className="w-full py-5 px-20 shadow-lg shadow-[#2B124A]/5">
-          <h1 className="text-4xl font-semibold">Nome do Programa</h1>
+          <h1 className="text-4xl font-semibold">{currentMentorship.name}</h1>
         </header>
 
         <div className="flex flex-col items-center px-20">
           <div className="my-5 flex items-center gap-2 self-start">
             <Calendar size={40} weight="light" />
             <div>
-              <span className="block">De dd/mm/aaaa</span>
-              <span className="block">Até dd/mm/aaaa</span>
+              <span className="block">
+                De {dayjs(currentMentorship.startDate).format('DD/MM/YYYY')}
+              </span>
+              <span className="block">
+                Até {dayjs(currentMentorship.endDate).format('DD/MM/YYYY')}
+              </span>
             </div>
           </div>
 
           <div className=" w-full rounded-md p-5 text-lg shadow-[0_0_24px] shadow-black/10">
             <div className="flex h-64 flex-col gap-8 overflow-y-auto pr-[20%]">
-              <p>
-                No Programa Mentoria 1, você atuará como mentor(a) voluntário(a)
-                de uma organização social que atua na causa da educação ou da
-                saúde.
-              </p>
-              <p>
-                Você trabalhará em equipe com outros voluntários da Empresa X
-                para apoiar o desenvolvimento da instituição e contribuir para
-                aumentar o seu impacto social.
-              </p>
-              <p>
-                Serão realizados encontros semanais de mentoria, em que a equipe
-                de mentores aconselhará os
-              </p>
-              <p>
-                Você trabalhará em equipe com outros voluntários da Empresa X
-                para apoiar o desenvolvimento da instituição e contribuir para
-                aumentar o seu impacto social.
-              </p>
+              <FormatText text={currentMentorship.description} />
             </div>
           </div>
 
-          <div className="mt-12">
-            <div
-              className="grid items-center justify-center"
-              style={{
-                gridTemplateColumns: `repeat(${stagesLength}, minmax(0, 1fr))`,
-              }}
-            >
-              {stagesData.map((stage, index) => (
-                <span key={index} className="text-center">
-                  {stage.title}
-                </span>
-              ))}
-            </div>
-
-            <div
-              className="relative mt-2 grid justify-center"
-              style={{
-                gridTemplateColumns: `repeat(${stagesLength}, minmax(0, 1fr))`,
-              }}
-            >
-              <div
-                className="absolute top-1/2 box-border h-[2px] -translate-x-1 bg-[#D1D5DB]"
-                style={{
-                  width: `${barGrayWidth}%`,
-                  marginLeft: `${marginBar}%`,
-                }}
-              />
-              <div
-                className="absolute top-1/2 h-[2px] w-64 -translate-x-1 bg-violet-400"
-                style={{
-                  width: `${barCompletedWidth}%`,
-                  marginLeft: `${marginBar}%`,
-                }}
-              />
-
-              {stagesData.map((stage) =>
-                stage.completed ? (
-                  <div
-                    className={`z-10 flex h-8 w-8 items-center justify-center justify-self-center rounded-full bg-white text-white`}
-                  >
-                    <Check
-                      size={32}
-                      className="rounded-full bg-violet-400 p-1"
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className={`${
-                      currentStage === stage
-                        ? 'border-violet-400'
-                        : 'border-[#9CA3AF]'
-                    } z-10 flex h-8 w-8 items-center justify-center justify-self-center rounded-full border-2 border-solid bg-white text-white`}
-                  >
-                    <div
-                      className={`${
-                        currentStage === stage
-                          ? 'bg-violet-400'
-                          : 'bg-[#D1D5DB]'
-                      } h-[10px] w-[10px] rounded-full `}
-                    />
-                  </div>
-                ),
-              )}
-            </div>
-
-            <div
-              className="mt-2 grid justify-center"
-              style={{
-                gridTemplateColumns: `repeat(${stagesLength}, minmax(0, 1fr))`,
-              }}
-            >
-              {stagesData.map((stage, index) => (
-                <span key={index} className="text-center text-sm text-gray-400">
-                  {setMessage(stage)}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <button className="my-10 mx-auto rounded-lg bg-violet-500 px-20 py-4 text-lg font-semibold text-white transition-colors hover:bg-violet-600">
-            Instruções da etapa atual
-          </button>
+          <StagesLine
+            currentMentorship={currentMentorship}
+            openPopUp={openPopUp}
+          />
         </div>
       </div>
+      {selectedStep?.video && (
+        <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+          <Dialog.Portal>
+            <Dialog.Overlay className="fixed inset-0 z-10 bg-black/25" />
+            <Dialog.Content className="absolute top-1/2 left-1/2 z-20 w-[80vw] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-violet-900 p-4">
+              <VideoPopUp source={selectedStep.video} />
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+      )}
     </div>
   )
 }
