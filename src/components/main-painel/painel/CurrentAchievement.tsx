@@ -8,10 +8,10 @@ import { CaretLeft, CaretRight } from 'phosphor-react'
 import { useState } from 'react'
 import { completeAchievements } from '../../../data/completeAchievements'
 import { incompleteAchievements } from '../../../data/incompleteAchievements'
-import { achievementProps } from '../../../types/achievement'
+import { AchievementProps } from '../../../types/achievement'
 
 type CurrentAchievementProps = {
-  achievements: achievementProps[]
+  achievements: AchievementProps[]
 }
 
 export default function CurrentAchievement({
@@ -37,7 +37,7 @@ export default function CurrentAchievement({
   })
 
   return (
-    <div className="navigation-wrapper relative flex min-h-[12rem] w-full justify-between rounded-lg bg-[#1E2543]">
+    <div className="relative flex min-h-[12rem] w-full justify-between rounded-lg bg-[#1E2543]">
       <div ref={sliderRef} className="keen-slider w-full">
         {achievements.map((achievement) => {
           const currentAchivement = achievement.completed
@@ -47,7 +47,7 @@ export default function CurrentAchievement({
           return (
             <div
               key={achievement.id}
-              className=" keen-slider__slide flex flex-col py-6 pl-20 pr-52"
+              className="keen-slider__slide flex flex-col py-6 pl-20 pr-52"
             >
               <span className="text-xl text-gray-500">
                 {currentAchivement.title}

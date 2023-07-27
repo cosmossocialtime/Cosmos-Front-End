@@ -1,6 +1,6 @@
 import { Pencil } from 'phosphor-react'
 import { useState } from 'react'
-import { userProps } from '../../../types/user'
+import { UserProps } from '../../../types/user'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { api } from '../../../services/api'
@@ -13,8 +13,8 @@ import { Button } from '../../Button'
 import { useForm } from 'react-hook-form'
 
 interface FormUserDataProps {
-  userData: userProps
-  updateUserData: (newUser: userProps) => void
+  userData: UserProps
+  updateUserData: (newUser: UserProps) => void
 }
 dayjs.extend(utc)
 

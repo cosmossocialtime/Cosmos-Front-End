@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import defaultBannerPerfil from '../../../assets/default-banner-perfil.png'
 
 import { api } from '../../../services/api'
-import { userProps } from '../../../types/user'
+import { UserProps } from '../../../types/user'
 import { Camera, Pencil } from 'phosphor-react'
 
 import Header from '../../../components/main-painel/Header'
@@ -13,7 +13,7 @@ import SettingCropArea from '../../../components/Crop/SettingCropArea'
 import { DialogCrop } from '../../../components/Crop/DialogCrop'
 
 export default function Perfil() {
-  const [user, setUser] = useState<userProps | null>(null)
+  const [user, setUser] = useState<UserProps | null>(null)
   const [selectedImgSrc, setSelectedImgSrc] = useState('')
   const [cropType, setCroptType] = useState<'profile' | 'banner'>('profile')
   const [onDialog, setOnDialog] = useState(false)
@@ -50,7 +50,7 @@ export default function Perfil() {
     })
   }
 
-  function updateUserData(newUser: userProps) {
+  function updateUserData(newUser: UserProps) {
     setUser(newUser)
   }
 
