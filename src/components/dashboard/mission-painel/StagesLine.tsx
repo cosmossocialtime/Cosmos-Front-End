@@ -98,14 +98,19 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
             ) : (
               <div
                 key={step.stepId}
-                data-currentStep={currentStep === step}
+                data-currentStep={
+                  currentStep === step &&
+                  dayjs(currentStep.startDate).isBefore(dayjs())
+                }
                 className="z-10 flex h-8 w-8 items-center justify-center justify-self-center rounded-full border-2 border-solid border-[#9CA3AF] bg-white text-white data-[currentStep=true]:border-violet-400"
               >
                 <div
                   key={step.stepId}
-                  className={`${
-                    currentStep === step ? 'bg-violet-400' : 'bg-[#D1D5DB]'
-                  } h-[10px] w-[10px] rounded-full `}
+                  data-currentStep={
+                    currentStep === step &&
+                    dayjs(currentStep.startDate).isBefore(dayjs())
+                  }
+                  className="h-[10px] w-[10px] rounded-full bg-[#D1D5DB] data-[currentStep=true]:bg-violet-400"
                 />
               </div>
             ),

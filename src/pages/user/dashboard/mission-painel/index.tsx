@@ -12,6 +12,7 @@ import { StagesLine } from '../../../../components/dashboard/mission-painel/Stag
 import { VideoPopUp } from '../../../../components/dashboard/mission-painel/VideoPopUp'
 import { StepProps } from '../../../../types/step'
 import Router from 'next/router'
+import { toast } from 'react-toastify'
 
 export default function MissionPainel() {
   // const { dashboard } = useDashboard()
@@ -36,8 +37,18 @@ export default function MissionPainel() {
   }, [])
 
   function openPopUp(step: StepProps) {
+    const now = dayjs()
     if (step.step === 'Introdução') {
       Router.push('/user/adventure/1/onboarding')
+    }
+    if (dayjs(step.startDate).isAfter(now)) {
+      toast.error(
+        'Etapa atual ainda não disponível. Aguarde a data de lançamento para receber novas instruções.',
+        {
+          autoClose: 5000,
+        },
+      )
+      return
     }
 
     setSelectedStep(step)
