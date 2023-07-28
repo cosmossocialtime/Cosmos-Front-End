@@ -14,6 +14,7 @@ export function useSubscribe({
     dashboard?.programs.find((program) => String(program.id) === programId) ||
     null
   const user = dashboard?.user
+  const company = dashboard?.company
 
   const isSubscribed = program?.completed
   const defaultRoute = `/user/adventure/${programId}/subscribe`
@@ -22,5 +23,5 @@ export function useSubscribe({
     Router.push(defaultRoute)
   }
 
-  return { program, user, programId }
+  return { program, user, programId, company }
 }

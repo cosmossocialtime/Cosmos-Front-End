@@ -118,25 +118,28 @@ export default function ApplicationForm() {
 
         <Input.Root
           ariaLabel="Em que cargo e em que setor você atua?"
-          className="gap-4"
+          className="gap-4 text-sm"
         >
-          <Input.Content
-            required
-            type="text"
-            defaultValue={user.professionalRole || ''}
-            placeholder="Cargo"
-            className="w-1/2"
-            {...register('professionalRole')}
-          />
-
-          <Input.Content
-            required
-            type="text"
-            defaultValue={user.professionalSector || ''}
-            placeholder="Setor"
-            className="w-1/2"
-            {...register('professionalSector')}
-          />
+          <Input.Root ariaLabel="Cargo">
+            <Input.Content
+              required
+              type="text"
+              defaultValue={user.professionalRole || ''}
+              placeholder="Analista"
+              className="w-1/2 text-base"
+              {...register('professionalRole')}
+            />
+          </Input.Root>
+          <Input.Root ariaLabel="Setor">
+            <Input.Content
+              required
+              type="text"
+              defaultValue={user.professionalSector || ''}
+              placeholder="Marketing"
+              className="w-1/2 text-base"
+              {...register('professionalSector')}
+            />
+          </Input.Root>
         </Input.Root>
 
         <Input.Root ariaLabel="Quanto tempo você tem disponível para o programada?">
