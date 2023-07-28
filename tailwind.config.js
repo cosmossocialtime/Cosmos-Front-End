@@ -4,6 +4,10 @@ module.exports = {
     './src/**/*.tsx',
     './node_modules/tailwind-datepicker-react/dist/**/*.tsx',
   ],
+  plugins: [
+    // ...
+    require('@tailwindcss/line-clamp'),
+  ],
 
   theme: {
     extend: {

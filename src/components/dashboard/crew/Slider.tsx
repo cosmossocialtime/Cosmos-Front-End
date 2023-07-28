@@ -133,11 +133,11 @@ export default function Slider() {
                         )}
                       </div>
                     </div>
-                    <div className="mt-2 flex max-h-[20rem] max-w-[20rem] flex-col gap-3">
-                      <p className="overflow-ellipsis break-words text-left text-indigo-500">
+                    <div className="mt-2 flex max-h-48 max-w-[20rem] flex-col gap-3">
+                      <p className="break-words text-left text-indigo-500 ">
                         {volunteer.professionalPreviousExperiences}
                       </p>
-                      <p className="overflow-ellipsis break-words text-left text-indigo-500">
+                      <p className="overflow-hidden overflow-ellipsis text-left text-indigo-500">
                         {volunteer.mainCompetencies}
                       </p>
                     </div>
@@ -178,7 +178,7 @@ export default function Slider() {
             }
             className={`${
               currentSlide === 0 && ''
-            } absolute left-10 top-1/2 z-40 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full bg-violet-400 p-2 text-zinc-50 transition-colors hover:bg-violet-500`}
+            } absolute left-10 top-1/2 z-40 h-12 w-12 -translate-y-1/2 cursor-pointer rounded-full bg-black/10 p-3 text-blue-800 transition-colors hover:bg-violet-400 hover:text-zinc-50`}
           />
           <CaretRight
             size={24}
@@ -188,7 +188,7 @@ export default function Slider() {
             className={`${
               currentSlide ===
                 instanceRef.current.track.details.slides.length - 1 && ''
-            } absolute right-10 top-1/2 z-40 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full bg-violet-400 p-2 text-zinc-50 transition-colors hover:bg-violet-500`}
+            } absolute right-10 top-1/2 z-40 h-12 w-12 -translate-y-1/2 cursor-pointer rounded-full bg-black/10 p-3 text-blue-800 transition-colors hover:bg-violet-400 hover:text-zinc-50`}
           />
         </>
       )}
