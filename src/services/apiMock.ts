@@ -47,7 +47,7 @@ const mentorships: MentorshipProps[] = [
       },
       {
         stepId: 2,
-        step: 'Imagens de satélite',
+        step: 'Imagens de Satélite',
         startDate: new Date('2023-06-30'),
         endDate: new Date('2023-07-15'),
         status: true,
@@ -55,7 +55,7 @@ const mentorships: MentorshipProps[] = [
       },
       {
         stepId: 3,
-        step: 'Encontro da tripulação',
+        step: 'Encontro da Tripulação',
         startDate: new Date('2023-07-16'),
         endDate: new Date('2023-08-28'),
         status: false,
@@ -63,7 +63,7 @@ const mentorships: MentorshipProps[] = [
       },
       {
         stepId: 4,
-        step: 'Encontro com a estrela',
+        step: 'Encontro com a Estrela',
         startDate: new Date('2023-08-30'),
         endDate: new Date('2023-09-28'),
         status: false,
@@ -71,7 +71,7 @@ const mentorships: MentorshipProps[] = [
       },
       {
         stepId: 5,
-        step: 'O mapa de navegação',
+        step: 'O mapa de Navegação',
         startDate: new Date('2023-10-30'),
         endDate: new Date('2023-11-27'),
         status: false,
@@ -79,7 +79,7 @@ const mentorships: MentorshipProps[] = [
       },
       {
         stepId: 6,
-        step: 'Executando a missão',
+        step: 'Executando a Missão',
         startDate: new Date('2023-11-30'),
         endDate: new Date('2023-10-15'),
         status: false,
@@ -87,7 +87,7 @@ const mentorships: MentorshipProps[] = [
       },
       {
         stepId: 7,
-        step: 'Encontro final',
+        step: 'Encontro Final',
         startDate: new Date('2023-10-20'),
         endDate: new Date('2023-11-20'),
         status: false,
