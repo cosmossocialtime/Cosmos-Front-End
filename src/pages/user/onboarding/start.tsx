@@ -1,5 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
+import Router from 'next/router'
+import useFetch from '../../../hooks/useFetch'
+
+interface UserProps {
+  user: {
+    completedOnboarding: boolean
+  }
+}
+
 export default function Iniciar() {
+  const { data } = useFetch<UserProps>(
+    'https://api.cosmossocial.com.br/api/dashboard',
+  )
+  const completedOboarding = data?.user.completedOnboarding
+  if (completedOboarding) {
+    Router.push('/user/painel')
+  }
+
   return (
     <main className="flex h-screen items-center justify-center bg-espaco bg-cover bg-no-repeat p-4 text-white">
       <div className="flex flex-col items-center gap-10 rounded-2xl bg-black/10 p-10 backdrop-blur-md">

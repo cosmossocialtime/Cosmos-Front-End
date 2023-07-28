@@ -26,7 +26,6 @@ export default function Login() {
 
   const SubmitForm = async ({ email, password }: formProps) => {
     setIsSubmiting(true)
-
     try {
       await auth.signIn({ email, password })
       toast.success('Acesso autorizado, ligando os foguetes')

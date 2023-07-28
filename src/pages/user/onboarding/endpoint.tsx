@@ -12,7 +12,7 @@ export default function Decolar() {
         completed: true,
       })
       .finally(() => {
-        Router.push('/main-painel/painel')
+        Router.push('/user/painel')
       })
   }
   return (
