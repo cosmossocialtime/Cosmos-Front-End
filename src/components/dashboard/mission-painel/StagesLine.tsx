@@ -98,11 +98,8 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
             ) : (
               <div
                 key={step.stepId}
-                className={`${
-                  currentStep === step
-                    ? 'border-violet-400'
-                    : 'border-[#9CA3AF]'
-                } z-10 flex h-8 w-8 items-center justify-center justify-self-center rounded-full border-2 border-solid bg-white text-white`}
+                data-currentStep={currentStep === step}
+                className="z-10 flex h-8 w-8 items-center justify-center justify-self-center rounded-full border-2 border-solid border-[#9CA3AF] bg-white text-white data-[currentStep=true]:border-violet-400"
               >
                 <div
                   key={step.stepId}
@@ -125,7 +122,7 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
             <span
               key={step.stepId}
               data-status={step.status}
-              className="text-center text-sm text-gray-400 data-[status=true]:cursor-pointer data-[status=true]:underline-offset-2 hover:data-[status=true]:text-blue-400 hover:data-[status=true]:underline"
+              className="text-center text-sm text-gray-400 data-[status=true]:cursor-pointer hover:data-[status=true]:font-semibold hover:data-[status=true]:text-blue-400"
               onClick={() => step.status && openPopUp(step)}
             >
               {setMessage(step)}
