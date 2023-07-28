@@ -27,7 +27,7 @@ export default function Painel() {
         <div className="flex w-4/6 flex-1 flex-col gap-6">
           <CurrentAchievement achievements={achievements} />
 
-          {programs?.length !== 0 && (
+          {mentorships.length !== 0 && (
             <CurrentMissionsArea mentorships={mentorships} />
           )}
 
@@ -45,7 +45,7 @@ export default function Painel() {
 
           <div
             className={`${
-              programs?.length === 0 ? 'h-[17rem]' : 'h-[36rem]'
+              mentorships?.length === 0 ? 'h-[17rem]' : 'h-[36rem]'
             } relative flex flex-col rounded-lg bg-[#1E2543] p-6`}
           >
             <div className="mb-2 flex justify-between">
