@@ -94,7 +94,7 @@ export default function Slider() {
                 }}
                 key={volunteer.id}
               >
-                <div className="keen-slider__slide rounded border  border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-32">
+                <div className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-24">
                   <Dialog.Trigger className="w-full">
                     <div className="flex w-full justify-between">
                       <div className="flex flex-col">

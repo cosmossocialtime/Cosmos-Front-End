@@ -193,7 +193,9 @@ export default function Modal(ModalProps: DatasProfile) {
         <div className="mb-10 flex w-3/4 items-center justify-center rounded border border-gray-300 px-2 text-black lg:w-full lg:max-w-4xl ">
           <div className="w-full px-3 py-3">
             <Tabs.Content value="tab1">
-              {ModalProps.professionalPreviousExperiences}
+              <span className="break-words">
+                {ModalProps.professionalPreviousExperiences}
+              </span>
             </Tabs.Content>
             <Tabs.Content value="tab2">
               <span className="break-words">{ModalProps.mainCompetencies}</span>
