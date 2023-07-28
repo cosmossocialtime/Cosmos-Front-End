@@ -1,15 +1,17 @@
-export type userProps = {
+export type UserProps = {
   id: number
-  email: string
-  isVerified: boolean
-  byname: string
   fullName: string
+  byname: string
+  email: string
   gender: string
   birthdate: Date
   country: boolean
   state: string
   city: string
   company: string
+  companyId: number
+  socialOrganizationId: number | null
+  completedOnboarding: boolean
   professionalExperience: number | null
   professionalSector: string | null
   professionalRole: string | null
@@ -21,8 +23,10 @@ export type userProps = {
   previousMentorship: string | null
   banner: string | null
   profilePicture: string | null
+  roleId: number
   role: {
     id: number
     role: string
   }
+  isVerified: boolean
 }

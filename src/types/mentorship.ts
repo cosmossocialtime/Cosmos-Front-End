@@ -1,4 +1,6 @@
-export type mentorshipProps = {
+import { StepProps } from './step'
+
+export type MentorshipProps = {
   currentStepId: number
   description: string
   endDate: Date
@@ -7,12 +9,7 @@ export type mentorshipProps = {
   name: string
   programId: number
   socialOrganizationId: number
-  startDate: Date
-  steps: {
-    stepId: number
-    step: string
-    startDate: Date
-    endDate: Date
-  }[]
+  startDate: Date | null
+  steps: StepProps[]
   weeklyHours: number
 }

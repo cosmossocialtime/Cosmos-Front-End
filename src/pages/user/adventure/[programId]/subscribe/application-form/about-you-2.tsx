@@ -2,14 +2,13 @@ import { z } from 'zod'
 import { Input } from '../../../../../../components/Input'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '../../../../../../services/api'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import { toast } from 'react-toastify'
 import { Button } from '../../../../../../components/Button'
 import { Header } from '../../../../../../components/adventure/Header'
-import { useEffect, useState } from 'react'
-import { userProps } from '../../../../../../types/user'
 import { Loading } from '../../../../../../components/Loading'
 import Link from 'next/link'
+import { useSubscribe } from '../../../../../../hooks/useSubscribe'
 
 const schema = z.object({
   reasonToJoin: z
@@ -22,24 +21,9 @@ const schema = z.object({
 type formProps = z.infer<typeof schema>
 
 export default function AboutYou2() {
-  const router = useRouter()
-  const { programId } = router.query
+  const { user, programId } = useSubscribe()
 
-  const [user, setUser] = useState<userProps | null>(null)
   const { handleSubmit, control } = useForm<formProps>()
-
-  useEffect(() => {
-    if (programId) {
-      api
-        .get(`/user`)
-        .then((response) => {
-          setUser(response.data)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
 
   function submitForm({ reasonToJoin, previousMentorship }: formProps) {
     api

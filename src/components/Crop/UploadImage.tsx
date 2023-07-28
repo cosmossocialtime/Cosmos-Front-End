@@ -17,8 +17,9 @@ export default function UploadImage({
 
   return (
     <Dropzone
-      maxFiles={1}
+      // maxFiles={1}
       accept={{ 'image/*': ['.png', '.jpeg', '.jpg'] }}
+      multiple
       onDropAccepted={(acceptedFiles) => {
         handleSelecteFile(acceptedFiles)
       }}

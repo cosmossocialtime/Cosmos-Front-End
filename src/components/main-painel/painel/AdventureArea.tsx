@@ -1,11 +1,11 @@
 import { Calendar, CaretRight, Check, Clock } from 'phosphor-react'
 import adventuresData from '../../../data/AdventuresData'
 import Link from 'next/link'
-import { programProps } from '../../../types/program'
+import { ProgramProps } from '../../../types/program'
 import dayjs from 'dayjs'
 
 interface AdventureAreaProps {
-  programs: programProps[]
+  programs: ProgramProps[]
 }
 
 export default function AdventureArea({ programs }: AdventureAreaProps) {
@@ -37,7 +37,7 @@ export default function AdventureArea({ programs }: AdventureAreaProps) {
                   </span>
                 </div>
 
-                {program.applied ? (
+                {program.completed ? (
                   <div className="mr-4 flex items-center gap-1 rounded-full bg-[#1E2543] py-2 px-3">
                     <Check size={24} className="text-[#46CE9D]" />
                     <span className="text-xs text-gray-400">

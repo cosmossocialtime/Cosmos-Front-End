@@ -3,32 +3,19 @@ import { Header } from '../../../../../components/adventure/Header'
 import { Input } from '../../../../../components/Input'
 import Link from 'next/link'
 import { Button } from '../../../../../components/Button'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import { api } from '../../../../../services/api'
 import { Loading } from '../../../../../components/Loading'
 import { toast } from 'react-toastify'
-import { programProps } from '../../../../../types/program'
+import { useSubscribe } from '../../../../../hooks/useSubscribe'
 
 export default function TermsOfUse() {
+  const { program, programId } = useSubscribe()
   const [isAcceptTerms, setIsAcceptTerms] = useState(false)
-  const [program, setProgram] = useState<programProps | null>(null)
-
-  const router = useRouter()
-  const { programId } = router.query
 
   useEffect(() => {
-    if (programId) {
-      api
-        .get(`/program/${programId}`)
-        .then((response) => {
-          setProgram(response.data)
-          setIsAcceptTerms(Boolean(response.data.volunteerApplicationId))
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
+    setIsAcceptTerms(Boolean(program?.volunteerApplicationId))
+  }, [program])
 
   if (!program) {
     return <Loading />

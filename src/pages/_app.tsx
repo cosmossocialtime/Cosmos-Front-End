@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
 import { GlobalStyle } from '../styles/GlobalStyle'
-import { AuthProvider } from '../context/AuthProvider'
+import { AppProvider } from '../context'
 import NextNProgress from 'nextjs-progressbar'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import ptBR from 'date-fns/locale/pt-BR'
@@ -24,10 +24,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         height={3}
         options={{ showSpinner: false }}
       />
-      <AuthProvider>
+      <AppProvider>
         <Component {...pageProps} />
         <ToastContainer autoClose={2000} limit={3} />
-      </AuthProvider>
+      </AppProvider>
       <GlobalStyle />
     </>
   )

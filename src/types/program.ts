@@ -1,13 +1,15 @@
-export type programProps = {
-  companyName: string
-  applied: boolean
-  createdAt: Date
-  description: string
-  endDate: Date
+export type ProgramProps = {
   id: number
-  volunteerApplicationId: number
   name: string
-  startDate: Date
-  updatedAt: Date
+  description: string
+  applied: boolean
+  completed: boolean
   weeklyHours: number
+  companyName: string
+  createdAt: Date
+  startDate: Date
+  endDate: Date
+  disclosureDate: Date
+  updatedAt: Date
+  volunteerApplicationId: number
 }

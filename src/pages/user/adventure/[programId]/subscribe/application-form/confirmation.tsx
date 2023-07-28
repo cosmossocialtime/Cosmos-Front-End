@@ -4,71 +4,28 @@ import { Header } from '../../../../../../components/adventure/Header'
 import { toast } from 'react-toastify'
 import { Button } from '../../../../../../components/Button'
 import { api } from '../../../../../../services/api'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import Link from 'next/link'
-import { programProps } from '../../../../../../types/program'
+import { KnowledgeProps } from '../../../../../../types/knowledge'
+import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+// import axiosInstance from '../../../../../../services/apiMock'
 
 export default function Confirmation() {
-  const router = useRouter()
-  const { programId } = router.query
-  const [program, setProgram] = useState<programProps>()
+  const { program, programId } = useSubscribe()
 
   const [selectedAreas, setSelectedAreas] = useState<number[]>([])
-  const knowledgeAreas = [
-    {
-      id: 1,
-      name: 'Análise de Dados',
-    },
-    {
-      id: 2,
-      name: 'Comercial',
-    },
-    {
-      id: 3,
-      name: 'Comunicação e Marketing',
-    },
-    {
-      id: 4,
-      name: 'Finanças',
-    },
-    {
-      id: 5,
-      name: 'Gestão de Pessoas',
-    },
-    {
-      id: 6,
-      name: 'Gestão de Projetos',
-    },
-    {
-      id: 7,
-      name: 'Desenvolvimento de Lideranças',
-    },
-    {
-      id: 8,
-      name: 'Estratégia',
-    },
-    {
-      id: 9,
-      name: 'Jurídico',
-    },
-    {
-      id: 10,
-      name: 'Sustentabilidade',
-    },
-  ]
+  const [knowledgeAreas, setKnowledgeAreas] = useState<KnowledgeProps[]>([])
 
   useEffect(() => {
-    if (programId) {
-      api
-        .get(`/program/${programId}`)
-        .then((response) => {
-          setProgram(response.data)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
+    api
+      .get('/enum/sectors')
+      .then((response) => {
+        setKnowledgeAreas(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
 
   function selectArea(areaId: number) {
     if (selectedAreas.includes(areaId)) {
@@ -85,27 +42,40 @@ export default function Confirmation() {
 
     setSelectedAreas((prevSelectedAreas) => [...prevSelectedAreas, areaId])
   }
-
   function sendData() {
     if (selectedAreas.length === 0) {
       toast.error('Selecione ao menos 1 área!')
       return
     }
     api
-      .patch(`/volunteer/completed/${program?.volunteerApplicationId}`, {
+      .patch(`/user/volunteering/`, {
         sectorIds: selectedAreas,
       })
       .then((response) => {
         if (response.status === 200) {
-          Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/thanks`,
-          )
+          completeRegistration()
         }
       })
       .catch((error) => {
         console.error(error)
         toast.error(
           'Não foi possível enviar os dados. Tente novamente mais tarde!',
+        )
+      })
+  }
+
+  function completeRegistration() {
+    api
+      .patch(`volunteer/completed/${program?.volunteerApplicationId}`)
+      .then((response) => {
+        Router.push(
+          `/user/adventure/${programId}/subscribe/application-form/thanks`,
+        )
+      })
+      .catch((error) => {
+        console.error(error)
+        toast.error(
+          'Não foi possível validar sua inscrição. Tente novamente mais tarde!',
         )
       })
   }
@@ -119,7 +89,7 @@ export default function Confirmation() {
       </Header>
       <div className="mt-10 mb-20 grid justify-center">
         <h2 className="text-center">
-          Ufa! Chegamos na última etapa! Agora, escolha{' '}
+          Ufa! Chegamos à última etapa! Agora, escolha{' '}
           <strong>até 3 áreas</strong> do conhecimento <br /> com as quais você
           pode contribuir para a organização mentorada:
         </h2>
@@ -130,7 +100,7 @@ export default function Confirmation() {
               checked={selectedAreas.includes(knowledge.id)}
               onChangeChecked={() => selectArea(knowledge.id)}
               key={knowledge.id}
-              content={knowledge.name}
+              content={knowledge.sectorName}
             />
           ))}
         </div>

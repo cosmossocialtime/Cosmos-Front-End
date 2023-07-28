@@ -15,7 +15,7 @@ export default function PerfilArea({
   name,
 }: perfilProps) {
   return (
-    <div className="relative flex flex-1 flex-col items-center overflow-hidden rounded-lg bg-[#1E2543] py-11 pb-7">
+    <>
       <Image
         className="absolute top-0 h-24 w-full object-cover"
         src={bannerPicture || bannerPerfilDefault}
@@ -42,6 +42,6 @@ export default function PerfilArea({
       <Link href={'profile'} className="text-sm font-semibold text-blue-300">
         visitar perfil
       </Link>
-    </div>
+    </>
   )
 }

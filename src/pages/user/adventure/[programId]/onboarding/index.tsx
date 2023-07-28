@@ -1,45 +1,23 @@
 import Link from 'next/link'
 import { Button } from '../../../../../components/Button'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { api } from '../../../../../services/api'
 import { Loading } from '../../../../../components/Loading'
-import { dashboardProps } from '../../../../../types/dashboard'
+import { useOnboarding } from '../../../../../hooks/useOnboarding'
 
 export default function AdventuresOnboarding() {
-  const [dashboard, setDashboard] = useState<dashboardProps>()
-  const router = useRouter()
-  const { programId } = router.query
+  const { user, currentMentorship, programId } = useOnboarding()
 
-  useEffect(() => {
-    if (programId) {
-      api
-        .get('/dashboard')
-        .then((response) => {
-          if (response.status === 200) {
-            setDashboard(response.data)
-          }
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
-
-  if (!dashboard) {
+  if (!user || !currentMentorship || !programId) {
     return <Loading />
   }
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-bgTeletransport bg-cover bg-center">
-      <div className="w-2/5 rounded-lg bg-blue-800/10 py-12 px-11 text-center text-lg text-gray-100 backdrop-blur-lg">
+      <div className="w-[45vw] rounded-lg bg-blue-800/30 py-8 px-11 text-center text-lg text-gray-100 backdrop-blur-xl">
         <p className="mb-7">
-          <span className="font-bold">Parabéns, {dashboard.user.byname}!</span>{' '}
-          Sua jornada no programa <br />
-          <span className="font-bold">
-            {dashboard.currentMentorship.name}
-          </span>{' '}
-          começa agora!
+          <span className="font-bold">Parabéns, {user.byname}!</span> Sua
+          jornada no programa <br />
+          <span className="font-bold">{currentMentorship.name}</span> começa
+          agora!
         </p>
         <p className="mb-7">
           Na próxima tela você poderá escolher uma foto sua <br /> e

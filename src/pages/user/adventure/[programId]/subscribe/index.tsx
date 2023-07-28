@@ -1,32 +1,14 @@
 import { Calendar, Check, Clock } from 'phosphor-react'
 import FormatText from '../../../../../utils/FormatText'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { Header } from '../../../../../components/adventure/Header'
-import { api } from '../../../../../services/api'
-import { useRouter } from 'next/router'
 import { Loading } from '../../../../../components/Loading'
 import dayjs from 'dayjs'
-import { programProps } from '../../../../../types/program'
 import { Button } from '../../../../../components/Button'
+import { useSubscribe } from '../../../../../hooks/useSubscribe'
 
 export default function Adventure() {
-  const [program, setProgram] = useState<programProps | null>(null)
-  const router = useRouter()
-  const { programId } = router.query
-
-  useEffect(() => {
-    if (programId) {
-      api
-        .get(`/program/${programId}`)
-        .then((response) => {
-          setProgram(response.data)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
+  const { program, programId } = useSubscribe({ disableRedirect: true })
 
   if (!program) {
     return <Loading />
@@ -55,7 +37,7 @@ export default function Adventure() {
       </div>
 
       <div className="absolute bottom-14 mx-auto flex w-full justify-center">
-        {program.applied ? (
+        {program.completed ? (
           <div className="flex items-center gap-4 rounded border border-solid border-gray-300 p-4">
             <Check
               size={56}
@@ -68,7 +50,8 @@ export default function Adventure() {
               <p className="text-gray-500">
                 O processo de seleção será feito pela empresa{' '}
                 {program.companyName}.
-                <br /> O resultado será divulgado por e-mail até o dia dd/mm/aa.
+                <br /> O resultado será divulgado por e-mail até o dia{' '}
+                {dayjs(program.updatedAt).format('DD/MM/YYYY')}.
               </p>
             </div>
           </div>

@@ -1,15 +1,13 @@
 import { Header } from '../../../../../../components/adventure/Header'
-import { useEffect, useState } from 'react'
 import { api } from '../../../../../../services/api'
-import { programProps } from '../../../../../../types/program'
 import Link from 'next/link'
 import { Button } from '../../../../../../components/Button'
 import { Input } from '../../../../../../components/Input'
-import Router, { useRouter } from 'next/router'
-import { userProps } from '../../../../../../types/user'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'react-toastify'
+import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+import Router from 'next/router'
 
 const schema = z.object({
   professionalExperience: z.string(),
@@ -22,11 +20,7 @@ const schema = z.object({
 type formProps = z.infer<typeof schema>
 
 export default function ApplicationForm() {
-  const [program, setProgram] = useState<programProps>()
-  const [user, setUser] = useState<userProps>()
-
-  const router = useRouter()
-  const { programId } = router.query
+  const { program, user, programId } = useSubscribe()
 
   const timeExperienceOpts = [
     'Menos de 2 anos',
@@ -50,29 +44,6 @@ export default function ApplicationForm() {
     : undefined
 
   const { control, handleSubmit, register } = useForm<formProps>()
-
-  useEffect(() => {
-    api
-      .get('/user')
-      .then((response) => {
-        setUser(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
-  useEffect(() => {
-    if (programId) {
-      api
-        .get(`/program/${programId}`)
-        .then((response) => {
-          setProgram(response.data)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [programId])
 
   function submitForm({
     professionalExperience,
@@ -147,25 +118,28 @@ export default function ApplicationForm() {
 
         <Input.Root
           ariaLabel="Em que cargo e em que setor você atua?"
-          className="gap-4"
+          className="gap-4 text-sm"
         >
-          <Input.Content
-            required
-            type="text"
-            defaultValue={user.professionalRole || ''}
-            placeholder="Cargo"
-            className="w-1/2"
-            {...register('professionalRole')}
-          />
-
-          <Input.Content
-            required
-            type="text"
-            defaultValue={user.professionalSector || ''}
-            placeholder="Setor"
-            className="w-1/2"
-            {...register('professionalSector')}
-          />
+          <Input.Root ariaLabel="Cargo">
+            <Input.Content
+              required
+              type="text"
+              defaultValue={user.professionalRole || ''}
+              placeholder="Analista"
+              className="w-1/2 text-base"
+              {...register('professionalRole')}
+            />
+          </Input.Root>
+          <Input.Root ariaLabel="Setor">
+            <Input.Content
+              required
+              type="text"
+              defaultValue={user.professionalSector || ''}
+              placeholder="Marketing"
+              className="w-1/2 text-base"
+              {...register('professionalSector')}
+            />
+          </Input.Root>
         </Input.Root>
 
         <Input.Root ariaLabel="Quanto tempo você tem disponível para o programada?">
