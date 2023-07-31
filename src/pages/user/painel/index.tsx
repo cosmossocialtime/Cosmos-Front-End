@@ -62,7 +62,7 @@ export default function Painel() {
             </div>
             <AchievementsArea achievements={achievements} />
 
-            <div className="absolute left-0 right-4 bottom-0 m-6 box-border h-12 bg-gradient-to-t from-[#1E2543]"></div>
+            <div className="absolute bottom-0 left-0 right-4 m-6 box-border h-12 bg-gradient-to-t from-[#1E2543]"></div>
           </div>
         </div>
       </main>

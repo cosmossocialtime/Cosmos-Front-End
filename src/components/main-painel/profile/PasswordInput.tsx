@@ -99,7 +99,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
           <Dialog.Overlay className="fixed inset-0 bg-black/25" />
           <Dialog.Content className="fixed left-1/2 top-1/2 flex w-[34rem] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white px-16 py-[4.5rem]">
             <Dialog.Close>
-              <X size={24} className="absolute top-6 right-6" />
+              <X size={24} className="absolute right-6 top-6" />
             </Dialog.Close>
             <form
               autoComplete="off"
@@ -126,7 +126,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
                     }} `}
                   />
                   <button
-                    className="button-show-password absolute top-3 right-2"
+                    className="button-show-password absolute right-2 top-3"
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                   >
@@ -173,7 +173,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
                     }`}
                   />
                   <button
-                    className="button-show-password absolute top-3 right-2"
+                    className="button-show-password absolute right-2 top-3"
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
                   >
@@ -209,7 +209,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
                     }} `}
                   />
                   <button
-                    className="button-show-password absolute top-3 right-2"
+                    className="button-show-password absolute right-2 top-3"
                     type="button"
                     onClick={() =>
                       setShowConfirmNewPassword(!showConfirmNewPassword)

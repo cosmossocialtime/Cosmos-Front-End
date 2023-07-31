@@ -64,7 +64,7 @@ export default function MissionPainel() {
       <SideBar />
 
       <div className="scroll max-h-screen flex-1 overflow-y-auto text-gray-600">
-        <header className="w-full py-5 px-20 shadow-lg shadow-[#2B124A]/5">
+        <header className="w-full px-20 py-5 shadow-lg shadow-[#2B124A]/5">
           <h1 className="text-4xl font-semibold">{currentMentorship.name}</h1>
         </header>
 
@@ -97,7 +97,7 @@ export default function MissionPainel() {
         <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 z-10 bg-black/25" />
-            <Dialog.Content className="absolute top-1/2 left-1/2 z-20 w-[80vw] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-violet-900 p-4">
+            <Dialog.Content className="absolute left-1/2 top-1/2 z-20 w-[80vw] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-violet-900 p-4">
               <VideoPopUp source={selectedStep.video} />
             </Dialog.Content>
           </Dialog.Portal>

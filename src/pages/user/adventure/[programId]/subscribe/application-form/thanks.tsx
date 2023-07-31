@@ -13,7 +13,7 @@ export default function Thanks() {
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-bgEspaço bg-cover">
       <div className="w-[55rem] rounded-[20px] bg-gradient-to-l from-violet-400 to-blue-300 p-1">
-        <div className="rounded-2xl bg-white py-16 px-24 text-center text-gray-800">
+        <div className="rounded-2xl bg-white px-24 py-16 text-center text-gray-800">
           <h1 className="mb-9 text-4xl font-semibold">
             Obrigada por se inscrever no programa {program.name}
           </h1>
@@ -30,7 +30,7 @@ export default function Thanks() {
             jornada.
           </p>
           <Link href="/user/painel">
-            <Button.Primary className="mt-8 py-3 px-20">
+            <Button.Primary className="mt-8 px-20 py-3">
               Voltar ao Painel Principal
             </Button.Primary>
           </Link>

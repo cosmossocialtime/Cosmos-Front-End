@@ -13,7 +13,7 @@ export function InputDate({ className, ...rest }: InputDateProps) {
       className={twMerge(
         `${
           rest.disabled ? 'border-0 border-b' : 'border'
-        } flex flex-1 items-center gap-2 rounded border-solid border-gray-400 py-3 px-4 outline-none`,
+        } flex flex-1 items-center gap-2 rounded border-solid border-gray-400 px-4 py-3 outline-none`,
         className,
       )}
     >

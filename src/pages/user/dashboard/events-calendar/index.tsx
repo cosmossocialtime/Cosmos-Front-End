@@ -105,68 +105,49 @@ export default function CalendarioEventosPage() {
               />
             ))}
 
-            {
-              daysOfMonth.map((day) => {
-                const eventsOfTheDay = events.filter((event) =>
-                  dayjs(event.eventAt).isSame(dayjs(day)),
-                )
-                const noEvents = eventsOfTheDay.length === 0
-                const formattedDay = dayjs(day).format('DD')
+            {daysOfMonth.map((day) => {
+              const eventsOfTheDay = events.filter((event) =>
+                dayjs(event.eventAt).isSame(dayjs(day)),
+              )
+              const noEvents = eventsOfTheDay.length === 0
+              const formattedDay = dayjs(day).format('DD')
 
-                return (
-                  <Popover.Root
-                    key={day.toString()}
-                    onOpenChange={(open) =>
-                      open === false && changeSelectedEvent(null)
-                    }
-                  >
-                    <Popover.Trigger>
-                      {noEvents ? (
-                        <DefaultCardDay
-                          day={formattedDay}
-                          onClick={() => changeVisiblePopover('Create Event')}
-                        />
-                      ) : (
-                        <DefaultCardDay
-                          day={formattedDay}
-                          className="border-none bg-violet-400 text-white hover:bg-violet-500"
-                          onClick={() => changeVisiblePopover('Events')}
-                        />
-                      )}
-                    </Popover.Trigger>
-                    {visiblePopover === 'Create Event' ? (
-                      <PopoverCreateEvent
-                        currentDay={day.toDate()}
-                        event={selectedEvent}
+              return (
+                <Popover.Root
+                  key={day.toString()}
+                  onOpenChange={(open) =>
+                    open === false && changeSelectedEvent(null)
+                  }
+                >
+                  <Popover.Trigger>
+                    {noEvents ? (
+                      <DefaultCardDay
+                        day={formattedDay}
+                        onClick={() => changeVisiblePopover('Create Event')}
                       />
-                    ) : visiblePopover === 'Events' ? (
-                      <PopoverEvents eventsOfTheDay={eventsOfTheDay} />
-                    ) : visiblePopover === 'Event' ? (
-                      dayjs(selectedEvent?.eventAt).isSame(day) && (
-                        <PopoverEvent selectedEvent={selectedEvent!} />
-                      )
-                    ) : null}
-                  </Popover.Root>
-                )
-              })
-
-              // return eventsOfTheDay.length > 0 ? (
-              //   <ViewEventsCardDay
-              //     key={day.toString()}
-              //     day={day.toDate()}
-              //     users={users}
-              //     eventsOfTheDay={eventsOfTheDay}
-              //     mentorshipId={currentMentorship?.programId}
-              //   />
-              // ) : (
-              //   <NewEventCardDay
-              //     key={day.toString()}
-              //     day={day.toDate()}
-              //     users={users}
-              //     mentorshipId={currentMentorship?.programId}
-              //   />
-              // )
-            }
+                    ) : (
+                      <DefaultCardDay
+                        day={formattedDay}
+                        className="border-none bg-violet-400 text-white hover:bg-violet-500"
+                        onClick={() => changeVisiblePopover('Events')}
+                      />
+                    )}
+                  </Popover.Trigger>
+                  {visiblePopover === 'Create Event' ? (
+                    <PopoverCreateEvent
+                      currentDay={day.toDate()}
+                      event={selectedEvent}
+                    />
+                  ) : visiblePopover === 'Events' ? (
+                    <PopoverEvents eventsOfTheDay={eventsOfTheDay} />
+                  ) : visiblePopover === 'Event' ? (
+                    dayjs(selectedEvent?.eventAt).isSame(day) && (
+                      <PopoverEvent selectedEvent={selectedEvent!} />
+                    )
+                  ) : null}
+                </Popover.Root>
+              )
+            })}
             {daysOfNextMonth.map((_, index) => (
               <DefaultCardDay
                 key={index}
