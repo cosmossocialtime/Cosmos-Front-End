@@ -41,9 +41,8 @@ export default function PopoverCreateEvent({
     useCalendar()
 
   const { control, handleSubmit, register } = useForm<formProps>()
-  const mentorshipId = currentMentorship.programId
+  const mentorshipId = currentMentorship!.programId
   const attendeesId = event?.attendees.map((attendee) => ({ id: attendee.id }))
-
   function submitForm({
     title,
     description,

@@ -3,13 +3,13 @@ import { EventProps } from '../../types/event'
 import { api } from '../../services/api'
 import { UserProps } from '../../types/user'
 import { useDashboard } from '../../hooks/useDashboard'
-import { Loading } from '../../components/Loading'
+// import { Loading } from '../../components/Loading'
 import { MentorshipProps } from '../../types/mentorship'
 
 type CalendarContextProps = {
   events: EventProps[]
   users: UserProps[]
-  currentMentorship: MentorshipProps
+  currentMentorship?: MentorshipProps
   selectedEvent: EventProps | null
   visiblePopover: 'Create Event' | 'Events' | 'Event' | null
   changeVisiblePopover: (
@@ -26,7 +26,6 @@ const CalendarContext = createContext<CalendarContextProps>(
 const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const { dashboard } = useDashboard()
   const currentMentorship = dashboard?.currentMentorship
-
   const [users, setUsers] = useState<UserProps[]>([])
   const [events, setEvents] = useState<EventProps[]>([])
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
@@ -78,10 +77,6 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
     popoverName: 'Create Event' | 'Events' | 'Event' | null,
   ) {
     setVisiblePopover(popoverName)
-  }
-
-  if (!currentMentorship) {
-    return <Loading />
   }
 
   return (
