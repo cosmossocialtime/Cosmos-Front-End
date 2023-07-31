@@ -52,7 +52,7 @@ export default function CurrentAchievement({
               <span className="text-xl text-gray-500">
                 {currentAchivement.title}
               </span>
-              <strong className="mt-4 mb-2 text-2xl font-semibold text-gray-200">
+              <strong className="mb-2 mt-4 text-2xl font-semibold text-gray-200">
                 {currentAchivement.description}
               </strong>
               <span className="text-gray-200">
@@ -60,7 +60,7 @@ export default function CurrentAchievement({
                   ? 'e conquistou uma medalha'
                   : 'e conquiste uma medalha'}
               </span>
-              <div className="duration-400 absolute top-1/2 right-16 z-10 -translate-y-1/2 transition-all">
+              <div className="duration-400 absolute right-16 top-1/2 z-10 -translate-y-1/2 transition-all">
                 {achievement.completed && (
                   <div className="absolute h-32 w-32 rounded-full bg-white/50 blur-xl" />
                 )}
