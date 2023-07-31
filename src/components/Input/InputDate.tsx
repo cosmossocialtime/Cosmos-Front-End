@@ -1,6 +1,7 @@
 import { Calendar } from 'phosphor-react'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
 import { twMerge } from 'tailwind-merge'
+import 'react-datepicker/dist/react-datepicker.css'
 
 interface InputDateProps extends ReactDatePickerProps {
   className?: string

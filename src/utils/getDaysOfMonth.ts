@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 
-export default function getDaysOfMonth(month: dayjs.Dayjs) {
+export default function getDaysOfMonth(dayOfMonth: dayjs.Dayjs) {
   const days = []
 
-  const firstDayOfMonth = month.startOf('M')
-  const lastDayOfMonth = month.endOf('M')
+  const firstDayOfMonth = dayOfMonth.startOf('M')
+  const lastDayOfMonth = dayOfMonth.endOf('M')
 
   let compareDate = firstDayOfMonth
 
