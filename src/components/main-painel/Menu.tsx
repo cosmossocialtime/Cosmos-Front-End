@@ -48,7 +48,7 @@ export default function Menu() {
           <DropDownMenu.Content
             align="end"
             sideOffset={25}
-            className="z-50 rounded-lg bg-gray-800 py-6 px-12 text-sm text-gray-400"
+            className="z-50 rounded-lg bg-gray-800 px-12 py-6 text-sm text-gray-400"
           >
             <DropDownMenu.RadioGroup
               className="flex flex-col gap-6"
