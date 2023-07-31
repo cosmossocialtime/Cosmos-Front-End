@@ -27,7 +27,7 @@ export default function Modal(ModalProps: DatasProfile) {
             className="cover w-full "
           />
         </div>
-        <Dialog.Close className="absolute top-10 right-8">
+        <Dialog.Close className="absolute right-8 top-10">
           <Image src={Close} alt="Button Close" className="rounded-md" />
         </Dialog.Close>
       </div>
@@ -48,7 +48,7 @@ export default function Modal(ModalProps: DatasProfile) {
 
             <div className="relative">
               <Image src={Retangulo} alt="Retangulo" />
-              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-xs shadow-lg shadow-black/20 drop-shadow-sm">
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-xs shadow-lg shadow-black/20 drop-shadow-sm">
                 {ModalProps.charge}
               </span>
             </div>

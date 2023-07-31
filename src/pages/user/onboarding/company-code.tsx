@@ -73,7 +73,7 @@ export default function CompanyCode() {
       <main className="flex h-screen items-center justify-around bg-bgCadastro bg-cover bg-bottom bg-no-repeat ">
         <form
           onSubmit={handleSubmit(submitForm)}
-          className="flex max-w-md flex-col items-center justify-center gap-12 rounded-2xl bg-black/10 py-10 px-8 backdrop-blur-md"
+          className="flex max-w-md flex-col items-center justify-center gap-12 rounded-2xl bg-black/10 px-8 py-10 backdrop-blur-md"
         >
           <h2 className="text-center text-2xl font-semibold text-zinc-50">
             Qual o código da empresa em que você trabalha?

@@ -12,7 +12,7 @@ export default function AdventuresOnboarding() {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-bgTeletransport bg-cover bg-center">
-      <div className="w-[45vw] rounded-lg bg-blue-800/30 py-8 px-11 text-center text-lg text-gray-100 backdrop-blur-xl">
+      <div className="w-[45vw] rounded-lg bg-blue-800/30 px-11 py-8 text-center text-lg text-gray-100 backdrop-blur-xl">
         <p className="mb-7">
           <span className="font-bold">Parabéns, {user.byname}!</span> Sua
           jornada no programa <br />
@@ -29,7 +29,7 @@ export default function AdventuresOnboarding() {
         </p>
 
         <Link href={`/user/adventure/${programId}/onboarding/generate-banner`}>
-          <Button.Primary className="py-4 px-20">
+          <Button.Primary className="px-20 py-4">
             Conhecer jornada
           </Button.Primary>
         </Link>

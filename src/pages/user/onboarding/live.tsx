@@ -90,7 +90,7 @@ export default function EstadoCidade() {
                   <Select.Root onValueChange={setStateSubmit}>
                     <Select.Trigger
                       id="country"
-                      className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500"
+                      className="flex w-full items-center justify-between rounded bg-zinc-50 px-4 py-3 text-sm text-zinc-500"
                     >
                       <Select.Value placeholder="Selecione seu estado" />
                       <Select.Icon>
@@ -113,7 +113,7 @@ export default function EstadoCidade() {
                               <Select.Item
                                 key={states.id}
                                 value={states.sigla}
-                                className=" flex items-center justify-between rounded-lg py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50"
+                                className=" flex items-center justify-between rounded-lg px-4 py-2 outline-none hover:bg-violet-500 hover:text-zinc-50"
                               >
                                 <Select.ItemText>{states.nome}</Select.ItemText>
                                 <Select.ItemIndicator>
@@ -132,7 +132,7 @@ export default function EstadoCidade() {
                   <Select.Root onValueChange={setCitySubmit}>
                     <Select.Trigger
                       id="City"
-                      className="flex w-full items-center justify-between rounded bg-zinc-50 py-3 px-4 text-sm text-zinc-500"
+                      className="flex w-full items-center justify-between rounded bg-zinc-50 px-4 py-3 text-sm text-zinc-500"
                     >
                       <Select.Value placeholder="Selecione sua cidade" />
                       <Select.Icon>
@@ -155,7 +155,7 @@ export default function EstadoCidade() {
                               <Select.Item
                                 key={city.id}
                                 value={city.nome}
-                                className=" flex items-center justify-between rounded-lg py-2 px-4 outline-none hover:bg-violet-500 hover:text-zinc-50"
+                                className=" flex items-center justify-between rounded-lg px-4 py-2 outline-none hover:bg-violet-500 hover:text-zinc-50"
                               >
                                 <Select.ItemText>{city.nome}</Select.ItemText>
                                 <Select.ItemIndicator>

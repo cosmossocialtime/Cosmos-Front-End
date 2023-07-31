@@ -97,7 +97,7 @@ export default function Perfil() {
           quality={100}
           alt=""
         />
-        <div className="absolute right-5 -bottom-4">
+        <div className="absolute -bottom-4 right-5">
           <UploadImage updateImgSrc={updateBannerSrc}>
             <Pencil
               size={24}
@@ -120,7 +120,7 @@ export default function Perfil() {
             <Camera size={64} className="text-gray-200" />
           )}
 
-          <div className="absolute right-0 -bottom-2 ">
+          <div className="absolute -bottom-2 right-0 ">
             <UploadImage updateImgSrc={updateProfileSrc}>
               <Pencil
                 size={24}

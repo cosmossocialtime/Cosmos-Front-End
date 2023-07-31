@@ -15,7 +15,7 @@ export default function ProgressBar({
 
   return (
     <svg
-      className="absolute top-0 left-0 -scale-y-100"
+      className="absolute left-0 top-0 -scale-y-100"
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
       width="9rem"
@@ -29,7 +29,7 @@ export default function ProgressBar({
       </defs>
 
       <circle
-        className="fill-none stroke-slate-100 [stroke-width:8px] [stroke-dasharray:472] "
+        className="fill-none stroke-slate-100 [stroke-dasharray:472] [stroke-width:8px] "
         cx="50%"
         cy="50%"
         r="60"

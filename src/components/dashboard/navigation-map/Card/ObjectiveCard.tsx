@@ -29,7 +29,7 @@ export default function ObjectiveCard({
             <Image
               src={darkMoonIcon}
               alt="Lua escura"
-              className="absolute top-0 left-0"
+              className="absolute left-0 top-0"
               style={{
                 clipPath: `circle(50% at ${percentageDistanceCenterImg}% 50%)`,
               }}

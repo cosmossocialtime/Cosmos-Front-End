@@ -47,7 +47,7 @@ export default function GenerateBanner() {
 
   return (
     <div className="relative">
-      <header className="absolute inset-x-0 flex items-center justify-end gap-12 bg-violet-900/50 py-3 px-20 text-gray-100 backdrop-blur-lg">
+      <header className="absolute inset-x-0 flex items-center justify-end gap-12 bg-violet-900/50 px-20 py-3 text-gray-100 backdrop-blur-lg">
         <a
           href={printImage}
           download

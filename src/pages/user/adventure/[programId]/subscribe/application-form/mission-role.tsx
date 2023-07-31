@@ -39,7 +39,7 @@ export default function MissionRole() {
           <Link
             href={`/user/adventure/${programId}/subscribe/application-form/commander`}
           >
-            <Button.Primary className="mt-14 py-3 px-36">
+            <Button.Primary className="mt-14 px-36 py-3">
               Vamos lá!
             </Button.Primary>
           </Link>

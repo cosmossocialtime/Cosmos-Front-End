@@ -53,7 +53,7 @@ export default function TermsOfUse() {
   return (
     <div>
       <Header title={program.name} subtitle="Formulário de Inscrição" />
-      <div className="py-16 px-44">
+      <div className="px-44 py-16">
         <h2 className="mb-14 text-center text-2xl font-semibold text-gray-800">
           Coloque seu capacete, ajuste seu traje e se prepare para uma aventura!
         </h2>

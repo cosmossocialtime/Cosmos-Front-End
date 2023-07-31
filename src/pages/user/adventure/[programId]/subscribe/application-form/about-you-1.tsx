@@ -62,7 +62,7 @@ export default function AboutYou1() {
       </Header>
       <form
         onSubmit={handleSubmit(submitForm)}
-        className="flex flex-col gap-12 py-14 px-32"
+        className="flex flex-col gap-12 px-32 py-14"
       >
         <Input.Root ariaLabel="Quais as suas principais experiências profissionais até agora?">
           <Controller

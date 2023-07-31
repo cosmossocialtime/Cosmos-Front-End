@@ -38,7 +38,7 @@ export default function MapaNavegacaoPage() {
       <SideBar />
 
       <div className="flex h-screen w-screen flex-col bg-bgArtBoard bg-cover bg-center bg-no-repeat">
-        <header className="bg-blue-900 bg-opacity-50 py-4 px-20 text-slate-100">
+        <header className="bg-blue-900 bg-opacity-50 px-20 py-4 text-slate-100">
           <h1 className="mb-2 text-4xl font-semibold">Mapa da Navegação</h1>
           <span>
             O plano de objetivos e atividades a serem alcançados no decorrer
@@ -66,7 +66,7 @@ export default function MapaNavegacaoPage() {
           </div>
           {objectiveCards.length < 4 && (
             <button
-              className="mb-24 max-w-max rounded-lg bg-violet-500 py-4 px-28 text-lg font-semibold text-white transition-all hover:bg-violet-600"
+              className="mb-24 max-w-max rounded-lg bg-violet-500 px-28 py-4 text-lg font-semibold text-white transition-all hover:bg-violet-600"
               onClick={createNewGoal}
             >
               Criar novo objetivo

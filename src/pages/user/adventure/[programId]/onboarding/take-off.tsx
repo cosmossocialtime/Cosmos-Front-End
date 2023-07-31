@@ -30,7 +30,7 @@ export default function TakeOff() {
 
   return (
     <div className="h-screen w-screen bg-bgAstronaltaDeLado bg-[40%_30%]">
-      <div className="absolute top-1/2 left-[15%] w-2/4 -translate-y-1/2 rounded-lg bg-blue-800/10 px-12 py-16 text-center text-xl font-semibold text-gray-100 backdrop-blur-lg">
+      <div className="absolute left-[15%] top-1/2 w-2/4 -translate-y-1/2 rounded-lg bg-blue-800/10 px-12 py-16 text-center text-xl font-semibold text-gray-100 backdrop-blur-lg">
         <p>
           A partir de agora, sua equipe irá viajar rumo a uma estrela distante
           chamada {mentorshipName}.
@@ -40,7 +40,7 @@ export default function TakeOff() {
           fazê-la brilhar ainda mais!
         </p>
         <Link href={`/user/adventure/${programId}/onboarding/portal`}>
-          <Button.Primary className="mt-12 py-3 px-20">
+          <Button.Primary className="mt-12 px-20 py-3">
             Preparar para a decolagem
           </Button.Primary>
         </Link>

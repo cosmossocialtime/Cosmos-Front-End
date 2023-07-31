@@ -18,7 +18,7 @@ export default function ModalConfirmEdit({
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-40 bg-gray-600/25" />
-      <Dialog.Content className="fixed top-1/2 left-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col gap-8 rounded-lg bg-blue-900 p-10">
+      <Dialog.Content className="fixed left-1/2 top-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col gap-8 rounded-lg bg-blue-900 p-10">
         <p className="text-center text-lg text-white">
           Tem certeza que deseja sair sem salvar?
         </p>

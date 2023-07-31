@@ -82,13 +82,13 @@ export default function ModalTask({
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-10 bg-black/70" />
-      <Dialog.Content className="fixed top-1/2 left-1/2 z-20 flex  w-[900px] flex-1 -translate-y-1/2 -translate-x-1/2 flex-col gap-10 rounded-2xl bg-violet-900 px-10 py-8">
+      <Dialog.Content className="fixed left-1/2 top-1/2 z-20 flex  w-[900px] flex-1 -translate-x-1/2 -translate-y-1/2 flex-col gap-10 rounded-2xl bg-violet-900 px-10 py-8">
         <div>
           <span className="block text-xl leading-normal text-gray-400">
             Objetivo {index + 1}
           </span>
           {editTitle ? (
-            <div className="flex w-[85%] items-center gap-4 bg-blue-900/20 py-2 px-5 text-3xl font-semibold text-gray-100">
+            <div className="flex w-[85%] items-center gap-4 bg-blue-900/20 px-5 py-2 text-3xl font-semibold text-gray-100">
               <input
                 className="flex-1 bg-transparent outline-none placeholder:font-normal placeholder:text-gray-400"
                 type="text"

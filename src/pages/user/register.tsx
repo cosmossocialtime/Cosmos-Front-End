@@ -189,7 +189,7 @@ export default function Cadastrar() {
                 }`}
               />
               <button
-                className="button-show-password absolute top-3 right-2"
+                className="button-show-password absolute right-2 top-3"
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
               >
@@ -215,7 +215,7 @@ export default function Cadastrar() {
                 }} `}
               />
               <button
-                className="button-show-password absolute top-3 right-2"
+                className="button-show-password absolute right-2 top-3"
                 type="button"
                 onClick={() => setShowPassword1(!showPassword1)}
               >

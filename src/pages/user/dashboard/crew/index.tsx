@@ -21,7 +21,7 @@ const TripulacaoPage = () => {
             </div>
           </header>
 
-          <div className="pt-32 pl-20">
+          <div className="pl-20 pt-32">
             <Slider />
           </div>
         </main>

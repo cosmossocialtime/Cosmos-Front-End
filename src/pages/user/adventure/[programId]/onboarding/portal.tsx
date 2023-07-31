@@ -8,13 +8,13 @@ export default function Portal() {
 
   return (
     <div className="h-screen w-screen bg-bgPortal bg-cover bg-center">
-      <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-lg bg-blue-800/10 py-10 px-14 text-center backdrop-blur-lg">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-blue-800/10 px-14 py-10 text-center backdrop-blur-lg">
         <p className="text-xl font-semibold text-gray-100">
           O painel com as etapas da missão já está <br /> disponível para você
           começar, vamos lá?
         </p>
         <Link href={`/user/dashboard/mission-painel`}>
-          <Button.Primary className="mt-8 py-3 px-28">
+          <Button.Primary className="mt-8 px-28 py-3">
             Dar a partida!
           </Button.Primary>
         </Link>
