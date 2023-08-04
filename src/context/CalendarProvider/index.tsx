@@ -3,7 +3,6 @@ import { EventProps } from '../../types/event'
 import { UserProps } from '../../types/user'
 import { useDashboard } from '../../hooks/useDashboard'
 import { api } from '../../services/api'
-import { Loading } from '../../components/Loading'
 import { MentorshipProps } from '../../types/mentorship'
 
 type popoverName = 'Create Event' | 'Events' | 'Event' | null
@@ -75,7 +74,11 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   }, [currentMentorship])
 
   if (!currentMentorship || !ownerUser) {
-    return <Loading />
+    return (
+      <div className="flex h-full w-full items-center justify-center text-gray-800">
+        <h1 className="text-lg">Carregando...</h1>
+      </div>
+    )
   }
 
   return (
