@@ -13,10 +13,11 @@ import { EventProps } from '../../../types/event'
 import { useCalendar } from '../../../context/CalendarProvider'
 import dayjs from 'dayjs'
 import { InputTime } from './InputTime'
+import { useState } from 'react'
 
 const schema = z.object({
   title: z.string().nonempty(),
-  description: z.string().nonempty(),
+  description: z.string(),
   link: z.string().nonempty(),
   startAt: z.string().nonempty(),
   endAt: z.string().nonempty(),
@@ -32,6 +33,8 @@ interface PopoverEventFormProps {
 }
 
 export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
+  const [onLinkMeet, setOnLinkMeet] = useState(false)
+
   const { changeVisiblePopover, currentMentorship, getEvents } = useCalendar()
 
   const { control, handleSubmit, register } = useForm<formProps>()
@@ -111,16 +114,6 @@ export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
   }
 
   function submitForm(data: formProps) {
-    if (
-      data.title.trim() === '' ||
-      data.description.trim() === '' ||
-      data.link.trim() === '' ||
-      data.startAt.trim() === '' ||
-      data.endAt.trim() === ''
-    ) {
-      toast.error('Preencha todos os campos!')
-      return
-    }
     if (event) {
       updateEvent(data)
     } else {
@@ -149,6 +142,7 @@ export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
             type="text"
             defaultValue={event?.title}
             placeholder="Adicionar título"
+            required
             maxLength={60}
             className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 outline-none placeholder:text-white placeholder:text-white/40 focus:border-white"
             {...register('title')}
@@ -161,6 +155,7 @@ export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
               defaultValue={currentDay || new Date()}
               render={({ field }) => (
                 <DatePicker
+                  required
                   className="outline-none"
                   selected={field.value}
                   onChange={(option) => field.onChange(option)}
@@ -223,15 +218,30 @@ export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
           <label htmlFor="url" className="absolute h-0 w-0 opacity-0">
             Link da reunião
           </label>
-          <input
-            type="url"
-            id="url"
-            defaultValue={event?.link}
-            placeholder="https://calendar.google.com"
-            className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-4 py-2 outline-none placeholder:text-white/40 focus:border-white"
-            pattern="https://.*"
-            {...register('link')}
-          />
+          <div>
+            <input
+              type="url"
+              id="url"
+              defaultValue={event?.link}
+              placeholder="https://calendar.google.com"
+              className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-4 py-2 outline-none placeholder:text-white/40 focus:border-white"
+              required
+              disabled={onLinkMeet}
+              pattern="https://.*"
+              {...register('link')}
+            />
+            <div className="mt-2 flex items-center gap-2">
+              <button
+                type="button"
+                data-meet={onLinkMeet}
+                className="group relative flex h-6 w-12 items-center rounded-full border border-solid border-gray-300 data-[meet=true]:border-blue-500 data-[meet=true]:bg-blue-500"
+                onClick={() => setOnLinkMeet(!onLinkMeet)}
+              >
+                <div className=" absolute left-0 m-1 h-4 w-4 rounded-full bg-gray-500 transition-all group-data-[meet=true]:left-6 group-data-[meet=true]:bg-white" />
+              </button>
+              <span>Usar o meet</span>
+            </div>
+          </div>
 
           <button className="mx-auto max-w-max rounded-lg border border-solid border-white bg-white px-20 py-2 font-semibold text-violet-500 transition-all hover:bg-violet-600 hover:text-white">
             Salvar

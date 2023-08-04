@@ -77,7 +77,7 @@ export function InputAttendees({
                   <Select.Item
                     key={companion.id}
                     value={companion.byname}
-                    className="flex items-center justify-between gap-3 px-2 py-2 hover:bg-black/5"
+                    className="flex items-center justify-between gap-3 px-2 py-2 transition-colors hover:bg-violet-500 hover:text-white"
                   >
                     {companion.profilePicture ? (
                       <Image

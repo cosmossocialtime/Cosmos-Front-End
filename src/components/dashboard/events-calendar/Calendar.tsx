@@ -49,7 +49,7 @@ export function Calendar({ currentDay }: CalendarProps) {
         })}
       </div>
 
-      <div className="grid flex-1 grid-cols-7 gap-2 2xl:gap-6">
+      <div className="grid flex-1 grid-cols-7 gap-2 ">
         {daysOfPreviousMonth.map((day, index) => (
           <DefaultCardDay
             key={day.toString()}
@@ -90,18 +90,17 @@ export function Calendar({ currentDay }: CalendarProps) {
                   : changeVisiblePopover(null)
               }
             >
-              <Popover.Trigger>
+              <Popover.Trigger className="group">
                 <DefaultCardDay
                   day={formattedDay}
-                  className="border-none bg-violet-400 text-white hover:bg-violet-500"
+                  className="border-none bg-violet-400 text-left text-white hover:bg-violet-500 group-data-[state='open']:bg-violet-500"
                 >
-                  <span className="absolute left-2 top-2">{formattedDay}</span>
-                  <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 overflow-clip truncate px-2">
+                  <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 overflow-clip truncate px-2 font-normal">
                     {dayjs(ordenedEvents[0].startAt).format('HH:mm')}{' '}
                     {ordenedEvents[0].title}
                   </span>
                   {ordenedEvents.length > 1 && (
-                    <span className="absolute bottom-2 left-2">
+                    <span className="absolute bottom-2 left-2 font-normal">
                       Mais {ordenedEvents.length - 1}
                     </span>
                   )}

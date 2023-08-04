@@ -18,7 +18,7 @@ export function PopoverEvents({ events, day }: PopoverEventsProps) {
         className="relative m-4  w-[28rem] rounded-lg bg-violet-500 p-5 text-white"
       >
         <span className="absolute right-4 top-4 text-xl">
-          {day.format('DD MMM')}
+          {day.format('ddd, DD MMM')}
         </span>
         <h3 className="text-xl">Eventos</h3>
         <div className="my-4 flex max-h-[24rem] w-full flex-col gap-3 overflow-y-auto">
