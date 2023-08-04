@@ -9,67 +9,54 @@ import { api } from '../../../services/api'
 import { z } from 'zod'
 import { toast } from 'react-toastify'
 import { InputAttendees } from './InputAttendees'
-import { useCalendar } from '../../../context/CalendarProvider'
 import { EventProps } from '../../../types/event'
+import { useCalendar } from '../../../context/CalendarProvider'
+import dayjs from 'dayjs'
+import { InputTime } from './InputTime'
 
 const schema = z.object({
   title: z.string().nonempty(),
   description: z.string().nonempty(),
   link: z.string().nonempty(),
-  startTime: z.string().nonempty(),
-  endTime: z.string().nonempty(),
+  startAt: z.string().nonempty(),
+  endAt: z.string().nonempty(),
   eventAt: z.date(),
-  attendees: z.array(
-    z.object({
-      id: z.number(),
-    }),
-  ),
+  attendees: z.array(z.number()),
 })
 
 type formProps = z.infer<typeof schema>
 
-interface MeetingDataProps {
-  event: EventProps | null
+interface PopoverEventFormProps {
+  event?: EventProps | null
   currentDay?: Date
 }
 
-export default function PopoverCreateEvent({
-  event,
-  currentDay,
-}: MeetingDataProps) {
-  const { getEvents, users, currentMentorship, changeVisiblePopover } =
-    useCalendar()
+export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
+  const { changeVisiblePopover, currentMentorship, getEvents } = useCalendar()
 
   const { control, handleSubmit, register } = useForm<formProps>()
-  const mentorshipId = currentMentorship!.programId
-  const attendeesId = event?.attendees.map((attendee) => ({ id: attendee.id }))
-  function submitForm({
+  const attendeesId = event?.attendees.map((attendee) => attendee.id)
+
+  function createEvent({
     title,
     description,
     link,
-    eventAt,
     attendees,
-    startTime,
-    endTime,
+    eventAt,
+    startAt,
+    endAt,
   }: formProps) {
-    if (
-      title.trim() === '' ||
-      description.trim() === '' ||
-      link.trim() === '' ||
-      startTime.trim() === '' ||
-      endTime.trim() === ''
-    ) {
-      toast.error('Preencha todos os campos!')
-      return
-    }
-
+    const dayEvent = dayjs(eventAt).format('MM/DD/YYYY')
+    const startHour = dayjs(`${dayEvent} ${startAt}`)
+    const endHour = dayjs(`${dayEvent} ${endAt}`)
     api
-      .post(`/mentorship/${mentorshipId}/event`, {
+      .post(`/mentorship/${currentMentorship.programId}/event`, {
         title,
         description,
         link,
-        eventAt,
         attendees,
+        startAt: startHour,
+        endAt: endHour,
       })
       .then((response) => {
         if (response.status === 201) {
@@ -84,6 +71,61 @@ export default function PopoverCreateEvent({
         )
         console.error(error)
       })
+  }
+
+  function updateEvent({
+    title,
+    description,
+    link,
+    attendees,
+    eventAt,
+    startAt,
+    endAt,
+  }: formProps) {
+    const dayEvent = dayjs(eventAt).format('MM/DD/YYYY')
+    const startHour = dayjs(`${dayEvent} ${startAt}`)
+    const endHour = dayjs(`${dayEvent} ${endAt}`)
+
+    api
+      .patch(`/mentorship/event/${event?.id}`, {
+        title,
+        description,
+        link,
+        attendees,
+        startAt: startHour,
+        endAt: endHour,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success('Evento Editado com sucesso!')
+          changeVisiblePopover(null)
+          getEvents()
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          'Não foi possível marcar a reunião. Tente novamente mais tarde!',
+        )
+        console.error(error)
+      })
+  }
+
+  function submitForm(data: formProps) {
+    if (
+      data.title.trim() === '' ||
+      data.description.trim() === '' ||
+      data.link.trim() === '' ||
+      data.startAt.trim() === '' ||
+      data.endAt.trim() === ''
+    ) {
+      toast.error('Preencha todos os campos!')
+      return
+    }
+    if (event) {
+      updateEvent(data)
+    } else {
+      createEvent(data)
+    }
   }
 
   return (
@@ -107,6 +149,7 @@ export default function PopoverCreateEvent({
             type="text"
             defaultValue={event?.title}
             placeholder="Adicionar título"
+            maxLength={60}
             className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 outline-none placeholder:text-white placeholder:text-white/40 focus:border-white"
             {...register('title')}
           />
@@ -131,12 +174,15 @@ export default function PopoverCreateEvent({
             <label htmlFor="startTime" className="absolute h-0 w-0 opacity-0">
               Horario de inicio da reunião
             </label>
-            <input
-              type="time"
-              id="startTime"
-              defaultValue={'19:00'}
-              className="flex-1 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 outline-none focus:border-white"
-              {...register('startTime')}
+            <Controller
+              name="startAt"
+              control={control}
+              defaultValue={
+                event ? dayjs(event.startAt).format('HH:mm') : '19:00'
+              }
+              render={({ field }) => (
+                <InputTime time={field.value} changeTime={field.onChange} />
+              )}
             />
 
             <span className="font-semibold">até</span>
@@ -144,12 +190,15 @@ export default function PopoverCreateEvent({
             <label htmlFor="endTime" className="absolute h-0 w-0 opacity-0">
               Horario de fim da reunião
             </label>
-            <input
-              type="time"
-              id="endTime"
-              defaultValue={'21:00'}
-              className="flex-1 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 outline-none focus:border-white"
-              {...register('endTime')}
+            <Controller
+              name="endAt"
+              control={control}
+              defaultValue={
+                event ? dayjs(event.endAt).format('HH:mm') : '20:00'
+              }
+              render={({ field }) => (
+                <InputTime time={field.value} changeTime={field.onChange} />
+              )}
             />
           </div>
 
@@ -159,9 +208,8 @@ export default function PopoverCreateEvent({
             defaultValue={attendeesId}
             render={({ field }) => (
               <InputAttendees
-                users={users}
-                attendees={field.value}
-                changeAttendees={(attendees) => field.onChange(attendees)}
+                attendeesId={field.value}
+                changeAttendeesId={(attendees) => field.onChange(attendees)}
               />
             )}
           />

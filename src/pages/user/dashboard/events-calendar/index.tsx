@@ -1,56 +1,28 @@
-import * as Popover from '@radix-ui/react-popover'
 import dayjs from 'dayjs'
 
 import { CaretLeft, CaretRight } from 'phosphor-react'
 
-import { useState } from 'react'
-import getDaysOfMonth from '../../../../utils/getDaysOfMonth'
+import { createContext, useState } from 'react'
 import SideBar from '../sideBar'
-import { DefaultCardDay } from '../../../../components/dashboard/events-calendar/DefaultCardDay'
-import { useCalendar } from '../../../../context/CalendarProvider'
-import PopoverCreateEvent from '../../../../components/dashboard/events-calendar/PopoverCreateEvent'
-import { PopoverEvents } from '../../../../components/dashboard/events-calendar/PopoverEvents'
-import { PopoverEvent } from '../../../../components/dashboard/events-calendar/PopoverEvent'
+import { EventProps } from '../../../../types/event'
+import { CalendarProvider } from '../../../../context/CalendarProvider'
+import { Calendar } from '../../../../components/dashboard/events-calendar/Calendar'
 
-const daysOfWeek = [
-  'Domingo',
-  'Segunda',
-  'Terça',
-  'Quarta',
-  'Quinta',
-  'Sexta',
-  'Sábado',
-]
+type popoverName = 'Create Event' | 'Events' | 'Event' | null
 
-export default function CalendarioEventosPage() {
-  const {
-    events,
-    visiblePopover,
-    changeVisiblePopover,
-    selectedEvent,
-    changeSelectedEvent,
-  } = useCalendar()
+type CalendarContextProps = {
+  events: EventProps[]
+  selectedEvent: EventProps | null
+  changeVisiblePopover: (name: popoverName) => void
+  changeSelectedEvent: (event: EventProps | null) => void
+}
 
+export const CalendarContext = createContext<CalendarContextProps>(
+  {} as CalendarContextProps,
+)
+
+export default function EventsCalendar() {
   const [currentDay, setCurrentDay] = useState(dayjs())
-  const daysOfMonth = getDaysOfMonth(currentDay)
-  const daysOfLastMonth = getDaysOfMonth(currentDay.subtract(1, 'month'))
-
-  const firstDayWeekOfMonth = Number(daysOfMonth[0].format('d'))
-  const daysOfPreviousMonth = daysOfLastMonth.slice(
-    daysOfLastMonth.length - firstDayWeekOfMonth,
-  )
-
-  const daysOfNextMonth = Array.from({
-    length: 42 - daysOfMonth.length - daysOfPreviousMonth.length,
-  })
-
-  function getNextMonth() {
-    setCurrentDay(currentDay.add(1, 'month'))
-  }
-
-  function getPreviuosMonth() {
-    setCurrentDay(currentDay.subtract(1, 'month'))
-  }
 
   return (
     <div className="flex">
@@ -64,7 +36,7 @@ export default function CalendarioEventosPage() {
               color="#9D37F2"
               size={24}
               className="cursor-pointer"
-              onClick={getPreviuosMonth}
+              onClick={() => setCurrentDay(currentDay.subtract(1, 'month'))}
             />
 
             <h1
@@ -80,83 +52,14 @@ export default function CalendarioEventosPage() {
               color="#9D37F2"
               size={24}
               className="cursor-pointer"
-              onClick={getNextMonth}
+              onClick={() => setCurrentDay(currentDay.add(1, 'month'))}
             />
           </div>
         </header>
 
-        <div className="mt-4 flex w-full flex-1 flex-col gap-2 text-gray-500 2xl:gap-4">
-          <div className="grid w-full grid-cols-7 gap-2 text-center 2xl:gap-6">
-            {daysOfWeek.map((day) => {
-              return (
-                <h3 key={day} className="text-xl font-medium">
-                  {day}
-                </h3>
-              )
-            })}
-          </div>
-
-          <div className="grid flex-1 grid-cols-7 gap-2 2xl:gap-6">
-            {daysOfPreviousMonth.map((day, index) => (
-              <DefaultCardDay
-                key={day.toString()}
-                day={dayjs(day).format('DD')}
-                disabled
-              />
-            ))}
-
-            {daysOfMonth.map((day) => {
-              const eventsOfTheDay = events.filter((event) =>
-                dayjs(event.eventAt).isSame(dayjs(day)),
-              )
-              const noEvents = eventsOfTheDay.length === 0
-              const formattedDay = dayjs(day).format('DD')
-
-              return (
-                <Popover.Root
-                  key={day.toString()}
-                  onOpenChange={(open) =>
-                    open === false && changeSelectedEvent(null)
-                  }
-                >
-                  <Popover.Trigger>
-                    {noEvents ? (
-                      <DefaultCardDay
-                        day={formattedDay}
-                        onClick={() => changeVisiblePopover('Create Event')}
-                      />
-                    ) : (
-                      <DefaultCardDay
-                        day={formattedDay}
-                        className="border-none bg-violet-400 text-white hover:bg-violet-500"
-                        onClick={() => changeVisiblePopover('Events')}
-                      />
-                    )}
-                  </Popover.Trigger>
-                  {visiblePopover === 'Create Event' ? (
-                    <PopoverCreateEvent
-                      currentDay={day.toDate()}
-                      event={selectedEvent}
-                    />
-                  ) : visiblePopover === 'Events' ? (
-                    <PopoverEvents eventsOfTheDay={eventsOfTheDay} />
-                  ) : visiblePopover === 'Event' ? (
-                    dayjs(selectedEvent?.eventAt).isSame(day) && (
-                      <PopoverEvent selectedEvent={selectedEvent!} />
-                    )
-                  ) : null}
-                </Popover.Root>
-              )
-            })}
-            {daysOfNextMonth.map((_, index) => (
-              <DefaultCardDay
-                key={index}
-                day={`${index + 1 < 10 ? '0' : ''}${index + 1}`}
-                disabled
-              />
-            ))}
-          </div>
-        </div>
+        <CalendarProvider>
+          <Calendar currentDay={currentDay} />
+        </CalendarProvider>
       </main>
     </div>
   )

@@ -1,22 +1,23 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { EventProps } from '../../types/event'
-import { api } from '../../services/api'
 import { UserProps } from '../../types/user'
 import { useDashboard } from '../../hooks/useDashboard'
-// import { Loading } from '../../components/Loading'
+import { api } from '../../services/api'
+import { Loading } from '../../components/Loading'
 import { MentorshipProps } from '../../types/mentorship'
 
+type popoverName = 'Create Event' | 'Events' | 'Event' | null
+
 type CalendarContextProps = {
-  events: EventProps[]
+  currentMentorship: MentorshipProps
+  ownerUser: UserProps
+  visiblePopover: popoverName
   users: UserProps[]
-  currentMentorship?: MentorshipProps
+  events: EventProps[]
   selectedEvent: EventProps | null
-  visiblePopover: 'Create Event' | 'Events' | 'Event' | null
-  changeVisiblePopover: (
-    name: 'Create Event' | 'Events' | 'Event' | null,
-  ) => void
-  getEvents: () => void
+  changeVisiblePopover: (name: popoverName) => void
   changeSelectedEvent: (event: EventProps | null) => void
+  getEvents: () => void
 }
 
 const CalendarContext = createContext<CalendarContextProps>(
@@ -26,14 +27,35 @@ const CalendarContext = createContext<CalendarContextProps>(
 const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const { dashboard } = useDashboard()
   const currentMentorship = dashboard?.currentMentorship
+  const ownerUser = dashboard?.user
+
   const [users, setUsers] = useState<UserProps[]>([])
   const [events, setEvents] = useState<EventProps[]>([])
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
-  const [visiblePopover, setVisiblePopover] = useState<
-    'Create Event' | 'Events' | 'Event' | null
-  >(null)
+  const [visiblePopover, setVisiblePopover] = useState<popoverName>(null)
 
-  function getVolunteers() {
+  function changeVisiblePopover(name: popoverName) {
+    setVisiblePopover(name)
+  }
+  function changeSelectedEvent(event: EventProps | null) {
+    setSelectedEvent(event)
+    setVisiblePopover('Event')
+  }
+
+  function getEvents() {
+    api
+      .get(`/mentorship/${currentMentorship?.programId}/calendar`)
+      .then((response) => {
+        if (response.status === 200) {
+          setEvents(response.data)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  useEffect(() => {
     if (!currentMentorship) {
       return
     }
@@ -47,49 +69,27 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
       .catch((error) => {
         console.error(error)
       })
-  }
 
-  useEffect(() => {
-    getVolunteers()
     getEvents()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMentorship])
 
-  function getEvents() {
-    if (!currentMentorship) {
-      return
-    }
-    api
-      .get(`/mentorship/${currentMentorship.programId}/calendar`)
-      .then((response) => {
-        if (response.status === 200) {
-          setEvents(response.data)
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-  function changeSelectedEvent(event: EventProps | null) {
-    setSelectedEvent(event)
-    changeVisiblePopover('Event')
-  }
-  function changeVisiblePopover(
-    popoverName: 'Create Event' | 'Events' | 'Event' | null,
-  ) {
-    setVisiblePopover(popoverName)
+  if (!currentMentorship || !ownerUser) {
+    return <Loading />
   }
 
   return (
     <CalendarContext.Provider
       value={{
-        users,
+        ownerUser,
         currentMentorship,
-        events,
-        getEvents,
-        selectedEvent,
-        changeSelectedEvent,
         visiblePopover,
+        users,
+        events,
+        selectedEvent,
         changeVisiblePopover,
+        changeSelectedEvent,
+        getEvents,
       }}
     >
       {children}

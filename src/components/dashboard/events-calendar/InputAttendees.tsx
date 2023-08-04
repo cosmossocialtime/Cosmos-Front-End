@@ -2,90 +2,88 @@ import * as Select from '@radix-ui/react-select'
 import Image from 'next/image'
 import { CaretDown, User, X } from 'phosphor-react'
 
-import { UserProps } from '../../../types/user'
-
-type attendee = {
-  id: number
-}
+import { useCalendar } from '../../../context/CalendarProvider'
 
 interface InputAttendeesProps {
-  users: UserProps[]
-  attendees?: attendee[]
-  changeAttendees: (attendees: attendee[]) => void
+  attendeesId?: number[]
+  changeAttendeesId: (attendeesId: number[]) => void
 }
 
 export function InputAttendees({
-  users,
-  attendees = [],
-  changeAttendees,
+  attendeesId = [],
+  changeAttendeesId,
 }: InputAttendeesProps) {
-  function deleteSelectedAttendee(attendee: attendee) {
-    let updateAttendees = [...attendees]
-    updateAttendees = updateAttendees.filter(
+  const { users, ownerUser } = useCalendar()
+
+  function deleteSelectedAttendee(attendee: number) {
+    let updateAttendeesId = [...attendeesId]
+    updateAttendeesId = updateAttendeesId.filter(
       (upAttendee) => upAttendee !== attendee,
     )
 
-    changeAttendees(updateAttendees)
+    changeAttendeesId(updateAttendeesId)
   }
+  const companions = users.filter((user) => user.userId !== ownerUser.id)
 
   function selectAttendee(value: string) {
-    const user = users.find((user) => user.byname === value)
+    const companion = companions.find((companion) => companion.byname === value)
 
-    if (user) {
-      changeAttendees([...attendees, { id: user.id }])
+    if (companion) {
+      changeAttendeesId([...attendeesId, companion.id])
     }
   }
 
   return (
     <Select.Root onValueChange={(value) => selectAttendee(value)}>
-      <div className="flex w-full items-center justify-between gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-2 text-sm focus-within:border-white ">
-        <User size={24} />
-        {attendees.length === 0 ? (
-          <span className="flex-1 text-base text-white/40">
+      <div className="relative flex w-full items-center gap-3">
+        <User size={24} className="absolute left-2" />
+        {attendeesId.length === 0 ? (
+          <span className="absolute ml-10 text-base text-white/40">
             Adicionar convidados
           </span>
         ) : (
-          <div className="flex flex-1 flex-wrap gap-1">
-            {attendees.map((attendeer) => (
+          <div className="absolute left-10 z-20 flex flex-wrap gap-1">
+            {attendeesId.map((attendeerId) => (
               <span
-                key={attendeer.id}
-                className="flex items-center gap-1 rounded border border-solid border-white p-1"
+                key={attendeerId}
+                className="flex items-center gap-1 px-1 py-2 hover:bg-black/5"
               >
-                {users.find((user) => user.id === attendeer.id)?.byname}
+                {
+                  companions.find((companion) => companion.id === attendeerId)
+                    ?.byname
+                }
                 <X
                   className="cursor-pointer"
-                  onClick={() => deleteSelectedAttendee(attendeer)}
+                  onClick={() => deleteSelectedAttendee(attendeerId)}
                 />
               </span>
             ))}
           </div>
         )}
-        <Select.Trigger>
+        <Select.Trigger className="z-10 flex flex-1 justify-end rounded-lg border border-solid border-white/40 bg-violet-600/50 p-2 text-sm">
           <CaretDown size={24} />
         </Select.Trigger>
       </div>
       <Select.Portal>
         <Select.Content
-          side="left"
-          sideOffset={4}
+          side="bottom"
           position="popper"
-          alignOffset={20}
-          className="z-20 rounded bg-white text-center"
+          className="z-20 bg-white text-center"
         >
-          <Select.Viewport className="cursor-pointer p-2 text-violet-500">
-            {users.map((user) => {
+          <Select.Viewport className="cursor-pointer text-violet-500">
+            {companions.map((companion) => {
               return (
-                !attendees.includes({ id: user.id }) && (
+                !attendeesId.includes(companion.id) && (
                   <Select.Item
-                    key={user.id}
-                    value={user.byname}
-                    className="flex items-center justify-between gap-3 rounded-lg px-2 py-2 hover:bg-violet-500 hover:text-white"
+                    key={companion.id}
+                    value={companion.byname}
+                    className="flex items-center justify-between gap-3 px-2 py-2 hover:bg-black/5"
                   >
-                    {user.profilePicture ? (
+                    {companion.profilePicture ? (
                       <Image
                         className="rounded-full"
                         alt="foto de usuário"
-                        src={user.profilePicture}
+                        src={companion.profilePicture}
                         width={32}
                         height={32}
                       />
@@ -93,7 +91,7 @@ export function InputAttendees({
                       <User size={24} />
                     )}
 
-                    <Select.ItemText>{user.byname}</Select.ItemText>
+                    <Select.ItemText>{companion.byname}</Select.ItemText>
                   </Select.Item>
                 )
               )

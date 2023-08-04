@@ -1,4 +1,5 @@
 import * as Popover from '@radix-ui/react-popover'
+import * as Dialog from '@radix-ui/react-dialog'
 import dayjs from 'dayjs'
 import {
   ArrowLeft,
@@ -10,23 +11,32 @@ import {
   User,
   X,
 } from 'phosphor-react'
-import { useCalendar } from '../../../context/CalendarProvider'
 import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
-import { EventProps } from '../../../types/event'
+import { useCalendar } from '../../../context/CalendarProvider'
+import { DeleteConfirmation } from '../../DeleteConfirmation'
 
-interface PopoverEventProps {
-  selectedEvent: EventProps
-}
+export function PopoverEvent() {
+  const {
+    changeVisiblePopover,
+    changeSelectedEvent,
+    selectedEvent,
+    getEvents,
+  } = useCalendar()
 
-export function PopoverEvent({ selectedEvent }: PopoverEventProps) {
-  const { users, changeVisiblePopover } = useCalendar()
+  if (!selectedEvent) {
+    return (
+      <Popover.Portal>
+        <Popover.Content>
+          <h1>Evento não encontrado</h1>
+        </Popover.Content>
+      </Popover.Portal>
+    )
+  }
 
-  const { title, description, eventAt, link, attendees } = selectedEvent
-  const attendeesId = attendees.map((attendee) => attendee.id)
-  const usersName = users
-    .filter((user) => attendeesId.includes(user.id))
-    .map((user) => user.byname)
+  const { title, description, startAt, endAt, link, attendees } = selectedEvent
+  const hourStart = dayjs(startAt).format('HH')
+  const hourEnd = dayjs(endAt).format('HH')
 
   function deleteEvent() {
     api
@@ -34,12 +44,19 @@ export function PopoverEvent({ selectedEvent }: PopoverEventProps) {
       .then((response) => {
         if (response.status === 200) {
           toast.success('Evento deletado com sucesso!')
+          changeVisiblePopover(null)
+          getEvents()
         }
       })
       .catch((error) => {
         toast.error('Nao foi possível deletar o evento!')
         console.error(error)
       })
+  }
+
+  function backPopover() {
+    changeSelectedEvent(null)
+    changeVisiblePopover('Events')
   }
 
   return (
@@ -52,7 +69,7 @@ export function PopoverEvent({ selectedEvent }: PopoverEventProps) {
           size={24}
           weight="bold"
           className="absolute cursor-pointer"
-          onClick={() => changeVisiblePopover('Events')}
+          onClick={backPopover}
         />
         <div className="absolute right-4 top-4 flex items-center justify-center gap-3">
           <Popover.Root>
@@ -70,16 +87,20 @@ export function PopoverEvent({ selectedEvent }: PopoverEventProps) {
                   <PencilSimpleLine size={24} />
                   <span>Editar</span>
                 </button>
-                <button
-                  className="flex cursor-pointer items-center gap-1 text-red-400"
-                  onClick={deleteEvent}
-                >
-                  <Trash size={24} />
-                  <span>Excluir</span>
-                </button>
+                <Dialog.Root>
+                  <Dialog.Trigger className="flex cursor-pointer items-center gap-1 text-red-400">
+                    <Trash size={24} />
+                    <span>Excluir</span>
+                  </Dialog.Trigger>
+                  <DeleteConfirmation
+                    message="Tem certeza de que deseja excluir o evento?"
+                    deleteFunc={deleteEvent}
+                  />
+                </Dialog.Root>
               </div>
             </Popover.Content>
           </Popover.Root>
+
           <Popover.Close>
             <X size={24} weight="bold" />
           </Popover.Close>
@@ -91,17 +112,21 @@ export function PopoverEvent({ selectedEvent }: PopoverEventProps) {
           <div className="flex items-center gap-3">
             <Calendar size={24} />
             <span className="font-semibold">
-              {dayjs(eventAt).format('DD/MM/YYYY')}
+              {dayjs(startAt).format('DD/MM/YYYY')}
             </span>
           </div>
           <div className="flex items-center gap-3">
             <Clock size={24} />
-            <span className="font-semibold">19H - 20H</span>
+            <span className="font-semibold">
+              {hourStart}H - {hourEnd}H
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
             <User size={24} />
-            <span className="font-semibold">{usersName.join(', ')}</span>
+            <span className="font-semibold">
+              {attendees.map((attendee) => attendee.byname).join(', ')}
+            </span>
           </div>
 
           <p className="font-semibold">{description}</p>

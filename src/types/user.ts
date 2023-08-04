@@ -1,5 +1,6 @@
 export type UserProps = {
   id: number
+  userId: number
   fullName: string
   byname: string
   email: string

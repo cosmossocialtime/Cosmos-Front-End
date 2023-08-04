@@ -117,6 +117,7 @@ const programs: ProgramProps[] = [
 ]
 
 const user: UserProps = {
+  userId: 1,
   id: 5,
   fullName: 'Eitau user',
   byname: 'Eitau três',

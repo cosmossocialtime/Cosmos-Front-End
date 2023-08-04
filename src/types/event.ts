@@ -3,13 +3,17 @@ export type EventProps = {
   title: string
   description: string
   link: string
-  eventAt: Date
+  startAt: Date
+  endAt: Date
   createdAt: Date
   updatedAt: Date
   attendees: {
-    id: number
     accepted: boolean
-    invitedAt: Date
     answeredAt: Date
+    byname: string
+    eventId: number
+    id: number
+    invitedAt: Date
+    userId: number
   }[]
 }

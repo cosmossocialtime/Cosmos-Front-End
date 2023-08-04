@@ -1,3 +1,4 @@
+import React from 'react'
 import { twMerge } from 'tailwind-merge'
 
 interface DefaultCardDayProps {
@@ -5,6 +6,7 @@ interface DefaultCardDayProps {
   className?: string
   disabled?: boolean
   onClick?: () => void
+  children?: React.ReactNode
 }
 
 export function DefaultCardDay({
@@ -12,6 +14,7 @@ export function DefaultCardDay({
   className,
   disabled = false,
   onClick,
+  children,
 }: DefaultCardDayProps) {
   return (
     <div
@@ -23,6 +26,7 @@ export function DefaultCardDay({
       onClick={onClick}
     >
       <span className="absolute left-2 top-2">{day}</span>
+      {children}
     </div>
   )
 }
