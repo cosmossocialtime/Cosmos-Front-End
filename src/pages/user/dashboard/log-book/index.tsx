@@ -1,44 +1,55 @@
-import { ArrowRight } from 'phosphor-react'
+import SideBar from '../sideBar'
+import { CardEvent } from '../../../../components/dashboard/log-book/CardEvent'
+import { useEffect, useState } from 'react'
+import { EventProps } from '../../../../types/event'
+import { api } from '../../../../services/api'
+import { useDashboard } from '../../../../hooks/useDashboard'
+import { Loading } from '../../../../components/Loading'
 
-const DiarioBordoPage = () => {
+export default function LogBook() {
+  const { dashboard } = useDashboard()
+  const currentMentorship = dashboard?.currentMentorship
+
+  const [events, setEvents] = useState<EventProps>([])
+
+  useEffect(() => {
+    if (!currentMentorship) {
+      return
+    }
+    api.get('').then(response => {
+      if(response.status === 200) {
+        setEvents(response.data)
+      }}).catch(error => {
+        console.error(error)
+      })
+    })
+  }, [currentMentorship])
+
+  if (!currentMentorship) {
+    return <Loading />
+  }
+
   return (
-    <div className="grid h-screen grid-rows-[15%_1fr]">
-      <header className="shadow-[0px 0px 24px rgba(43, 18, 74, 0.08)] row-start-1 row-end-2 flex items-center justify-between bg-[#FDFDFF] px-20">
-        <section className="flex flex-col">
-          <p className="text-lg text-[#727CA3]">23/02/2023</p>
-          <h1 className="text-4xl font-semibold text-[#363F63]">
-            Encontro da Tripulação
+    <div className="flex h-screen w-screen">
+      <SideBar />
+      <div className="flex h-full flex-1 flex-col">
+        <header className="px-20 py-8 shadow-lg">
+          <h1 className="text-[2.5rem] font-semibold leading-[120%] text-gray-600">
+            Diário de bordo
           </h1>
-        </section>
-        <button className="arrowButton">
-          <ArrowRight size={24} className="text-cian-500" />
-        </button>
-      </header>
+        </header>
 
-      <main className="row-start-2 row-end-3 flex w-5/6 flex-col pl-20 pt-8">
-        <section className="flex grow flex-col gap-[8%]">
-          <h3 className="text-lg text-[#363F63]">
-            Quais são algumas das informações que vocês já podem tomar como
-            verdadeiras sobre o(a) [Nome da Instituição]?
-          </h3>
-          <input
-            type="message"
-            className="h-4/6 rounded border-2 border-solid border-[#A2ABCC] text-base"
-          />
-        </section>
-        <section className="flex grow flex-col gap-[8%]">
-          <h3 className="text-lg text-[#363F63]">
-            Quais informações ainda estão faltando? O que vocês gostariam de
-            perguntar para os líderes da Estrela?
-          </h3>
-          <input
-            type="message"
-            className="h-4/6 rounded border-2 border-solid border-[#A2ABCC] text-base"
-          />
-        </section>
-      </main>
+        <div className="mx-20 mb-24 mt-8 flex-1 overflow-y-auto pr-16">
+          <h2 className="mb-4 font-bold text-gray-500">Agosto 2022</h2>
+          <div className="flex flex-col gap-4">
+            <CardEvent />
+            <CardEvent />
+            <CardEvent />
+            <CardEvent />
+            <CardEvent />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
-
-export default DiarioBordoPage

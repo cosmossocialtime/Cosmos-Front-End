@@ -2,24 +2,10 @@ import dayjs from 'dayjs'
 
 import { CaretLeft, CaretRight } from 'phosphor-react'
 
-import { createContext, useState } from 'react'
+import { useState } from 'react'
 import SideBar from '../sideBar'
-import { EventProps } from '../../../../types/event'
 import { CalendarProvider } from '../../../../context/CalendarProvider'
 import { Calendar } from '../../../../components/dashboard/events-calendar/Calendar'
-
-type popoverName = 'Create Event' | 'Events' | 'Event' | null
-
-type CalendarContextProps = {
-  events: EventProps[]
-  selectedEvent: EventProps | null
-  changeVisiblePopover: (name: popoverName) => void
-  changeSelectedEvent: (event: EventProps | null) => void
-}
-
-export const CalendarContext = createContext<CalendarContextProps>(
-  {} as CalendarContextProps,
-)
 
 export default function EventsCalendar() {
   const [currentDay, setCurrentDay] = useState(dayjs())
