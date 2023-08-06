@@ -1,15 +1,15 @@
 import { CaretRight, Clock } from 'phosphor-react'
-import { EventProps } from '../../../types/event'
 import dayjs from 'dayjs'
 import { useLogBook } from '../../../context/LogBookProvider'
+import { EventEntryProps } from '../../../types/EventEntry'
 
 interface CardEventProps {
-  event: EventProps
-  index: number
+  eventEntry: EventEntryProps
 }
 
-export function CardEvent({ event, index }: CardEventProps) {
+export function CardEvent({ eventEntry }: CardEventProps) {
   const { changeSelectedEvent } = useLogBook()
+  const { event, index } = eventEntry
 
   const eventDay = dayjs(event.startAt)
   const endEvent = dayjs(event.endAt)
@@ -17,7 +17,7 @@ export function CardEvent({ event, index }: CardEventProps) {
   return (
     <button
       className="flex max-w-full cursor-pointer items-center justify-between overflow-hidden rounded-lg border border-solid border-transparent bg-gray-200 px-8 py-5 text-gray-600 hover:border-violet-500"
-      onClick={() => changeSelectedEvent(event)}
+      onClick={() => changeSelectedEvent(eventEntry)}
     >
       <div className="flex items-center gap-8">
         <div className="text-violet-400">

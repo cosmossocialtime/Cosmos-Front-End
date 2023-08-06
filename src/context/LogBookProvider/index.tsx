@@ -5,14 +5,12 @@ import { Loading } from '../../components/Loading'
 import { useDashboard } from '../../hooks/useDashboard'
 import dayjs from 'dayjs'
 import { groupDatesByMonth } from './groupDatesByMonth'
+import { EventEntryProps } from '../../types/EventEntry'
 
 type LogBookContextProps = {
-  selectedEvent: EventProps | null
-  changeSelectedEvent: (event: EventProps | null) => void
-  eventsOfEachMonth: {
-    event: EventProps
-    index: number
-  }[][]
+  selectedEvent: EventEntryProps | null
+  changeSelectedEvent: (event: EventEntryProps | null) => void
+  eventsOfEachMonth: EventEntryProps[][]
 }
 
 const LogBookContext = createContext<LogBookContextProps>(
@@ -24,10 +22,12 @@ const LogBookProvider = ({ children }: { children: React.ReactNode }) => {
   const currentMentorship = dashboard?.currentMentorship
 
   const [events, setEvents] = useState<EventProps[]>()
-  const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<EventEntryProps | null>(
+    null,
+  )
 
-  function changeSelectedEvent(event: EventProps | null) {
-    setSelectedEvent(event)
+  function changeSelectedEvent(eventEntry: EventEntryProps | null) {
+    setSelectedEvent(eventEntry)
   }
 
   useEffect(() => {

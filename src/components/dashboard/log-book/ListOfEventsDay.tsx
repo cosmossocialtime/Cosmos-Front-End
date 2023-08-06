@@ -21,8 +21,8 @@ export function ListOfEventsDay() {
                 {day.format('MMMM YYYY')}
               </h2>
               <div className="flex flex-col gap-4">
-                {eventsOfMonth.map(({ event, index }) => (
-                  <CardEvent key={index} event={event} index={index} />
+                {eventsOfMonth.map((eventEntry) => (
+                  <CardEvent key={eventEntry.index} eventEntry={eventEntry} />
                 ))}
               </div>
             </div>

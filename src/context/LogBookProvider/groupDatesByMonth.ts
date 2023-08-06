@@ -1,11 +1,10 @@
 import dayjs from 'dayjs'
 import { EventProps } from '../../types/event'
+import { EventEntryProps } from '../../types/EventEntry'
 
 export function groupDatesByMonth(events: EventProps[]) {
-  const groupedDates: { event: EventProps; index: number }[][] = []
-  let eventsOfMonth: { event: EventProps; index: number }[] = [
-    { event: events[0], index: 1 },
-  ]
+  const groupedDates: EventEntryProps[][] = []
+  let eventsOfMonth: EventEntryProps[] = [{ event: events[0], index: 1 }]
 
   events.forEach((event, index) => {
     if (index === 0) return
