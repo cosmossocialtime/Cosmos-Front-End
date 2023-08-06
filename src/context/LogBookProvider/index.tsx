@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { EventProps } from '../../types/event'
 import { api } from '../../services/api'
-import { Loading } from '../../components/Loading'
 import { useDashboard } from '../../hooks/useDashboard'
 import dayjs from 'dayjs'
 import { groupDatesByMonth } from './groupDatesByMonth'
 import { EventEntryProps } from '../../types/EventEntry'
+import { LoadingLight } from '../../components/LoadingLight'
 
 type LogBookContextProps = {
   selectedEvent: EventEntryProps | null
@@ -47,7 +47,7 @@ const LogBookProvider = ({ children }: { children: React.ReactNode }) => {
   }, [currentMentorship])
 
   if (!events) {
-    return <Loading />
+    return <LoadingLight />
   }
 
   const ordenedEvents = events.sort((a, b) =>

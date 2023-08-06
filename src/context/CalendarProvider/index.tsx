@@ -4,6 +4,7 @@ import { UserProps } from '../../types/user'
 import { useDashboard } from '../../hooks/useDashboard'
 import { api } from '../../services/api'
 import { MentorshipProps } from '../../types/mentorship'
+import { LoadingLight } from '../../components/LoadingLight'
 
 type popoverName = 'Event Form' | 'Events' | 'Event' | null
 
@@ -74,11 +75,7 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   }, [currentMentorship])
 
   if (!currentMentorship || !ownerUser) {
-    return (
-      <div className="flex h-full w-full items-center justify-center text-gray-800">
-        <h1 className="text-lg">Carregando...</h1>
-      </div>
-    )
+    return <LoadingLight />
   }
 
   return (
