@@ -17,7 +17,9 @@ export default function Painel() {
   const achievements = dashboard.achievements
   const user = dashboard.user
   const programs = dashboard.programs
-  const mentorships = [dashboard.currentMentorship]
+  const mentorships = dashboard.currentMentorship
+    ? [dashboard.currentMentorship]
+    : []
 
   return (
     <div className="flex h-screen max-w-[100vw] flex-col">
