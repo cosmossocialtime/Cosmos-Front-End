@@ -5,7 +5,7 @@ import { useDashboard } from '../../hooks/useDashboard'
 import { api } from '../../services/api'
 import { MentorshipProps } from '../../types/mentorship'
 
-type popoverName = 'Create Event' | 'Events' | 'Event' | null
+type popoverName = 'Event Form' | 'Events' | 'Event' | null
 
 type CalendarContextProps = {
   currentMentorship: MentorshipProps

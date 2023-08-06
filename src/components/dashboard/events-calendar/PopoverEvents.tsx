@@ -43,7 +43,7 @@ export function PopoverEvents({ events, day }: PopoverEventsProps) {
 
         <button
           className=" rounded-lg border border-solid bg-white px-10 py-2 font-semibold text-violet-500 transition-colors hover:border-white hover:bg-violet-600 hover:text-white"
-          onClick={() => changeVisiblePopover('Create Event')}
+          onClick={() => changeVisiblePopover('Event Form')}
         >
           Marcar novo evento
         </button>

@@ -82,7 +82,7 @@ export function PopoverEvent() {
               <div className="mr-14 flex flex-col items-start gap-7">
                 <button
                   className="flex cursor-pointer items-center gap-1"
-                  onClick={() => changeVisiblePopover('Create Event')}
+                  onClick={() => changeVisiblePopover('Event Form')}
                 >
                   <PencilSimpleLine size={24} />
                   <span>Editar</span>

@@ -76,7 +76,7 @@ export function Calendar({ currentDay }: CalendarProps) {
               <Popover.Trigger>
                 <DefaultCardDay
                   day={formattedDay}
-                  onClick={() => changeVisiblePopover('Create Event')}
+                  onClick={() => changeVisiblePopover('Event Form')}
                 />
               </Popover.Trigger>
               <PopoverEventForm currentDay={day.toDate()} />
@@ -106,7 +106,7 @@ export function Calendar({ currentDay }: CalendarProps) {
                   )}
                 </DefaultCardDay>
               </Popover.Trigger>
-              {visiblePopover === 'Create Event' ? (
+              {visiblePopover === 'Event Form' ? (
                 <PopoverEventForm
                   currentDay={day.toDate()}
                   event={selectedEvent}
