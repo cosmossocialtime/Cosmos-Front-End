@@ -23,11 +23,9 @@ export function Book() {
     return <h1>Error! Evento nao encontrado</h1>
   }
 
-  const { event, index } = selectedEvent
-
   function submitForm(data: formProps) {
     api
-      .post(`mentorship/event/${event.id}/logbook`)
+      .post(`mentorship/event/${selectedEvent?.id}/logbook`)
       .then((response) => {
         if (response.status === 200) {
           toast.success('Os dados foram salvos com sucesso!')
@@ -42,14 +40,14 @@ export function Book() {
   }
 
   return (
-    <div className="flex h-full flex-1 flex-col">
+    <div className="flex h-screen flex-1 flex-col overflow-y-auto">
       <header className="flex min-h-[7rem] items-center justify-between px-20 shadow-lg">
         <div>
           <span className="text-lg text-gray-500">
-            {dayjs(event.startAt).format('DD/MM/YYYY')}
+            {dayjs(selectedEvent.startAt).format('DD/MM/YYYY')}
           </span>
           <h1 className="max-w-[20ch] truncate text-[2.5rem] font-semibold leading-[120%] text-gray-600">
-            Encontro {index}
+            {selectedEvent.title}
           </h1>
         </div>
         <X
@@ -73,7 +71,7 @@ export function Book() {
               <Input.TextArea
                 value={field.value}
                 onChange={field.onChange}
-                className="mt-4 h-[7rem]"
+                className="mt-4 h-44"
               />
             )}
           />
@@ -89,7 +87,7 @@ export function Book() {
               <Input.TextArea
                 value={field.value}
                 onChange={field.onChange}
-                className="mt-4 h-[7rem]"
+                className="mt-4 h-44"
               />
             )}
           />

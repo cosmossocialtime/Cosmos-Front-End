@@ -1,15 +1,14 @@
 import { CaretRight, Clock } from 'phosphor-react'
 import dayjs from 'dayjs'
 import { useLogBook } from '../../../context/LogBookProvider'
-import { EventEntryProps } from '../../../types/EventEntry'
+import { EventProps } from '../../../types/event'
 
 interface CardEventProps {
-  eventEntry: EventEntryProps
+  event: EventProps
 }
 
-export function CardEvent({ eventEntry }: CardEventProps) {
+export function CardEvent({ event }: CardEventProps) {
   const { changeSelectedEvent } = useLogBook()
-  const { event, index } = eventEntry
 
   const eventDay = dayjs(event.startAt)
   const endEvent = dayjs(event.endAt)
@@ -17,7 +16,7 @@ export function CardEvent({ eventEntry }: CardEventProps) {
   return (
     <button
       className="flex max-w-full cursor-pointer items-center justify-between overflow-hidden rounded-lg border border-solid border-transparent bg-gray-200 px-8 py-5 text-gray-600 hover:border-violet-500"
-      onClick={() => changeSelectedEvent(eventEntry)}
+      onClick={() => changeSelectedEvent(event)}
     >
       <div className="flex items-center gap-8">
         <div className="text-violet-400">
@@ -29,13 +28,11 @@ export function CardEvent({ eventEntry }: CardEventProps) {
           </span>
         </div>
 
-        <h3 className="max-w-[40ch] truncate font-semibold">
-          Encontro {index}
-        </h3>
+        <h3 className="max-w-[40ch] truncate font-semibold">{event.title}</h3>
       </div>
 
       <div className="flex items-center gap-16">
-        <div className="flex flex-1 items-center justify-self-end">
+        <div className="flex flex-1 items-center gap-2 justify-self-end">
           <Clock size={24} />
           <span className="font-semibold">
             {eventDay.format('HH[h]mm')} às {endEvent.format('HH[h]mm')}
