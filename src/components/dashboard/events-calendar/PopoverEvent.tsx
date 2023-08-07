@@ -6,6 +6,7 @@ import {
   Calendar,
   Clock,
   DotsThree,
+  Link,
   PencilSimpleLine,
   Trash,
   User,
@@ -106,8 +107,8 @@ export function PopoverEvent() {
           </Popover.Close>
         </div>
 
-        <div className="mt-16 flex flex-col gap-4">
-          <h1 className="text-xl font-semibold">{title}</h1>
+        <div className="mt-8 flex flex-col gap-4">
+          <h1 className="text-2xl font-semibold">{title}</h1>
 
           <div className="flex items-center gap-3">
             <Calendar size={24} />
@@ -130,10 +131,16 @@ export function PopoverEvent() {
           </div>
 
           <p className="font-semibold">{description}</p>
+          <span className="flex items-center gap-3 font-semibold">
+            <Link size={24} />
+            {link}
+          </span>
         </div>
         <a
           className="mx-auto mt-10 block max-w-max cursor-pointer rounded-lg border border-solid border-white bg-zinc-50 px-12 py-2 font-semibold text-violet-500 transition-all duration-200 hover:bg-violet-600 hover:text-white"
           href={link}
+          target="_blank"
+          rel="noreferrer"
         >
           Acessar Reunião
         </a>

@@ -15,6 +15,9 @@ import dayjs from 'dayjs'
 import { InputTime } from './InputTime'
 import { useState } from 'react'
 
+import MeetIcon from '../../../assets/meet-icon.svg'
+import Image from 'next/image'
+
 const schema = z.object({
   title: z.string().nonempty(),
   description: z.string(),
@@ -223,7 +226,7 @@ export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
               type="url"
               id="url"
               defaultValue={event?.link}
-              placeholder="https://calendar.google.com"
+              placeholder="Adicionar link para videochamada"
               className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-4 py-2 outline-none placeholder:text-white/40 focus:border-white"
               required
               disabled={onLinkMeet}
@@ -239,11 +242,12 @@ export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
               >
                 <div className=" absolute left-0 m-1 h-4 w-4 rounded-full bg-gray-500 transition-all group-data-[meet=true]:left-6 group-data-[meet=true]:bg-white" />
               </button>
-              <span>Usar o meet</span>
+              <Image src={MeetIcon} alt="Logo do google meet" height={20} />
+              <span>Usar o Google Meet</span>
             </div>
           </div>
 
-          <button className="mx-auto max-w-max rounded-lg border border-solid border-white bg-white px-20 py-2 font-semibold text-violet-500 transition-all hover:bg-violet-600 hover:text-white">
+          <button className="mx-auto mt-4 max-w-max rounded-lg border border-solid border-white bg-white px-20 py-2 font-semibold text-violet-500 transition-all hover:bg-violet-600 hover:text-white">
             Salvar
           </button>
         </form>
