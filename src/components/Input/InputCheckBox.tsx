@@ -3,7 +3,7 @@ import { Check } from 'phosphor-react'
 import { twMerge } from 'tailwind-merge'
 
 interface CheckInputProps {
-  content: string
+  content?: string
   checked: boolean
   disabled?: boolean
   onChangeChecked: (checked: boolean) => void

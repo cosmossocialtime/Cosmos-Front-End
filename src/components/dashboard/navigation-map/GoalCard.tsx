@@ -1,24 +1,20 @@
-import moonIcon from '../../../../assets/moon-icon.svg'
-import darkMoonIcon from '../../../../assets/dark-moon-icon.svg'
-import ProgressBar from './ProgressBar'
+import moonIcon from '../../../assets/moon-icon.svg'
+import darkMoonIcon from '../../../assets/dark-moon-icon.svg'
 import Image from 'next/image'
-import { Button } from '../../../Button'
+import ProgressBar from './ProgressBar'
+import { GoalProps } from '../../../types/Goal'
 
-interface ObjectiveCardProps {
-  description: string
+interface GoalCardProps {
+  goal: GoalProps
   index: number
-  amountTask: number
-  completedTask: number
 }
 
-export default function ObjectiveCard({
-  description,
-  index,
-  amountTask,
-  completedTask,
-}: ObjectiveCardProps) {
+export default function GoalCard({ goal, index }: GoalCardProps) {
+  const amountTask = goal.tasks.length
+  const completedTask = goal.tasks.filter((task) => task.completed).length
+
   const completedPercentage =
-    amountTask > 0 ? Math.round((completedTask / amountTask) * 100) : 0
+    goal.tasks.length > 0 ? Math.round((completedTask / amountTask) * 100) : 0
   const percentageDistanceCenterImg = -(completedPercentage - 50)
 
   return (
@@ -46,15 +42,15 @@ export default function ObjectiveCard({
 
         <div className="flex flex-col items-center">
           <strong className="mb-2 block text-center text-2xl font-semibold">
-            Objetivo {index}
+            Objetivo {index + 1}
           </strong>
-          <span className="text-center text-sm">{description}</span>
+          <span className="text-center text-sm">{goal.name}</span>
         </div>
       </div>
 
-      <Button.Primary className="mt-2 w-full py-2 font-semibold opacity-0 group-hover:opacity-100">
+      <div className="mt-2 w-full rounded-lg bg-violet-500 py-2 text-center text-lg font-semibold text-gray-100 opacity-0 transition-colors hover:bg-violet-600 group-hover:opacity-100">
         Descobrir tarefas
-      </Button.Primary>
+      </div>
     </div>
   )
 }

@@ -1,38 +1,8 @@
-import { useState } from 'react'
-
 import SideBar from '../sideBar'
-import { objectiveCardsData } from '../../../../data/objectiveCardsData'
-import DialogObjective from '../../../../components/dashboard/navigation-map/DialogObjective'
-const { v4: uuidv4 } = require('uuid')
+import { Goals } from '../../../../components/dashboard/navigation-map/Goals'
+import { NavigationMapProvider } from '../../../../context/NavigationMapProvider'
 
-export default function MapaNavegacaoPage() {
-  const [objectiveCards, setObjectiveCards] = useState(objectiveCardsData)
-
-  function deleteObjective(id: string) {
-    setObjectiveCards((prevObjectiveCards) => {
-      const updateObjectiveCards = prevObjectiveCards.filter(
-        (objective) => objective.id !== id,
-      )
-
-      return updateObjectiveCards
-    })
-  }
-
-  function createNewGoal() {
-    setObjectiveCards((prevObjectiveCards) => {
-      const updateObjectiveCards = [
-        ...prevObjectiveCards,
-        {
-          id: uuidv4(),
-          title: '',
-          tasks: [],
-        },
-      ]
-
-      return updateObjectiveCards
-    })
-  }
-
+export default function NavigationMap() {
   return (
     <div className="flex">
       <SideBar />
@@ -45,34 +15,9 @@ export default function MapaNavegacaoPage() {
             desta missão
           </span>
         </header>
-
-        <div className="flex flex-1 flex-col items-center">
-          <div className="flex flex-1 items-center justify-center gap-10">
-            {objectiveCards.length !== 0 ? (
-              objectiveCards.map((cardData, key) => (
-                <DialogObjective
-                  key={cardData.id}
-                  index={key}
-                  cardData={cardData}
-                  deleteObjective={deleteObjective}
-                />
-              ))
-            ) : (
-              <p className="rounded-lg bg-gray-700 bg-opacity-5 p-8 font-normal text-white backdrop-blur-3xl">
-                Nome da organização ainda não tem nenhum objetivo... <br />
-                Aguarde o encontro do Mapa da Navegação para criá-los.
-              </p>
-            )}
-          </div>
-          {objectiveCards.length < 4 && (
-            <button
-              className="mb-24 max-w-max rounded-lg bg-violet-500 px-28 py-4 text-lg font-semibold text-white transition-all hover:bg-violet-600"
-              onClick={createNewGoal}
-            >
-              Criar novo objetivo
-            </button>
-          )}
-        </div>
+        <NavigationMapProvider>
+          <Goals />
+        </NavigationMapProvider>
       </div>
     </div>
   )
