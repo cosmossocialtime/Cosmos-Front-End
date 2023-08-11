@@ -17,17 +17,25 @@ type formProps = z.infer<typeof schema>
 
 export function Book() {
   const { selectedEvent, changeSelectedEvent } = useLogBook()
-  const { handleSubmit, control } = useForm<formProps>()
+  const { handleSubmit, control } = useForm<formProps>({
+    defaultValues: {
+      meetingAccomplishments: selectedEvent?.logbook.meetingAccomplishments,
+      nextMeetingGoals: selectedEvent?.logbook.nextMeetingGoals,
+    },
+  })
 
   if (!selectedEvent) {
     return <h1>Error! Evento nao encontrado</h1>
   }
 
-  function submitForm(data: formProps) {
+  function submitForm({ meetingAccomplishments, nextMeetingGoals }: formProps) {
     api
-      .post(`mentorship/event/${selectedEvent?.id}/logbook`)
+      .post(`mentorship/event/${selectedEvent?.id}/logbook`, {
+        meetingAccomplishments,
+        nextMeetingGoals,
+      })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
           toast.success('Os dados foram salvos com sucesso!')
         }
       })
@@ -71,7 +79,7 @@ export function Book() {
               <Input.TextArea
                 value={field.value}
                 onChange={field.onChange}
-                className="mt-4 h-44"
+                className="mt-4 h-40"
               />
             )}
           />
@@ -87,7 +95,7 @@ export function Book() {
               <Input.TextArea
                 value={field.value}
                 onChange={field.onChange}
-                className="mt-4 h-44"
+                className="mt-4 h-40"
               />
             )}
           />
