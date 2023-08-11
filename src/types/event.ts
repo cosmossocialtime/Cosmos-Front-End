@@ -16,4 +16,8 @@ export type EventProps = {
     invitedAt: Date
     userId: number
   }[]
+  logbook: {
+    meetingAccomplishments: string
+    nextMeetingGoals: string
+  }
 }
