@@ -16,11 +16,11 @@ const schema = z.object({
 type formProps = z.infer<typeof schema>
 
 export function Book() {
-  const { selectedEvent, changeSelectedEvent } = useLogBook()
+  const { selectedEvent, changeSelectedEvent, getEvents } = useLogBook()
   const { handleSubmit, control } = useForm<formProps>({
     defaultValues: {
-      meetingAccomplishments: selectedEvent?.logbook.meetingAccomplishments,
-      nextMeetingGoals: selectedEvent?.logbook.nextMeetingGoals,
+      meetingAccomplishments: selectedEvent?.logbook?.meetingAccomplishments,
+      nextMeetingGoals: selectedEvent?.logbook?.nextMeetingGoals,
     },
   })
 
@@ -35,8 +35,9 @@ export function Book() {
         nextMeetingGoals,
       })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success('Os dados foram salvos com sucesso!')
+          getEvents()
         }
       })
       .catch((error) => {

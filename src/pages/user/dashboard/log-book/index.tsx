@@ -4,7 +4,7 @@ import { LogBookPageSwitcher } from '../../../../components/dashboard/log-book/L
 
 export default function LogBook() {
   return (
-    <div className="flex h-screen w-screen">
+    <div className="max-w-screen flex h-screen overflow-hidden">
       <SideBar />
 
       <LogBookProvider>

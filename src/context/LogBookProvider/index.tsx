@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { EventProps } from '../../types/event'
 import { api } from '../../services/api'
 import { useDashboard } from '../../hooks/useDashboard'
@@ -10,6 +16,7 @@ type LogBookContextProps = {
   selectedEvent: EventProps | null
   changeSelectedEvent: (event: EventProps | null) => void
   eventsOfEachMonth: EventProps[][]
+  getEvents: () => void
 }
 
 const LogBookContext = createContext<LogBookContextProps>(
@@ -27,10 +34,7 @@ const LogBookProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedEvent(eventEntry)
   }
 
-  useEffect(() => {
-    if (!currentMentorship) {
-      return
-    }
+  const getEvents = useCallback(() => {
     api
       .get(`/mentorship/${currentMentorship?.programId}/calendar`)
       .then((response) => {
@@ -42,6 +46,13 @@ const LogBookProvider = ({ children }: { children: React.ReactNode }) => {
         console.error(error)
       })
   }, [currentMentorship])
+
+  useEffect(() => {
+    if (!currentMentorship) {
+      return
+    }
+    getEvents()
+  }, [currentMentorship, getEvents])
 
   if (!events) {
     return <LoadingLight />
@@ -55,7 +66,12 @@ const LogBookProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <LogBookContext.Provider
-      value={{ selectedEvent, changeSelectedEvent, eventsOfEachMonth }}
+      value={{
+        selectedEvent,
+        changeSelectedEvent,
+        eventsOfEachMonth,
+        getEvents,
+      }}
     >
       {children}
     </LogBookContext.Provider>
