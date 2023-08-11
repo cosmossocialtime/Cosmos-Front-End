@@ -23,8 +23,8 @@ export function PopoverEvents({ events, day }: PopoverEventsProps) {
         <h3 className="text-xl">Eventos</h3>
         <div className="my-4 flex max-h-[24rem] w-full flex-col gap-3 overflow-y-auto">
           {events.map((event) => {
-            const hourStart = dayjs(event.startAt).format('HH')
-            const hourEnd = dayjs(event.endAt).format('HH')
+            const hourStart = dayjs(event.startAt).format('HH:mm')
+            const hourEnd = dayjs(event.endAt).format('HH:mm')
 
             return (
               <button
@@ -33,7 +33,7 @@ export function PopoverEvents({ events, day }: PopoverEventsProps) {
                 className="cursor-pointer rounded-lg border border-solid border-white/40 p-3  hover:border-white"
               >
                 <span>
-                  {hourStart}h - {hourEnd}h
+                  {hourStart} - {hourEnd}
                 </span>
                 <p className="mt-2 break-words">{event.title}</p>
               </button>

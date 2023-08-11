@@ -41,7 +41,7 @@ export function PopoverEventForm({ event, currentDay }: PopoverEventFormProps) {
   const { changeVisiblePopover, currentMentorship, getEvents } = useCalendar()
 
   const { control, handleSubmit, register } = useForm<formProps>()
-  const attendeesId = event?.attendees.map((attendee) => attendee.id)
+  const attendeesId = event?.attendees.map((attendee) => attendee.userId)
 
   function createEvent({
     title,

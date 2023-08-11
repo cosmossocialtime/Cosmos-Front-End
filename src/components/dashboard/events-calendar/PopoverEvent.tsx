@@ -5,8 +5,8 @@ import {
   ArrowLeft,
   Calendar,
   Clock,
+  Copy,
   DotsThree,
-  Link,
   PencilSimpleLine,
   Trash,
   User,
@@ -36,8 +36,8 @@ export function PopoverEvent() {
   }
 
   const { title, description, startAt, endAt, link, attendees } = selectedEvent
-  const hourStart = dayjs(startAt).format('HH')
-  const hourEnd = dayjs(endAt).format('HH')
+  const hourStart = dayjs(startAt).format('HH:mm')
+  const hourEnd = dayjs(endAt).format('HH:mm')
 
   function deleteEvent() {
     api
@@ -119,7 +119,7 @@ export function PopoverEvent() {
           <div className="flex items-center gap-3">
             <Clock size={24} />
             <span className="font-semibold">
-              {hourStart}H - {hourEnd}H
+              {hourStart} - {hourEnd}
             </span>
           </div>
 
@@ -132,8 +132,15 @@ export function PopoverEvent() {
 
           <p className="font-semibold">{description}</p>
           <span className="flex items-center gap-3 font-semibold">
-            <Link size={24} />
             {link}
+            <Copy
+              size={24}
+              onClick={() => {
+                navigator.clipboard.writeText(link)
+                toast.success('Link copiado para a área de transferência.')
+              }}
+              className="cursor-pointer"
+            />
           </span>
         </div>
         <a

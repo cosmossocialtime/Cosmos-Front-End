@@ -29,7 +29,7 @@ export function InputAttendees({
     const companion = companions.find((companion) => companion.byname === value)
 
     if (companion) {
-      changeAttendeesId([...attendeesId, companion.id])
+      changeAttendeesId([...attendeesId, companion.userId])
     }
   }
 
@@ -49,8 +49,9 @@ export function InputAttendees({
                 className="flex items-center gap-1 px-1 py-2 hover:bg-black/5"
               >
                 {
-                  companions.find((companion) => companion.id === attendeerId)
-                    ?.byname
+                  companions.find(
+                    (companion) => companion.userId === attendeerId,
+                  )?.byname
                 }
                 <X
                   className="cursor-pointer"
@@ -73,7 +74,7 @@ export function InputAttendees({
           <Select.Viewport className="cursor-pointer text-violet-500">
             {companions.map((companion) => {
               return (
-                !attendeesId.includes(companion.id) && (
+                !attendeesId.includes(companion.userId) && (
                   <Select.Item
                     key={companion.id}
                     value={companion.byname}
