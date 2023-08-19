@@ -3,9 +3,28 @@ import { useNavigationMap } from '../../../context/NavigationMapProvider'
 import { Button } from '../../Button'
 import GoalPopUp from './GoalPopUp'
 import GoalCard from './GoalCard'
+import { useState } from 'react'
+import WarningEdit from './WarningEdit'
+import { GoalProps } from '../../../types/Goal'
 
 export function Goals() {
-  const { goals, selectGoal, selectedGoal, createGoal } = useNavigationMap()
+  const [onWarningEdit, setOnWarningEdit] = useState(false)
+
+  const { goals, selectGoal, selectedGoal, createGoal, editEnable } =
+    useNavigationMap()
+
+  function openChangeGoal(open: boolean, goal: GoalProps) {
+    if (open) {
+      selectGoal(goal)
+      return
+    }
+    if (editEnable) {
+      setOnWarningEdit(true)
+      return
+    }
+
+    selectGoal(null)
+  }
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-8">
@@ -15,9 +34,7 @@ export function Goals() {
             <Dialog.Root
               key={goal.id}
               open={selectedGoal?.id === goal.id}
-              onOpenChange={(open) =>
-                open ? selectGoal(goal) : selectGoal(null)
-              }
+              onOpenChange={(open) => openChangeGoal(open, goal)}
             >
               <Dialog.Trigger>
                 <GoalCard goal={goal} index={index} />
@@ -42,6 +59,8 @@ export function Goals() {
           Criar novo objetivo
         </Button.Primary>
       )}
+
+      <WarningEdit open={onWarningEdit} onOpenChange={setOnWarningEdit} />
     </div>
   )
 }

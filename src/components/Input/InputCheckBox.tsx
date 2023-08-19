@@ -24,7 +24,7 @@ export function InputCheckBox({
       className={twMerge(
         ` ${
           isLineThrough && checked ? 'text-gray-400 line-through' : ''
-        }  flex gap-2`,
+        }  flex cursor-pointer gap-2`,
         className,
       )}
     >

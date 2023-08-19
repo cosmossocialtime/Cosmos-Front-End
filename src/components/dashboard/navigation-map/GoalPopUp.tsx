@@ -12,6 +12,8 @@ import { Menu } from '../../menu'
 import WarningGoalDeletion from './WarningGoalDeletion'
 import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ErrorMessage } from '@hookform/error-message'
 
 const editGoalFormSchema = z.object({
   title: z.string().nonempty('O título é obrigatório!'),
@@ -19,7 +21,7 @@ const editGoalFormSchema = z.object({
     z.object({
       name: z.string().nonempty('A atividade precisa de uma descrição!'),
       completed: z.boolean(),
-      id: z.number(),
+      id: z.number().optional(),
     }),
   ),
 })
@@ -42,6 +44,7 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
   }
 
   const newCycleForm = useForm<formProps>({
+    resolver: zodResolver(editGoalFormSchema),
     defaultValues: {
       title: goal.name || 'Novo objetivo',
       tasks: [
@@ -53,12 +56,18 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
       ],
     },
   })
-  const { handleSubmit, register, getValues } = newCycleForm
+  const {
+    handleSubmit,
+    register,
+    trigger,
+    setError,
+    getValues,
+    formState: { errors },
+  } = newCycleForm
 
   function submitForm({ title, tasks }: formProps) {
-    // Enviar para o backend
     api
-      .patch(`mentorship/goal/${goal.id}`, {
+      .put(`mentorship/goal/${goal.id}`, {
         title,
         tasks: tasks.map((task) => ({ name: task.name, id: task.id })),
       })
@@ -75,23 +84,8 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
           'Não foi possível salvar as alterações. Tente novamente mais tarde!',
         )
       })
-    // Lógica desnecessária, utilizada apenas enquanto o backend não é finalizado
-    // const newTasks: TaskProps[] = tasks.map((task, index) => ({
-    //   id: index,
-    //   name: task.name,
-    //   completed: task.completed,
-    //   completedBy: null,
-    //   completedAt: null,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // }))
-    // const newGoal: GoalProps = { ...goal, name: title, tasks: newTasks }
-
-    // changeGoal(newGoal)
-
-    // changeEdit(false)
   }
-
+  console.log(errors)
   return (
     <form onSubmit={handleSubmit(submitForm)} className="flex flex-col">
       <header className="relative">
@@ -99,17 +93,34 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
           Objetivo {index + 1}
         </span>
         {editEnable && editTitle ? (
-          <div className="flex h-14 w-[85%] items-center justify-between gap-3 bg-blue-900/50 px-4 py-2">
-            <input
-              autoFocus
-              type="text"
-              className="flex-1 bg-transparent text-3xl leading-normal text-blue-50 outline-none"
-              {...register('title')}
+          <>
+            <div className="flex h-14 w-[85%] items-center justify-between gap-3 bg-blue-900/50 px-4 py-2">
+              <input
+                autoFocus
+                type="text"
+                className="flex-1 bg-transparent text-3xl leading-normal text-blue-50 outline-none"
+                {...register('title')}
+              />
+              <button
+                onClick={async () => {
+                  const isSuccess = await trigger('title', {
+                    shouldFocus: true,
+                  })
+                  isSuccess && setEditTitle(false)
+                }}
+                type="button"
+              >
+                <Check size={32} className="text-blue-50" />
+              </button>
+            </div>
+            <ErrorMessage
+              errors={errors}
+              name="title"
+              render={({ message }) => (
+                <p className="ml-4 mt-2 text-sm text-red-400">{message}</p>
+              )}
             />
-            <button onClick={() => setEditTitle(false)} type="button">
-              <Check size={32} className="text-blue-50" />
-            </button>
-          </div>
+          </>
         ) : (
           <div className="w-[85%]">
             <Dialog.Title className="text-4xl leading-normal text-blue-50 ">

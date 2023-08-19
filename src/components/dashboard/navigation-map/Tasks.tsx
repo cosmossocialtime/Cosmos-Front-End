@@ -7,13 +7,17 @@ import { InputTask } from './InputTask'
 import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 
 interface TasksProps {
   goal: GoalProps
 }
 
 export function Tasks({ goal }: TasksProps) {
-  const { control } = useFormContext()
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext()
   const { changeGoal, editEnable } = useNavigationMap()
   const { fields, prepend, remove } = useFieldArray({
     control,
@@ -65,12 +69,20 @@ export function Tasks({ goal }: TasksProps) {
       <div className="scrollbar-thumb-blue-400 scrollbar-thin scrollbar-track-blue-500/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full flex h-52 flex-col gap-6 overflow-y-auto pr-3">
         {editEnable
           ? fields.map((field, index) => (
-              <InputTask
-                key={field.id}
-                index={index}
-                completed={false}
-                deleteTask={deleteTask}
-              />
+              <div key={field.id}>
+                <InputTask
+                  index={index}
+                  completed={false}
+                  deleteTask={deleteTask}
+                />
+                <ErrorMessage
+                  // errors={errors}
+                  name={`tasks.${index}.name`}
+                  render={({ message }) => (
+                    <p className="ml-4 mt-2 text-sm text-red-400">{message}</p>
+                  )}
+                />
+              </div>
             ))
           : goal.tasks.map((task, index) => (
               <Task task={task} key={task.id} completeTask={completeTask} />

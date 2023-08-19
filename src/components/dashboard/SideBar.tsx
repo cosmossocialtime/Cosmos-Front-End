@@ -1,5 +1,3 @@
-'use client'
-
 import {
   ArrowLeft,
   Calendar,
@@ -14,7 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-export default function SideBar() {
+export function SideBar() {
   const SideBarItems = [
     {
       id: 1,

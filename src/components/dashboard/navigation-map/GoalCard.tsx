@@ -12,11 +12,13 @@ interface GoalCardProps {
 export default function GoalCard({ goal, index }: GoalCardProps) {
   const amountTask = goal.tasks.length
   const completedTask = goal.tasks.filter((task) => task.completed).length
-
   const completedPercentage =
     goal.tasks.length > 0 ? Math.round((completedTask / amountTask) * 100) : 0
-  const percentageDistanceCenterImg = -(completedPercentage - 50)
+  const conversionRate =
+    ((100 - Math.abs(100 - completedPercentage * 2)) * -10) / 100
 
+  const percentageDistanceCenterImg =
+    50 - (completedPercentage + conversionRate)
   return (
     <div className="group flex cursor-pointer flex-col justify-between">
       <div className="flex h-[270px] w-[200px] flex-col items-center gap-1 rounded-lg bg-blue-100 bg-opacity-5 from-blue-400/70 to-violet-600/70 px-2 pt-4 text-white group-hover:bg-gradient-to-b">
