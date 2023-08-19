@@ -60,7 +60,6 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
     handleSubmit,
     register,
     trigger,
-    setError,
     getValues,
     formState: { errors },
   } = newCycleForm

@@ -14,10 +14,7 @@ interface TasksProps {
 }
 
 export function Tasks({ goal }: TasksProps) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext()
+  const { control } = useFormContext()
   const { changeGoal, editEnable } = useNavigationMap()
   const { fields, prepend, remove } = useFieldArray({
     control,
