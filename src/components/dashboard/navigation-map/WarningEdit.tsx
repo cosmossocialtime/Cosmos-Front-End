@@ -7,10 +7,10 @@ interface WarningEditProps {
 }
 
 export default function WarningEdit({ open, onOpenChange }: WarningEditProps) {
-  const { changeEdit, selectGoal } = useNavigationMap()
+  const { changeEdit, selectGoalId } = useNavigationMap()
 
   function exitDialog() {
-    selectGoal(null)
+    selectGoalId(null)
     changeEdit(false)
     onOpenChange(false)
   }
