@@ -34,7 +34,7 @@ type GoalPopUpProps = {
 }
 
 export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
-  const { editEnable, changeEdit, getGoals } = useNavigationMap()
+  const { editEnable, changeEdit, updateGoals } = useNavigationMap()
 
   const [editTitle, setEditTitle] = useState(false)
   const [openWarningDelete, setOpenWarningDelete] = useState(false)
@@ -46,7 +46,7 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
   const newCycleForm = useForm<formProps>({
     resolver: zodResolver(editGoalFormSchema),
     defaultValues: {
-      title: goal.name || 'Novo objetivo',
+      title: goal.name,
       tasks: [
         ...goal.tasks.map((task) => ({
           name: task.name,
@@ -67,13 +67,13 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
   function submitForm({ title, tasks }: formProps) {
     api
       .put(`mentorship/goal/${goal.id}`, {
-        title,
+        name: title,
         tasks: tasks.map((task) => ({ name: task.name, id: task.id })),
       })
       .then((response) => {
         if (response.status === 200) {
           toast.success('Dados salvos com sucesso!')
-          getGoals()
+          updateGoals()
           changeEdit(false)
         }
       })
@@ -84,13 +84,24 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
         )
       })
   }
-  console.log(errors)
+
+  const completedTasksLength = goal.tasks.filter(
+    (task) => task.completed,
+  ).length
+  const tasksLength = goal.tasks.length
+  const percentageCompletedTasks =
+    Math.round((completedTasksLength / tasksLength) * 100) | 0
+
   return (
     <form onSubmit={handleSubmit(submitForm)} className="flex flex-col">
       <header className="relative">
-        <span className="block text-xl leading-normal text-gray-400">
-          Objetivo {index + 1}
-        </span>
+        <div className="flex gap-2 text-xl leading-normal text-gray-400">
+          <span>Objetivo {index + 1}</span>
+          <span>• {percentageCompletedTasks}% Concluído</span>
+          <span>
+            • {completedTasksLength}/{tasksLength} Tarefas realizadas
+          </span>
+        </div>
         {editEnable && editTitle ? (
           <>
             <div className="flex h-14 w-[85%] items-center justify-between gap-3 bg-blue-900/50 px-4 py-2">

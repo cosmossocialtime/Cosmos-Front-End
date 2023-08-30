@@ -10,6 +10,8 @@ import '../styles/mainTailwind.css'
 import './user/dashboard/satellite-images/planets.css'
 import 'keen-slider/keen-slider.min.css'
 import { ToastContainer } from 'react-toastify'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from '../services/queryClient'
 
 registerLocale('ptBR', ptBR)
 setDefaultLocale('ptBR')
@@ -17,18 +19,20 @@ setDefaultLocale('ptBR')
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <NextNProgress
-        color="#7A40D3"
-        startPosition={0.3}
-        stopDelayMs={300}
-        height={3}
-        options={{ showSpinner: false }}
-      />
-      <AppProvider>
-        <Component {...pageProps} />
-        <ToastContainer autoClose={2000} limit={3} />
-      </AppProvider>
-      <GlobalStyle />
+      <QueryClientProvider client={queryClient}>
+        <NextNProgress
+          color="#7A40D3"
+          startPosition={0.3}
+          stopDelayMs={300}
+          height={3}
+          options={{ showSpinner: false }}
+        />
+        <AppProvider>
+          <Component {...pageProps} />
+          <ToastContainer autoClose={2000} limit={3} />
+        </AppProvider>
+        <GlobalStyle />
+      </QueryClientProvider>
     </>
   )
 }

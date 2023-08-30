@@ -78,6 +78,7 @@ module.exports = {
         bgAstronaltaDeLado: 'url(/images/bg-astronauta-de-lado.jpg)',
         bgPortal: 'url(/images/bg-portal.jpg)',
         bgEspaço: 'url(/images/bg-espaco.jpg)',
+        bgError500: 'url(/images/bg-error-500.jpg)',
       },
     },
   },

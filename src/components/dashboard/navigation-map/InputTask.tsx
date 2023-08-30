@@ -4,11 +4,10 @@ import { Input } from '../../Input'
 
 interface InputTaskProps {
   index: number
-  completed: boolean
   deleteTask: (index: number) => void
 }
 
-export function InputTask({ index, completed, deleteTask }: InputTaskProps) {
+export function InputTask({ index, deleteTask }: InputTaskProps) {
   const { register, control } = useFormContext()
 
   return (

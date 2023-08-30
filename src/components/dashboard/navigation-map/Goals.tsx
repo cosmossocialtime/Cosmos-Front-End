@@ -10,12 +10,12 @@ import { GoalProps } from '../../../types/Goal'
 export function Goals() {
   const [onWarningEdit, setOnWarningEdit] = useState(false)
 
-  const { goals, selectGoal, selectedGoal, createGoal, editEnable } =
+  const { goals, selectGoalId, selectedGoalId, createGoal, editEnable } =
     useNavigationMap()
 
   function openChangeGoal(open: boolean, goal: GoalProps) {
     if (open) {
-      selectGoal(goal)
+      selectGoalId(goal.id)
       return
     }
     if (editEnable) {
@@ -23,7 +23,7 @@ export function Goals() {
       return
     }
 
-    selectGoal(null)
+    selectGoalId(null)
   }
 
   return (
@@ -33,7 +33,7 @@ export function Goals() {
           goals.map((goal, index) => (
             <Dialog.Root
               key={goal.id}
-              open={selectedGoal?.id === goal.id}
+              open={selectedGoalId === goal.id}
               onOpenChange={(open) => openChangeGoal(open, goal)}
             >
               <Dialog.Trigger>

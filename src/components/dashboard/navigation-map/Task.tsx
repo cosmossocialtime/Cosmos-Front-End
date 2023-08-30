@@ -7,8 +7,6 @@ interface TaskComponentProps {
 }
 
 export function Task({ task, completeTask }: TaskComponentProps) {
-  // const [completed, setCompleted] = useState(task.completed)
-
   return (
     <Input.CheckBox
       className="text-gray-200 data-[state=checked]:text-gray-400"

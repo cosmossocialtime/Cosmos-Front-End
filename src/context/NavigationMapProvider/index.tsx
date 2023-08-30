@@ -9,17 +9,19 @@ import { GoalProps } from '../../types/Goal'
 import { useDashboard } from '../../hooks/useDashboard'
 import { api } from '../../services/api'
 import { toast } from 'react-toastify'
+import { useQuery } from '@tanstack/react-query'
+import { queryClient } from '../../services/queryClient'
 
 type NavigationMapContextProps = {
   goals: GoalProps[]
-  selectedGoal: GoalProps | null
+  selectedGoalId: number | null
   editEnable: boolean
   changeEdit: (editEnable: boolean) => void
-  selectGoal: (goal: GoalProps | null) => void
+  selectGoalId: (goalId: number | null) => void
   changeGoal: (goal: GoalProps) => void
   deleteGoal: () => void
   createGoal: () => void
-  getGoals: () => void
+  updateGoals: () => void
 }
 
 const NavigationMapContext = createContext<NavigationMapContextProps>(
@@ -30,52 +32,46 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   const { dashboard } = useDashboard()
   const currentMentorship = dashboard?.currentMentorship
 
-  const [goals, setGoals] = useState<GoalProps[]>([])
-  const [selectedGoal, setSelectedGoal] = useState<GoalProps | null>(null)
+  const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null)
   const [editEnable, setEditEnable] = useState(false)
 
-  const getGoals = useCallback(() => {
-    api
-      .get(`/mentorship/${currentMentorship?.programId}/goals`)
-      .then((response) => {
-        if (response.status === 200) {
-          setGoals(response.data)
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [currentMentorship])
+  async function getGoals() {
+    const response = await api.get<GoalProps[]>(`/mentorship/1/goals`)
 
-  function selectGoal(goal: GoalProps | null) {
-    setSelectedGoal(goal)
+    return response.data
   }
 
-  function changeGoal(goal: GoalProps) {
-    setGoals((prevGoals) =>
-      prevGoals.map((prevGoal) => (prevGoal.id === goal.id ? goal : prevGoal)),
+  const { data: goals = [], refetch } = useQuery({
+    queryKey: ['goals'],
+    queryFn: getGoals,
+  })
+
+  const updateGoals = useCallback(() => {
+    refetch()
+  }, [refetch])
+
+  function selectGoalId(goalId: number | null) {
+    setSelectedGoalId(goalId)
+  }
+
+  function changeGoal(updatedGoal: GoalProps) {
+    const newGoals = goals.map((goal) =>
+      goal.id === updatedGoal.id ? updatedGoal : goal,
     )
+    queryClient.setQueriesData(['goals'], newGoals)
   }
 
   function createGoal() {
     api
-      .post(`/mentorship/${currentMentorship?.programId}/goal`)
+      .post(`/mentorship/${currentMentorship?.programId}/goal`, {
+        name: 'Novo objetivo',
+      })
       .then((response) => {
-        if (response.status === 201) {
-          const newGoal: GoalProps = {
-            id: Number(new Date()),
-            name: '',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            tasks: [],
-          }
-          setGoals([...goals, newGoal])
-          selectGoal(newGoal)
-          setEditEnable(true)
+        selectGoalId(response.data.id)
+        updateGoals()
+        setEditEnable(true)
 
-          // getGoals()
-          toast.success('Objetivo criado com sucesso!')
-        }
+        toast.success('Objetivo criado com sucesso!')
       })
       .catch((error) => {
         console.error(error)
@@ -86,18 +82,18 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function deleteGoal() {
-    if (!selectedGoal) {
+    if (!selectedGoalId) {
       toast.error('Objetivo não encontrado!')
       return
     }
     api
-      .delete(`/mentorship/goal/${selectedGoal.id}`)
+      .delete(`/mentorship/goal/${selectedGoalId}`)
       .then((response) => {
         if (response.status === 200) {
+          const newGoals = goals.filter((goal) => goal.id !== selectedGoalId)
+          queryClient.setQueriesData(['goals'], newGoals)
+
           toast.success('Objetivo deletado com sucesso!')
-          setGoals((prevGoals) =>
-            prevGoals.filter((prevGoal) => prevGoal.id !== selectedGoal.id),
-          )
         }
       })
       .catch((error) => {
@@ -116,21 +112,22 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
     if (!currentMentorship) {
       return
     }
-    getGoals()
-  }, [currentMentorship, getGoals])
+
+    updateGoals()
+  }, [currentMentorship, updateGoals])
 
   return (
     <NavigationMapContext.Provider
       value={{
         goals,
-        selectedGoal,
+        selectedGoalId,
         editEnable,
         changeGoal,
-        selectGoal,
+        selectGoalId,
         changeEdit,
         deleteGoal,
         createGoal,
-        getGoals,
+        updateGoals,
       }}
     >
       {children}

@@ -15,7 +15,7 @@ interface TasksProps {
 
 export function Tasks({ goal }: TasksProps) {
   const { control } = useFormContext()
-  const { changeGoal, editEnable } = useNavigationMap()
+  const { editEnable, changeGoal } = useNavigationMap()
   const { fields, prepend, remove } = useFieldArray({
     control,
     name: 'tasks',
@@ -67,13 +67,8 @@ export function Tasks({ goal }: TasksProps) {
         {editEnable
           ? fields.map((field, index) => (
               <div key={field.id}>
-                <InputTask
-                  index={index}
-                  completed={false}
-                  deleteTask={deleteTask}
-                />
+                <InputTask index={index} deleteTask={deleteTask} />
                 <ErrorMessage
-                  // errors={errors}
                   name={`tasks.${index}.name`}
                   render={({ message }) => (
                     <p className="ml-4 mt-2 text-sm text-red-400">{message}</p>
