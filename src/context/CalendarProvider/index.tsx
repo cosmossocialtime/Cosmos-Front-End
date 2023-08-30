@@ -6,7 +6,7 @@ import { api } from '../../services/api'
 import { MentorshipProps } from '../../types/mentorship'
 import { LoadingLight } from '../../components/LoadingLight'
 
-type popoverName = 'Event Form' | 'Events' | 'Event' | null
+type popoverName = 'Event Form' | 'Events' | 'Event'
 
 type CalendarContextProps = {
   currentMentorship: MentorshipProps
@@ -14,9 +14,11 @@ type CalendarContextProps = {
   visiblePopover: popoverName
   users: UserProps[]
   events: EventProps[]
+  onPopover: boolean
   selectedEvent: EventProps | null
   changeVisiblePopover: (name: popoverName) => void
   changeSelectedEvent: (event: EventProps | null) => void
+  changeOnPopover: (open: boolean) => void
   getEvents: () => void
 }
 
@@ -32,7 +34,8 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<UserProps[]>([])
   const [events, setEvents] = useState<EventProps[]>([])
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
-  const [visiblePopover, setVisiblePopover] = useState<popoverName>(null)
+  const [visiblePopover, setVisiblePopover] = useState<popoverName>('Events')
+  const [onPopover, setOnPopover] = useState(false)
 
   function changeVisiblePopover(name: popoverName) {
     setVisiblePopover(name)
@@ -40,6 +43,9 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   function changeSelectedEvent(event: EventProps | null) {
     setSelectedEvent(event)
     setVisiblePopover('Event')
+  }
+  function changeOnPopover(open: boolean) {
+    setOnPopover(open)
   }
 
   function getEvents() {
@@ -86,9 +92,11 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
         visiblePopover,
         users,
         events,
+        onPopover,
         selectedEvent,
         changeVisiblePopover,
         changeSelectedEvent,
+        changeOnPopover,
         getEvents,
       }}
     >
