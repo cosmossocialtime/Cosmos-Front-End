@@ -1,4 +1,4 @@
-import { DotsSixVertical, Trash } from 'phosphor-react'
+import { Trash } from 'phosphor-react'
 import { useFormContext, Controller } from 'react-hook-form'
 import { Input } from '../../Input'
 
@@ -13,9 +13,7 @@ export function InputTask({ index, deleteTask }: InputTaskProps) {
   return (
     <div
       className={`${'bg-blue-900/30'} flex items-center gap-2 rounded-lg p-3 text-gray-300 focus-within:bg-blue-900 `}
-      draggable
     >
-      <DotsSixVertical size={24} weight="bold" className="cursor-pointer" />
       <Controller
         name={`tasks.${index}.completed`}
         control={control}

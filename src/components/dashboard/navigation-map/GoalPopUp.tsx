@@ -19,7 +19,7 @@ const editGoalFormSchema = z.object({
   title: z.string().nonempty('O título é obrigatório!'),
   tasks: z.array(
     z.object({
-      name: z.string().nonempty('A atividade precisa de uma descrição!'),
+      name: z.string().nonempty('A tarefa precisa de uma descrição!'),
       completed: z.boolean(),
       id: z.number().optional(),
     }),
@@ -34,9 +34,9 @@ type GoalPopUpProps = {
 }
 
 export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
-  const { editEnable, changeEdit, updateGoals } = useNavigationMap()
+  const { editEnable, changeEdit, updateGoals, editTitle, changeEditTitle } =
+    useNavigationMap()
 
-  const [editTitle, setEditTitle] = useState(false)
   const [openWarningDelete, setOpenWarningDelete] = useState(false)
 
   function changeOpenWarningDelete(open: boolean) {
@@ -95,7 +95,7 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
   return (
     <form onSubmit={handleSubmit(submitForm)} className="flex flex-col">
       <header className="relative">
-        <div className="flex gap-2 text-xl leading-normal text-gray-400">
+        <div className="flex gap-2 leading-normal text-gray-400">
           <span>Objetivo {index + 1}</span>
           <span>• {percentageCompletedTasks}% Concluído</span>
           <span>
@@ -116,7 +116,7 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
                   const isSuccess = await trigger('title', {
                     shouldFocus: true,
                   })
-                  isSuccess && setEditTitle(false)
+                  isSuccess && changeEditTitle(false)
                 }}
                 type="button"
               >
@@ -139,7 +139,7 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
                 <PencilLine
                   size={32}
                   className="ml-3 inline cursor-pointer text-blue-50"
-                  onClick={() => setEditTitle(true)}
+                  onClick={() => changeEditTitle(true)}
                 />
               )}
             </Dialog.Title>

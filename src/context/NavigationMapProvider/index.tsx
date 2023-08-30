@@ -16,7 +16,9 @@ type NavigationMapContextProps = {
   goals: GoalProps[]
   selectedGoalId: number | null
   editEnable: boolean
+  editTitle: boolean
   changeEdit: (editEnable: boolean) => void
+  changeEditTitle: (editEnable: boolean) => void
   selectGoalId: (goalId: number | null) => void
   changeGoal: (goal: GoalProps) => void
   deleteGoal: () => void
@@ -34,6 +36,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null)
   const [editEnable, setEditEnable] = useState(false)
+  const [editTitle, setEditTitle] = useState(false)
 
   async function getGoals() {
     const response = await api.get<GoalProps[]>(`/mentorship/1/goals`)
@@ -70,6 +73,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
         selectGoalId(response.data.id)
         updateGoals()
         setEditEnable(true)
+        setEditTitle(true)
 
         toast.success('Objetivo criado com sucesso!')
       })
@@ -108,6 +112,10 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
     setEditEnable(editEnable)
   }
 
+  function changeEditTitle(editTitle: boolean) {
+    setEditTitle(editTitle)
+  }
+
   useEffect(() => {
     if (!currentMentorship) {
       return
@@ -122,12 +130,14 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
         goals,
         selectedGoalId,
         editEnable,
+        editTitle,
         changeGoal,
         selectGoalId,
         changeEdit,
         deleteGoal,
         createGoal,
         updateGoals,
+        changeEditTitle,
       }}
     >
       {children}
