@@ -1,19 +1,20 @@
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
-import { CaretLeft, CaretRight } from 'phosphor-react'
+// import { CaretLeft, CaretRight } from 'phosphor-react'
 
-import { useState } from 'react'
+// import { useState } from 'react'
+// import { CalendarProvider } from '../../../../context/CalendarProvider'
+// import { Calendar } from '../../../../components/dashboard/events-calendar/Calendar'
 import SideBar from '../sideBar'
-import { CalendarProvider } from '../../../../context/CalendarProvider'
-import { Calendar } from '../../../../components/dashboard/events-calendar/Calendar'
 
 export default function EventsCalendar() {
-  const [currentDay, setCurrentDay] = useState(dayjs())
+  // const [currentDay, setCurrentDay] = useState(dayjs())
 
   return (
     <div className="flex">
       <SideBar />
-      <main className="flex max-h-screen flex-1 flex-col px-20 py-4 2xl:py-16">
+      <h1>Página em manutenção. Funcionamento em Breve</h1>
+      {/* <main className="flex max-h-screen flex-1 flex-col px-20 py-4 2xl:py-16">
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CaretLeft
@@ -46,7 +47,7 @@ export default function EventsCalendar() {
         <CalendarProvider>
           <Calendar currentDay={currentDay} />
         </CalendarProvider>
-      </main>
+      </main> */}
     </div>
   )
 }
