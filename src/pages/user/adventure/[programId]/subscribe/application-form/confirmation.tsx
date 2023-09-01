@@ -8,7 +8,6 @@ import Router from 'next/router'
 import Link from 'next/link'
 import { KnowledgeProps } from '../../../../../../types/knowledge'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
-// import axiosInstance from '../../../../../../services/apiMock'
 
 export default function Confirmation() {
   const { program, programId } = useSubscribe()

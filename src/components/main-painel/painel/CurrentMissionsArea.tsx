@@ -58,7 +58,11 @@ export default function CurrentMissionsArea({
                   <p className="mb-6 text-gray-200">{mentorship.description}</p>
                   <Link
                     className="block max-w-max rounded-lg bg-violet-400 px-24 py-4 text-lg font-semibold text-white transition-colors hover:bg-violet-600"
-                    href={`/user/adventure/${mentorship.programId}/onboarding`}
+                    href={
+                      mentorship.completedOnboarding
+                        ? `/user/dashboard/${mentorship.mentorshipId}/mission-painel`
+                        : `/user/adventure/onboarding/${mentorship.mentorshipId}`
+                    }
                   >
                     Vamos lá!
                   </Link>
