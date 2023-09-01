@@ -10,8 +10,14 @@ import { GoalProps } from '../../../types/Goal'
 export function Goals() {
   const [onWarningEdit, setOnWarningEdit] = useState(false)
 
-  const { goals, selectGoalId, selectedGoalId, createGoal, editEnable } =
-    useNavigationMap()
+  const {
+    currentMentorship,
+    goals,
+    selectGoalId,
+    selectedGoalId,
+    createGoal,
+    editEnable,
+  } = useNavigationMap()
 
   function openChangeGoal(open: boolean, goal: GoalProps) {
     if (open) {
@@ -48,8 +54,9 @@ export function Goals() {
             </Dialog.Root>
           ))
         ) : (
-          <p className="rounded-lg bg-gray-700 bg-opacity-5 p-8 font-normal text-white backdrop-blur-3xl">
-            Nome da organização ainda não tem nenhum objetivo... <br />
+          <p className="rounded-lg bg-gray-700 bg-opacity-5 p-8 text-center font-normal text-white backdrop-blur-3xl">
+            {currentMentorship?.socialOrganization} ainda não tem nenhum
+            objetivo... <br />
             Aguarde o encontro do Mapa da Navegação para criá-los.
           </p>
         )}

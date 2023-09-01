@@ -11,8 +11,11 @@ import { api } from '../../services/api'
 import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 import { queryClient } from '../../services/queryClient'
+import { useRouter } from 'next/router'
+import { MentorshipProps } from '../../types/mentorship'
 
 type NavigationMapContextProps = {
+  currentMentorship?: MentorshipProps
   goals: GoalProps[]
   selectedGoalId: number | null
   editEnable: boolean
@@ -31,8 +34,13 @@ const NavigationMapContext = createContext<NavigationMapContextProps>(
 )
 
 const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
+  const route = useRouter()
+  const { mentorshipId } = route.query
+
   const { dashboard } = useDashboard()
-  const currentMentorship = dashboard?.currentMentorship
+  const currentMentorship = dashboard?.currentMentorships.find(
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+  )
 
   const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null)
   const [editEnable, setEditEnable] = useState(false)
@@ -127,6 +135,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <NavigationMapContext.Provider
       value={{
+        currentMentorship,
         goals,
         selectedGoalId,
         editEnable,
