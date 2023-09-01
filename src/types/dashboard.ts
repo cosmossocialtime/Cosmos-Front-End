@@ -7,7 +7,7 @@ import { UserProps } from './user'
 export type DashboardProps = {
   achievements: AchievementProps[]
   company: CompanyProps
-  currentMentorship: MentorshipProps
+  currentMentorships: MentorshipProps[]
   programs: ProgramProps[]
   user: UserProps
 }

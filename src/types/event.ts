@@ -19,5 +19,5 @@ export type EventProps = {
   logbook: {
     meetingAccomplishments: string
     nextMeetingGoals: string
-  }
+  } | null
 }

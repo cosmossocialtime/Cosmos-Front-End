@@ -9,7 +9,12 @@ export type MentorshipProps = {
   name: string
   programId: number
   socialOrganizationId: number
+  socialOrganization: string
   startDate: Date | null
+  role: string
+  roleId: number
   steps: StepProps[]
   weeklyHours: number
+  completedOnboarding: boolean
+  volunteerId: number
 }
