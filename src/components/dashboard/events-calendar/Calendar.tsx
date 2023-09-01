@@ -3,8 +3,6 @@ import dayjs from 'dayjs'
 import { useCalendar } from '../../../context/CalendarProvider'
 import getDaysOfMonth from '../../../utils/getDaysOfMonth'
 import { DefaultCardDay } from './DefaultCardDay'
-import { PopoverEvents } from './PopoverEvents'
-import { PopoverEvent } from './PopoverEvent'
 import { PopoverEventForm } from './PopoverEventForm'
 
 const daysOfWeek = [
@@ -22,8 +20,12 @@ interface CalendarProps {
 }
 
 export function Calendar({ currentDay }: CalendarProps) {
-  const { events, changeVisiblePopover, selectedEvent, visiblePopover } =
-    useCalendar()
+  const {
+    events,
+    popover: PopoverElement,
+    selectDay,
+    selectedDay,
+  } = useCalendar()
 
   const daysOfMonth = getDaysOfMonth(currentDay)
   const daysOfLastMonth = getDaysOfMonth(currentDay.subtract(1, 'month'))
@@ -36,6 +38,7 @@ export function Calendar({ currentDay }: CalendarProps) {
   const daysOfNextMonth = Array.from({
     length: 42 - daysOfMonth.length - daysOfPreviousMonth.length,
   })
+  console.log(<PopoverElement />)
 
   return (
     <div className="mt-4 flex w-full flex-1 flex-col gap-2 text-gray-500 2xl:gap-4">
@@ -49,7 +52,7 @@ export function Calendar({ currentDay }: CalendarProps) {
         })}
       </div>
 
-      <div className="grid flex-1 grid-cols-7 gap-2 2xl:gap-6">
+      <div className="grid flex-1 grid-cols-7 gap-2 ">
         {daysOfPreviousMonth.map((day, index) => (
           <DefaultCardDay
             key={day.toString()}
@@ -67,56 +70,52 @@ export function Calendar({ currentDay }: CalendarProps) {
           const noEvents = ordenedEvents.length === 0
           const formattedDay = dayjs(day).format('DD')
           return noEvents ? (
-            <Popover.Root
-              key={day.toString()}
-              onOpenChange={(open) =>
-                open === false && changeVisiblePopover(null)
-              }
-            >
+            <Popover.Root key={day.toString()}>
               <Popover.Trigger>
-                <DefaultCardDay
-                  day={formattedDay}
-                  onClick={() => changeVisiblePopover('Create Event')}
-                />
+                <DefaultCardDay day={formattedDay} />
               </Popover.Trigger>
-              <PopoverEventForm currentDay={day.toDate()} />
+              <Popover.Portal>
+                <Popover.Content
+                  side={'right'}
+                  className="relative z-[2] m-4 w-[28rem] rounded-2xl bg-violet-500 px-6 pb-10 pt-14 text-white 2xl:w-[32rem]"
+                >
+                  <PopoverEventForm />
+                </Popover.Content>
+              </Popover.Portal>
             </Popover.Root>
           ) : (
             <Popover.Root
               key={day.toString()}
+              open={dayjs(selectedDay) === day}
               onOpenChange={(open) =>
-                open
-                  ? changeVisiblePopover('Events')
-                  : changeVisiblePopover(null)
+                open ? selectDay(day.toDate()) : selectDay(null)
               }
             >
-              <Popover.Trigger>
+              <Popover.Trigger className="group">
                 <DefaultCardDay
                   day={formattedDay}
-                  className="border-none bg-violet-400 text-white hover:bg-violet-500"
+                  className="border-none bg-violet-400 text-left text-white hover:bg-violet-500 group-data-[state='open']:bg-violet-500"
                 >
-                  <span className="absolute left-2 top-2">{formattedDay}</span>
-                  <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 overflow-clip truncate px-2">
+                  <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 overflow-clip truncate px-2 font-normal">
                     {dayjs(ordenedEvents[0].startAt).format('HH:mm')}{' '}
                     {ordenedEvents[0].title}
                   </span>
                   {ordenedEvents.length > 1 && (
-                    <span className="absolute bottom-2 left-2">
+                    <span className="absolute bottom-2 left-2 font-normal">
                       Mais {ordenedEvents.length - 1}
                     </span>
                   )}
                 </DefaultCardDay>
               </Popover.Trigger>
-              {visiblePopover === 'Create Event' ? (
-                <PopoverEventForm
-                  currentDay={day.toDate()}
-                  event={selectedEvent}
-                />
-              ) : visiblePopover === 'Events' ? (
-                <PopoverEvents events={ordenedEvents} day={day} />
-              ) : visiblePopover === 'Event' ? (
-                <PopoverEvent />
-              ) : null}
+
+              <Popover.Portal>
+                <Popover.Content
+                  side={'right'}
+                  className="relative z-[2] m-4 w-[28rem] rounded-2xl bg-violet-500 px-6 pb-10 pt-14 text-white 2xl:w-[32rem]"
+                >
+                  <PopoverElement />
+                </Popover.Content>
+              </Popover.Portal>
             </Popover.Root>
           )
         })}

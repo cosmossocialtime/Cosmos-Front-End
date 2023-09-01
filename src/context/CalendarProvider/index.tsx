@@ -1,24 +1,33 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  ElementType,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { EventProps } from '../../types/event'
 import { UserProps } from '../../types/user'
 import { useDashboard } from '../../hooks/useDashboard'
 import { api } from '../../services/api'
 import { MentorshipProps } from '../../types/mentorship'
 import { LoadingLight } from '../../components/LoadingLight'
-
-type popoverName = 'Event Form' | 'Events' | 'Event'
+import { PopoverEvent } from '../../components/dashboard/events-calendar/PopoverEvent'
+import { PopoverEventForm } from '../../components/dashboard/events-calendar/PopoverEventForm'
+import { PopoverEvents } from '../../components/dashboard/events-calendar/PopoverEvents'
+import { useRouter } from 'next/router'
 
 type CalendarContextProps = {
+  selectedDay: Date | null
   currentMentorship: MentorshipProps
   ownerUser: UserProps
-  visiblePopover: popoverName
+  popover: ElementType
   users: UserProps[]
   events: EventProps[]
-  onPopover: boolean
   selectedEvent: EventProps | null
-  changeVisiblePopover: (name: popoverName) => void
+  selectDay: (day: Date | null) => void
+  changePopover: (popover: ElementType) => void
   changeSelectedEvent: (event: EventProps | null) => void
-  changeOnPopover: (open: boolean) => void
   getEvents: () => void
 }
 
@@ -26,29 +35,30 @@ const CalendarContext = createContext<CalendarContextProps>(
   {} as CalendarContextProps,
 )
 
+export const popovers = {
+  Event: PopoverEvent,
+  EventForm: PopoverEventForm,
+  Events: PopoverEvents,
+}
+
 const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
+  const route = useRouter()
+  const { mentorshipId } = route.query
+
   const { dashboard } = useDashboard()
-  const currentMentorship = dashboard?.currentMentorship
+
+  const currentMentorship = dashboard?.currentMentorships.find(
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+  )
   const ownerUser = dashboard?.user
 
   const [users, setUsers] = useState<UserProps[]>([])
   const [events, setEvents] = useState<EventProps[]>([])
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
-  const [visiblePopover, setVisiblePopover] = useState<popoverName>('Events')
-  const [onPopover, setOnPopover] = useState(false)
+  const [popover, setPopover] = useState<ElementType>(PopoverEvent)
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null)
 
-  function changeVisiblePopover(name: popoverName) {
-    setVisiblePopover(name)
-  }
-  function changeSelectedEvent(event: EventProps | null) {
-    setSelectedEvent(event)
-    setVisiblePopover('Event')
-  }
-  function changeOnPopover(open: boolean) {
-    setOnPopover(open)
-  }
-
-  function getEvents() {
+  const getEvents = useCallback(() => {
     api
       .get(`/mentorship/${currentMentorship?.programId}/calendar`)
       .then((response) => {
@@ -59,7 +69,7 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
       .catch((error) => {
         console.error(error)
       })
-  }
+  }, [currentMentorship])
 
   useEffect(() => {
     if (!currentMentorship) {
@@ -77,8 +87,19 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
       })
 
     getEvents()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentMentorship])
+  }, [currentMentorship, getEvents])
+
+  function selectDay(day: Date | null) {
+    setSelectedDay(day)
+  }
+
+  function changePopover(popover: ElementType) {
+    setPopover(popover)
+  }
+  function changeSelectedEvent(event: EventProps | null) {
+    setSelectedEvent(event)
+    setPopover(popovers.Event)
+  }
 
   if (!currentMentorship || !ownerUser) {
     return <LoadingLight />
@@ -87,17 +108,17 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <CalendarContext.Provider
       value={{
+        selectedDay,
         ownerUser,
         currentMentorship,
-        visiblePopover,
+        popover,
         users,
         events,
-        onPopover,
         selectedEvent,
-        changeVisiblePopover,
+        changePopover,
         changeSelectedEvent,
-        changeOnPopover,
         getEvents,
+        selectDay,
       }}
     >
       {children}
