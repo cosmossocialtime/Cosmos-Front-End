@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { EventProps } from '../../types/event'
+import { EventProps } from '../../../types/event'
 
 export function groupDatesByMonth(events: EventProps[]) {
   const groupedDates: EventProps[][] = []

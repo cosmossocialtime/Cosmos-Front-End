@@ -1,9 +1,51 @@
 import dayjs from 'dayjs'
 import { CardEvent } from './CardEvent'
-import { useLogBook } from '../../../context/LogBookProvider'
+import { useEffect, useState } from 'react'
+import { api } from '../../../services/api'
+import { useDashboard } from '../../../hooks/useDashboard'
+import { EventProps } from '../../../types/event'
+import { groupDatesByMonth } from './groupDatesByMonth'
+import { LoadingLight } from '../../LoadingLight'
 
 export function ListOfEventsDay() {
-  const { eventsOfEachMonth } = useLogBook()
+  const { dashboard } = useDashboard()
+  const currentMentorship = dashboard?.currentMentorships[0]
+
+  const [events, setEvents] = useState<EventProps[]>()
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (!currentMentorship) {
+      return
+    }
+
+    api
+      .get(`/mentorship/${currentMentorship?.programId}/calendar`)
+      .then((response) => {
+        if (response.status === 200) {
+          setEvents(response.data)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [currentMentorship])
+
+  if (isLoading) {
+    return <LoadingLight />
+  }
+
+  if (!events) {
+    return <h1>Page error</h1>
+  }
+
+  const ordenedEvents = events.sort((a, b) =>
+    dayjs(a.startAt).diff(dayjs(b.startAt)),
+  )
+  const eventsOfEachMonth = groupDatesByMonth(ordenedEvents)
 
   return (
     <div className="flex h-full flex-1 flex-col">

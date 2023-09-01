@@ -1,22 +1,24 @@
 import { CaretRight, Clock } from 'phosphor-react'
 import dayjs from 'dayjs'
-import { useLogBook } from '../../../context/LogBookProvider'
 import { EventProps } from '../../../types/event'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface CardEventProps {
   event: EventProps
 }
 
 export function CardEvent({ event }: CardEventProps) {
-  const { changeSelectedEvent } = useLogBook()
+  const route = useRouter()
+  const { mentorshipId } = route.query
 
   const eventDay = dayjs(event.startAt)
   const endEvent = dayjs(event.endAt)
 
   return (
-    <button
+    <Link
+      href={`/user/dashboard/${mentorshipId}/log-book/${event.id}`}
       className="flex max-w-full cursor-pointer items-center justify-between overflow-hidden rounded-lg border border-solid border-transparent bg-gray-200 px-8 py-5 text-gray-600 hover:border-violet-500"
-      onClick={() => changeSelectedEvent(event)}
     >
       <div className="flex items-center gap-8">
         <div className="text-violet-400">
@@ -41,6 +43,6 @@ export function CardEvent({ event }: CardEventProps) {
 
         <CaretRight size={24} />
       </div>
-    </button>
+    </Link>
   )
 }
