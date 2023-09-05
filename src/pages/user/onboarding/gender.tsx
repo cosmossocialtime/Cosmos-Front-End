@@ -50,7 +50,7 @@ export default function Genero() {
         <form
           action=""
           onSubmit={handleSubmit(submitFormGender)}
-          className="flex flex-col items-center justify-center gap-8 rounded-2xl bg-black/10 py-10 px-8 backdrop-blur-md"
+          className="flex flex-col items-center justify-center gap-8 rounded-2xl bg-black/10 px-8 py-10 backdrop-blur-md"
         >
           <h2 className="max-w-xs text-center text-2xl font-semibold text-zinc-50">
             Com qual gênero você se identifica?
@@ -97,7 +97,7 @@ export default function Genero() {
               />
               <button
                 type="submit"
-                className="ml-4 rounded-lg bg-violet-500 py-3 px-8  text-zinc-50 transition-all duration-200 hover:bg-violet-600"
+                className="ml-4 rounded-lg bg-violet-500 px-8 py-3  text-zinc-50 transition-all duration-200 hover:bg-violet-600"
               >
                 <CaretRight weight="bold" size={32} />
               </button>

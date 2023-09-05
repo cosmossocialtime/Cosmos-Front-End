@@ -30,10 +30,10 @@ export function AstronaltRule({
       </Header>
       <div className="mt-28 flex flex-col items-center justify-center">
         <div
-          className={`relative w-[660px] rounded-[36px] bg-[${color}] py-10 pr-9 pl-28`}
+          className={`relative w-[660px] rounded-[36px] bg-[${color}] py-10 pl-28 pr-9`}
         >
           <Image
-            className="absolute -top-[5.5rem] -left-40"
+            className="absolute -left-40 -top-[5.5rem]"
             alt="comandante"
             src={astronaltImg}
           />

@@ -63,7 +63,7 @@ export default function AboutYou2() {
 
       <form
         onSubmit={handleSubmit(submitForm)}
-        className="flex flex-col gap-12 py-14 px-32"
+        className="flex flex-col gap-12 px-32 py-14"
       >
         <Input.Root ariaLabel="O que motiva você a querer participar desse programa?">
           <Controller

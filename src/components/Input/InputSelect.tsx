@@ -27,7 +27,7 @@ export function InputSelect({
         className={twMerge(
           `${
             rest.disabled ? 'border-0 border-b' : 'border'
-          } group flex flex-1 items-center justify-between gap-12 rounded border-solid border-gray-400 py-3 px-4`,
+          } group flex flex-1 items-center justify-between gap-12 rounded border-solid border-gray-400 px-4 py-3`,
           className,
         )}
       >

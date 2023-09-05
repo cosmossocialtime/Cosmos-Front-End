@@ -5,10 +5,21 @@ import AdventureArea from '../../../components/main-painel/painel/AdventureArea'
 import PerfilArea from '../../../components/main-painel/painel/PerfilArea'
 import AchievementsArea from '../../../components/main-painel/painel/AchievementsArea'
 import { Loading } from '../../../components/Loading'
-import { useDashboard } from '../../../hooks/useDashboard'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../../../services/api'
+import { DashboardProps } from '../../../types/dashboard'
 
 export default function Painel() {
-  const { dashboard } = useDashboard()
+  async function getDashboard() {
+    const response = await api.get<DashboardProps>('/dashboard')
+
+    return response.data
+  }
+
+  const { data: dashboard } = useQuery({
+    queryKey: ['dashboard'],
+    queryFn: getDashboard,
+  })
 
   if (!dashboard) {
     return <Loading />
@@ -17,7 +28,7 @@ export default function Painel() {
   const achievements = dashboard.achievements
   const user = dashboard.user
   const programs = dashboard.programs
-  const mentorships = [dashboard.currentMentorship]
+  const mentorships = dashboard.currentMentorships
 
   return (
     <div className="flex h-screen max-w-[100vw] flex-col">
@@ -62,7 +73,7 @@ export default function Painel() {
             </div>
             <AchievementsArea achievements={achievements} />
 
-            <div className="absolute left-0 right-4 bottom-0 m-6 box-border h-12 bg-gradient-to-t from-[#1E2543]"></div>
+            <div className="absolute bottom-0 left-0 right-4 m-6 box-border h-12 bg-gradient-to-t from-[#1E2543]"></div>
           </div>
         </div>
       </main>

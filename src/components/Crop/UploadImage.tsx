@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import Dropzone from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 
 interface UploadImageProps {
   updateImgSrc: (source: string) => void
@@ -10,26 +10,11 @@ export default function UploadImage({
   updateImgSrc,
   children,
 }: UploadImageProps) {
-  function handleSelecteFile(acceptedFiles: File[]) {
-    const file = acceptedFiles[0]
-    updateImgSrc(URL.createObjectURL(file))
-  }
+  const { getRootProps } = useDropzone({
+    onDrop: (files) => updateImgSrc(URL.createObjectURL(files[0])),
+    accept: { 'image/*': ['.png', '.jpeg', '.jpg'] },
+    maxFiles: 1,
+  })
 
-  return (
-    <Dropzone
-      // maxFiles={1}
-      accept={{ 'image/*': ['.png', '.jpeg', '.jpg'] }}
-      multiple
-      onDropAccepted={(acceptedFiles) => {
-        handleSelecteFile(acceptedFiles)
-      }}
-    >
-      {({ getInputProps }) => (
-        <label>
-          <input {...getInputProps()} />
-          {children}
-        </label>
-      )}
-    </Dropzone>
-  )
+  return <div {...getRootProps()}>{children}</div>
 }

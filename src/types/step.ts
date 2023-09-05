@@ -3,6 +3,6 @@ export type StepProps = {
   step: string
   startDate: Date
   endDate: Date
-  status: boolean
+  active: boolean
   video: string | null
 }

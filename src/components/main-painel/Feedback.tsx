@@ -41,7 +41,7 @@ export function Feedback({ closeFeedback }: FeedbackProps) {
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-10 bg-gray-500 mix-blend-multiply" />
-      <Dialog.Content className="fixed top-1/2 left-1/2 z-10 flex w-1/2 -translate-x-1/2 -translate-y-1/2 flex-col rounded-lg bg-blue-900 py-9 px-12 text-gray-100">
+      <Dialog.Content className="fixed left-1/2 top-1/2 z-10 flex w-1/2 -translate-x-1/2 -translate-y-1/2 flex-col rounded-lg bg-blue-900 px-12 py-9 text-gray-100">
         <Dialog.Close>
           <X size={24} className="absolute right-5 top-5" />
         </Dialog.Close>
@@ -55,13 +55,13 @@ export function Feedback({ closeFeedback }: FeedbackProps) {
           required
           value={feedbackContent}
           onChange={(e) => setFeedbackContent(e.target.value)}
-          className="mt-3 mb-6 h-40 resize-none rounded-lg border border-solid border-violet-400 bg-transparent p-3 outline-none"
+          className="mb-6 mt-3 h-40 resize-none rounded-lg border border-solid border-violet-400 bg-transparent p-3 outline-none"
         />
 
         <button
           disabled={isSubmitting}
           onClick={sendFeedback}
-          className="max-w-max cursor-pointer self-end rounded-lg bg-violet-500 py-4 px-32 text-lg font-semibold transition-colors hover:bg-violet-600 disabled:cursor-not-allowed disabled:bg-violet-600"
+          className="max-w-max cursor-pointer self-end rounded-lg bg-violet-500 px-32 py-4 text-lg font-semibold transition-colors hover:bg-violet-600 disabled:cursor-not-allowed disabled:bg-violet-600"
         >
           Enviar
         </button>

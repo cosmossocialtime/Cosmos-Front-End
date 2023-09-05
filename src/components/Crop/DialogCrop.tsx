@@ -16,10 +16,10 @@ export function DialogCrop({
   return (
     <Dialog.Root open={onDialog} onOpenChange={setOnDialog}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed top-0 left-0 z-10 h-screen w-screen bg-black/40" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-gray-800">
+        <Dialog.Overlay className="fixed left-0 top-0 z-10 h-screen w-screen bg-black/40" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-gray-800">
           <Dialog.Close>
-            <X size={24} className=" absolute top-4 right-4 text-gray-100" />
+            <X size={24} className=" absolute right-4 top-4 text-gray-100" />
           </Dialog.Close>
           {children}
         </Dialog.Content>

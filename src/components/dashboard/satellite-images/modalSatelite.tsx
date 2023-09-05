@@ -41,7 +41,7 @@ export default function ModalSatelite({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[2] bg-black/70" />
 
-        <Dialog.Content className="scrollbar-thin scrollbar-w-1 scrollbar-h-1/2 scrollbar-thumb-blue-300 scrollbar-track-[#8779B5]/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full fixed top-1/2 left-1/2 z-10 flex h-[95%] w-[80%] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-xl bg-c-blue-800 p-5 pl-11 text-white">
+        <Dialog.Content className="scrollbar-thin scrollbar-w-1 scrollbar-h-1/2 scrollbar-thumb-blue-300 scrollbar-track-[#8779B5]/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full fixed left-1/2 top-1/2 z-10 flex h-[95%] w-[80%] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-xl bg-c-blue-800 p-5 pl-11 text-white">
           <Dialog.Title>
             <p className="self-end text-[50px]">{name}</p>
           </Dialog.Title>
@@ -55,13 +55,13 @@ export default function ModalSatelite({
                 ser trabalhada?
               </h2>
               <div
-                className={`relative mt-10 ml-12 flex h-1 w-[600px] items-center justify-between rounded-lg bg-c-blue-700 before:absolute before:top-0 before:left-0 before:h-1 before:rounded-lg ${rattingSlider}  before:content-center before:bg-c-blue-300`}
+                className={`relative ml-12 mt-10 flex h-1 w-[600px] items-center justify-between rounded-lg bg-c-blue-700 before:absolute before:left-0 before:top-0 before:h-1 before:rounded-lg ${rattingSlider}  before:content-center before:bg-c-blue-300`}
               >
                 <div className="z-10 flex w-24 flex-col items-center pt-9">
                   <span
                     className={`rounded-full ${
                       ratting >= 1 ? 'bg-c-blue-300' : 'bg-c-blue-700'
-                    }  border-2 border-c-blue-300 py-1 px-3`}
+                    }  border-2 border-c-blue-300 px-3 py-1`}
                   >
                     1
                   </span>
@@ -71,7 +71,7 @@ export default function ModalSatelite({
                   <span
                     className={`rounded-full ${
                       ratting >= 2 ? 'bg-c-blue-300' : 'bg-c-blue-700'
-                    }  border-2 border-c-blue-300 py-1 px-3`}
+                    }  border-2 border-c-blue-300 px-3 py-1`}
                   >
                     2
                   </span>
@@ -81,7 +81,7 @@ export default function ModalSatelite({
                   <span
                     className={`rounded-full ${
                       ratting >= 3 ? 'bg-c-blue-300' : 'bg-c-blue-700'
-                    }  border-2 border-c-blue-300 py-1 px-3`}
+                    }  border-2 border-c-blue-300 px-3 py-1`}
                   >
                     3
                   </span>
@@ -91,7 +91,7 @@ export default function ModalSatelite({
                   <span
                     className={`rounded-full ${
                       ratting >= 4 ? 'bg-c-blue-300' : 'bg-c-blue-700'
-                    }  border-2 border-c-blue-300 py-1 px-3`}
+                    }  border-2 border-c-blue-300 px-3 py-1`}
                   >
                     4
                   </span>
@@ -101,7 +101,7 @@ export default function ModalSatelite({
                   <span
                     className={`rounded-full ${
                       ratting >= 5 ? 'bg-c-blue-300' : 'bg-c-blue-700'
-                    }  border-2 border-c-blue-300 py-1 px-3`}
+                    }  border-2 border-c-blue-300 px-3 py-1`}
                   >
                     5
                   </span>
@@ -131,7 +131,7 @@ export default function ModalSatelite({
             </div>
           </div>
 
-          <Dialog.Close className="absolute top-8 right-6 text-xl text-white">
+          <Dialog.Close className="absolute right-6 top-8 text-xl text-white">
             <X />
           </Dialog.Close>
         </Dialog.Content>

@@ -7,7 +7,6 @@ import { api } from '../../../services/api'
 import { LocationInput } from './LocationInput'
 import { PasswordInput } from './PasswordInput'
 import { toast } from 'react-toastify'
-import 'react-datepicker/dist/react-datepicker.css'
 import { Input } from '../../Input'
 import { Button } from '../../Button'
 import { useForm } from 'react-hook-form'
@@ -160,7 +159,7 @@ export default function FormUserData({
 
         {!enableForm && (
           <Button.Secondary
-            className="absolute -right-11 top-0 flex max-w-max translate-x-full items-center gap-2 py-3 px-8"
+            className="absolute -right-11 top-0 flex max-w-max translate-x-full items-center gap-2 px-8 py-3"
             onClick={() => setEnableForm(true)}
           >
             <Pencil size={22} />
@@ -176,7 +175,7 @@ export default function FormUserData({
           >
             Cancelar
           </button>
-          <Button.Primary className="py-4 px-8" onClick={sendNewInfo}>
+          <Button.Primary className="px-8 py-4" onClick={sendNewInfo}>
             Salvar edição
           </Button.Primary>
         </div>

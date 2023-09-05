@@ -11,6 +11,7 @@ import UploadImage from '../../../components/Crop/UploadImage'
 import FormUserData from '../../../components/main-painel/profile/FormUserData'
 import SettingCropArea from '../../../components/Crop/SettingCropArea'
 import { DialogCrop } from '../../../components/Crop/DialogCrop'
+import { Loading } from '../../../components/Loading'
 
 export default function Perfil() {
   const [user, setUser] = useState<UserProps | null>(null)
@@ -30,11 +31,7 @@ export default function Perfil() {
   }, [])
 
   if (!user) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center bg-zinc-900 text-zinc-50">
-        <h1 className="text-lg">Carregando...</h1>
-      </div>
-    )
+    return <Loading />
   }
 
   async function updateImgServer(base64Image: string, route: string) {
@@ -97,7 +94,7 @@ export default function Perfil() {
           quality={100}
           alt=""
         />
-        <div className="absolute right-5 -bottom-4">
+        <div className="absolute -bottom-4 right-5">
           <UploadImage updateImgSrc={updateBannerSrc}>
             <Pencil
               size={24}
@@ -120,7 +117,7 @@ export default function Perfil() {
             <Camera size={64} className="text-gray-200" />
           )}
 
-          <div className="absolute right-0 -bottom-2 ">
+          <div className="absolute -bottom-2 right-0 ">
             <UploadImage updateImgSrc={updateProfileSrc}>
               <Pencil
                 size={24}
@@ -148,10 +145,6 @@ export default function Perfil() {
             )}
           </DialogCrop>
         </div>
-
-        <span className="z-[1] text-3xl font-semibold text-white">
-          {user.byname}
-        </span>
       </div>
 
       <FormUserData userData={user} updateUserData={updateUserData} />

@@ -9,7 +9,7 @@ export default function Main() {
         alt=""
       />
       <img
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-2xl bg-black/20 p-14 backdrop-blur-md"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  rounded-2xl bg-black/20 p-14 backdrop-blur-md"
         src="/images/logo.png"
         alt="Logo"
       />

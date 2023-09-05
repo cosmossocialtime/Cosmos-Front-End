@@ -38,7 +38,7 @@ export default function AdventureArea({ programs }: AdventureAreaProps) {
                 </div>
 
                 {program.completed ? (
-                  <div className="mr-4 flex items-center gap-1 rounded-full bg-[#1E2543] py-2 px-3">
+                  <div className="mr-4 flex items-center gap-1 rounded-full bg-[#1E2543] px-3 py-2">
                     <Check size={24} className="text-[#46CE9D]" />
                     <span className="text-xs text-gray-400">
                       Você já se inscreveu nessa aventura!
@@ -75,7 +75,7 @@ export default function AdventureArea({ programs }: AdventureAreaProps) {
         )}
       </div>
       {adventuresData.length >= 3 && (
-        <div className="absolute left-0 right-4 bottom-0 m-6 box-border h-12 bg-gradient-to-t from-[#1E2543]"></div>
+        <div className="absolute bottom-0 left-0 right-4 m-6 box-border h-12 bg-gradient-to-t from-[#1E2543]"></div>
       )}
     </div>
   )

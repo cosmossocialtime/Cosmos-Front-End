@@ -119,7 +119,7 @@ export default function ChooseYourRole() {
         </span>
       </Header>
 
-      <div className="flex flex-col items-center px-36 pt-10 pb-20 text-gray-800">
+      <div className="flex flex-col items-center px-36 pb-20 pt-10 text-gray-800">
         <span className="text-xl">
           {!rolesSelected[0]
             ? 'Agora que você já conhece todos os papéis, escolha aquele que mais gostaria de exercer ao longo da jornada:'
@@ -134,7 +134,7 @@ export default function ChooseYourRole() {
               key={crew.role}
               className="group cursor-pointer rounded-[14px] p-1 outline-none transition-all hover:scale-105 hover:shadow-2xl aria-disabled:pointer-events-none aria-disabled:bg-transparent data-[selected=true]:scale-105 data-[selected=true]:bg-gradient-to-l data-[selected=true]:from-violet-400 data-[selected=true]:to-blue-300 data-[selected=true]:shadow-2xl"
             >
-              <div className="max-w-max rounded-xl bg-white py-3 px-3">
+              <div className="max-w-max rounded-xl bg-white px-3 py-3">
                 <Image
                   className="group-aria-disabled:opacity-50 group-aria-disabled:grayscale"
                   alt={crew.role}
@@ -148,7 +148,7 @@ export default function ChooseYourRole() {
         </div>
         <Button.Primary
           onClick={!rolesSelected[0] ? selectFirtOpt : selectSecondOpt}
-          className="mt-16 py-3 px-28"
+          className="mt-16 px-28 py-3"
         >
           {!rolesSelected[0] ? 'Confirmar 1ª opção' : 'Confirmar 2ª opção'}
         </Button.Primary>

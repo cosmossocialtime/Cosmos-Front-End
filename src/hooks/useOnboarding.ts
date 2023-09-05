@@ -5,14 +5,18 @@ export function useOnboarding() {
   const router = useRouter()
 
   const { dashboard } = useDashboard()
-  const { programId } = router.query
+  const { mentorshipId } = router.query
 
-  const program =
-    dashboard?.programs.find((program) => String(program.id) === programId) ||
-    null
+  // const program =
+  //   dashboard?.programs.find((program) => String(program.id) === programId) ||
+  //   null
   const user = dashboard?.user
   const company = dashboard?.company
-  const currentMentorship = dashboard?.currentMentorship
+  const currentMentorship = dashboard?.currentMentorships.find(
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+  )
 
-  return { program, user, company, currentMentorship, programId }
+  const rootRoute = `/user/adventure/onboarding/${mentorshipId}`
+
+  return { user, company, currentMentorship, mentorshipId, rootRoute }
 }

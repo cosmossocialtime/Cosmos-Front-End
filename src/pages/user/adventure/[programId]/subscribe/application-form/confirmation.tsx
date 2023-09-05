@@ -8,7 +8,6 @@ import Router from 'next/router'
 import Link from 'next/link'
 import { KnowledgeProps } from '../../../../../../types/knowledge'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
-// import axiosInstance from '../../../../../../services/apiMock'
 
 export default function Confirmation() {
   const { program, programId } = useSubscribe()
@@ -87,14 +86,14 @@ export default function Confirmation() {
           <strong className="font-bold">5</strong>/5
         </span>
       </Header>
-      <div className="mt-10 mb-20 grid justify-center">
+      <div className="mb-20 mt-10 grid justify-center">
         <h2 className="text-center">
           Ufa! Chegamos à última etapa! Agora, escolha{' '}
           <strong>até 3 áreas</strong> do conhecimento <br /> com as quais você
           pode contribuir para a organização mentorada:
         </h2>
 
-        <div className="mt-14 grid grid-cols-2 items-center justify-between gap-y-10 gap-x-28">
+        <div className="mt-14 grid grid-cols-2 items-center justify-between gap-x-28 gap-y-10">
           {knowledgeAreas.map((knowledge) => (
             <Input.CheckBox
               checked={selectedAreas.includes(knowledge.id)}
@@ -107,7 +106,7 @@ export default function Confirmation() {
 
         <Button.Primary
           onClick={sendData}
-          className="mx-auto mt-20 max-w-max py-3 px-32"
+          className="mx-auto mt-20 max-w-max px-32 py-3"
         >
           Enviar inscrição
         </Button.Primary>
