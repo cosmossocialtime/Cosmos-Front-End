@@ -5,10 +5,10 @@ import Image from 'next/image'
 import Astronauta from '../../../../public/images/astronauta.png'
 import ModalContent from './CreateModal'
 import Modal from './Modal'
-import useFetch from '../../../hooks/useFetch'
 import { api } from '../../../services/api'
 import { useKeenSlider } from 'keen-slider/react'
 import { CaretLeft, CaretRight } from 'phosphor-react'
+import { useRouter } from 'next/router'
 
 interface MentorshipProps {
   id: number
@@ -32,11 +32,6 @@ interface MentorshipProps {
   professionalSector: string
 }
 
-interface currentMentorship {
-  currentMentorship: {
-    mentorshipId: number
-  }
-}
 export default function Slider() {
   const [openModal, setOpenModal] = useState(false)
   const [loaded, setLoaded] = useState(false)
@@ -57,10 +52,8 @@ export default function Slider() {
       setLoaded(true)
     },
   })
-  const { data } = useFetch<currentMentorship>(
-    'https://api.cosmossocial.com.br/api/dashboard',
-  )
-  const mentorshipId = data?.currentMentorship.mentorshipId
+  const router = useRouter()
+  const { mentorshipId } = router.query
 
   useEffect(() => {
     if (mentorshipId) {
@@ -70,7 +63,6 @@ export default function Slider() {
     }
   }, [mentorshipId])
 
-  console.log(mentorshipVolunteers)
   if (!mentorshipVolunteers) {
     return (
       <div className="h-screen w-full items-end justify-center">
