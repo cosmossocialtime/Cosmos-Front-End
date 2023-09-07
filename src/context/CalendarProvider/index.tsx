@@ -1,5 +1,4 @@
 import React, {
-  ElementType,
   createContext,
   useCallback,
   useContext,
@@ -12,21 +11,20 @@ import { useDashboard } from '../../hooks/useDashboard'
 import { api } from '../../services/api'
 import { MentorshipProps } from '../../types/mentorship'
 import { LoadingLight } from '../../components/LoadingLight'
-import { PopoverEvent } from '../../components/dashboard/events-calendar/PopoverEvent'
-import { PopoverEventForm } from '../../components/dashboard/events-calendar/PopoverEventForm'
-import { PopoverEvents } from '../../components/dashboard/events-calendar/PopoverEvents'
 import { useRouter } from 'next/router'
+
+export type popoversName = 'eventForm' | 'events' | 'event'
 
 type CalendarContextProps = {
   selectedDay: Date | null
   currentMentorship: MentorshipProps
   ownerUser: UserProps
-  popover: ElementType
+  popoverName: popoversName
   users: UserProps[]
   events: EventProps[]
   selectedEvent: EventProps | null
   selectDay: (day: Date | null) => void
-  changePopover: (popover: ElementType) => void
+  changePopover: (popover: popoversName) => void
   changeSelectedEvent: (event: EventProps | null) => void
   getEvents: () => void
 }
@@ -34,12 +32,6 @@ type CalendarContextProps = {
 const CalendarContext = createContext<CalendarContextProps>(
   {} as CalendarContextProps,
 )
-
-export const popovers = {
-  Event: PopoverEvent,
-  EventForm: PopoverEventForm,
-  Events: PopoverEvents,
-}
 
 const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const route = useRouter()
@@ -55,7 +47,7 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<UserProps[]>([])
   const [events, setEvents] = useState<EventProps[]>([])
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
-  const [popover, setPopover] = useState<ElementType>(PopoverEvent)
+  const [popoverName, setPopoverName] = useState<popoversName>('events')
   const [selectedDay, setSelectedDay] = useState<Date | null>(null)
 
   const getEvents = useCallback(() => {
@@ -93,12 +85,12 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedDay(day)
   }
 
-  function changePopover(popover: ElementType) {
-    setPopover(popover)
+  function changePopover(popoverName: popoversName) {
+    setPopoverName(popoverName)
   }
   function changeSelectedEvent(event: EventProps | null) {
     setSelectedEvent(event)
-    setPopover(popovers.Event)
+    setPopoverName('event')
   }
 
   if (!currentMentorship || !ownerUser) {
@@ -111,7 +103,7 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
         selectedDay,
         ownerUser,
         currentMentorship,
-        popover,
+        popoverName,
         users,
         events,
         selectedEvent,

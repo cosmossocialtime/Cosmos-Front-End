@@ -1,4 +1,4 @@
-import { popovers, useCalendar } from '../../../context/CalendarProvider'
+import { useCalendar } from '../../../context/CalendarProvider'
 import dayjs from 'dayjs'
 
 export function PopoverEvents() {
@@ -44,7 +44,7 @@ export function PopoverEvents() {
 
       <button
         className=" rounded-lg border border-solid bg-white px-10 py-2 font-semibold text-violet-500 transition-colors hover:border-white hover:bg-violet-600 hover:text-white"
-        onClick={() => changePopover(popovers.EventForm)}
+        onClick={() => changePopover('eventForm')}
       >
         Marcar novo evento
       </button>

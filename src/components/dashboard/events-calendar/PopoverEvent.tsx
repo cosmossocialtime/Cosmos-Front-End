@@ -14,7 +14,7 @@ import {
 } from 'phosphor-react'
 import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
-import { popovers, useCalendar } from '../../../context/CalendarProvider'
+import { useCalendar } from '../../../context/CalendarProvider'
 import { DeleteConfirmation } from '../../DeleteConfirmation'
 
 export function PopoverEvent() {
@@ -46,7 +46,7 @@ export function PopoverEvent() {
       .then((response) => {
         if (response.status === 200) {
           toast.success('Evento deletado com sucesso!')
-          changePopover(popovers.Events)
+          changePopover('events')
           selectDay(null)
           getEvents()
         }
@@ -59,7 +59,7 @@ export function PopoverEvent() {
 
   function backPopover() {
     changeSelectedEvent(null)
-    changePopover(popovers.Events)
+    changePopover('events')
   }
 
   return (
@@ -81,7 +81,7 @@ export function PopoverEvent() {
             <div className="mr-14 flex flex-col items-start gap-7">
               <button
                 className="flex cursor-pointer items-center gap-1"
-                onClick={() => changePopover(popovers.EventForm)}
+                onClick={() => changePopover('eventForm')}
               >
                 <PencilSimpleLine size={24} />
                 <span>Editar</span>

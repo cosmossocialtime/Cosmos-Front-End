@@ -9,9 +9,8 @@ import { api } from '../../../services/api'
 import { z } from 'zod'
 import { toast } from 'react-toastify'
 import { InputAttendees } from './InputAttendees'
-import { popovers, useCalendar } from '../../../context/CalendarProvider'
+import { useCalendar } from '../../../context/CalendarProvider'
 import dayjs from 'dayjs'
-import { InputTime } from './InputTime'
 import { useState } from 'react'
 
 import MeetIcon from '../../../assets/meet-icon.svg'
@@ -45,7 +44,7 @@ export function PopoverEventForm() {
   const attendeesId = selectedEvent?.attendees.map(
     (attendee) => attendee.userId,
   )
-  const day = dayjs(selectedDay).toDate()
+  const day = selectedDay || new Date()
 
   function createEvent({
     title,
@@ -71,7 +70,7 @@ export function PopoverEventForm() {
       .then((response) => {
         if (response.status === 201) {
           toast.success('Evento criado com sucesso!')
-          changePopover(popovers.Event)
+          changePopover('events')
           selectDay(null)
           getEvents()
         }
@@ -109,7 +108,7 @@ export function PopoverEventForm() {
       .then((response) => {
         if (response.status === 200) {
           toast.success('Evento Editado com sucesso!')
-          changePopover(popovers.Event)
+          changePopover('events')
           selectDay(null)
           getEvents()
         }
@@ -123,7 +122,7 @@ export function PopoverEventForm() {
   }
 
   function submitForm(data: formProps) {
-    if (event) {
+    if (selectedEvent) {
       updateEvent(data)
     } else {
       createEvent(data)
@@ -171,17 +170,15 @@ export function PopoverEventForm() {
           <label htmlFor="startTime" className="absolute h-0 w-0 opacity-0">
             Horario de inicio da reunião
           </label>
-          <Controller
-            name="startAt"
-            control={control}
+          <input
+            className="relative flex flex-1 items-center rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1"
+            type="time"
             defaultValue={
               selectedEvent
-                ? dayjs(selectedEvent.startAt).format('HH:mm')
+                ? dayjs(selectedEvent.endAt).format('HH:mm')
                 : '19:00'
             }
-            render={({ field }) => (
-              <InputTime time={field.value} changeTime={field.onChange} />
-            )}
+            {...register('startAt')}
           />
 
           <span className="font-semibold">até</span>
@@ -189,17 +186,15 @@ export function PopoverEventForm() {
           <label htmlFor="endTime" className="absolute h-0 w-0 opacity-0">
             Horario de fim da reunião
           </label>
-          <Controller
-            name="endAt"
-            control={control}
+          <input
+            className="relative flex flex-1 items-center rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1"
+            type="time"
             defaultValue={
               selectedEvent
                 ? dayjs(selectedEvent.endAt).format('HH:mm')
                 : '20:00'
             }
-            render={({ field }) => (
-              <InputTime time={field.value} changeTime={field.onChange} />
-            )}
+            {...register('endAt')}
           />
         </div>
 
