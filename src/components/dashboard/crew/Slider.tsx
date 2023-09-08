@@ -71,12 +71,12 @@ export default function Slider() {
     )
   }
   return (
-    <div className="relative mt-10 flex items-center medium:mt-32">
+    <main className="relative flex flex-1 flex-col items-center justify-center">
       {!openModal && (
         <div className="absolute right-0 top-0 z-10 bg-gradient-to-l from-white lg:w-96" />
       )}
 
-      <div ref={sliderRef} className="keen-slider w-full py-1 px-4">
+      <div ref={sliderRef} className="keen-slider flex w-full  py-1 px-4">
         {mentorshipVolunteers &&
           mentorshipVolunteers.map((volunteer) => {
             return (
@@ -184,6 +184,6 @@ export default function Slider() {
           />
         </>
       )}
-    </div>
+    </main>
   )
 }

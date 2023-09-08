@@ -10,7 +10,7 @@ const TripulacaoPage = () => {
         <Head>
           <title>Tripulação</title>
         </Head>
-        <main className="h-screen bg-gray-100">
+        <div className="flex h-screen flex-col bg-gray-100">
           <header className="border border-b-gray-50 p-4 drop-shadow-sm">
             <div className="pl-20">
               <h1 className="text-[40px] font-semibold text-indigo-500">
@@ -21,11 +21,8 @@ const TripulacaoPage = () => {
               </span>
             </div>
           </header>
-
-          <div className="pt-32 pl-20">
-            <Slider />
-          </div>
-        </main>
+          <Slider />
+        </div>
       </div>
     </div>
   )
