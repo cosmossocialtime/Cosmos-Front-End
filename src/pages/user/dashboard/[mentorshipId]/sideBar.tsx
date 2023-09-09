@@ -56,7 +56,7 @@ export default function SideBar() {
       icon: <UsersThree />,
     },
   ]
-  const { pathname } = useRouter()
+  const { asPath } = useRouter()
   const [showside, setShowSide] = useState(true)
 
   return (
@@ -103,12 +103,12 @@ export default function SideBar() {
                   key={item.id}
                   href={item.route}
                   className={`${
-                    pathname.includes(item.route) ? 'bg-white/10' : ''
+                    asPath.includes(item.route) ? 'bg-white/10' : ''
                   } z-[1] my-1 flex items-center gap-4 rounded-lg border border-solid border-transparent py-3 pl-2 pr-3 text-white transition-colors hover:border-violet-500`}
                 >
                   <span
                     className={`${
-                      pathname.includes(item.route)
+                      asPath.includes(item.route)
                         ? 'bg-purple-600'
                         : 'bg-white/10'
                     } items-center justify-center rounded-full p-2 text-center text-2xl 2xl:p-4`}

@@ -28,23 +28,20 @@ const schema = z.object({
 
 type formProps = z.infer<typeof schema>
 
-export function PopoverEventForm() {
+interface PopoverEventFormProps {
+  day: Date
+}
+
+export function PopoverEventForm({ day }: PopoverEventFormProps) {
   const [onLinkMeet, setOnLinkMeet] = useState(false)
 
-  const {
-    changePopover,
-    currentMentorship,
-    getEvents,
-    selectDay,
-    selectedDay,
-    selectedEvent,
-  } = useCalendar()
+  const { changePopover, currentMentorship, getEvents, selectedEvent } =
+    useCalendar()
 
   const { control, handleSubmit, register } = useForm<formProps>()
   const attendeesId = selectedEvent?.attendees.map(
     (attendee) => attendee.userId,
   )
-  const day = selectedDay || new Date()
 
   function createEvent({
     title,
@@ -71,7 +68,6 @@ export function PopoverEventForm() {
         if (response.status === 201) {
           toast.success('Evento criado com sucesso!')
           changePopover('events')
-          selectDay(null)
           getEvents()
         }
       })
@@ -109,7 +105,6 @@ export function PopoverEventForm() {
         if (response.status === 200) {
           toast.success('Evento Editado com sucesso!')
           changePopover('events')
-          selectDay(null)
           getEvents()
         }
       })

@@ -13,17 +13,15 @@ import { MentorshipProps } from '../../types/mentorship'
 import { LoadingLight } from '../../components/LoadingLight'
 import { useRouter } from 'next/router'
 
-export type popoversName = 'eventForm' | 'events' | 'event'
+type popoversName = 'eventForm' | 'events' | 'event'
 
 type CalendarContextProps = {
-  selectedDay: Date | null
   currentMentorship: MentorshipProps
   ownerUser: UserProps
   popoverName: popoversName
   users: UserProps[]
   events: EventProps[]
   selectedEvent: EventProps | null
-  selectDay: (day: Date | null) => void
   changePopover: (popover: popoversName) => void
   changeSelectedEvent: (event: EventProps | null) => void
   getEvents: () => void
@@ -48,7 +46,6 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const [events, setEvents] = useState<EventProps[]>([])
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
   const [popoverName, setPopoverName] = useState<popoversName>('events')
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null)
 
   const getEvents = useCallback(() => {
     api
@@ -81,16 +78,21 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
     getEvents()
   }, [currentMentorship, getEvents])
 
-  function selectDay(day: Date | null) {
-    setSelectedDay(day)
-  }
-
   function changePopover(popoverName: popoversName) {
+    if (popoverName === 'events') {
+      setSelectedEvent(null)
+    }
+
     setPopoverName(popoverName)
   }
   function changeSelectedEvent(event: EventProps | null) {
     setSelectedEvent(event)
-    setPopoverName('event')
+
+    if (event) {
+      setPopoverName('event')
+    } else {
+      setPopoverName('events')
+    }
   }
 
   if (!currentMentorship || !ownerUser) {
@@ -100,7 +102,6 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <CalendarContext.Provider
       value={{
-        selectedDay,
         ownerUser,
         currentMentorship,
         popoverName,
@@ -110,7 +111,6 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
         changePopover,
         changeSelectedEvent,
         getEvents,
-        selectDay,
       }}
     >
       {children}

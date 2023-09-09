@@ -18,13 +18,8 @@ import { useCalendar } from '../../../context/CalendarProvider'
 import { DeleteConfirmation } from '../../DeleteConfirmation'
 
 export function PopoverEvent() {
-  const {
-    changePopover,
-    changeSelectedEvent,
-    selectedEvent,
-    getEvents,
-    selectDay,
-  } = useCalendar()
+  const { changePopover, changeSelectedEvent, selectedEvent, getEvents } =
+    useCalendar()
 
   if (!selectedEvent) {
     return (
@@ -47,7 +42,6 @@ export function PopoverEvent() {
         if (response.status === 200) {
           toast.success('Evento deletado com sucesso!')
           changePopover('events')
-          selectDay(null)
           getEvents()
         }
       })

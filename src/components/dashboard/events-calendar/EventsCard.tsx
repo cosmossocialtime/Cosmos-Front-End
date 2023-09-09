@@ -1,7 +1,7 @@
 import * as Popover from '@radix-ui/react-popover'
 import dayjs from 'dayjs'
 import { DefaultCardDay } from './DefaultCardDay'
-import { popoversName, useCalendar } from '../../../context/CalendarProvider'
+import { useCalendar } from '../../../context/CalendarProvider'
 import { PopoverEventForm } from './PopoverEventForm'
 import { PopoverEvent } from './PopoverEvent'
 import { PopoverEvents } from './PopoverEvents'
@@ -11,13 +11,9 @@ interface EventsCardProps {
   day: Date
 }
 
-type PopoverProps = {
-  popover: React.ElementType
-  name: popoversName
-}
-
 export function EventsCard({ day }: EventsCardProps) {
-  const { events, popoverName, selectDay, selectedDay } = useCalendar()
+  const { events, popoverName, changePopover, changeSelectedEvent } =
+    useCalendar()
 
   const formattedDay = dayjs(day).format('DD')
 
@@ -29,30 +25,15 @@ export function EventsCard({ day }: EventsCardProps) {
     dayjs(a.startAt).diff(dayjs(b.startAt)),
   )
 
-  const Popovers: PopoverProps[] = [
-    {
-      popover: PopoverEventForm,
-      name: 'eventForm',
-    },
-    {
-      popover: PopoverEvent,
-      name: 'event',
-    },
-    {
-      popover: PopoverEvents,
-      name: 'events',
-    },
-  ]
-
-  const PopoverContent = Popovers.find(
-    ({ name }) => name === popoverName,
-  )?.popover
+  function changeOpenPopover(open: boolean) {
+    if (open === false) {
+      changePopover('events')
+      changeSelectedEvent(null)
+    }
+  }
 
   return (
-    <Popover.Root
-      open={dayjs(day).isSame(selectedDay, 'day')}
-      onOpenChange={(open) => (open ? selectDay(day) : selectDay(null))}
-    >
+    <Popover.Root onOpenChange={(open) => changeOpenPopover(open)}>
       <Popover.Trigger className="group">
         <DefaultCardDay
           day={formattedDay}
@@ -75,7 +56,11 @@ export function EventsCard({ day }: EventsCardProps) {
           side={'right'}
           className="relative z-[2] m-4 w-[28rem] rounded-2xl bg-violet-500 px-6 pb-10 pt-14 text-white 2xl:w-[32rem]"
         >
-          {PopoverContent && <PopoverContent />}
+          {popoverName === 'events' && (
+            <PopoverEvents day={day} events={ordenedEvents} />
+          )}
+          {popoverName === 'event' && <PopoverEvent />}
+          {popoverName === 'eventForm' && <PopoverEventForm day={day} />}
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

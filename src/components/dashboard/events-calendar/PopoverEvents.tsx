@@ -1,29 +1,23 @@
 import { useCalendar } from '../../../context/CalendarProvider'
 import dayjs from 'dayjs'
+import { EventProps } from '../../../types/event'
 
-export function PopoverEvents() {
-  const { changeSelectedEvent, changePopover, events, selectedDay } =
-    useCalendar()
+interface PopoverEventsProps {
+  day: Date
+  events: EventProps[]
+}
 
-  if (!selectedDay) {
-    return <h1>Dia não encontrado.</h1>
-  }
-
-  const eventsOfTheDay = events.filter((event) =>
-    dayjs(event.startAt).isSame(dayjs(selectedDay), 'day'),
-  )
-  const ordenedEvents = eventsOfTheDay.sort((a, b) =>
-    dayjs(a.startAt).diff(dayjs(b.startAt)),
-  )
+export function PopoverEvents({ day, events }: PopoverEventsProps) {
+  const { changeSelectedEvent, changePopover } = useCalendar()
 
   return (
     <>
       <span className="absolute right-4 top-4 text-xl">
-        {dayjs(selectedDay).format('ddd, DD MMM')}
+        {dayjs(day).format('ddd, DD MMM')}
       </span>
       <h3 className="text-xl">Eventos</h3>
       <div className="my-4 flex max-h-[24rem] w-full flex-col gap-3 overflow-y-auto">
-        {ordenedEvents.map((event) => {
+        {events.map((event) => {
           const hourStart = dayjs(event.startAt).format('HH:mm')
           const hourEnd = dayjs(event.endAt).format('HH:mm')
 
