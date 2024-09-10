@@ -12,6 +12,7 @@ import 'keen-slider/keen-slider.min.css'
 import { ToastContainer } from 'react-toastify'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from '../services/queryClient'
+import "../styles/global.css";
 
 registerLocale('ptBR', ptBR)
 setDefaultLocale('ptBR')
