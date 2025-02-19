@@ -2,6 +2,7 @@ interface ButtonProps{
     text: string;
     type?: "button" | "submit" | "reset";
     disabled? : boolean;
+    isLoading?: boolean;
     onClick?: () => void;
 }
 
