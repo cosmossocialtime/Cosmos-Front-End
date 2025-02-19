@@ -60,7 +60,7 @@ export default function ForgotPassword() {
               />
             </div>
 
-            <button type="submit" onClick={SubmitForm} className="cBtn">
+            <button type="submit" onClick={SubmitForm} className="colorButton">
               Recuperar
             </button>
           </form>

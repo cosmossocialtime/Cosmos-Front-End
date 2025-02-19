@@ -107,7 +107,7 @@ export default function Login() {
               </span>
             </div>
 
-            <button type="submit" className="cBtn" disabled={isSubmiting}>
+            <button type="submit" className="colorButton" disabled={isSubmiting}>
               Entrar
             </button>
           </form>

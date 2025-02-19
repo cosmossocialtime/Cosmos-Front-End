@@ -71,7 +71,7 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  .cBtn{
+  .colorButton{
     background: var(--purple-500);
     color: #fff;
     font-weight: bold;
@@ -83,10 +83,10 @@ export const GlobalStyle = createGlobalStyle`
     align-items: center;
     font-size: 1rem;
     :hover {
-      background: #642BBB;
+      background: #7A40D3;
     }
     :disabled{
-      background: #6F5597;
+      background: #D0D5E5;
       cursor: not-allowed;
     }
   }

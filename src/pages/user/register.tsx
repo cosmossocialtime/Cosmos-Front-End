@@ -260,7 +260,7 @@ export default function Cadastrar() {
             </div>
             <button
               type="submit"
-              className="cBtn mt-2  w-full max-w-md"
+              className="colorButton mt-2  w-full max-w-md"
               disabled={isSubmiting}
             >
               Criar Conta

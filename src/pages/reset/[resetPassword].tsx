@@ -152,7 +152,7 @@ export default function ResetPassword() {
             </span>
           )}
 
-          <button type="submit" className="cBtn mt-10">
+          <button type="submit" className="colorButton mt-10">
             Confirmar
           </button>
         </form>
