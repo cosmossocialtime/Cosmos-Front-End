@@ -1,17 +1,17 @@
 import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Main from '../../components/Main'
-import { InputEmail } from '../../components/Input/InputEmail'
+import Main from '../../../components/Main'
+import { InputEmail } from '../../../components/Input/InputEmail'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { api } from '../../services/api'
+import { api } from '../../../services/api'
 import { setCookie } from 'nookies'
 import Router, { useRouter } from 'next/router'
-import { InputPassword } from '../../components/Input/InputPassword'
-import { emailSchema, passwordSchema } from '../../utils/ValidationSchemas'
-import { PageTitle } from '../../components/TitlesAndLinks/PageTitles'
-import { LoginLink } from '../../components/TitlesAndLinks/LinkLogin'
-import { Button } from '../../components/Button/ButtonSubmit'
+import { InputPassword } from '../../../components/Input/InputPassword'
+import { emailSchema, passwordSchema } from '../../../utils/ValidationSchemas'
+import { PageTitle } from '../../../components/TitlesAndLinks/PageTitles'
+import { LoginLink } from '../../../components/TitlesAndLinks/LinkLogin'
+import { Button } from '../../../components/Button/ButtonSubmit'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -30,7 +30,6 @@ export default function RegisterInstituition() {
         formState: { errors },
     } = useForm<formProps>({ resolver: zodResolver(schema) })
 
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false)
 
     const email = watch('email', '');
@@ -53,7 +52,7 @@ export default function RegisterInstituition() {
         //                 })
                         toast.success('Criado com sucesso!')
                         Router.push({
-                            pathname: '/instituition/verifyEmail',
+                            pathname: '/onboarding/institutions/verifyEmail',
                             query: {email: data.email, password: data.password}
                         })
         //         })

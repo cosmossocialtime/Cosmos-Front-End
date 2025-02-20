@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import Logo from '../../assets/logotipoCosmos.svg';
-import Mensagem from '../../assets/icons/Envelope.svg';
+import Logo from '../../../assets/logotipoCosmos.svg';
+import Mensagem from '../../../assets/icons/Envelope.svg';
 import { useEffect, useState } from 'react';
-import styles from '../../components/instituition/verifyEmail/verifyEmail.module.css'; // Importando CSS
+import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css'; // Importando CSS
  
 export default function VerifyEmail() {
   const [seconds, setSeconds] = useState(60);

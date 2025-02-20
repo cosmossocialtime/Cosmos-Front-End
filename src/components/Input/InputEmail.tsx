@@ -25,7 +25,7 @@ export function InputEmail({ id, label, register, error, ...rest }: InputEmailPr
         className="rounded-md border border-solid border-gray-400 p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
         {...rest}
       />
-      {error && <span className="text-sm text-rose-600">{error}</span>}
+      {error && <span className="text-sm text-rose-600 leading-[1.1] text-[12px]">{error}</span>}
 </div>
   );
 }
