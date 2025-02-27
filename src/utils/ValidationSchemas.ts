@@ -1,26 +1,31 @@
 import { z } from "zod";
- 
+
 // 🔹 Validação para Nome (transforma em Title Case)
 export const nameSchema = z
   .string()
-  .nonempty("O campo nome é obrigatório.")
+  .nonempty("O campo nome é obrigatório.") 
+  .min(2, "O nome deve ter pelo menos 2 letras.") 
   .transform((name) =>
     name
-      .trim()
+      .trim() 
       .split(" ")
-      .map((word) => word[0].toLocaleUpperCase() + word.substring(1))
-      .join(" ")
+      .map((word) =>
+        word.length > 1 
+          ? word[0].toLocaleUpperCase() + word.substring(1)
+          : word
+      )
+      .join(" ") 
   );
- 
+
 // 🔹 Validação para Alias
 export const aliasSchema = z.string().nonempty("O campo acima é obrigatório.");
- 
+
 // 🔹 Validação para E-mail
 export const emailSchema = z
   .string()
   .nonempty("O campo e-mail é obrigatório.")
   .email("O formato do e-mail está incorreto.");
- 
+
 // 🔹 Validação para Senha
 export const passwordSchema = z
   .string()
@@ -29,12 +34,12 @@ export const passwordSchema = z
   .regex(/[A-Z]/, "A senha deve ter pelo menos uma letra maiúscula.")
   .regex(/[a-z]/, "A senha deve ter pelo menos uma letra minúscula.")
   .regex(/\d/, "A senha deve ter pelo menos um número.");
- 
+
 // 🔹 Validação para Senha e Confirmação de Senha
 export const confirmPasswordSchema = z
   .string()
   .nonempty("O campo de confirmação de senha é obrigatório.");
- 
+
 // 🔹 Validação para Formulário de Cadastro
 export const registerSchema = z
   .object({
@@ -48,3 +53,15 @@ export const registerSchema = z
     message: "As senhas não são iguais",
     path: ["confirmPassword"],
   });
+
+export const multiSelectSchema = z.object({
+  selectedOptions: z
+    .array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      })
+    )
+    .min(1, "Você precisa selecionar pelo menos 1 opção.")
+    .max(3, "Você só pode selecionar até 3 opções."),
+});
