@@ -55,11 +55,11 @@ export default function AboutYou() {
         formState: { errors, isValid }
     } = useForm<formProps>({
         resolver: zodResolver(schema),
-        mode: "onChange" 
+        mode: "onChange"
     });
 
     useEffect(() => {
-        const savedData = getFormData("aboutOrganization");
+        const savedData = getFormData("aboutYou");
 
         setIsDisabled(!isValid);
         if (savedData?.nameYou && savedData?.phone && savedData?.position) {
@@ -73,7 +73,20 @@ export default function AboutYou() {
         setIsLoading(true);
         console.log(data);
         try {
-            saveFormData("aboutYou", data);
+            // 🔹 Pega os dados já salvos da organização
+            const savedOrganization = getFormData("aboutOrganization") || {};
+
+            // 🔹 Adiciona os dados da organização dentro do `data`
+            const fullData = {
+                ...data,
+                nomeOrganizacao: savedOrganization.nameOrganization || "", // Inclui o nome da organização
+            };
+
+            console.log("Dados completos a serem salvos:", fullData);
+
+            // 🔹 Salva o objeto combinado no localStorage
+            saveFormData("aboutYou", fullData);
+            console.log(data);
             toast.success('Cadastro concluído!');
             Router.push('/onboarding/institutions/verifyEmail');
         } catch (error) {
@@ -115,7 +128,7 @@ export default function AboutYou() {
 
                         />
 
-                         <MultiSelectComboBox options={options} label="Área de Trabalho" />
+                        <MultiSelectComboBox options={options} label="Área de Trabalho" />
                         {/* Cargo */}
                         <InputField
                             label="Seu cargo na organização"

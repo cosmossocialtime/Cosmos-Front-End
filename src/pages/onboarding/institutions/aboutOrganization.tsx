@@ -14,7 +14,8 @@ import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBo
 import { MultiValue } from 'react-select';
 import { Option } from "../../../types/MultiselectCombobox";
 import InputField from '../../../components/Input/InputField';
-import { getFormData } from '../../../utils/localStroge';
+import { getFormData, saveFormData } from '../../../utils/localStroge';
+
 
 // Opções disponíveis
 const options = [
@@ -105,6 +106,7 @@ export default function AboutOrganization() {
         setIsLoading(true);
         console.log(data);
         try {
+            saveFormData("aboutOrganization", { nameOrganization: data.name});
             //toast.success('Criado com sucesso!');
             Router.push({
                 pathname: '/onboarding/institutions/aboutYou',
