@@ -1,20 +1,21 @@
+import { transform } from "html2canvas/dist/types/css/property-descriptors/transform";
 import { z } from "zod";
 
 // 🔹 Validação para Nome (transforma em Title Case)
 export const nameSchema = z
   .string()
-  .nonempty("O campo nome é obrigatório.") 
-  .min(2, "O nome deve ter pelo menos 2 letras.") 
+  .nonempty("O campo nome é obrigatório.")
+  .min(2, "O nome deve ter pelo menos 2 letras.")
   .transform((name) =>
     name
-      .trim() 
+      .trim()
       .split(" ")
       .map((word) =>
-        word.length > 1 
+        word.length > 1
           ? word[0].toLocaleUpperCase() + word.substring(1)
           : word
       )
-      .join(" ") 
+      .join(" ")
   );
 
 // 🔹 Validação para Alias
@@ -54,6 +55,7 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
+// 🔹 Validação para Multiselect
 export const multiSelectSchema = z.object({
   selectedOptions: z
     .array(
@@ -65,3 +67,12 @@ export const multiSelectSchema = z.object({
     .min(1, "Você precisa selecionar pelo menos 1 opção.")
     .max(3, "Você só pode selecionar até 3 opções."),
 });
+
+
+export const phoneSchema = z
+  .string()
+  //.regex(/^\+\d{2} \(\d{2}\) \d{5}-\d{4}$/, "Formato inválido. Use +12 (12) 12121-2121") // 🔹 Valida a máscara
+  .transform((value) => value.replace(/\D/g, "")) // 🔹 Remove tudo que não for número
+  .refine((value) => value.length === 13, {
+    message: "O número deve ter exatamente 13 dígitos numéricos.",
+  });

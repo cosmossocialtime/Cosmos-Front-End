@@ -8,7 +8,7 @@ import { api } from '../../../services/api'
 import { setCookie } from 'nookies'
 import Router, { useRouter } from 'next/router'
 import { InputPassword } from '../../../components/Input/InputPassword'
-import { emailSchema, passwordSchema } from '../../../utils/ValidationSchemas'
+import { emailSchema, passwordSchema } from '../../../utils/validationSchemas'
 import { PageTitle } from '../../../components/TitlesAndLinks/PageTitles'
 import { LoginLink } from '../../../components/TitlesAndLinks/LinkLogin'
 import { Button } from '../../../components/Button/ButtonSubmit'
@@ -50,11 +50,11 @@ export default function RegisterInstituition() {
         //                 setCookie(undefined, 'cosmos.user', data.email, {
         //                     maxAge: 60 * 60 * 12,
         //                 })
-                        toast.success('Criado com sucesso!')
-                        Router.push({
-                            pathname: '/onboarding/institutions/verifyEmail',
-                            query: {email: data.email, password: data.password}
-                        })
+        toast.success('Criado com sucesso!')
+        Router.push({
+            pathname: '/onboarding/institutions/verifyEmail',
+            query: { email: data.email, password: data.password }
+        })
         //         })
         // } catch (error: any) {
         //     if (error.response.status === 400) {
@@ -68,8 +68,8 @@ export default function RegisterInstituition() {
         //         )
         //     } 
         // } finally {
-            setIsLoading(false);
-        }
+        setIsLoading(false);
+    }
     //}
 
     return (
@@ -95,16 +95,19 @@ export default function RegisterInstituition() {
                             <InputPassword id="password" label="Senha"
                                 register={register}
                                 error={errors.password?.message}
-                                placeholder="Digite sua senha aqui" 
-                                helperText='A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número'/>
+                                placeholder="Digite sua senha aqui"
+                                helperText='A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número' />
                         </div>
-                        <Button text='Criar Conta' disabled={isDisabled} type="submit" isLoading = {true}></Button>
+                        <Button text='Criar Conta'
+                            disabled={isDisabled}
+                            type="submit" isLoading={true}>
+                        </Button>
 
                         <p className="text-xs text-gray-800 text-center mt-[20px]" >
                             Ao clicar em "Criar conta", você aceita os <Link href="#" className="font-semibold" style={{ color: "#0890F7" }}>Termos e Condições</Link> e a <Link href="#" className="font-semibold" style={{ color: "#0890F7" }}>Política de Privacidade</Link> da Cosmos.
                         </p>
                     </form>
-                        <LoginLink></LoginLink>
+                    <LoginLink></LoginLink>
                 </main>
             </div>
         </div>

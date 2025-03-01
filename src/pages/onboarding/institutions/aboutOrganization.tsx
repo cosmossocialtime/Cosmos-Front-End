@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
 import { Button } from '../../../components/Button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
-import { aliasSchema, multiSelectSchema, nameSchema } from '../../../utils/ValidationSchemas';
+import { aliasSchema, multiSelectSchema, nameSchema } from '../../../utils/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -13,6 +13,8 @@ import styles from '../../../components/instituition/verifyEmail/verifyEmail.mod
 import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBox';
 import { MultiValue } from 'react-select';
 import { Option } from "../../../types/MultiselectCombobox";
+import InputField from '../../../components/Input/InputField';
+import { getFormData } from '../../../utils/localStroge';
 
 // Opções disponíveis
 const options = [
@@ -52,29 +54,38 @@ const schema = z.object({
 
 type formProps = z.infer<typeof schema>;
 
-export default function MultiStepForm() {
+export default function AboutOrganization() {
     const [isLoading, setIsLoading] = useState(false);
-    const [currentStep, setCurrentStep] = useState(2);
+    const [currentStep] = useState(2);
     const [isDisabled, setIsDisabled] = useState(true);
+ 
     //const [selectedOptions] = useState<MultiValue<Option>>([]);
-    const handleNextStep = () => {
-        if (currentStep < steps.length) setCurrentStep(currentStep + 1);
-    };
 
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         formState: { errors, isValid }
-    } = useForm<formProps>({ resolver: zodResolver(schema),
+    } = useForm<formProps>({
+        resolver: zodResolver(schema),
         mode: 'onChange'
-     });
+    });
 
-    // Atualiza o estado do botão sempre que os inputs mudam
-    useEffect(() => {
+
+     useEffect(() => {
+        const savedData = getFormData("aboutOrganization");
+       
         setIsDisabled(!isValid);
-    }, [isValid]);
+        if (savedData?.nameOrganization) {
+            setValue("name", savedData.nameOrganization);
+        }
+    }, [setValue, isValid]);
+    // // Atualiza o estado do botão sempre que os inputs mudam
     // useEffect(() => {
+    //     setIsDisabled(!isValid);
+    // }, [isValid]);
+    // // useEffect(() => {
     //     const nomePreenchido = watch("name");
 
     //     if (nomePreenchido && nomePreenchido.length >= 2) {
@@ -92,6 +103,7 @@ export default function MultiStepForm() {
 
     async function handleForm(data: formProps) {
         setIsLoading(true);
+        console.log(data);
         try {
             //toast.success('Criado com sucesso!');
             Router.push({
@@ -103,8 +115,6 @@ export default function MultiStepForm() {
             setIsLoading(false);
         }
     }
-
-
 
     return (
 
@@ -121,29 +131,23 @@ export default function MultiStepForm() {
                 {/* Formulário - 384px */}
                 <div className="w-[384px] p-6 bg-white rounded-lg shadow-md">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
-                        {/* Nome */}
-                        <div>
-                            <label htmlFor="Nome" className="text-sm font-medium text-gray-700">
-                                Nome da organização
-                            </label>
-                            <input
-                                {...register('name')}
-                                required
-                                id="Nome"
-                                placeholder="Ex: Amigos da Cosmos"
-                                className=" mt-1 p-2 rounded-md border border-solid border-gray-400 transition-all  w-full duration-200 mt-1 p-2  hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
-                            />
-                            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
-                        </div>
-
+                         {/* Nome */}
+                         <InputField
+                            label="Nome da organização"
+                            name="name"
+                            placeholder="Ex: Amigos da Cosmos"
+                            register={register}
+                            error={errors.name?.message}
+                        />
+                        
                         {/* <MultiSelectComboBox options={options} maxSelections={3} label="Causa(s) em que atua (até 3)" /> */}
 
+                       
                         <Button
                             text={isLoading ? "Carregando..." : "Finalizar"}
                             disabled={isDisabled || isLoading}
                             type="submit"
                             isLoading={isLoading}
-                            onClick={handleNextStep}
                         />
                     </form>
                 </div>

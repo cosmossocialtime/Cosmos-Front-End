@@ -1,32 +1,19 @@
 import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
 import { Button } from '../../../components/Button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
-import { aliasSchema } from '../../../utils/ValidationSchemas';
+import { nameSchema, phoneSchema } from '../../../utils/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import Router from 'next/router';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
-import Select, { components, MultiValue, StylesConfig } from "react-select";
-import { Check } from 'phosphor-react';
-import * as Checkbox from '@radix-ui/react-checkbox';
+import InputField from '../../../components/Input/InputField';
+import { getFormData, saveFormData } from '../../../utils/localStroge';
+import MaskedInputField from '../../../components/Input/MaskedInputField';
 import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBox';
-
-
-const steps = [
-    { id: 1, label: 'Cadastro inicial' },
-    { id: 2, label: 'Sobre a organização' },
-    { id: 3, label: 'Sobre você' }
-];
-
-const schema = z.object({
-    nome: aliasSchema,
-});
-
-type formProps = z.infer<typeof schema>;
 
 // Opções disponíveis
 const options = [
@@ -42,118 +29,108 @@ const options = [
     { value: "lideranca", label: "Liderança" },
 ];
 
+const steps = [
+    { id: 1, label: 'Cadastro inicial' },
+    { id: 2, label: 'Sobre a organização' },
+    { id: 3, label: 'Sobre você' }
+];
 
-export default function MultiStepForm() {
+const schema = z.object({
+    nome: nameSchema,
+    celular: phoneSchema,
+    cargo: nameSchema
+});
 
-    const [currentStep, setCurrentStep] = useState(3);
-    const nextStep = () => {
-        if (currentStep < steps.length) { setCurrentStep(currentStep + 1); }
-    };
-    const [acceptTerms, setAcceptTerms] = useState(false);
+type formProps = z.infer<typeof schema>;
+
+export default function AboutYou() {
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentStep] = useState(3);
+    const [isDisabled, setIsDisabled] = useState(true);
+
     const {
         register,
         handleSubmit,
-        formState: { errors }
-    } = useForm<formProps>({ resolver: zodResolver(schema) });
+        setValue,
+        formState: { errors, isValid }
+    } = useForm<formProps>({
+        resolver: zodResolver(schema),
+        mode: "onChange" 
+    });
 
-    const isDisabled = false;
+    useEffect(() => {
+        const savedData = getFormData("aboutOrganization");
 
-    const [isLoading, setIsLoading] = useState(false);
+        setIsDisabled(!isValid);
+        if (savedData?.nameYou && savedData?.phone && savedData?.position) {
+            setValue("nome", savedData.nameYou);
+            setValue("celular", savedData.phone);
+            setValue("cargo", savedData.position);
+        }
+    }, [setValue, isValid]);
 
     async function handleForm(data: formProps) {
         setIsLoading(true);
+        console.log(data);
         try {
-            toast.success('Criado com sucesso!');
-            Router.push({
-                 pathname: '/onboarding/institutions/verifyEmail',
-            });
-        } catch (error: any) {
-            toast.error('Não foi possível criar sua conta, tente novamente');
+            saveFormData("aboutYou", data);
+            toast.success('Cadastro concluído!');
+            Router.push('/onboarding/institutions/verifyEmail');
+        } catch (error) {
+            toast.error('Erro ao criar conta, tente novamente.');
         } finally {
             setIsLoading(false);
         }
     }
 
-
-
-
     return (
-
-
         <div className={styles.container}>
             {/* Logo */}
             <Image className={styles.logo} src={Logo} alt="Logo cosmos" height={24} quality={100} />
-
             <main className="flex flex-col items-center">
-                {/* Barra de Progresso - 554px */}
+                {/* Barra de Progresso */}
                 <div className="w-[607px] mb-4">
                     <ProgressBar steps={steps} currentStep={currentStep} />
                 </div>
-
-                {/* Formulário - 384px */}
+                {/* Formulário */}
                 <div className="w-[384px] p-6 bg-white rounded-lg shadow-md">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
                         {/* Nome */}
-                        <div>
-                            <label htmlFor="Nome" className="text-sm font-medium text-gray-700">
-                                Nome da organização
-                            </label>
-                            <input
-                                {...register('nome')}
-                                required
-                                id="Nome"
-                                placeholder="Ex: Amigos da Cosmos"
-                                //  className=" rounded-md border border-solid border-gray-400 p-2 transition-all w-full duration-200 mt-1 p-2 border rounded-md hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500  focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
-                                className=" mt-1 p-2 rounded-md border border-solid border-gray-400 transition-all  w-full duration-200 mt-1 p-2  hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
-                            />
-                            {errors.nome && <p className="text-red-500 text-sm mt-1">{errors.nome.message}</p>}
-                        </div>
+                        <InputField
+                            label="Seu nome"
+                            name="nome"
+                            placeholder="Ex: Maria Gomes"
+                            register={register}
+                            error={errors.nome?.message}
+                        />
+                        {/* Celular */}
+                        <MaskedInputField
+                            label="Celular"
+                            name="celular"
+                            placeholder="Ex:+55 (00) 00000-0000"
+                            register={register}
+                            setValue={setValue}
+                            error={errors.celular?.message}
+                            mask="+99 (99) 99999-9999"
 
+                        />
 
-                         {/* Celular */}
-                        <div>
-                            <label htmlFor="Celular" className="text-sm font-medium text-gray-700">
-                                Celular
-                            </label>
-                            <input
-                                type="text"
-                                id="Celular"
-                                placeholder="+55 (00) 00000 - 0000"
-                                className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
-                            />
-                        </div>
-
-                        <MultiSelectComboBox options={options} label="Área de Trabalho" />
-
-                       
-
-                       
-
-                      
-
-                        {/* Cargo na organização */}
-                        {/* <div>
-                            <label htmlFor="cargo" className="text-sm font-medium text-gray-700">
-                                Seu cargo na organização
-                            </label>
-                            <input
-                                type="text"
-                                id="cargo"
-                                placeholder="Ex.: Analista financeiro"
-                                className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
-                            />
-                        </div> */}
-                        {/* Botão de continuar */}
-                        {currentStep < steps.length && (
-                            //                     <button onClick={nextStep}
-                            //                         className={`mt-4 px-4 py-2 rounded w-full
-                            //   ${currentStep < steps.length ? "bg-[#9D37F2] text-white" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
-                            //                         disabled={currentStep >= steps.length}>
-                            //                         Continuar
-                            //                     </button>
-                            <Button text="Finalizar" disabled={isDisabled} type="submit" isLoading={isLoading} onClick={nextStep} />
-                        )}
-
+                         <MultiSelectComboBox options={options} label="Área de Trabalho" />
+                        {/* Cargo */}
+                        <InputField
+                            label="Seu cargo na organização"
+                            name="cargo"
+                            placeholder="Ex: Analista financeiro"
+                            register={register}
+                            error={errors.cargo?.message}
+                        />
+                        {/* Botão de Finalizar */}
+                        <Button
+                            text={isLoading ? "Carregando..." : "Finalizar"}
+                            disabled={isDisabled || isLoading}
+                            type="submit"
+                            isLoading={isLoading}
+                        />
                     </form>
                 </div>
             </main>
