@@ -115,7 +115,7 @@ export default function Login() {
             <h3>
               Ainda não tem uma conta?{' '}
               <strong className="font-bold text-purple-700 transition-all duration-200 hover:text-purple-600">
-                <Link href="/onboarding/select-role">Cadastre-se</Link>
+                <Link href="/institutions/select-role">Cadastre-se</Link>
               </strong>
             </h3>
           </div>
