@@ -106,7 +106,7 @@ export default function AboutYou() {
                     <ProgressBar steps={steps} currentStep={currentStep} />
                 </div>
                 {/* Formulário */}
-                <div className="w-[384px] p-6 bg-white rounded-lg shadow-md">
+                <div className="w-[384px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
                         {/* Nome */}
                         <InputField

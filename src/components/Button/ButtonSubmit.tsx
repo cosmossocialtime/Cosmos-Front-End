@@ -12,7 +12,7 @@ export function Button({ text, type, disabled, onClick}: ButtonProps) {
         type ={type}
         disabled= {disabled}
         onClick = {onClick}
-        className={`w-full rounded-md p-2 mt-[20px] text-white transition colorButton ${disabled ? "disabled" : ""}`}
+        className={`w-full rounded-md p-2 mt-[20px] text-white transition colorButton font-normal ${disabled ? "disabled" : ""}`}
         >
             {text}
         </button>

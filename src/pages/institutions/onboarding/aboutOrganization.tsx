@@ -131,7 +131,7 @@ export default function AboutOrganization() {
                 </div>
 
                 {/* Formulário - 384px */}
-                <div className="w-[384px] p-6 bg-white rounded-lg shadow-md">
+                <div className="w-[384px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
                          {/* Nome */}
                          <InputField
