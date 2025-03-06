@@ -27,6 +27,7 @@ export default function TermsPage() {
 
     const handleAcceptTerms = (value: boolean) => {
         setAcceptTerms(value);
+        console.log(value)
         saveFormData("termsAccepted", value);
     };
 
