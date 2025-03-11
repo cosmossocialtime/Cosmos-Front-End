@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useFetch from '../../../hooks/useFetch'
 import axios from 'axios'
-import { Input } from '../../Input'
+import { Input } from '../../input'
 
 interface cityProps {
   id: number

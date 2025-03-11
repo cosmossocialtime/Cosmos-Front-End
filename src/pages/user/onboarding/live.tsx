@@ -12,7 +12,7 @@ import { api } from '../../../services/api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
-import { Button } from '../../../components/Button'
+import { Button } from '../../../components/button'
 
 interface cityProps {
   id: number

@@ -1,10 +1,10 @@
 
 import Main from '../../components/Main'
-import { PageTitle } from '../../components/TitlesAndLinks/PageTitles'
-import { LoginLink } from '../../components/TitlesAndLinks/LinkLogin'
+import { PageTitle } from '../../components/titlesAndLinks/PageTitles'
+import { LoginLink } from '../../components/titlesAndLinks/LinkLogin'
 import { CaretRight, User, UsersThree } from 'phosphor-react'
 import router from 'next/router'
-import { SelectableButton } from '../../components/Button/SelectableButton'
+import { SelectableButton } from '../../components/button/SelectableButton'
 
 
 export default function SelectRoleOnboarding() {

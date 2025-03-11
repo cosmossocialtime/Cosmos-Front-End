@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/Button/ButtonSubmit';
+import { Button } from '../../../components/button/ButtonSubmit';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
-import { TermsCheckbox } from '../../../components/Button/TernsCheckbox';
-import { getFormData, saveFormData } from '../../../utils/localStroge';
-import { TermsText } from '../../../components/TitlesAndLinks/TermsText';
+import { CustomCheckbox } from '../../../components/button/CustomCheckbox';
+import { saveFormData } from '../../../utils/localStroge';
+import { TermsText } from '../../../components/titlesAndLinks/TermsText';
 
 const steps = [
     { id: 1, label: 'Termos' },
@@ -57,9 +57,9 @@ export default function TermsPage() {
                         />
                         <div className="pt-12 flex items-center"> 
                             <div className="mr-4">
-                                <TermsCheckbox
-                                    acceptTerms={acceptTerms}
-                                    setAcceptTerms={handleAcceptTerms}
+                                <CustomCheckbox
+                                    checked={acceptTerms}
+                                    setChecked={handleAcceptTerms}
                                     labelText="Aceito que a Cosmos, a empresa parceira e seus colaboradores tenham acesso às minhas respostas"
                                 />
                             </div>

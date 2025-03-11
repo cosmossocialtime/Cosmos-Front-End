@@ -7,8 +7,8 @@ import { api } from '../../../services/api'
 import { LocationInput } from './LocationInput'
 import { PasswordInput } from './PasswordInput'
 import { toast } from 'react-toastify'
-import { Input } from '../../Input'
-import { Button } from '../../Button'
+import { Input } from '../../input'
+import { Button } from '../../button'
 import { useForm } from 'react-hook-form'
 
 interface FormUserDataProps {

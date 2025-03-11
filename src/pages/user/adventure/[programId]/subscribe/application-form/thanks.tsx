@@ -1,4 +1,4 @@
-import { Button } from '../../../../../../components/Button'
+import { Button } from '../../../../../../components/button'
 import { Loading } from '../../../../../../components/Loading'
 import Link from 'next/link'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'

@@ -1,5 +1,5 @@
-import { Button } from '../../../../../../components/Button'
-import { Input } from '../../../../../../components/Input'
+import { Button } from '../../../../../../components/button'
+import { Input } from '../../../../../../components/input'
 import { Header } from '../../../../../../components/adventure/Header'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '../../../../../../services/api'

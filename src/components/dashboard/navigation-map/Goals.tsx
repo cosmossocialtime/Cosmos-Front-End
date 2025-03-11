@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { useNavigationMap } from '../../../context/NavigationMapProvider'
-import { Button } from '../../Button'
+import { Button } from '../../button'
 import GoalPopUp from './GoalPopUp'
 import GoalCard from './GoalCard'
 import { useState } from 'react'

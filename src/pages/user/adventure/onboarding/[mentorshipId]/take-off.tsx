@@ -1,4 +1,4 @@
-import { Button } from '../../../../../components/Button'
+import { Button } from '../../../../../components/button'
 import Link from 'next/link'
 import { useOnboarding } from '../../../../../hooks/useOnboarding'
 

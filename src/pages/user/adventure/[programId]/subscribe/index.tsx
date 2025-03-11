@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Header } from '../../../../../components/adventure/Header'
 import { Loading } from '../../../../../components/Loading'
 import dayjs from 'dayjs'
-import { Button } from '../../../../../components/Button'
+import { Button } from '../../../../../components/button'
 import { useSubscribe } from '../../../../../hooks/useSubscribe'
 
 export default function Adventure() {

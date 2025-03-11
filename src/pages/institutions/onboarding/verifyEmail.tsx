@@ -20,10 +20,8 @@ export default function VerifyEmail() {
  
   return (
     <div className={styles.container}>
-      {/* Logo */}
       <Image className={styles.logo} src={Logo} alt="Logo cosmos" height={24} quality={100} />
  
-      {/* Conteúdo Principal */}
       <div className={styles.mainContent}>
         <Image src={Mensagem} alt="Envelope" width={72} height={72} quality={100} />
         <h1 className={styles.title}>Verifique seu e-mail</h1>

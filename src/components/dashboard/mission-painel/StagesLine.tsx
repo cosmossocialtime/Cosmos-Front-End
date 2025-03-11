@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { MentorshipProps } from '../../../types/mentorship'
 import { Check } from 'phosphor-react'
 import { StepProps } from '../../../types/step'
-import { Button } from '../../Button'
+import { Button } from '../../button'
 import { stepsNames } from './stepsNames'
 
 interface StagesLineProps {

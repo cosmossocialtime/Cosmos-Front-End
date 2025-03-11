@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/Button/ButtonSubmit';
+import { Button } from '../../../components/button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
-import { aliasSchema, multiSelectSchema, nameSchema } from '../../../utils/validationSchemas';
+import { aliasSchema, createMultiSelectSchema, nameSchema } from '../../../utils/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -13,7 +13,7 @@ import styles from '../../../components/instituition/verifyEmail/verifyEmail.mod
 import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBox';
 import { MultiValue } from 'react-select';
 import { Option } from "../../../types/MultiselectCombobox";
-import InputField from '../../../components/Input/InputField';
+import InputField from '../../../components/input/InputField';
 import { getFormData, saveFormData } from '../../../utils/localStroge';
 
 
@@ -50,7 +50,7 @@ const steps = [
 
 const schema = z.object({
     name: nameSchema,
-    // multiSelect: multiSelectSchema
+    cause: createMultiSelectSchema(1, 3),
 });
 
 type formProps = z.infer<typeof schema>;
@@ -59,14 +59,17 @@ export default function AboutOrganization() {
     const [isLoading, setIsLoading] = useState(false);
     const [currentStep] = useState(2);
     const [isDisabled, setIsDisabled] = useState(true);
- 
-    //const [selectedOptions] = useState<MultiValue<Option>>([]);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>([] as MultiValue<Option>);
 
     const {
         register,
         handleSubmit,
         setValue,
         watch,
+        setError,
+        clearErrors,
+        trigger,
         formState: { errors, isValid }
     } = useForm<formProps>({
         resolver: zodResolver(schema),
@@ -74,14 +77,44 @@ export default function AboutOrganization() {
     });
 
 
-     useEffect(() => {
-        const savedData = getFormData("aboutOrganization");
-       
-        setIsDisabled(!isValid);
-        if (savedData?.nameOrganization) {
-            setValue("name", savedData.nameOrganization);
+    const handleChange = (selected: MultiValue<Option>) => {
+        setSelectedOptions(selected);
+        setValue("cause", { selectedOptions: [...selected] }, { shouldValidate: true });
+
+        if (selected.length === 0) {
+            setError("cause", {
+                type: "manual",
+                message: "Você precisa selecionar pelo menos 1 opção."
+            });
+        } else {
+            console.log("Erro foi setado!", errors.cause);
+            clearErrors("cause");
         }
-    }, [setValue, isValid]);
+
+        trigger("cause");
+    };
+
+    //  useEffect(() => {
+    //     const savedData = getFormData("aboutOrganization");
+
+    //     setIsDisabled(!isValid);
+    //     if (savedData?.nameOrganization) {
+    //         setValue("name", savedData.nameOrganization);
+    //     }
+    // }, [setValue, isValid]);
+    useEffect(() => {
+        const nomePreenchido = watch("name");
+        setIsDisabled(!(nomePreenchido && nomePreenchido.length >= 2 && selectedOptions.length >= 1));
+    }, [watch("name"), selectedOptions]);
+
+    // useEffect(() => {
+    //     const nomePreenchido = watch("name");
+    //     if (nomePreenchido && nomePreenchido.length >= 2 && selectedOptions.length === 3) {
+    //         setIsDisabled(false);
+    //     } else {
+    //         setIsDisabled(true);
+    //     }
+    // }, [watch("name"), selectedOptions]);
     // // Atualiza o estado do botão sempre que os inputs mudam
     // useEffect(() => {
     //     setIsDisabled(!isValid);
@@ -102,11 +135,12 @@ export default function AboutOrganization() {
     // }
     //[selectedOptions, watch]);  
 
+
     async function handleForm(data: formProps) {
         setIsLoading(true);
         console.log(data);
         try {
-            saveFormData("aboutOrganization", { nameOrganization: data.name});
+            saveFormData("aboutOrganization", { nameOrganization: data.name });
             //toast.success('Criado com sucesso!');
             Router.push({
                 pathname: '/institutions/onboarding/aboutYou',
@@ -117,34 +151,35 @@ export default function AboutOrganization() {
             setIsLoading(false);
         }
     }
-
+    console.log(errors);
     return (
 
         <div className={styles.container}>
-            {/* Logo */}
-            <Image className={styles.logo} src={Logo} alt="Logo cosmos" height={24} quality={100} />
-
+            <Image className={styles.logo} src={Logo} alt="Logo cosmos" width={110} height={24} quality={100} priority={true}/>
             <main className="flex flex-col items-center">
-                {/* Barra de Progresso - 554px */}
                 <div className="w-[607px] mb-4">
                     <ProgressBar steps={steps} currentStep={currentStep} />
                 </div>
 
-                {/* Formulário - 384px */}
                 <div className="w-[384px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
-                         {/* Nome */}
-                         <InputField
+
+                        <InputField
                             label="Nome da organização"
                             name="name"
                             placeholder="Ex: Amigos da Cosmos"
                             register={register}
                             error={errors.name?.message}
                         />
-                        
-                        {/* <MultiSelectComboBox options={options} maxSelections={3} label="Causa(s) em que atua (até 3)" /> */}
 
-                       
+                        <MultiSelectComboBox options={options}
+                            maxSelections={3}
+                            onChange={handleChange}
+                            label="Causa(s) em que atua (até 3)"
+                            error={errors.cause?.message}
+                            //{errors.cause && <p className="text-red-500 text-sm mt-1">{errors.cause.message}</p>}
+                        />
+
                         <Button
                             text={isLoading ? "Carregando..." : "Finalizar"}
                             disabled={isDisabled || isLoading}

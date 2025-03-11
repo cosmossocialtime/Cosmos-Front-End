@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '../../../../../components/Button'
+import { Button } from '../../../../../components/button'
 import { Loading } from '../../../../../components/Loading'
 import { useOnboarding } from '../../../../../hooks/useOnboarding'
 

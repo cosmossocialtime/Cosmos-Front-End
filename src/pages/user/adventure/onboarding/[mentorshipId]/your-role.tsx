@@ -1,4 +1,4 @@
-import { Button } from '../../../../../components/Button'
+import { Button } from '../../../../../components/button'
 import LogoCosmos from '../../../../../../public/images/logoCosmosBranco.svg'
 import Image from 'next/image'
 import Link from 'next/link'

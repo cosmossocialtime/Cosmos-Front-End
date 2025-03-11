@@ -56,23 +56,82 @@ export const registerSchema = z
   });
 
 // 🔹 Validação para Multiselect
-export const multiSelectSchema = z.object({
-  selectedOptions: z
-    .array(
-      z.object({
-        value: z.string(),
-        label: z.string(),
-      })
-    )
-    .min(1, "Você precisa selecionar pelo menos 1 opção.")
-    .max(3, "Você só pode selecionar até 3 opções."),
-});
+  export const createMultiSelectSchema = (min: number = 0, max: number | null = null) =>
+    z.object({
+      selectedOptions: z
+        .array(
+          z.object({
+            value: z.string(),
+            label: z.string(),
+          })
+        )
+        .min(min, `Você precisa selecionar pelo menos ${min} opção(ões).`)
+        .refine((options) => max === null || options.length <= max, {
+          message: `Você só pode selecionar até ${max} opção(ões).`,
+        }),
+    })
 
-
+// 🔹 Validação para telefone 
 export const phoneSchema = z
   .string()
-  //.regex(/^\+\d{2} \(\d{2}\) \d{5}-\d{4}$/, "Formato inválido. Use +12 (12) 12121-2121") // 🔹 Valida a máscara
-  .transform((value) => value.replace(/\D/g, "")) // 🔹 Remove tudo que não for número
+  .transform((value) => value.replace(/\D/g, "")) 
   .refine((value) => value.length === 13, {
     message: "O número deve ter exatamente 13 dígitos numéricos.",
+  });
+
+  // 🔹 Validação para CNPJ (Formato XX.XXX.XXX/XXXX-XX)
+export const cnpjSchema = z
+.string()
+.optional()
+.refine((cnpj) => {
+  if (!cnpj) return true; // Se estiver vazio, é opcional
+  return /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj);
+}, {
+  message: "Formato de CNPJ inválido. Use XX.XXX.XXX/XXXX-XX",
+});
+
+// 🔹 Validação para Receita Anual (Número positivo)
+export const receitaSchema = z
+  .string()
+  .optional()
+  .refine((value) => !value || !isNaN(Number(value)) && Number(value) >= 0, {
+    message: "A receita deve ser um número positivo.",
+  });
+
+  // 🔹 Validação para Data de Fundação (Não pode ser no futuro)
+export const dataFundacaoSchema = z
+.string()
+.optional()
+.refine((data) => {
+  if (!data) return true;
+  const inputDate = new Date(data);
+  const today = new Date();
+  console.log(inputDate);
+  console.log(today);
+  return inputDate <= today;
+}, {
+  message: "A data de fundação não pode estar no futuro.",
+});
+
+// 🔹 Validação para Estado e Cidade (Devem ser preenchidos se organização for do Brasil)
+export const estadoSchema = z.string().optional();
+export const cidadeSchema = z.string().optional();
+ 
+// 🔹 Validação para Número de Funcionários e Número de Beneficiários
+export const numeroSchema = z
+  .string()
+  .optional()
+  .refine((value) => !value || (!isNaN(Number(value)) && Number(value) >= 0), {
+    message: "O valor deve ser um número positivo.",
+  });
+ 
+// 🔹 Validação para Upload de Arquivo (Apenas PDF, DOC, etc.)
+export const fileSchema = z
+  .any()
+  .refine((file) => {
+    if (!file) return true; // Se o arquivo não for obrigatório, retorna true
+    const validTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "image/jpeg"];
+    return file instanceof File && validTypes.includes(file.type);
+  }, {
+    message: "Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.",
   });

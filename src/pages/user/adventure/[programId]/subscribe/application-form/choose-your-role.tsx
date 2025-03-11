@@ -1,4 +1,4 @@
-import { Button } from '../../../../../../components/Button'
+import { Button } from '../../../../../../components/button'
 import { Header } from '../../../../../../components/adventure/Header'
 import Commander from '../../../../../../../public/images/mission-role/cards/commander.png'
 import Specialist from '../../../../../../../public/images/mission-role/cards/specialist.png'

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/Button/ButtonSubmit';
+import { Button } from '../../../components/button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
 import { nameSchema, phoneSchema } from '../../../utils/validationSchemas';
 import { z } from 'zod';
@@ -10,9 +10,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import Router from 'next/router';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
-import InputField from '../../../components/Input/InputField';
+import InputField from '../../../components/input/InputField';
 import { getFormData, saveFormData } from '../../../utils/localStroge';
-import MaskedInputField from '../../../components/Input/MaskedInputField';
+import MaskedInputField from '../../../components/input/MaskedInputField';
 import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBox';
 
 // Opções disponíveis
@@ -72,19 +72,16 @@ export default function AboutYou() {
     async function handleForm(data: formProps) {
         setIsLoading(true);
         console.log(data);
-        try {
-            // 🔹 Pega os dados já salvos da organização
+        try { 
             const savedOrganization = getFormData("aboutOrganization") || {};
 
-            // 🔹 Adiciona os dados da organização dentro do `data`
             const fullData = {
                 ...data,
-                nomeOrganizacao: savedOrganization.nameOrganization || "", // Inclui o nome da organização
+                nomeOrganizacao: savedOrganization.nameOrganization || "", 
             };
 
             console.log("Dados completos a serem salvos:", fullData);
 
-            // 🔹 Salva o objeto combinado no localStorage
             saveFormData("aboutYou", fullData);
             console.log(data);
             toast.success('Cadastro concluído!');
@@ -98,17 +95,17 @@ export default function AboutYou() {
 
     return (
         <div className={styles.container}>
-            {/* Logo */}
+           
             <Image className={styles.logo} src={Logo} alt="Logo cosmos" height={24} quality={100} />
             <main className="flex flex-col items-center">
-                {/* Barra de Progresso */}
+                
                 <div className="w-[607px] mb-4">
                     <ProgressBar steps={steps} currentStep={currentStep} />
                 </div>
-                {/* Formulário */}
+              
                 <div className="w-[384px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
-                        {/* Nome */}
+                       
                         <InputField
                             label="Seu nome"
                             name="nome"
@@ -116,7 +113,7 @@ export default function AboutYou() {
                             register={register}
                             error={errors.nome?.message}
                         />
-                        {/* Celular */}
+                        
                         <MaskedInputField
                             label="Celular"
                             name="celular"
@@ -124,12 +121,10 @@ export default function AboutYou() {
                             register={register}
                             setValue={setValue}
                             error={errors.celular?.message}
-                            mask="+99 (99) 99999-9999"
-
                         />
 
                         <MultiSelectComboBox options={options} label="Área de Trabalho" />
-                        {/* Cargo */}
+                        
                         <InputField
                             label="Seu cargo na organização"
                             name="cargo"
@@ -137,7 +132,7 @@ export default function AboutYou() {
                             register={register}
                             error={errors.cargo?.message}
                         />
-                        {/* Botão de Finalizar */}
+                        
                         <Button
                             text={isLoading ? "Carregando..." : "Finalizar"}
                             disabled={isDisabled || isLoading}

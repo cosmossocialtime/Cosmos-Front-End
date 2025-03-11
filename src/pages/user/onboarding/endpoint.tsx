@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import { Button } from '../../../components/Button'
+import { Button } from '../../../components/button'
 import { api } from '../../../services/api'
 import Router from 'next/router'
 

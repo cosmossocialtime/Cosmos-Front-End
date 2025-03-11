@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/Button/ButtonSubmit';
+import { Button } from '../../../components/button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
 import { emailSchema, nameSchema, phoneSchema } from '../../../utils/validationSchemas';
 import { z } from 'zod';
@@ -10,11 +10,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import Router from 'next/router';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
-import InputField from '../../../components/Input/InputField';
+import InputField from '../../../components/input/InputField';
 import { getFormData, saveFormData } from '../../../utils/localStroge';
-import MaskedInputField from '../../../components/Input/MaskedInputField';
-import { InputEmail } from '../../../components/Input/InputEmail';
-import { TermsCheckbox } from '../../../components/Button/TernsCheckbox';
+import MaskedInputField from '../../../components/input/MaskedInputField';
+import { InputEmail } from '../../../components/input/InputEmail';
+import { CustomCheckbox } from '../../../components/button/CustomCheckbox';
 
 const steps = [
     { id: 1, label: 'Termos' },
@@ -87,7 +87,7 @@ export default function FocalPoint() {
 
             saveFormData("aboutYou", fullData);
             toast.success('Cadastro concluído!');
-            Router.push('/institutions/onboarding/verifyEmail');
+            Router.push('/institutions/onboardingProgram/aboutInstitution');
         } catch (error) {
             toast.error('Erro ao criar conta, tente novamente.');
         } finally {
@@ -109,10 +109,9 @@ export default function FocalPoint() {
                             O Ponto focal da instituição é a pessoa responsável por participar de todo o programa.
                         </p>
 
-                        {/* 🔹 Checkbox da tela atual */}
-                        <TermsCheckbox
-                            acceptTerms={acceptTerms}
-                            setAcceptTerms={setAcceptTerms}
+                        <CustomCheckbox
+                            checked={acceptTerms}
+                            setChecked={setAcceptTerms}
                             labelText="Usar meus dados cadastrados na plataforma"
                         />
 
@@ -138,7 +137,6 @@ export default function FocalPoint() {
                             register={register}
                             setValue={setValue}
                             error={errors.celular?.message}
-                            mask="+99 (99) 99999-9999"
                         />
                         <InputField
                             label="Cargo na organização"
@@ -148,7 +146,6 @@ export default function FocalPoint() {
                             error={errors.cargo?.message}
                         />
 
-                        {/* 🔹 Botão de Continuar */}
                         <Button
                             text={isLoading ? "Carregando..." : "Continuar"}
                             disabled={!isValid || !acceptTerms || !previousTermsAccepted || isLoading}

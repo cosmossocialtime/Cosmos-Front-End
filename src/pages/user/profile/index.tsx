@@ -7,10 +7,10 @@ import { UserProps } from '../../../types/user'
 import { Camera, Pencil } from 'phosphor-react'
 
 import Header from '../../../components/main-painel/Header'
-import UploadImage from '../../../components/Crop/UploadImage'
+import UploadImage from '../../../components/crop/UploadImage'
 import FormUserData from '../../../components/main-painel/profile/FormUserData'
-import SettingCropArea from '../../../components/Crop/SettingCropArea'
-import { DialogCrop } from '../../../components/Crop/DialogCrop'
+import SettingCropArea from '../../../components/crop/SettingCropArea'
+import { DialogCrop } from '../../../components/crop/DialogCrop'
 import { Loading } from '../../../components/Loading'
 
 export default function Perfil() {

@@ -2,25 +2,27 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import { Check } from 'phosphor-react';
 import { useCallback } from 'react';
 
-interface TermsCheckboxProps {
-    acceptTerms: boolean;
-    setAcceptTerms: (value: boolean) => void;
-    labelText: string; 
+interface CustomCheckboxProps {
+    checked: boolean;
+    setChecked: (value: boolean) => void;
+    labelText: string;
 }
 
-export const TermsCheckbox: React.FC<TermsCheckboxProps> = ({ acceptTerms, setAcceptTerms, labelText }) => {
+export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ checked, setChecked, labelText }) => {
     const handleCheckedChange = useCallback((checked: boolean) => {
-        setAcceptTerms(checked);
-    }, [setAcceptTerms]);
+        setChecked(checked);
+    }, [setChecked]);
 
     return (
         <div className="my-4 flex gap-2 items-end">
             <Checkbox.Root
-                className={`flex h-6 w-6 items-center justify-center rounded border-2 border-solid border-[#A2ABCC] bg-zinc-50 ${acceptTerms ? 'border-none bg-gradient-to-r from-blue-300 to-[#9D37F2]' : ''
+                className={`flex h-6 w-6 items-center justify-center rounded border-2 
+                    border-solid border-[#A2ABCC] bg-zinc-50 ${checked ? 
+                        'border-none bg-gradient-to-r from-blue-300 to-[#9D37F2]' : ''
                     }`}
                 id="checkbox"
                 required
-                checked={acceptTerms}
+                checked={checked}
                 onCheckedChange={handleCheckedChange}
                 aria-labelledby="checkbox-label"
             >
