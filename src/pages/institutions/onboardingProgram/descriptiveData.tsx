@@ -1,16 +1,16 @@
 import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import Router from 'next/router';
 import TextAreaField from '../../../components/Input/TextAreaField';
-import ProgressBar from '../../../components/main-painel/ProgressBar';
+import ProgressBar from '../../../components/menu/ProgressBar';
 import { Button } from '../../../components/Button/ButtonSubmit';
-
 import { useState, useEffect } from 'react';
 import { textAreaSchema } from '../../../utils/ValidationSchemas';
 import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { InputText } from '../../../components/Input/InputEmail copy';
 
 
 const steps = [
@@ -28,32 +28,41 @@ const schema = z.object({
     support: textAreaSchema,
 });
  
-
+type formProps = z.infer<typeof schema>
 const programName = "Cosmos Social";
 
 export default function DescriptiveData() {
     const [currentStep] = useState(4);
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
     const {
         register,
         trigger,
         handleSubmit,
         watch,
         formState: { errors, isValid }
-    } = useForm({
+    } = useForm<formProps>({
         resolver: zodResolver(schema),
-        mode: 'all', 
+        mode: 'onChange', 
     });
+    const [isLoading, setIsLoading] = useState(false)
+    const history = watch("history", "");
+    const impact = watch("impact", "");
+    const challenges = watch("challenges", "");
+    const support = watch("support", "");
+    console.log(history)
+ 
+    const disabled = !history || !impact || !challenges || !support || isLoading;
 
-    useEffect(() => {
-        console.log("isValid atualizado:", isValid);
-        console.log("Erros:", errors);
-        setIsButtonDisabled(!isValid);
-    }, [isValid, errors, watch()]);
+    // useEffect(() => {
+    //     console.log("isValid atualizado:", isValid);
+    //     console.log("Erros:", errors);
+    //     setIsButtonDisabled(!isValid);
+    // }, [isValid, errors, watch()]);
 
     function handleForm(data: any) {
+        setIsLoading(true);
         toast.success('Dados salvos com sucesso!');
-        Router.push('/institutions/onboarding/finalization');
+        Router.push('/institutions/onboardingProgram/finalization');
     }
 
     return (
@@ -65,45 +74,38 @@ export default function DescriptiveData() {
                 </div>
                 <div className="w-[890px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
-                        <TextAreaField
-                            label="Escreva brevemente a história da instituição"
-                            name="history"
+                        <InputText
+                            label="Escreva brevemente a história da instituição?"
+                            id="history"
                             placeholder="Digite aqui"
                             register={register}
-                            trigger={trigger}
-                          
-                            error={errors.history?.message?.toString()}
+                            error={errors.history?.message}
                         />
-                        <TextAreaField
+                        <InputText
                             label="Qual a atuação e o impacto da organização?"
-                            name="impact"
+                            id="impact"
                             placeholder="Digite aqui"
                             register={register}
-                            trigger={trigger}
-                         
-                            error={errors.impact?.message?.toString()}
+                            error={errors.impact?.message}
                         />
-                        <TextAreaField
+                        <InputText
                             label="Quais são as principais necessidades e desafios que a sua organização enfrenta no momento?"
-                            name="challenges"
+                            id="challenges"
                             placeholder="Digite aqui"
                             register={register}
-                            trigger={trigger}
-                           
-                            error={errors.challenges?.message?.toString()}
+                            error={errors.challenges?.message}
                         />
-                        <TextAreaField
+                        <InputText
                             label="Como você acredita que o programa [Nome do programa] poderá apoiar a sua organização?"
-                            name="support"
+                            id="support"
                             placeholder="Digite aqui"
                             register={register}
-                            trigger={trigger}
                             dynamicLabel={programName}
-                           
-                            error={errors.support?.message?.toString()}
+                            error={errors.support?.message}
+                            
                         />
                         <div className="px-4 w-[248px]">
-                            <Button text="Continuar" disabled={isButtonDisabled} type="submit" />
+                            <Button text="Continuar" disabled={disabled} type="submit" isLoading={true}/>
                         </div>
                     </form>
                 </div>

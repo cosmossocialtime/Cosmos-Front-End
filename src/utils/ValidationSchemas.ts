@@ -21,6 +21,24 @@ export const nameSchema = z
 // 🔹 Validação para Alias
 export const aliasSchema = z.string().nonempty("O campo acima é obrigatório.");
 
+// 🔹 Validação para TextArea
+export const textAreaSchema = z
+  .string()
+  .min(1, { message: "O campo é obrigatório" })
+  .min(100, { message: "O campo é obrigatório, limite mínimo de 100 caracteres" })
+  .max(300, { message: "O limite de caracteres já foi atingido" })
+  .transform((name) =>
+    name
+      .trim()
+      .split(" ")
+      .map((word) =>
+        word.length > 1
+          ? word[0].toLocaleUpperCase() + word.substring(1)
+          : word
+      )
+      .join(" ")
+  );
+
 // 🔹 Validação para E-mail
 export const emailSchema = z
   .string()
@@ -99,19 +117,20 @@ export const receitaSchema = z
   });
 
   // 🔹 Validação para Data de Fundação (Não pode ser no futuro)
-export const dataFundacaoSchema = z
-.string()
-.optional()
-.refine((data) => {
-  if (!data) return true;
-  const inputDate = new Date(data);
-  const today = new Date();
-  console.log(inputDate);
-  console.log(today);
-  return inputDate <= today;
-}, {
-  message: "A data de fundação não pode estar no futuro.",
-});
+  export const dataFundacaoSchema = z
+  .string()
+  .optional()
+  .refine((data) => {
+    if (!data) return true;
+    const inputDate = new Date(new Date(data).toLocaleString('pt-BR', { timeZone: 'UTC' }));
+    const today = new Date();
+    console.log(data);
+    console.log(inputDate);
+    console.log(today);
+    return inputDate <= today;
+  }, {
+    message: "A data de fundação não pode estar no futuro.",
+  });
 
 // 🔹 Validação para Estado e Cidade (Devem ser preenchidos se organização for do Brasil)
 export const estadoSchema = z.string().optional();
@@ -127,11 +146,10 @@ export const numeroSchema = z
  
 // 🔹 Validação para Upload de Arquivo (Apenas PDF, DOC, etc.)
 export const fileSchema = z
-  .any()
+  .instanceof(File)
   .refine((file) => {
-    if (!file) return true; // Se o arquivo não for obrigatório, retorna true
     const validTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "image/jpeg"];
-    return file instanceof File && validTypes.includes(file.type);
+    return validTypes.includes(file.type);
   }, {
     message: "Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.",
   });

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useEffect, useState } from 'react';
-import ProgressBar from '../../../components/main-painel/ProgressBar';
+import ProgressBar from '../../../components/menu/ProgressBar';
 import { Button } from '../../../components/Button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
 import { nameSchema, phoneSchema } from '../../../utils/ValidationSchemas';

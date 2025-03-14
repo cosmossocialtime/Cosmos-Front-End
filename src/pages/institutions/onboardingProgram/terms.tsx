@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Logo from '../../../assets/logotipoCosmos.svg';
-import ProgressBar from '../../../components/main-painel/ProgressBar';
+import ProgressBar from '../../../components/menu/ProgressBar';
 import { Button } from '../../../components/Button/ButtonSubmit';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
 import { CustomCheckbox } from '../../../components/Button/CustomCheckbox';
