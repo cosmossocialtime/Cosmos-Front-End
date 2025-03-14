@@ -13,6 +13,7 @@ interface SingleSelectComboBoxProps {
     onChange?: (selected: Option | null) => void;
     isDisabled?: boolean;
     value?: Option | null;
+    instanceId?: string;
 }
 
 const DropdownIndicator = (props: any) => {
@@ -69,7 +70,7 @@ const customStyles: StylesConfig<any, false> = {
     }),
 };
 
-const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({ options, label, onChange, isDisabled = false }) => {
+const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({ options, label, onChange, isDisabled = false, instanceId }) => {
     const [selectedOption, setSelectedOption] = useState<Option | null>(null);
 
     const handleChange = (selected: Option | null) => {
@@ -81,6 +82,7 @@ const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({ options, la
         <div className="w-full">
             {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
             <Select
+                instanceId={instanceId}
                 options={options}
                 value={selectedOption}
                 onChange={handleChange}
@@ -88,7 +90,7 @@ const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({ options, la
                 isDisabled={isDisabled}
                 styles={customStyles}
                 className="mt-1"
-                components={{ClearIndicator,  DropdownIndicator }}
+                components={{ ClearIndicator, DropdownIndicator }}
             />
         </div>
     );

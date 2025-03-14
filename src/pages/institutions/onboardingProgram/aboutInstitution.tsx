@@ -2,18 +2,18 @@ import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/button/ButtonSubmit';
+import { Button } from '../../../components/Button/ButtonSubmit';
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import Router from 'next/router';
-import InputField from '../../../components/input/InputField';
-import MaskedInputField from '../../../components/input/MaskedInputField';
-import { nameSchema, cnpjSchema, receitaSchema, dataFundacaoSchema, estadoSchema, cidadeSchema, numeroSchema, fileSchema, createMultiSelectSchema } from '../../../utils/validationSchemas';
+import InputField from '../../../components/Input/InputField';
+import MaskedInputField from '../../../components/Input/MaskedInputField';
+import { nameSchema, cnpjSchema, receitaSchema, dataFundacaoSchema, estadoSchema, cidadeSchema, numeroSchema, fileSchema, createMultiSelectSchema, phoneSchema, emailSchema } from '../../../utils/ValidationSchemas';
 import { getFormData, saveFormData } from '../../../utils/localStroge';
 import { z } from 'zod';
-import MaskedDateField from '../../../components/input/MaskedDateField';
-import { CustomCheckbox } from '../../../components/button/CustomCheckbox';
+import MaskedDateField from '../../../components/Input/MaskedDateField';
+import { CustomCheckbox } from '../../../components/Button/CustomCheckbox';
 import SingleSelectComboBox from '../../../components/combobox/SingleSelectComboBox';
 import FileUpload from '../../../components/file/FileUpload';
 import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBox';
@@ -54,7 +54,7 @@ const steps = [
 
 const schema = z.object({
     nomeInstituicao: nameSchema,
-    cause: createMultiSelectSchema(0,null),
+    cause: createMultiSelectSchema(0, null),
     cnpj: cnpjSchema,
     receitaAnual: receitaSchema,
     dataFundacao: dataFundacaoSchema,
@@ -65,6 +65,10 @@ const schema = z.object({
     estatuto: fileSchema,
     semCnpj: z.boolean().optional(),
     foraDoBrasil: z.boolean().optional(),
+    nomeResponsavel: nameSchema.optional(),
+    emailResponsavel: emailSchema.optional(),
+    celularResponsavel: phoneSchema.optional(),
+    cargoResponsavel: nameSchema.optional(),
 });
 
 interface Option {
@@ -81,10 +85,10 @@ export default function AboutInstitution() {
     const [selectedEstado, setSelectedEstado] = useState<Option | null>(null);
     const [selectedCidade, setSelectedCidade] = useState<Option | null>(null);
     const [cidades, setCidades] = useState<Option[]>([]);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [selectedFile] = useState<File | null>(null);
     const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>([] as MultiValue<Option>);
     const [currentStep] = useState(3);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const {
         register,
         handleSubmit,
@@ -139,10 +143,11 @@ export default function AboutInstitution() {
     const handleSemCnpjChange = (value: boolean) => {
         setSemCnpj(value);
         setValue("semCnpj", value, { shouldValidate: true });
-
+        
         if (value) {
             setValue("cnpj", "");
         }
+        
     };
 
     const handleForaDoBrasilChange = (value: boolean) => {
@@ -154,27 +159,119 @@ export default function AboutInstitution() {
             setSelectedCidade(null);
             setValue("estado", "Selecione");
             setValue("cidade", "Selecione");
-            setCidades([]); 
+            setCidades([]);
         }
     };
 
     const handleChange = (selected: MultiValue<Option>) => {
         setSelectedOptions(selected);
         setValue("cause", { selectedOptions: [...selected] }, { shouldValidate: true });
-     
-        // Se o usuário remover tudo, mostra erro de mínimo do schema ANTES do submit
+
         if (selected.length === 0) {
             setError("cause", {
                 type: "manual",
                 message: "Você precisa selecionar pelo menos 1 opção."
             });
         } else {
-            // Remove o erro se o usuário corrigir
             clearErrors("cause");
         }
     };
+    const [previousTermsAccepted, setPreviousTermsAccepted] = useState(false);
+    const [acceptTerms, setAcceptTerms] = useState(false);
 
+    useEffect(() => {
+        const nomeInstituicao = watch("nomeInstituicao")?.trim() !== ""; // Nome preenchido
+        const cause = selectedOptions.length > 0; // Pelo menos uma causa
+        const cnpjValido = watch("cnpj")?.trim() !== "" || semCnpj; // CNPJ preenchido ou checkbox marcada
+        //const cnpjValido = !!watch("cnpj")?.trim();
+        const sesemCnpj = semCnpj;
+        const cnpjValor = watch("cnpj"); // Capturando o valor do CNPJ para depuração
+        const receitaValida = watch("receitaAnual")?.trim() !== ""; // Receita preenchida
+        const dataFundacaoValida = watch("dataFundacao")?.trim() !== ""; // Data de Fundação preenchida
+        const estadoValido = selectedEstado !== null || foraDoBrasil; // Estado selecionado ou checkbox marcada
+        const cidadeValida = selectedCidade !== null || foraDoBrasil; // Cidade selecionada ou checkbox marcada
+        const nFuncionariosValido = watch("nFuncionarios")?.trim() !== ""; // Número de funcionários preenchido
+        const nBeneficiariosValido = watch("nBeneficiarios")?.trim() !== ""; // Número de beneficiários preenchido
+        const estatutoValido = selectedFile !== null || semEstatuto; // Estatuto enviado ou checkbox marcada
 
+        console.log("📢 sem CNPJ:", semCnpj); 
+        console.log("📢 Valor do CNPJ:", cnpjValor); // Depuração
+        console.log("📢 CNPJ válido?:", cnpjValido); // Depuração
+        console.log("📢 Checkbox 'Não possui CNPJ' marcada?:", semCnpj); // Depuração
+
+        const todosCamposPreenchidos =
+            nomeInstituicao &&
+            cause &&
+            cnpjValido &&
+            receitaValida &&
+            dataFundacaoValida &&
+            estadoValido &&
+            cidadeValida &&
+            nFuncionariosValido &&
+            nBeneficiariosValido &&
+            estatutoValido;
+            console.log("📢 Checkbox 'Não possui CNPJ' marcada?:", cnpjValido)
+            // 🔹 Recupera os dados da tela "Ponto Focal"
+        const focalPointData = getFormData("focalPoint");
+        if (focalPointData) {
+            console.log("📢 Dados do FocalPoint recuperados:", focalPointData);
+
+            setValue("nomeResponsavel", focalPointData.nome || "");
+            setValue("emailResponsavel", focalPointData.email || "");
+            setValue("celularResponsavel", focalPointData.celular || "");
+            setValue("cargoResponsavel", focalPointData.cargo || "");
+
+            // ✅ Recuperando os termos aceitos
+            if (focalPointData.termsAccepted !== undefined) {
+                console.log("📢 Termos aceitos na tela anterior:", focalPointData.termsAccepted);
+                setPreviousTermsAccepted(focalPointData.termsAccepted);
+            }
+            if (focalPointData.focalPointAccepted !== undefined) {
+                console.log("📢 Termos aceitos nesta tela:", focalPointData.focalPointAccepted);
+                setAcceptTerms(focalPointData.focalPointAccepted);
+            }
+        } else {
+            console.log("⚠️ Nenhum dado encontrado no localStorage para FocalPoint");
+        }
+
+        // 🔹 Recupera os dados da tela "Sobre a Instituição"
+        const aboutInstitutionData = getFormData("aboutInstitution");
+        if (aboutInstitutionData) {
+            console.log("📢 Dados da AboutInstitution recuperados:", aboutInstitutionData);
+
+            setValue("nomeInstituicao", aboutInstitutionData.nomeInstituicao || "");
+            setValue("cause", aboutInstitutionData.cause || []);
+            setValue("cnpj", aboutInstitutionData.cnpj || "");
+            setValue("receitaAnual", aboutInstitutionData.receitaAnual || "");
+            setValue("dataFundacao", aboutInstitutionData.dataFundacao || "");
+            setValue("nFuncionarios", aboutInstitutionData.nFuncionarios || "");
+            setValue("nBeneficiarios", aboutInstitutionData.nBeneficiarios || "");
+
+            if (aboutInstitutionData.estado) {
+                setSelectedEstado(estados.find(e => e.value === aboutInstitutionData.estado) || null);
+            }
+            if (aboutInstitutionData.cidade) {
+                setSelectedCidade(cidades.find(c => c.value === aboutInstitutionData.cidade) || null);
+            }
+        } else {
+            console.log("⚠️ Nenhum dado encontrado no localStorage para AboutInstitution.");
+        }
+        setIsButtonDisabled(!todosCamposPreenchidos);
+    }, [
+        watch("nomeInstituicao"),
+        selectedOptions,
+        watch("cnpj"),
+        semCnpj,
+        watch("receitaAnual"),
+        watch("dataFundacao"),
+        selectedEstado,
+        selectedCidade,
+        foraDoBrasil,
+        watch("nFuncionarios"),
+        watch("nBeneficiarios"),
+        selectedFile,
+        semEstatuto,
+    ]);
 
     async function handleForm(data: formProps) {
         setIsLoading(true);
@@ -230,13 +327,15 @@ export default function AboutInstitution() {
                 <div className="w-[450px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
                         <InputField
-                            label="Nome da Instituição"
-                            name="nomeInstituicao" register={register}
+                            label="Nome da organização"
+                            name="name"
+                            placeholder="Ex: Amigos da Cosmos"
+                            register={register}
                             error={errors.nomeInstituicao?.message}
                         />
 
                         <MultiSelectComboBox options={options} maxSelections={3} onChange={handleChange} label="Causa(s) em que atua (até 3)" />
-                        
+
                         <div className="flex gap-4">
                             {/* CNPJ */}
                             <MaskedInputField
@@ -275,18 +374,20 @@ export default function AboutInstitution() {
 
                         <div className="flex gap-4">
                             <SingleSelectComboBox
+                                instanceId="estado-instance"
                                 options={estados}
                                 label="Estado"
                                 onChange={handleEstadoChange}
                                 value={selectedEstado}
-                                isDisabled={foraDoBrasil} 
+                                isDisabled={foraDoBrasil}
                             />
                             <SingleSelectComboBox
+                                instanceId="cidade-instance"
                                 options={cidades}
                                 label="Cidade"
                                 onChange={handleCidadeChange}
-                                value={selectedCidade} 
-                                isDisabled={!selectedEstado || foraDoBrasil} 
+                                value={selectedCidade}
+                                isDisabled={!selectedEstado || foraDoBrasil}
                             />
                         </div>
 
@@ -315,9 +416,12 @@ export default function AboutInstitution() {
                         </div>
                         <FileUpload
                             label="Estatuto ou Contrato Social"
-                            onFileChange={setSelectedFile}
-                            disabled={semEstatuto}
-                            error={errors.estatuto ? String(errors.estatuto.message) : undefined}
+                            onFileChange={(file) => {
+                                if (file) {
+                                    setValue("estatuto", file, { shouldValidate: true });
+                                }
+                            }}
+                            error={errors.estatuto}
                         />
                         <div className="flex items-center mt-[-25px]">
                             <CustomCheckbox
@@ -328,7 +432,7 @@ export default function AboutInstitution() {
                         </div>
                         <Button
                             text="Continuar"
-                            disabled={!isValid}
+                            disabled={isButtonDisabled}
                             type="submit" />
                     </form>
                 </div>
@@ -336,3 +440,5 @@ export default function AboutInstitution() {
         </div>
     );
 }
+
+

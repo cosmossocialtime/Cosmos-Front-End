@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/button/ButtonSubmit';
+import { Button } from '../../../components/Button/ButtonSubmit';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
-import { CustomCheckbox } from '../../../components/button/CustomCheckbox';
+import { CustomCheckbox } from '../../../components/Button/CustomCheckbox';
 import { saveFormData } from '../../../utils/localStroge';
-import { TermsText } from '../../../components/titlesAndLinks/TermsText';
+import { TermsText } from '../../../components/TitlesAndLinks/TermsText';
 
 const steps = [
     { id: 1, label: 'Termos' },

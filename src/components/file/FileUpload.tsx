@@ -11,29 +11,16 @@ interface FileUploadProps {
 
 const FileUpload: React.FC<FileUploadProps> = ({ label, onFileChange, disabled = false, error }) => {
     const [file, setFile] = useState<File | null>(null);
-    const [localError, setLocalError] = useState<string | null>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0] || null;
-        const validTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "image/jpeg"];
 
-        if (selectedFile) {
-            if (!validTypes.includes(selectedFile.type)) {
-                setLocalError("Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.");
-                setFile(null);
-                onFileChange(null);
-                return;
-            }
-
-            setLocalError(null); // Limpa a mensagem de erro se for um arquivo válido
-            setFile(selectedFile);
-            onFileChange(selectedFile);
-        }
+        setFile(selectedFile);
+        onFileChange(selectedFile);
     };
 
     const handleRemoveFile = () => {
         setFile(null);
-        setLocalError(null);
         onFileChange(null);
     };
 
@@ -65,7 +52,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ label, onFileChange, disabled =
                     </div>
                 )}
             </div>
-            {localError && <p className="text-red-500 text-sm mt-1">{localError}</p>}
             {error && <p className="text-red-500 text-sm mt-1">{typeof error === "string" ? error : error.message}</p>}
         </div>
     );

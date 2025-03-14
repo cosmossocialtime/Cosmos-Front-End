@@ -2,19 +2,19 @@ import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/button/ButtonSubmit';
+import { Button } from '../../../components/Button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
-import { emailSchema, nameSchema, phoneSchema } from '../../../utils/validationSchemas';
+import { emailSchema, nameSchema, phoneSchema } from '../../../utils/ValidationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import Router from 'next/router';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
-import InputField from '../../../components/input/InputField';
+import InputField from '../../../components/Input/InputField';
 import { getFormData, saveFormData } from '../../../utils/localStroge';
-import MaskedInputField from '../../../components/input/MaskedInputField';
-import { InputEmail } from '../../../components/input/InputEmail';
-import { CustomCheckbox } from '../../../components/button/CustomCheckbox';
+import MaskedInputField from '../../../components/Input/MaskedInputField';
+import { InputEmail } from '../../../components/Input/InputEmail';
+import { CustomCheckbox } from '../../../components/Button/CustomCheckbox';
 
 const steps = [
     { id: 1, label: 'Termos' },

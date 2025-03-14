@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Logo from '../../../assets/logotipoCosmos.svg';
 import { useEffect, useState } from 'react';
 import ProgressBar from '../../../components/main-painel/ProgressBar';
-import { Button } from '../../../components/button/ButtonSubmit';
+import { Button } from '../../../components/Button/ButtonSubmit';
 import { useForm } from 'react-hook-form';
-import { aliasSchema, createMultiSelectSchema, nameSchema } from '../../../utils/validationSchemas';
+import { aliasSchema, createMultiSelectSchema, nameSchema } from '../../../utils/ValidationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -13,7 +13,7 @@ import styles from '../../../components/instituition/verifyEmail/verifyEmail.mod
 import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBox';
 import { MultiValue } from 'react-select';
 import { Option } from "../../../types/MultiselectCombobox";
-import InputField from '../../../components/input/InputField';
+import InputField from '../../../components/Input/InputField';
 import { getFormData, saveFormData } from '../../../utils/localStroge';
 
 
