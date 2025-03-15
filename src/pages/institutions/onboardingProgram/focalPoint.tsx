@@ -15,6 +15,7 @@ import { getFormData, saveFormData } from '../../../utils/localStroge';
 import MaskedInputField from '../../../components/Input/MaskedInputField';
 import { InputEmail } from '../../../components/Input/InputEmail';
 import { CustomCheckbox } from '../../../components/Button/CustomCheckbox';
+import DynamicHeader from '../../../components/main-painel/DynamicHeader';
 
 const steps = [
     { id: 1, label: 'Termos' },
@@ -37,7 +38,7 @@ export default function FocalPoint() {
     const [acceptTerms, setAcceptTerms] = useState(false); // Checkbox da tela atual
     const [previousTermsAccepted, setPreviousTermsAccepted] = useState(false); // Checkbox da tela anterior
     const [isLoading, setIsLoading] = useState(false);
-    const [currentStep] = useState(2);
+    const [currentStep,setCurrentStep] = useState(2);
 
     const {
         register,
@@ -96,11 +97,11 @@ export default function FocalPoint() {
     }
 
     return (
-        <div className={styles.container}>
-            <Image className={styles.logo} src={Logo} alt="Logo cosmos" height={24} quality={100} />
-            <main className="flex flex-col items-center">
-                <div className="w-[980px] mb-4">
-                    <ProgressBar steps={steps} currentStep={currentStep} />
+        <div className="w-full min-h-screen flex flex-col">
+            <DynamicHeader/> 
+            <main className="flex flex-col items-center w-full mt-[32px] px-4"> 
+                <div className="w-[1016px] mb-4">
+                    <ProgressBar steps={steps} currentStep={currentStep} onBack={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}/>
                 </div>
 
                 <div className="w-[450px] p-6">

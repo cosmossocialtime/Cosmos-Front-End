@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css';
 import { getFormData } from '../../../utils/localStroge';
 import SingleSelectComboBox from '../../../components/combobox/SingleSelectComboBox';
+import DynamicHeader from '../../../components/main-painel/DynamicHeader';
 
 const options = [
     { value: "busca_google", label: "Busca no Google" },
@@ -31,14 +32,14 @@ const steps = [
 ];
 
 const schema = z.object({
-    como_soube: z.string().nonempty("Este campo é obrigatório") 
+    como_soube: z.string().nonempty("Este campo é obrigatório")
 });
 
 type formProps = z.infer<typeof schema>;
 
 export default function finalization() {
     const [isLoading, setIsLoading] = useState(false);
-    const [currentStep] = useState(5);
+    const [currentStep, setCurrentStep] = useState(5);
     const [selectedOption, setSelectedOption] = useState<{ value: string; label: string } | null>(null);
 
     const {
@@ -53,7 +54,7 @@ export default function finalization() {
     useEffect(() => {
         const savedData = getFormData("finalization");
 
-        if ( savedData?.como_soube) {
+        if (savedData?.como_soube) {
             setSelectedOption(savedData.como_soube);
         }
     }, [setValue]);
@@ -76,7 +77,7 @@ export default function finalization() {
 
             // console.log("Dados completos a serem salvos:", fullData);
 
-           // saveFormData("finalization", fullData);
+            // saveFormData("finalization", fullData);
             console.log(data);
             toast.success('Cadastro concluído!');
             //Router.push('/institutions/onboarding/verifyEmail');
@@ -88,11 +89,11 @@ export default function finalization() {
     }
 
     return (
-        <div className={styles.container}>
-            <Image className={styles.logo} src={Logo} alt="Logo cosmos" height={24} quality={100} />
-            <main className="flex flex-col items-center">
-                <div className="w-[980px] mb-4">
-                    <ProgressBar steps={steps} currentStep={currentStep} />
+        <div className="w-full min-h-screen flex flex-col">
+            <DynamicHeader />
+            <main className="flex flex-col items-center w-full mt-[32px] px-4">
+                <div className="w-[1017px] mb-4">
+                    <ProgressBar steps={steps} currentStep={currentStep} onBack={() => setCurrentStep((prev) => Math.max(prev - 1, 1))} />
                 </div>
                 <div className="w-[450px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">

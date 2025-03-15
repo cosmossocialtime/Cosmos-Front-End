@@ -18,6 +18,7 @@ import SingleSelectComboBox from '../../../components/combobox/SingleSelectCombo
 import FileUpload from '../../../components/file/FileUpload';
 import MultiSelectComboBox from '../../../components/combobox/MultiSelectComboBox';
 import { MultiValue } from 'react-select';
+import DynamicHeader from '../../../components/main-painel/DynamicHeader';
 
 // Opções disponíveis
 const options = [
@@ -87,7 +88,7 @@ export default function AboutInstitution() {
     const [cidades, setCidades] = useState<Option[]>([]);
     const [selectedFile] = useState<File | null>(null);
     const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>([] as MultiValue<Option>);
-    const [currentStep] = useState(3);
+    const [currentStep, setCurrentStep] = useState(3);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const {
         register,
@@ -143,11 +144,11 @@ export default function AboutInstitution() {
     const handleSemCnpjChange = (value: boolean) => {
         setSemCnpj(value);
         setValue("semCnpj", value, { shouldValidate: true });
-        
+
         if (value) {
             setValue("cnpj", "");
         }
-        
+
     };
 
     const handleForaDoBrasilChange = (value: boolean) => {
@@ -194,7 +195,7 @@ export default function AboutInstitution() {
         const nBeneficiariosValido = watch("nBeneficiarios")?.trim() !== ""; // Número de beneficiários preenchido
         const estatutoValido = selectedFile !== null || semEstatuto; // Estatuto enviado ou checkbox marcada
 
-        console.log("📢 sem CNPJ:", semCnpj); 
+        console.log("📢 sem CNPJ:", semCnpj);
         console.log("📢 Valor do CNPJ:", cnpjValor); // Depuração
         console.log("📢 CNPJ válido?:", cnpjValido); // Depuração
         console.log("📢 Checkbox 'Não possui CNPJ' marcada?:", semCnpj); // Depuração
@@ -210,8 +211,8 @@ export default function AboutInstitution() {
             nFuncionariosValido &&
             nBeneficiariosValido &&
             estatutoValido;
-            console.log("📢 Checkbox 'Não possui CNPJ' marcada?:", cnpjValido)
-            // 🔹 Recupera os dados da tela "Ponto Focal"
+        console.log("📢 Checkbox 'Não possui CNPJ' marcada?:", cnpjValido)
+        // 🔹 Recupera os dados da tela "Ponto Focal"
         const focalPointData = getFormData("focalPoint");
         if (focalPointData) {
             console.log("📢 Dados do FocalPoint recuperados:", focalPointData);
@@ -318,11 +319,11 @@ export default function AboutInstitution() {
     // }
 
     return (
-        <div className="container">
-            <Image className="logo" src={Logo} alt="Logo cosmos" height={24} quality={100} />
-            <main className="flex flex-col items-center">
-                <div className="w-[980px] mb-4">
-                    <ProgressBar steps={steps} currentStep={currentStep} />
+        <div className="w-full min-h-screen flex flex-col">
+            <DynamicHeader />
+            <main className="flex flex-col items-center w-full mt-[32px] px-4">
+                <div className="w-[1018px] mb-4">
+                    <ProgressBar steps={steps} currentStep={currentStep} onBack={() => setCurrentStep((prev) => Math.max(prev - 1, 1))} />
                 </div>
                 <div className="w-[450px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">

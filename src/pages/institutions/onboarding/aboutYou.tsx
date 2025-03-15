@@ -45,7 +45,7 @@ type formProps = z.infer<typeof schema>;
 
 export default function AboutYou() {
     const [isLoading, setIsLoading] = useState(false);
-    const [currentStep] = useState(3);
+    const [currentStep,setCurrentStep] = useState(3);
     const [isDisabled, setIsDisabled] = useState(true);
 
     const {
@@ -100,7 +100,7 @@ export default function AboutYou() {
             <main className="flex flex-col items-center">
                 
                 <div className="w-[607px] mb-4">
-                    <ProgressBar steps={steps} currentStep={currentStep} />
+                    <ProgressBar steps={steps} currentStep={currentStep} onBack={() => setCurrentStep((prev) => Math.max(prev - 1, 1))} />
                 </div>
               
                 <div className="w-[384px] p-6">

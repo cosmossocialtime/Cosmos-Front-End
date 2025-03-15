@@ -11,6 +11,7 @@ import { textAreaSchema } from '../../../utils/ValidationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { InputText } from '../../../components/Input/InputEmail copy';
+import DynamicHeader from '../../../components/main-painel/DynamicHeader';
 
 
 const steps = [
@@ -27,12 +28,12 @@ const schema = z.object({
     challenges: textAreaSchema,
     support: textAreaSchema,
 });
- 
+
 type formProps = z.infer<typeof schema>
 const programName = "Cosmos Social";
 
 export default function DescriptiveData() {
-    const [currentStep] = useState(4);
+    const [currentStep, setCurrentStep] = useState(4);
 
     const {
         register,
@@ -42,7 +43,7 @@ export default function DescriptiveData() {
         formState: { errors, isValid }
     } = useForm<formProps>({
         resolver: zodResolver(schema),
-        mode: 'onChange', 
+        mode: 'onChange',
     });
     const [isLoading, setIsLoading] = useState(false)
     const history = watch("history", "");
@@ -50,7 +51,7 @@ export default function DescriptiveData() {
     const challenges = watch("challenges", "");
     const support = watch("support", "");
     console.log(history)
- 
+
     const disabled = !history || !impact || !challenges || !support || isLoading;
 
     // useEffect(() => {
@@ -66,11 +67,11 @@ export default function DescriptiveData() {
     }
 
     return (
-        <div className="container">
-            <Image className="logo" src={Logo} alt="Logo cosmos" height={24} quality={100} />
-            <main className="flex flex-col items-center">
-                <div className="w-[980px] mb-4">
-                    <ProgressBar steps={steps} currentStep={currentStep} />
+        <div className="w-full min-h-screen flex flex-col">
+            <DynamicHeader />
+            <main className="flex flex-col items-center w-full mt-[32px] px-4">
+                <div className="w-[1020px] mb-4">
+                    <ProgressBar steps={steps} currentStep={currentStep} onBack={() => setCurrentStep((prev) => Math.max(prev - 1, 1))} />
                 </div>
                 <div className="w-[890px] p-6">
                     <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
@@ -102,10 +103,10 @@ export default function DescriptiveData() {
                             register={register}
                             dynamicLabel={programName}
                             error={errors.support?.message}
-                            
+
                         />
                         <div className="px-4 w-[248px]">
-                            <Button text="Continuar" disabled={disabled} type="submit" isLoading={true}/>
+                            <Button text="Continuar" disabled={disabled} type="submit" isLoading={true} />
                         </div>
                     </form>
                 </div>

@@ -8,6 +8,7 @@ import styles from '../../../components/instituition/verifyEmail/verifyEmail.mod
 import { CustomCheckbox } from '../../../components/Button/CustomCheckbox';
 import { saveFormData } from '../../../utils/localStroge';
 import { TermsText } from '../../../components/TitlesAndLinks/TermsText';
+import DynamicHeader from '../../../components/main-painel/DynamicHeader';
 
 const steps = [
     { id: 1, label: 'Termos' },
@@ -39,9 +40,10 @@ export default function TermsPage() {
     };
 
     return (
-        <div className={styles.container}>
-            <Image className={styles.logo} src={Logo} alt="Logo cosmos" height={24} quality={100} />
-            <main className="flex flex-col items-start"> 
+        
+        <div className="w-full min-h-screen flex flex-col">
+            <DynamicHeader/> 
+            <main className="flex flex-col items-center w-full mt-[32px] px-4"> 
                 <div className="w-[980px] mb-4">
                     <ProgressBar steps={steps} currentStep={1} />
 
