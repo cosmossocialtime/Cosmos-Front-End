@@ -70,7 +70,7 @@ export default function DescriptiveData() {
         <div className="w-full min-h-screen flex flex-col">
             <DynamicHeader />
             <main className="flex flex-col items-center w-full mt-[32px] px-4">
-                <div className="w-[1020px] mb-4">
+                <div className="w-[1016px] mb-4">
                     <ProgressBar steps={steps} currentStep={currentStep} onBack={() => setCurrentStep((prev) => Math.max(prev - 1, 1))} />
                 </div>
                 <div className="w-[890px] p-6">
