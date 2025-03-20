@@ -33,12 +33,12 @@
 //   };
 
 //   const handleBlur = async () => {
-//     setHasInteracted(true); 
-//     await trigger(name); 
+//     setHasInteracted(true);
+//     await trigger(name);
 //   };
 
 //   const isMaxReached = charCount >= maxLength;
-//   const isMinNotReached = hasInteracted && charCount < minLength; 
+//   const isMinNotReached = hasInteracted && charCount < minLength;
 
 //   return (
 //     <div className="w-full border border-gray-300 rounded-lg p-4 hover:border-purple-500 focus-within:border-purple-500 transition-all duration-200">
@@ -50,7 +50,7 @@
 //           {...register(name, {
 //             onChange: (e) => setCharCount(e.target.value.length),
 //             onBlur: async () => {
-//               await trigger(name); 
+//               await trigger(name);
 //             }
 
 //           })}
@@ -76,23 +76,20 @@
 //   );
 // }
 
+import { useState } from 'react'
+import { FieldValues, UseFormRegister } from 'react-hook-form'
 
-
-import { useState } from "react";
-import { FieldValues, UseFormRegister } from "react-hook-form";
-
-interface TextAreaFieldProps  {
-  dynamicLabel?: string;
-  label: string;
-  name: string;
-  placeholder?: string;
-  register: UseFormRegister<any>;
-  value: string; 
-  error?: string;
-  minLength?: number;
-  maxLength?: number;
+interface TextAreaFieldProps {
+  dynamicLabel?: string
+  label: string
+  name: string
+  placeholder?: string
+  register: UseFormRegister<any>
+  value: string
+  error?: string
+  minLength?: number
+  maxLength?: number
 }
-
 
 export default function TextAreaField({
   label,
@@ -100,37 +97,40 @@ export default function TextAreaField({
   placeholder,
   register,
   error,
-  dynamicLabel = "",
+  dynamicLabel = '',
   minLength = 100,
   maxLength = 300,
   value,
-
 }: TextAreaFieldProps) {
-  
-  const [charCount, setCharCount] = useState(0); 
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [charCount, setCharCount] = useState(0)
+  const [hasInteracted, setHasInteracted] = useState(false)
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const valueLength = e.target.value.length;
-    setCharCount(valueLength);
-    setHasInteracted(true);
-  };  
+    const valueLength = e.target.value.length
+    setCharCount(valueLength)
+    setHasInteracted(true)
+  }
 
-  const isMaxReached = charCount >= maxLength;
-  const isMinNotReached = charCount > 0 && charCount < minLength; 
+  const isMaxReached = charCount >= maxLength
+  const isMinNotReached = charCount > 0 && charCount < minLength
 
   return (
-    <div className={`"w-full border border-gray-300 rounded-lg p-4 hover:border-purple-500 focus-within:border-purple-500 transition-all duration-200"
-            ${error ? "border-red-500" : "border-gray-300"}`}>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-      {label.replace("[Nome do programa]", dynamicLabel)}
+    <div
+      className={`"w-full duration-200" rounded-lg border border-gray-300 p-4 transition-all focus-within:border-purple-500 hover:border-purple-500
+            ${error ? 'border-red-500' : 'border-gray-300'}`}
+    >
+      <label
+        htmlFor={name}
+        className="mb-1 block text-sm font-medium text-gray-700"
+      >
+        {label.replace('[Nome do programa]', dynamicLabel)}
       </label>
       <div className="relative">
         <textarea
-        {...register(name)
-        //   {...register(name, {
-        //     required: "O campo senha é obrigatório",
-        // })
-
+          {
+            ...register(name)
+            //   {...register(name, {
+            //     required: "O campo senha é obrigatório",
+            // })
           }
           id={name}
           value={value}
@@ -139,16 +139,20 @@ export default function TextAreaField({
           maxLength={maxLength}
           onChange={handleChange}
           className={`w-full rounded-md border border-solid p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 
-                        ${error ? "border-red-500" : "border-gray-400"}`}
+                        ${error ? 'border-red-500' : 'border-gray-400'}`}
         />
-        <span className={`absolute bottom-4 right-3 text-xs ${isMaxReached ? "text-red-500" : "text-gray-500"}`}>
-           {charCount} caracteres (De {minLength} a {maxLength})
-         </span>
+        <span
+          className={`absolute bottom-4 right-3 text-xs ${
+            isMaxReached ? 'text-red-500' : 'text-gray-500'
+          }`}
+        >
+          {charCount} caracteres (De {minLength} a {maxLength})
+        </span>
       </div>
-      {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
-      
+      {error && <span className="mt-1 text-sm text-red-500">{error}</span>}
+
       {/* {isMinNotReached && <span className="text-red-500 text-sm mt-1">O campo é obrigatório, mínimo de {minLength} caracteres</span>}
       {isMaxReached && <span className="text-red-500 text-sm mt-1">O limite de caracteres já foi atingido</span>}  */}
     </div>
-  );
+  )
 }

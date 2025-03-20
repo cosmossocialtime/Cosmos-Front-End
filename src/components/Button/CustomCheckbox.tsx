@@ -1,43 +1,57 @@
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { Check } from 'phosphor-react';
-import { useCallback } from 'react';
+import * as Checkbox from '@radix-ui/react-checkbox'
+import { Check } from 'phosphor-react'
+import { useCallback } from 'react'
 
 interface CustomCheckboxProps {
-    checked: boolean;
-    setChecked: (value: boolean) => void;
-    labelText: string;
+  checked: boolean
+  setChecked: (value: boolean) => void
+  labelText: string
 }
 
-export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ checked, setChecked, labelText }) => {
-    const handleCheckedChange = useCallback((checked: boolean) => {
-        setChecked(checked);
-    }, [setChecked]);
+export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
+  checked,
+  setChecked,
+  labelText,
+}) => {
+  const handleCheckedChange = useCallback(
+    (checked: boolean) => {
+      setChecked(checked)
+    },
+    [setChecked],
+  )
 
-    return (
-        <div className="my-4 flex gap-2 items-end">
-            <Checkbox.Root
-                className={`flex h-6 w-6 items-center justify-center rounded border-2 
-                    border-solid border-[#A2ABCC] bg-zinc-50 ${checked ? 
-                        'border-none bg-gradient-to-r from-blue-300 to-[#9D37F2]' : ''
+  return (
+    <div className="my-4 flex items-end gap-2">
+      <Checkbox.Root
+        className={`flex h-6 w-6 items-center justify-center rounded border-2 
+                    border-solid border-[#A2ABCC] bg-zinc-50 ${
+                      checked
+                        ? 'border-none bg-gradient-to-r from-blue-300 to-[#9D37F2]'
+                        : ''
                     }`}
-                id="checkbox"
-                required
-                checked={checked}
-                onCheckedChange={handleCheckedChange}
-                aria-labelledby="checkbox-label"
-            >
-                <Checkbox.Indicator>
-                    <Check size={32} className="p-1 font-bold text-zinc-50"/>
-                </Checkbox.Indicator>
-            </Checkbox.Root>
-            <label id="checkbox-label" htmlFor="checkbox" className="text-[16px] font-normal text-[#1B2031] leading-[20px] font-inter mt-2">
-                {labelText}
-            </label>
-        </div>
-    );
-};
+        id="checkbox"
+        required
+        checked={checked}
+        onCheckedChange={handleCheckedChange}
+        aria-labelledby="checkbox-label"
+      >
+        <Checkbox.Indicator>
+          <Check size={32} className="p-1 font-bold text-zinc-50" />
+        </Checkbox.Indicator>
+      </Checkbox.Root>
+      <label
+        id="checkbox-label"
+        htmlFor="checkbox"
+        className="font-inter mt-2 text-[16px] font-normal leading-[20px] text-[#1B2031]"
+      >
+        {labelText}
+      </label>
+    </div>
+  )
+}
 
-{/* <div className="my-4 flex gap-2 pt-[48px]">
+{
+  /* <div className="my-4 flex gap-2 pt-[48px]">
                         <Checkbox.Root
                             className={`flex h-6 w-6 items-center justify-center rounded border-2 border-solid border-[#A2ABCC] bg-zinc-50 ${acceptTerms && 'border-none bg-gradient-to-r from-blue-300 to-[#9D37F2]'
                                 }`}
@@ -56,4 +70,5 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ checked, setChec
                                 Aceito que a Cosmos, a empresa parceira e seus colaboradores tenham acesso às minhas respostas
                             </span>
                         </label>
-                    </div> */}
+                    </div> */
+}

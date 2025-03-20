@@ -1,5 +1,5 @@
 import { Calendar, Check, Clock } from 'phosphor-react'
-import FormatText from '../../../../../utils/formatText'
+import FormatText from '../../../../../utils/FormatText'
 import Link from 'next/link'
 import { Header } from '../../../../../components/adventure/Header'
 import { Loading } from '../../../../../components/Loading'
