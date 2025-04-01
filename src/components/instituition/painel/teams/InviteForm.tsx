@@ -96,13 +96,14 @@ export const InviteForm = ({ onOpenInviteForm }: InviteFormProps) => {
           >
             + Adicionar mais um email
           </button>
-
-          <button
-            className="w-full rounded-md bg-violet-600 p-3 text-white hover:bg-violet-700"
-            type="submit"
-          >
-            Convidar
-          </button>
+          <div className="w-[248px]">
+            <button
+              className="w-full rounded-md bg-violet-600 p-3 text-white hover:bg-violet-700"
+              type="submit"
+            >
+              Convidar
+            </button>
+          </div>
         </form>
       </section>
     </section>

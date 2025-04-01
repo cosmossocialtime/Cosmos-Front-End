@@ -1,8 +1,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Check } from 'phosphor-react'
+import { FeedbackModal } from '../../pages/institutions/painel/_components/FeedbackModal'
+import { useState } from 'react'
 
 export default function DropdownMenu() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const { pathname } = useRouter()
   const optionsMenu = [
     {
@@ -15,11 +18,11 @@ export default function DropdownMenu() {
     },
     {
       title: 'Sistema Solar',
-      link: '/',
+      link: '/institutions/painel/solarSystem',
     },
     {
       title: 'Trocar de organização',
-      link: '/',
+      link: '/institutions/painel/changeOrganization',
     },
   ]
 
@@ -28,11 +31,11 @@ export default function DropdownMenu() {
       title: 'Precisa de Ajuda?',
       link: '/',
     },
-    {
-      title: 'Feedback',
-      link: '/',
-    },
   ]
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   return (
     <div
@@ -69,6 +72,13 @@ export default function DropdownMenu() {
             {option.title === 'Painel Principal' && <Check />}
           </Link>
         ))}
+        <span
+          className="cursor-pointer text-gray-500 hover:text-blue-500"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Feedback
+        </span>
+        {isModalOpen && <FeedbackModal closeModal={closeModal} />}
         <div className={`h-[1px] w-full bg-black/5`} />
 
         <button className={`text-red-500`}>Sair</button>

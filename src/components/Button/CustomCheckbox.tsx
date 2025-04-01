@@ -30,7 +30,6 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
                         : ''
                     }`}
         id="checkbox"
-        required
         checked={checked}
         onCheckedChange={handleCheckedChange}
         aria-labelledby="checkbox-label"

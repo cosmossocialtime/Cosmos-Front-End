@@ -1,83 +1,5 @@
-// import { FieldValues, UseFormRegister, UseFormTrigger } from "react-hook-form";
-// import { useState } from "react";
-
-// interface TextAreaFieldProps {
-//   dynamicLabel?: string;
-//   label: string;
-//   name: string;
-//   placeholder?: string;
-//   register: UseFormRegister<FieldValues>;
-//   trigger: UseFormTrigger<FieldValues>;
-//   error?: string;
-//   minLength?: number;
-//   maxLength?: number;
-// }
-
-// export default function TextAreaField({
-//   label,
-//   name,
-//   placeholder,
-//   dynamicLabel = "",
-//   register,
-//   trigger,
-//   minLength = 100,
-//   maxLength = 300,
-// }: TextAreaFieldProps) {
-//   const [charCount, setCharCount] = useState(0);
-//   const [hasInteracted, setHasInteracted] = useState(false);
-
-//   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-//     const valueLength = e.target.value.length;
-//     setCharCount(valueLength);
-//     setHasInteracted(true);
-//   };
-
-//   const handleBlur = async () => {
-//     setHasInteracted(true);
-//     await trigger(name);
-//   };
-
-//   const isMaxReached = charCount >= maxLength;
-//   const isMinNotReached = hasInteracted && charCount < minLength;
-
-//   return (
-//     <div className="w-full border border-gray-300 rounded-lg p-4 hover:border-purple-500 focus-within:border-purple-500 transition-all duration-200">
-//       <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-//         {label.replace("[Nome do programa]", dynamicLabel)}
-//       </label>
-//       <div className="relative">
-//         <textarea
-//           {...register(name, {
-//             onChange: (e) => setCharCount(e.target.value.length),
-//             onBlur: async () => {
-//               await trigger(name);
-//             }
-
-//           })}
-//           id={name}
-//           placeholder={placeholder}
-//           rows={4}
-//           maxLength={maxLength}
-//           onChange={handleChange}
-//           className={`w-full rounded-md border border-solid p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 ${isMaxReached ? "border-red-500" : "border-gray-400"
-//             }`}
-//         />
-//         <span className={`absolute bottom-4 right-3 text-xs ${isMaxReached ? "text-red-500" : "text-gray-500"}`}>
-//           {charCount} caracteres (De {minLength} a {maxLength})
-//         </span>
-//       </div>
-//       {isMinNotReached && (
-//         <p className="text-red-500 text-sm mt-1">
-//           O campo é obrigatório, limite mínimo de {minLength} caracteres
-//         </p>
-//       )}
-//       {isMaxReached && <p className="text-red-500 text-sm mt-1">O limite de caracteres já foi atingido</p>}
-//     </div>
-//   );
-// }
-
-import { useState } from 'react'
-import { FieldValues, UseFormRegister } from 'react-hook-form'
+import { useState, useEffect } from 'react'
+import { UseFormRegister } from 'react-hook-form'
 
 interface TextAreaFieldProps {
   dynamicLabel?: string
@@ -85,10 +7,10 @@ interface TextAreaFieldProps {
   name: string
   placeholder?: string
   register: UseFormRegister<any>
-  value: string
   error?: string
   minLength?: number
   maxLength?: number
+  value?: string
 }
 
 export default function TextAreaField({
@@ -102,20 +24,22 @@ export default function TextAreaField({
   maxLength = 300,
   value,
 }: TextAreaFieldProps) {
-  const [charCount, setCharCount] = useState(0)
+  const [charCount, setCharCount] = useState(value?.length || 0)
   const [hasInteracted, setHasInteracted] = useState(false)
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const valueLength = e.target.value.length
-    setCharCount(valueLength)
-    setHasInteracted(true)
-  }
+
+  // Atualiza o contador de caracteres e a interação com o campo
+  useEffect(() => {
+    if (value) {
+      setCharCount(value.length)
+    }
+  }, [value]) // Executa sempre que o valor mudar
 
   const isMaxReached = charCount >= maxLength
   const isMinNotReached = charCount > 0 && charCount < minLength
 
   return (
     <div
-      className={`"w-full duration-200" rounded-lg border border-gray-300 p-4 transition-all focus-within:border-purple-500 hover:border-purple-500
+      className={`w-full rounded-lg border p-4 transition-all duration-200 focus-within:border-purple-500 hover:border-purple-500
             ${error ? 'border-red-500' : 'border-gray-300'}`}
     >
       <label
@@ -126,18 +50,12 @@ export default function TextAreaField({
       </label>
       <div className="relative">
         <textarea
-          {
-            ...register(name)
-            //   {...register(name, {
-            //     required: "O campo senha é obrigatório",
-            // })
-          }
+          {...register(name)} // Mantém a integração com o react-hook-form
           id={name}
-          value={value}
           placeholder={placeholder}
           rows={4}
+          value={value} // Controle do valor via props
           maxLength={maxLength}
-          onChange={handleChange}
           className={`w-full rounded-md border border-solid p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 
                         ${error ? 'border-red-500' : 'border-gray-400'}`}
         />
@@ -151,8 +69,16 @@ export default function TextAreaField({
       </div>
       {error && <span className="mt-1 text-sm text-red-500">{error}</span>}
 
-      {/* {isMinNotReached && <span className="text-red-500 text-sm mt-1">O campo é obrigatório, mínimo de {minLength} caracteres</span>}
-      {isMaxReached && <span className="text-red-500 text-sm mt-1">O limite de caracteres já foi atingido</span>}  */}
+      {isMinNotReached && (
+        <span className="mt-1 text-sm text-red-500">
+          O campo é obrigatório, mínimo de {minLength} caracteres
+        </span>
+      )}
+      {isMaxReached && (
+        <span className="mt-1 text-sm text-red-500">
+          O limite de caracteres já foi atingido
+        </span>
+      )}
     </div>
   )
 }

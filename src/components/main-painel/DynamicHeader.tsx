@@ -16,20 +16,6 @@ export default function DynamicHeader({
   userName,
 }: HeaderProps) {
   const [dropdownMenu, setDropdownMenu] = useState(false)
-  // const router = useRouter()
-  // const [showFullHeader, setShowFullHeader] = useState(false)
-
-  // useEffect(() => {
-  //   // Definir páginas onde apenas o logo deve ser exibido
-  //   const minimalPages = new Set([
-  //     '/institutions/onboardingProgram/terms',
-  //     '/institutions/onboardingProgram/finalization',
-  //     '/institutions/onboardingProgram/focalPoint',
-  //     '/institutions/onboardingProgram/aboutInstitution',
-  //     '/institutions/onboardingProgram/descriptiveData',
-  //   ])
-  //   setShowFullHeader(!minimalPages.has(router.pathname))
-  // }, [router.pathname])
 
   return (
     <header className="flex h-[68px] w-full items-center justify-between bg-white px-6 shadow-md">

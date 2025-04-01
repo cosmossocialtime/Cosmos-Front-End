@@ -1,18 +1,23 @@
 import { TextareaHTMLAttributes } from 'react'
+import { UseFormRegister } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 
 interface InputTextAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string
+  name: string
   text?: string
   minChar?: number
   maxChar?: number
+  register: UseFormRegister<any>
 }
 
 export function InputTextArea({
   className,
   text,
   minChar,
+  register,
+  name,
   maxChar,
   ...rest
 }: InputTextAreaProps) {
@@ -20,6 +25,8 @@ export function InputTextArea({
     <div className="relative flex-1">
       <textarea
         {...rest}
+        {...register(name)}
+        name={name}
         maxLength={maxChar}
         minLength={minChar}
         className={twMerge(

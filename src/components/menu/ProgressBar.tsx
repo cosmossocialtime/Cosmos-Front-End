@@ -27,15 +27,10 @@ export default function ProgressBar({
     inactive: '/images/Checkbox-inativo.svg',
   },
 }: ProgressBarProps) {
-  const router = useRouter()
-
   return (
     <div className="flex w-full items-center justify-between">
       {currentStep > 1 && (
-        <button
-          onClick={onBack || (() => router.back())}
-          className="mr-4 flex items-center"
-        >
+        <button onClick={onBack} className="mr-4 flex items-center">
           <Image src={icons.backArrow} alt="Voltar" width={24} height={24} />
         </button>
       )}

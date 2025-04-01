@@ -109,7 +109,7 @@ export default function AboutOrganization() {
 
   //     setIsDisabled(!isValid);
   //     if (savedData?.nameOrganization) {
-  //         setValue("name", savedData.nameOrganization);
+  //         setValue("name", savedData.nameOrganization)
   //     }
   // }, [setValue, isValid]);
   useEffect(() => {

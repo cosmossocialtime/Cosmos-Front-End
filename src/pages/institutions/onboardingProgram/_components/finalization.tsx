@@ -1,0 +1,109 @@
+import { useEffect, useState } from 'react'
+import { Button } from '../../../../components/Button/ButtonSubmit'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'react-toastify'
+import { getFormData } from '../../../../utils/localStroge'
+import SingleSelectComboBox from '../../../../components/combobox/SingleSelectComboBox'
+
+const options = [
+  { value: 'busca_google', label: 'Busca no Google' },
+  { value: 'divulgacao', label: 'E-mail de divulgação' },
+  { value: 'Evento_Palestra', label: 'Evento ou palestra' },
+  {
+    value: 'indicacao_amigos_colegas',
+    label: 'Indicação de amigos ou colegas',
+  },
+  { value: 'Noticia_artigo_midia', label: 'Notícia ou artigo na Mídia' },
+  { value: 'redes_sociais', label: 'Redes sociais' },
+  { value: 'site_Cosmos', label: 'Site da Cosmos' },
+  { value: 'outro', label: 'Outro' },
+]
+
+const schema = z.object({
+  como_soube: z.string().nonempty('Este campo é obrigatório'),
+})
+
+type formProps = z.infer<typeof schema>
+
+export function Finalization() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedOption, setSelectedOption] = useState<{
+    value: string
+    label: string
+  } | null>(null)
+
+  const {
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<formProps>({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  })
+
+  useEffect(() => {
+    const savedData = getFormData('finalization')
+
+    if (savedData?.como_soube) {
+      setSelectedOption(savedData.como_soube)
+    }
+  }, [setValue])
+
+  const handleSelectChange = (
+    selected: { value: string; label: string } | null,
+  ) => {
+    setSelectedOption(selected)
+    setValue('como_soube', selected?.value || '')
+  }
+
+  async function handleForm(data: formProps) {
+    setIsLoading(true)
+    console.log(data)
+    try {
+      const savedOrganization = getFormData('aboutOrganization') || {}
+
+      // const fullData = {
+      //     ...data,
+      //     nomeOrganizacao: savedOrganization.nameOrganization || "",
+      // };
+
+      // console.log("Dados completos a serem salvos:", fullData);
+
+      // saveFormData("finalization", fullData);
+      console.log(data)
+      toast.success('Cadastro concluído!')
+      // Router.push('/institutions/onboarding/verifyEmail');
+    } catch (error) {
+      toast.error('Erro ao criar conta, tente novamente.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="w-[450px] p-6">
+      <form onSubmit={handleSubmit(handleForm)} className="flex flex-col gap-4">
+        <SingleSelectComboBox
+          options={options}
+          label="Como você ficou sabendo sobre o programa?"
+          onChange={handleSelectChange}
+          value={selectedOption}
+        />
+        {errors.como_soube && (
+          <span className="text-sm text-red-500">
+            {errors.como_soube.message}
+          </span>
+        )}
+
+        <Button
+          text={isLoading ? 'Carregando...' : 'Finalizar inscrição'}
+          disabled={!selectedOption || isLoading}
+          type="submit"
+          isLoading={isLoading}
+        />
+      </form>
+    </div>
+  )
+}

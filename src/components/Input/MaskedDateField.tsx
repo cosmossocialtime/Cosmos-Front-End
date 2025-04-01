@@ -25,11 +25,52 @@ export default function MaskedDateField({
   const [inputValue, setInputValue] = useState('')
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date)
     if (date) {
-      const formattedDate = date.toLocaleDateString('pt-BR')
-      setValue(name, formattedDate, { shouldValidate: true })
-      setInputValue(formattedDate)
+      const today = new Date()
+      // Verifica se a data selecionada é maior que a data atual (no futuro)
+      if (date > today) {
+        setInputValue('') // Limpa o campo se for uma data no futuro
+        setValue(name, '', { shouldValidate: true }) // Exibe uma mensagem de erro
+      } else {
+        // Caso a data seja válida (não no futuro)
+        const formattedDate = date.toLocaleDateString('pt-BR')
+        setSelectedDate(date)
+        setValue(name, formattedDate, { shouldValidate: true })
+        setInputValue(formattedDate)
+      }
+    } else {
+      setInputValue('')
+      setValue(name, '', { shouldValidate: true })
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
+
+    // Verifica se o valor tem o formato correto (dd/MM/yyyy)
+    const dateParts = value.split('/')
+    if (dateParts.length === 3) {
+      const [day, month, year] = dateParts.map((part) => parseInt(part, 10))
+      const date = new Date(year, month - 1, day)
+
+      // Se a data for válida, atualiza o valor
+      if (
+        date.getDate() === day &&
+        date.getMonth() === month - 1 &&
+        date.getFullYear() === year
+      ) {
+        // Verifica novamente se a data não é no futuro
+        const today = new Date()
+        if (date > today) {
+          setInputValue('') // Limpa o campo se for uma data no futuro
+          setValue(name, '', { shouldValidate: true })
+          alert('A data de fundação não pode estar no futuro.')
+        } else {
+          setSelectedDate(date)
+          setValue(name, value, { shouldValidate: true })
+        }
+      }
     }
   }
 
@@ -42,7 +83,7 @@ export default function MaskedDateField({
         <InputMask
           mask="99/99/9999"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleInputChange}
           onBlur={(e) =>
             setValue(name, e.target.value, { shouldValidate: true })
           }
@@ -72,7 +113,7 @@ export default function MaskedDateField({
           />
         </div>
       </div>
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {/* {error && <p className="mt-1 text-sm text-red-500">{error}</p>} */}
     </div>
   )
 }
