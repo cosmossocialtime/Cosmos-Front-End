@@ -31,7 +31,7 @@ export function InputTextArea({
         minLength={minChar}
         className={twMerge(
           'relative w-full resize-none rounded border border-solid border-gray-400 p-4 outline-violet-500 placeholder:text-gray-500 before:content-["0_caracteres"]',
-          className,
+          className
         )}
       />
       <div className="absolute inset-x-0 bottom-0 flex justify-between p-4 text-gray-900/25">

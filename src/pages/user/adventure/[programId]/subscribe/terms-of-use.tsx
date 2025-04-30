@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../../../../../components/adventure/Header'
-import { Input } from '../../../../../components/input'
+import { Input } from '../../../../../components/Input'
 import Link from 'next/link'
-import { Button } from '../../../../../components/button'
+import { Button } from '../../../../../components/Button'
 import Router from 'next/router'
 import { api } from '../../../../../services/api'
 import { Loading } from '../../../../../components/Loading'
@@ -45,7 +45,7 @@ export default function TermsOfUse() {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+          'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
       })
   }

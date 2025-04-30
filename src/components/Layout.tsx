@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import DynamicHeader from './main-painel/DynamicHeader'
+import DynamicHeader from './header/DynamicHeader'
 
 interface LayoutProps {
   children: ReactNode

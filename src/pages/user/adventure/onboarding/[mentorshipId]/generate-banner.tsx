@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Camera, DownloadSimple, UploadSimple } from 'phosphor-react'
-import { Button } from '../../../../../components/button'
+import { Button } from '../../../../../components/Button'
 import UploadImage from '../../../../../components/Crop/UploadImage'
 import { DialogCrop } from '../../../../../components/Crop/DialogCrop'
 import SettingCropArea from '../../../../../components/Crop/SettingCropArea'

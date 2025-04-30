@@ -1,4 +1,4 @@
-import { Button } from '../../../../../../components/button'
+import { Button } from '../../../../../../components/Button'
 import { Header } from '../../../../../../components/adventure/Header'
 import Tripulantes from '../../../../../../../public/images/tripulantes.png'
 import Image from 'next/image'

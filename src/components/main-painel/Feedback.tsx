@@ -32,7 +32,7 @@ export function Feedback({ closeFeedback }: FeedbackProps) {
       .catch((error) => {
         console.log(error)
         toast.error(
-          'Não foi possível enviar seu feedback, tente novamente mais tarde.',
+          'Não foi possível enviar seu feedback, tente novamente mais tarde.'
         )
       })
     setIsSubmitting(false)

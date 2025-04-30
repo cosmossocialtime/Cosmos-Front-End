@@ -9,7 +9,7 @@ import { parseCookies } from 'nookies'
 import Image from 'next/image'
 import debounce from 'lodash.debounce'
 import Link from 'next/link'
-import { Button } from '../../../components/button'
+import { Button } from '../../../components/Button'
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty('O código da empresa é obrigatorio'),

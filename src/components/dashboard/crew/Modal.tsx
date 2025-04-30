@@ -27,7 +27,7 @@ type DatasProfile = {
     {
       sectorId: number
       sector: string
-    },
+    }
   ]
   previousMentorship: string
   professionalRole: string

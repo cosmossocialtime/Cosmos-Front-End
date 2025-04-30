@@ -7,7 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export default forwardRef<HTMLInputElement, InputProps>(function InputContent(
   { className, ...rest }: InputProps,
-  ref,
+  ref
 ) {
   return (
     <input
@@ -15,7 +15,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function InputContent(
       {...rest}
       className={twMerge(
         'flex-1 rounded border border-solid border-gray-400 px-4 py-3 outline-none placeholder:text-gray-800 placeholder:opacity-25 disabled:border-0 disabled:border-b',
-        className,
+        className
       )}
     />
   )

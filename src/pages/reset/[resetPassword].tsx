@@ -1,7 +1,6 @@
 import Router, { useRouter } from 'next/router'
 
 import { useForm } from 'react-hook-form'
-import { api } from '../../services/api'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Eye, EyeClosed, Question } from 'phosphor-react'
@@ -10,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Main from '../../components/Main'
 import * as HoverCard from '@radix-ui/react-hover-card'
 import { parseCookies } from 'nookies'
+import { invokeLambda } from '../../lib/aws/invokeLambda'
 
 const schema = z
   .object({
@@ -18,15 +18,15 @@ const schema = z
       .nonempty('O campo senha é obrigatório')
       .min(
         8,
-        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
+        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.'
       )
       .regex(
         /[A-Z]/,
-        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
+        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.'
       )
       .regex(
         /\d/,
-        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.',
+        'A senha deve ter no mínimo 8 caracteres, com pelo menos uma letra maiúscula e um número.'
       ),
     confirmPassword: z.string(),
   })
@@ -42,7 +42,7 @@ export default function ResetPassword() {
   const [showPassword1, setShowPassword1] = useState(false)
   const router = useRouter()
   const { resetPassword } = router.query
-  const { 'cosmos.u': email } = parseCookies()
+  const { 'cosmos.user': email } = parseCookies()
 
   const {
     register,
@@ -50,25 +50,41 @@ export default function ResetPassword() {
     formState: { errors },
   } = useForm<formProps>({ resolver: zodResolver(schema) })
 
-  const SubmitForm = ({ password }: formProps) => {
-    api
-      .patch('/auth/resetPassword', {
-        password,
+  async function handleForm(data: formProps) {
+    try {
+      const token = resetPassword !== undefined ? String(resetPassword) : ''
+      const payload = {
+        password: data.password,
         email,
-        token: resetPassword,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          Router.push('/user/login')
-          toast.success('Senha alterada com sucesso')
-        }
+        token: token,
+      }
+      const response = await invokeLambda<
+        {
+          password: string
+          email: string
+          token: string
+        },
+        { statusCode: number; body: string }
+      >('user-reset-password-lambda', payload)
 
-        if (response.status === 404) {
-          return toast.error(
-            'Não foi possivel processar sua requisição, tente novamente',
-          )
-        }
-      })
+      console.log(response)
+      if (response.statusCode == 200) {
+        toast.success('Senha alterada com sucesso')
+        Router.push('/user/login')
+      }
+      if (response.statusCode == 401) {
+        toast.error('Token inválido')
+      }
+      if (response.statusCode === 400) {
+        return toast.error(
+          'Não foi possivel processar sua requisição, tente novamente'
+        )
+      }
+    } catch (error) {
+      return toast.error(
+        'Não foi possivel recuperar sua senha, por favor tente novamente mais tarde'
+      )
+    }
   }
 
   return (
@@ -76,7 +92,9 @@ export default function ResetPassword() {
       <Main />
       <div className="flex h-screen w-full max-w-lg flex-col items-center justify-center bg-zinc-50 text-zinc-900">
         <form
-          onSubmit={handleSubmit(SubmitForm)}
+          onSubmit={handleSubmit(handleForm, (formErrors) => {
+            console.error('ERROS DE VALIDAÇÃO:', formErrors)
+          })}
           className="mt-4 flex w-full flex-col gap-3 p-10"
         >
           <div className="flex items-start gap-1 text-left">

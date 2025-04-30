@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Logo from '../assets/logotipoCosmos.svg'
 import LostAstronalt from '../assets/lost-astronaut.png'
-import { Button } from '../components/button'
+import { Button } from '../components/Button'
 import Link from 'next/link'
 
 export default function NotFound() {

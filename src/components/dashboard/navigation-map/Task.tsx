@@ -1,5 +1,5 @@
 import { TaskProps } from '../../../types/Task'
-import { Input } from '../../input'
+import { Input } from '../../Input'
 
 interface TaskComponentProps {
   task: TaskProps

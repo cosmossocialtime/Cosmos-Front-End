@@ -63,10 +63,10 @@ export default function VerifyEmail() {
                 {isResendEnabled
                   ? 'Enviar novo link de confirmação'
                   : `Enviar novo link em: ${String(
-                      Math.floor(seconds / 60),
+                      Math.floor(seconds / 60)
                     ).padStart(2, '0')}:${String(seconds % 60).padStart(
                       2,
-                      '0',
+                      '0'
                     )}`}
               </a>
             </div>

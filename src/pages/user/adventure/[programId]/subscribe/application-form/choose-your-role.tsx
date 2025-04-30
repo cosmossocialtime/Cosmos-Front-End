@@ -1,4 +1,4 @@
-import { Button } from '../../../../../../components/button'
+import { Button } from '../../../../../../components/Button'
 import { Header } from '../../../../../../components/adventure/Header'
 import Commander from '../../../../../../../public/images/mission-role/cards/commander.png'
 import Specialist from '../../../../../../../public/images/mission-role/cards/specialist.png'
@@ -47,7 +47,7 @@ export default function ChooseYourRole() {
       const firstOption = rolesSelected[0]
       const secondOption = rolesSelected[1]
       const thirdOption = numbersIds.find(
-        (number) => !rolesSelected.includes(number),
+        (number) => !rolesSelected.includes(number)
       )
 
       api
@@ -60,14 +60,14 @@ export default function ChooseYourRole() {
         .then((response) => {
           if (response.status === 200) {
             Router.push(
-              `/user/adventure/${programId}/subscribe/application-form/confirmation`,
+              `/user/adventure/${programId}/subscribe/application-form/confirmation`
             )
           }
         })
         .catch((error) => {
           console.error(error)
           toast.error(
-            'Não foi possível enviar os dados. Tente novamente mais tarde!',
+            'Não foi possível enviar os dados. Tente novamente mais tarde!'
           )
         })
     }

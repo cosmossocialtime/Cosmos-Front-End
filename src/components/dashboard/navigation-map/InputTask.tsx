@@ -1,6 +1,6 @@
 import { Trash } from 'phosphor-react'
 import { useFormContext, Controller } from 'react-hook-form'
-import { Input } from '../../input'
+import { Input } from '../../Input'
 
 interface InputTaskProps {
   index: number

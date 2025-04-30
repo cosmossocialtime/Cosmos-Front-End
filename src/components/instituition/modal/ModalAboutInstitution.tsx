@@ -98,7 +98,7 @@ export const AboutInstitutionModal = ({
   const [cidades, setCidades] = useState<Option[]>([])
   // const [selectedFile] = useState<File | null>(null)
   const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>(
-    [] as MultiValue<Option>,
+    [] as MultiValue<Option>
   )
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const {
@@ -156,7 +156,7 @@ export const AboutInstitutionModal = ({
       selected
         ? cidadesPorEstado[selected.value as keyof typeof cidadesPorEstado] ||
             []
-        : [],
+        : []
     )
   }
 
@@ -209,7 +209,7 @@ export const AboutInstitutionModal = ({
     setValue(
       'cause',
       { selectedOptions: [...selected] },
-      { shouldValidate: true },
+      { shouldValidate: true }
     )
 
     if (selected.length === 0) {
@@ -243,8 +243,8 @@ export const AboutInstitutionModal = ({
   useEffect(() => {
     console.log(
       `Nome da instituição: ${instituitionNameW} | Causas: ${causesW?.selectedOptions.map(
-        (v) => v.value,
-      )} | CNPJ: ${cnpjW} | Receita Anual: ${receitaW} | Data de fundação: ${dateW} | Estado: ${estadoW} | Cidade: ${cidadeW} | Contém Cnpj: ${checkNoCnpf} | Qtd. de Funcionários: ${numeroFuncW} | Qtd. de Beneficiários: ${numeroBeneW} | Fora do Brasil: ${checkForaBrasil} | Estatuto: ${estatutoW} | Contém Estatuto: ${checkEstatuto}`,
+        (v) => v.value
+      )} | CNPJ: ${cnpjW} | Receita Anual: ${receitaW} | Data de fundação: ${dateW} | Estado: ${estadoW} | Cidade: ${cidadeW} | Contém Cnpj: ${checkNoCnpf} | Qtd. de Funcionários: ${numeroFuncW} | Qtd. de Beneficiários: ${numeroBeneW} | Fora do Brasil: ${checkForaBrasil} | Estatuto: ${estatutoW} | Contém Estatuto: ${checkEstatuto}`
     )
 
     const checkButton = () => {

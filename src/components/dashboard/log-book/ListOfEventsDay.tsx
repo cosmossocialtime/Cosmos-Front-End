@@ -43,7 +43,7 @@ export function ListOfEventsDay() {
   }
 
   const ordenedEvents = events.sort((a, b) =>
-    dayjs(a.startAt).diff(dayjs(b.startAt)),
+    dayjs(a.startAt).diff(dayjs(b.startAt))
   )
   const eventsOfEachMonth = groupDatesByMonth(ordenedEvents)
 

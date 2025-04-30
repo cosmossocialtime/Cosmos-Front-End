@@ -7,8 +7,8 @@ import { api } from '../../../services/api'
 import { LocationInput } from './LocationInput'
 import { PasswordInput } from './PasswordInput'
 import { toast } from 'react-toastify'
-import { Input } from '../../input'
-import { Button } from '../../button'
+import { Input } from '../../Input'
+import { Button } from '../../Button'
 import { useForm } from 'react-hook-form'
 
 interface FormUserDataProps {
@@ -123,9 +123,9 @@ export default function FormUserData({
         </Input.Root>
 
         <LocationInput
-          cityData={newUserData.city}
-          stateData={newUserData.state}
-          livesInBrasil={newUserData.country}
+          cityData={newUserData.city || ''}
+          stateData={newUserData.state || ''}
+          livesInBrasil={newUserData.country || false}
           handleLocation={handleLocation}
           enableForm={enableForm}
         />
@@ -134,7 +134,7 @@ export default function FormUserData({
           <Input.Select
             disabled={!enableForm}
             items={gendersOpt}
-            option={newUserData.gender}
+            option={newUserData.gender || ''}
             changeOption={(option) =>
               setNewUserData({ ...newUserData, gender: option })
             }

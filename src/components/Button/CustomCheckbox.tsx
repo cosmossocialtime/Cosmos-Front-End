@@ -17,7 +17,7 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
     (checked: boolean) => {
       setChecked(checked)
     },
-    [setChecked],
+    [setChecked]
   )
 
   return (

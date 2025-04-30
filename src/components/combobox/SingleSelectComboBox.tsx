@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Select, { StylesConfig, components } from 'react-select'
 import Image from 'next/image'
 
@@ -78,17 +77,11 @@ const customStyles: StylesConfig<any, false> = {
 const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({
   options,
   label,
+  value,
   onChange,
   isDisabled = false,
   instanceId,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(null)
-
-  const handleChange = (selected: Option | null) => {
-    setSelectedOption(selected)
-    onChange?.(selected)
-  }
-
   return (
     <div className="w-full">
       {label && (
@@ -97,8 +90,8 @@ const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({
       <Select
         instanceId={instanceId}
         options={options}
-        value={selectedOption}
-        onChange={handleChange}
+        value={value}
+        onChange={onChange}
         placeholder="Selecione"
         isDisabled={isDisabled}
         styles={customStyles}

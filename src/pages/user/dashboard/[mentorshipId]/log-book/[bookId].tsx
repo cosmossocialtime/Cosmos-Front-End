@@ -4,8 +4,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'react-toastify'
 import { api } from '../../../../../services/api'
-import { Input } from '../../../../../components/input'
-import { Button } from '../../../../../components/button'
+import { Input } from '../../../../../components/Input'
+import { Button } from '../../../../../components/Button'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDashboard } from '../../../../../hooks/useDashboard'
@@ -27,7 +27,7 @@ export default function Book() {
 
   const { dashboard } = useDashboard()
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )
 
   const [event, setEvent] = useState<EventProps | null>(null)
@@ -72,7 +72,7 @@ export default function Book() {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possivel salvar os dados. Tente novamente mais tarde!',
+          'Não foi possivel salvar os dados. Tente novamente mais tarde!'
         )
       })
   }

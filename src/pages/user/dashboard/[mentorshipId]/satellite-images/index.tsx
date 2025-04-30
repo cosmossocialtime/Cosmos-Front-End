@@ -38,9 +38,7 @@ interface SectorProps {
 const SatelitesPage = () => {
   const [company, setCompany] = useState<SateliteInfo>()
   const [sectors, setSectors] = useState<SectorProps[]>([])
-  const { data } = useFetch<User>(
-    'https://api.cosmossocial.com.br/api/dashboard',
-  )
+  const { data } = useFetch<User>('http://localhost:8080/api/dashboard')
   const socialOrganizationId = data?.user.companyId
 
   useEffect(() => {
@@ -67,7 +65,7 @@ const SatelitesPage = () => {
           {sectors &&
             sectors.map((sector) => {
               const planets = DatasPlanets.find(
-                (planet) => planet.id === Number(sector.id),
+                (planet) => planet.id === Number(sector.id)
               )
 
               return (

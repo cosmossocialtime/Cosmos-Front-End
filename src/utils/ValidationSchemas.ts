@@ -1,4 +1,3 @@
-import { transform } from 'html2canvas/dist/types/css/property-descriptors/transform'
 import { z } from 'zod'
 
 // 🔹 Validação para Nome (transforma em Title Case)
@@ -11,11 +10,9 @@ export const nameSchema = z
       .trim()
       .split(' ')
       .map((word) =>
-        word.length > 1
-          ? word[0].toLocaleUpperCase() + word.substring(1)
-          : word,
+        word.length > 1 ? word[0].toLocaleUpperCase() + word.substring(1) : word
       )
-      .join(' '),
+      .join(' ')
   )
 
 // 🔹 Validação para Alias
@@ -34,11 +31,9 @@ export const textAreaSchema = z
       .trim()
       .split(' ')
       .map((word) =>
-        word.length > 1
-          ? word[0].toLocaleUpperCase() + word.substring(1)
-          : word,
+        word.length > 1 ? word[0].toLocaleUpperCase() + word.substring(1) : word
       )
-      .join(' '),
+      .join(' ')
   )
 
 // 🔹 Validação para E-mail
@@ -53,7 +48,7 @@ export const passwordSchema = z
   .nonempty('O campo senha é obrigatório.')
   .min(
     8,
-    'A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número.',
+    'A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número.'
   )
   .regex(/[A-Z]/, 'A senha deve ter pelo menos uma letra maiúscula.')
   .regex(/[a-z]/, 'A senha deve ter pelo menos uma letra minúscula.')
@@ -86,7 +81,7 @@ export const createMultiSelectSchema = (min = 0, max: number | null = null) =>
         z.object({
           value: z.string(),
           label: z.string(),
-        }),
+        })
       )
       .min(min, `Você precisa selecionar pelo menos ${min} opção(ões).`)
       .refine((options) => max === null || options.length <= max, {
@@ -113,37 +108,49 @@ export const cnpjSchema = z
     },
     {
       message: 'Formato de CNPJ inválido. Use XX.XXX.XXX/XXXX-XX',
-    },
+    }
   )
 
 // 🔹 Validação para Receita Anual (Número positivo)
 export const receitaSchema = z
   .string()
   .optional()
-  .refine((value) => !value || (!isNaN(Number(value)) && Number(value) >= 0), {
-    message: 'A receita deve ser um número positivo.',
+  .transform((val) => {
+    if (!val) return undefined
+
+    // Remove "R$", espaços, e converte vírgula para ponto
+    const cleaned = val
+      .replace(/\s/g, '') // remove espaços
+      .replace('R$', '') // remove símbolo de moeda
+      .replace(/\./g, '') // remove pontos de milhar
+      .replace(',', '.') // troca vírgula decimal por ponto
+
+    return cleaned
   })
+  .refine(
+    (val) => val === undefined || (!isNaN(Number(val)) && Number(val) >= 0),
+    {
+      message: 'A receita deve ser um número positivo.',
+    }
+  )
 
 // 🔹 Validação para Data de Fundação (Não pode ser no futuro)
-export const dataFundacaoSchema = z
-  .string()
-  .optional()
-  .refine(
-    (data) => {
-      if (!data) return true
-      const inputDate = new Date(
-        new Date(data).toLocaleString('pt-BR', { timeZone: 'UTC' }),
-      )
-      const today = new Date()
-      console.log(data)
-      console.log(inputDate)
-      console.log(today)
-      return inputDate <= today
-    },
-    {
-      message: 'A data de fundação não pode estar no futuro.',
-    },
-  )
+export const dataFundacaoSchema = z.string().refine(
+  (data) => {
+    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/
+    const match = data.match(regex)
+    if (!match) return false
+
+    const [dia, mes, ano] = match
+    const inputDate = new Date(`${ano}-${mes}-${dia}`)
+
+    const today = new Date()
+    return inputDate.getDate() <= today.getDate()
+  },
+  {
+    message: 'A data de fundação não pode estar no futuro.',
+  }
+)
 
 // 🔹 Validação para Estado e Cidade (Devem ser preenchidos se organização for do Brasil)
 export const estadoSchema = z.string().optional()
@@ -158,17 +165,20 @@ export const numeroSchema = z
   })
 
 // 🔹 Validação para Upload de Arquivo (Apenas PDF, DOC, etc.)
-export const fileSchema = z.instanceof(File).refine(
-  (file) => {
-    const validTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'image/jpeg',
-    ]
-    return validTypes.includes(file.type)
-  },
-  {
-    message: 'Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.',
-  },
-)
+export const fileSchema = z
+  .instanceof(File)
+  .refine(
+    (file) => {
+      const validTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg',
+      ]
+      return validTypes.includes(file.type)
+    },
+    {
+      message: 'Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.',
+    }
+  )
+  .optional()

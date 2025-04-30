@@ -1,5 +1,5 @@
 import { FacebookLogo, LinkedinLogo, WhatsappLogo } from 'phosphor-react'
-import { Button } from '../../button'
+import { Button } from '../../Button'
 
 export function ToShare() {
   return (

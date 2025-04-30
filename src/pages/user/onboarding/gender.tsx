@@ -9,7 +9,7 @@ import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
-import { Button } from '../../../components/button'
+import { Button } from '../../../components/Button'
 import { api } from '../../../services/api'
 
 const schemaGender = z.object({

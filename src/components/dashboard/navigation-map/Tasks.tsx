@@ -37,7 +37,7 @@ export function Tasks({ goal }: TasksProps) {
       .then((response) => {
         if (response.status === 200) {
           const newTasks = goal.tasks.map((t) =>
-            t.id === task.id ? { ...task, completed: !task.completed } : t,
+            t.id === task.id ? { ...task, completed: !task.completed } : t
           )
           const newGoal = { ...goal, tasks: newTasks }
           changeGoal(newGoal)
@@ -46,7 +46,7 @@ export function Tasks({ goal }: TasksProps) {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível validar a tarefa. Tente novamente mais tarde!',
+          'Não foi possível validar a tarefa. Tente novamente mais tarde!'
         )
       })
   }

@@ -1,71 +1,120 @@
-import React from 'react'
-import DynamicHeader from '../../../components/main-painel/DynamicHeader'
+import React, { useEffect } from 'react'
+import DynamicHeader from '../../../components/header/DynamicHeader'
+import { useQuery } from '@tanstack/react-query'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import AdventureAreaInstitution from '../../../components/main-painel/painel/AdventureAreaInstitution'
+import { DashboardProps } from '../../../types/dashboard'
+import { Loading } from '../../../components/Loading'
+import AchievementsAreaInstitution from '../../../components/main-painel/painel/AchievementsAreaInstitution'
+import CurrentAchievementInstitution from '../../../components/main-painel/painel/CurrentAchievementInstitution'
+import CurrentMissionsInstitutionArea from '../../../components/main-painel/painel/CurrentMissionsInstitutionArea'
+import { useHeader } from '../../../context/HeaderContext'
+import { AchievementProps } from '../../../types/achievement'
 
 export default function Home() {
+  const {
+    setShowMenu,
+    setShowOrganization,
+    setRoutes,
+    setOrganizationName,
+    setUserName,
+  } = useHeader()
+
+  async function getDashboard() {
+    const response = await invokeLambda<
+      Record<string, never>,
+      { statusCode: number; body: string }
+    >('dashboard-select-lambda', {})
+    return JSON.parse(response.body)
+  }
+
+  const { data: dashboard, error } = useQuery({
+    queryKey: ['dashboard'],
+    queryFn: getDashboard,
+    onError: () => {
+      setUserName('Erro ao carregar')
+      setOrganizationName(null)
+    },
+  })
+
+  useEffect(() => {
+    if (!dashboard) {
+      return
+    }
+    setShowMenu(true)
+    setShowOrganization(true)
+    setRoutes([
+      { label: 'Painel Principal', href: '/institutions/painel' },
+      {
+        label: 'Equipe',
+        href: `/institutions/painel/socialOrganization/${
+          dashboard.socialOrganization.id || 0
+        }/team`,
+      },
+      {
+        label: 'Sistema Estelar',
+        href: `/institutions/painel/socialOrganization/${
+          dashboard.socialOrganization.id || 0
+        }/starSystem`,
+      },
+      {
+        label: 'Trocar de organização',
+        href: `/institutions/painel/socialOrganization/${
+          dashboard.socialOrganization.id || 0
+        }/changeOrganization`,
+      },
+    ])
+    setUserName(dashboard.user.fullName)
+    setOrganizationName(dashboard.socialOrganization.name)
+  }, [dashboard])
+
+  if (!dashboard) {
+    return <Loading />
+  }
+
+  const achievements = dashboard.achievements
+  const user = dashboard.user
+  const programs = dashboard.programs
+  const mentorships = dashboard.currentMentorships
+  const socialOrganization = dashboard.socialOrganization
+
   return (
-    <div className="flex h-screen flex-col bg-gray-100">
-      {/* Header */}
-      {/* <header className="flex items-center justify-between bg-white p-4 shadow">
-        <h1 className="text-xl font-bold text-blue-600">COSMOS</h1>
-        <span className="text-gray-600">[Nome da organização]</span>
-      </header> */}
-      <DynamicHeader organizationName={`Ranetium Organization`} />
-      {/* Main Content */}
-      <main className="flex flex-1 p-6">
-        {/* Program List */}
-        <div className="flex-1">
-          <h2 className="mb-4 text-lg font-semibold text-gray-800">
-            Inscreva-se em uma nova aventura
-          </h2>
-          <div className="space-y-4">
-            {[...Array(5)].map((_, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between rounded-lg bg-white p-4 shadow"
-              >
-                <div>
-                  <h3 className="font-semibold text-blue-600">
-                    Nome do Programa
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    A organização social atua na causa da educação
-                  </p>
-                </div>
-                <div className="flex items-center text-gray-500">
-                  <span className="mr-2">📅 De dd/mm/aaaa</span>
-                  <span>Até dd/mm/aaaa</span>
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="min-h-screen overflow-x-hidden bg-gray-200 text-gray-800">
+      <DynamicHeader />
+      <main className="flex gap-6 p-6">
+        <div className="flex w-4/6 flex-1 flex-col gap-6">
+          {mentorships && mentorships.length !== 0 && (
+            <CurrentMissionsInstitutionArea mentorships={mentorships} />
+          )}
+          <AdventureAreaInstitution
+            programs={programs || []}
+            user={user}
+            socialOrganization={socialOrganization}
+          />
         </div>
-        {/* Sidebar */}
-        <aside className="ml-6 w-64 rounded-lg bg-white p-4 shadow">
-          <div className="mb-4 flex items-center rounded bg-green-100 p-2 text-green-700">
-            ✅ Conta criada com sucesso!
-          </div>
-          <div className="text-center">
-            <div className="mx-auto mb-2 h-16 w-16 rounded-full bg-gray-300"></div>
-            <p className="text-gray-700">
-              Complete as informações da Organização e conquiste uma medalha!
-            </p>
-            <button className="mt-2 rounded bg-blue-600 px-3 py-1 text-white">
-              Completar
-            </button>
-          </div>
-          <div className="mt-6">
-            <h3 className="mb-2 font-semibold text-gray-800">
-              Minhas conquistas:
-            </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>🏆 Um pequeno passo - Cadastro realizado</li>
-              <li className="opacity-50">
-                🏆 Supernoval - Complete as informações
-              </li>
-              <li className="opacity-50">
-                🏆 Mestre das galáxias - Complete os dados da organização
-              </li>
-            </ul>
+        <aside className="w-[360px] space-y-6">
+          <div className="flex w-[360px] flex-col gap-6 p-6">
+            <CurrentAchievementInstitution achievements={achievements} />
+            <div
+              className={`${
+                mentorships?.length === 0 ? 'h-[17rem]' : 'h-[36rem]'
+              } relative flex flex-col rounded-lg bg-gray-200 p-6`}
+            >
+              <div className="mb-2 flex items-center justify-between text-sm text-gray-600">
+                <span className="text-gray-700">Minhas conquistas:</span>
+                <span className="text-sm text-gray-700">
+                  <strong className="text-blue-400">
+                    {
+                      achievements?.filter(
+                        (achievement: AchievementProps) => achievement.completed
+                      ).length
+                    }
+                  </strong>{' '}
+                  de {achievements?.length}
+                </span>
+              </div>
+              <AchievementsAreaInstitution achievements={achievements} />
+            </div>
           </div>
         </aside>
       </main>

@@ -1,6 +1,7 @@
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import InputMask from 'react-input-mask'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import formatCurrency from '../../utils/formatCurrency'
 
 interface MaskedInputFieldProps {
   label: string
@@ -12,6 +13,7 @@ interface MaskedInputFieldProps {
   setValue: UseFormSetValue<any> // eslint-disable-line @typescript-eslint/no-explicit-any
   disabled?: boolean
   className?: string
+  defaultValue?: string
 }
 
 export default function MaskedInputField({
@@ -24,30 +26,24 @@ export default function MaskedInputField({
   setValue,
   disabled,
   className,
+  defaultValue = '',
 }: MaskedInputFieldProps) {
   const [inputValue, setInputValue] = useState('')
 
+  useEffect(() => {
+    if (name === 'receitaAnual' && defaultValue) {
+      const formatted = formatCurrency(defaultValue)
+      setInputValue(formatted)
+      setValue(name, defaultValue, { shouldValidate: true })
+    }
+  }, [defaultValue, name, setValue])
+
   const maskMap: Record<string, string> = {
     cnpj: '99.999.999/9999-99',
-    celular: '+99 (99) 99999-9999',
+    phone: '+99 (99) 99999-9999',
   }
 
   const mask = maskMap[name] || ''
-
-  const formatCurrency = (value: string) => {
-    const numericValue = value.replace(/\D/g, '')
-    if (numericValue === '') return ''
-
-    const formattedValue = (parseFloat(numericValue) / 100).toLocaleString(
-      'pt-BR',
-      {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      },
-    )
-
-    return `R$ ${formattedValue}`
-  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let rawValue = e.target.value
@@ -60,6 +56,7 @@ export default function MaskedInputField({
         .replace('R$ ', '')
         .replace(/\./g, '')
         .replace(',', '.')
+
       setValue(name, numericValue, { shouldValidate: true })
     } else {
       rawValue = rawValue.replace(/\D/g, '')

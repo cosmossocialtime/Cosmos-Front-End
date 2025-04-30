@@ -7,7 +7,7 @@ import { useNavigationMap } from '../../../context/NavigationMapProvider'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Button } from '../../button'
+import { Button } from '../../Button'
 import { Menu } from '../../menu'
 import WarningGoalDeletion from './WarningGoalDeletion'
 import { api } from '../../../services/api'
@@ -22,7 +22,7 @@ const editGoalFormSchema = z.object({
       name: z.string().nonempty('A tarefa precisa de uma descrição!'),
       completed: z.boolean(),
       id: z.number().optional(),
-    }),
+    })
   ),
 })
 
@@ -80,13 +80,13 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível salvar as alterações. Tente novamente mais tarde!',
+          'Não foi possível salvar as alterações. Tente novamente mais tarde!'
         )
       })
   }
 
   const completedTasksLength = goal.tasks.filter(
-    (task) => task.completed,
+    (task) => task.completed
   ).length
   const tasksLength = goal.tasks.length
   const percentageCompletedTasks =

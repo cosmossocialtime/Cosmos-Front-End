@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { useNavigationMap } from '../../../context/NavigationMapProvider'
-import { Button } from '../../button'
+import { Button } from '../../Button'
 import GoalPopUp from './GoalPopUp'
 import GoalCard from './GoalCard'
 import { useState } from 'react'
@@ -39,7 +39,7 @@ export function Goals() {
         {goals.length !== 0 ? (
           goals.map((goal, index) => {
             const ordenedTasks = goal.tasks.sort((a, b) =>
-              dayjs(b.createdAt).diff(dayjs(a.createdAt)),
+              dayjs(b.createdAt).diff(dayjs(a.createdAt))
             )
             const organizedGoal: GoalProps = { ...goal, tasks: ordenedTasks }
             return (

@@ -14,7 +14,7 @@ export function InputDate({ className, ...rest }: InputDateProps) {
         `${
           rest.disabled ? 'border-0 border-b' : 'border'
         } flex flex-1 items-center gap-2 rounded border-solid border-gray-400 px-4 py-3 outline-none`,
-        className,
+        className
       )}
     >
       <Calendar size={24} />

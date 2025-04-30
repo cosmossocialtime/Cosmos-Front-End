@@ -12,7 +12,7 @@ import { api } from '../../../services/api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
-import { Button } from '../../../components/button'
+import { Button } from '../../../components/Button'
 
 interface cityProps {
   id: number
@@ -30,17 +30,17 @@ export default function EstadoCidade() {
   const [city, setCity] = useState<cityProps[]>()
   const { handleSubmit } = useForm()
   const { data: statesOfBrazil } = useFetch<stateProps[]>(
-    'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome',
+    'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
   )
 
   useEffect(() => {
     async function fetchCidadesPorEstado() {
       try {
         const estadoEncontrado = statesOfBrazil?.find(
-          (e) => e.sigla === stateSubmit,
+          (e) => e.sigla === stateSubmit
         )
         const cidadesResponse = await axios.get(
-          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`,
+          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`
         )
         setCity(cidadesResponse.data)
       } catch (error) {

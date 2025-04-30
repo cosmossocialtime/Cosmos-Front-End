@@ -44,7 +44,7 @@ export default function CompletedRegistration() {
     } catch (error: any) {
       if (error.response.status === 404) {
         toast.error(
-          'Não foi possivel enviar, tente novamente em alguns instantes',
+          'Não foi possivel enviar, tente novamente em alguns instantes'
         )
       }
     }

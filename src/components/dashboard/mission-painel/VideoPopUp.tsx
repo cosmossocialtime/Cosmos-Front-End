@@ -1,4 +1,7 @@
-import Plyr from 'plyr-react'
+import dynamic from 'next/dynamic'
+
+const Plyr = dynamic(() => import('plyr-react'), { ssr: false })
+
 import 'plyr-react/plyr.css'
 
 interface VideoPopUpProps {

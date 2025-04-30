@@ -1,5 +1,5 @@
-import { Button } from '../../../../../../components/button'
-import { Input } from '../../../../../../components/input'
+import { Button } from '../../../../../../components/Button'
+import { Input } from '../../../../../../components/Input'
 import { Header } from '../../../../../../components/adventure/Header'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '../../../../../../services/api'
@@ -34,14 +34,14 @@ export default function AboutYou1() {
       .then((response) => {
         if (response.status === 200) {
           Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/about-you-2`,
+            `/user/adventure/${programId}/subscribe/application-form/about-you-2`
           )
         }
       })
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+          'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
       })
   }

@@ -25,7 +25,7 @@ export default function CompletedResetPassword() {
   }, [secondsAmount])
 
   useEffect(() => {
-    const { 'cosmos.u': email } = parseCookies()
+    const { 'cosmos.user': email } = parseCookies()
     setEmail(email)
   }, [])
 

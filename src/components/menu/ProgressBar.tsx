@@ -8,6 +8,7 @@ interface ProgressBarProps {
   onBack?: () => void
   activeColor?: string
   inactiveColor?: string
+  backFirstPage?: boolean
   icons?: {
     backArrow: string
     checked: string
@@ -20,6 +21,7 @@ export default function ProgressBar({
   steps,
   currentStep,
   onBack,
+  backFirstPage,
   icons = {
     backArrow: '/images/back-arrow.svg',
     checked: '/images/Checkedbox-icon.svg',
@@ -29,7 +31,7 @@ export default function ProgressBar({
 }: ProgressBarProps) {
   return (
     <div className="flex w-full items-center justify-between">
-      {currentStep > 1 && (
+      {(currentStep > 1 || backFirstPage) && (
         <button onClick={onBack} className="mr-4 flex items-center">
           <Image src={icons.backArrow} alt="Voltar" width={24} height={24} />
         </button>

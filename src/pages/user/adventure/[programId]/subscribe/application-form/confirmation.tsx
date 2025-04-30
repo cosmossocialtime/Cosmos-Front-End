@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Input } from '../../../../../../components/input'
+import { Input } from '../../../../../../components/Input'
 import { Header } from '../../../../../../components/adventure/Header'
 import { toast } from 'react-toastify'
-import { Button } from '../../../../../../components/button'
+import { Button } from '../../../../../../components/Button'
 import { api } from '../../../../../../services/api'
 import Router from 'next/router'
 import Link from 'next/link'
@@ -29,7 +29,7 @@ export default function Confirmation() {
   function selectArea(areaId: number) {
     if (selectedAreas.includes(areaId)) {
       setSelectedAreas((prevSelectedAreas) =>
-        prevSelectedAreas.filter((selectedArea) => selectedArea !== areaId),
+        prevSelectedAreas.filter((selectedArea) => selectedArea !== areaId)
       )
       return
     }
@@ -58,7 +58,7 @@ export default function Confirmation() {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+          'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
       })
   }
@@ -68,13 +68,13 @@ export default function Confirmation() {
       .patch(`volunteer/completed/${program?.volunteerApplicationId}`)
       .then((response) => {
         Router.push(
-          `/user/adventure/${programId}/subscribe/application-form/thanks`,
+          `/user/adventure/${programId}/subscribe/application-form/thanks`
         )
       })
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível validar sua inscrição. Tente novamente mais tarde!',
+          'Não foi possível validar sua inscrição. Tente novamente mais tarde!'
         )
       })
   }

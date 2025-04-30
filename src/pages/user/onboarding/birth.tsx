@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
-import { Button } from '../../../components/button'
+import { Button } from '../../../components/Button'
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState('20')

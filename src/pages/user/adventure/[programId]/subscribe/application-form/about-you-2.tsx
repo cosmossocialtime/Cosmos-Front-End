@@ -1,10 +1,10 @@
 import { z } from 'zod'
-import { Input } from '../../../../../../components/input'
+import { Input } from '../../../../../../components/Input'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '../../../../../../services/api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
-import { Button } from '../../../../../../components/button'
+import { Button } from '../../../../../../components/Button'
 import { Header } from '../../../../../../components/adventure/Header'
 import { Loading } from '../../../../../../components/Loading'
 import Link from 'next/link'
@@ -34,14 +34,14 @@ export default function AboutYou2() {
       .then((response) => {
         if (response.status === 200) {
           Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/mission-role`,
+            `/user/adventure/${programId}/subscribe/application-form/mission-role`
           )
         }
       })
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+          'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
       })
   }

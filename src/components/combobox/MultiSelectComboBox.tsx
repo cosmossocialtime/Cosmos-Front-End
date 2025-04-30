@@ -15,6 +15,7 @@ interface MultiSelectComboBoxProps {
   options: Option[]
   maxSelections?: number // Define o máximo de seleções (opcional)
   label?: string
+  value?: MultiValue<Option>
   onChange?: (selected: MultiValue<Option>) => void
   error?: string
 }
@@ -107,10 +108,11 @@ const MultiSelectComboBox: React.FC<MultiSelectComboBoxProps> = ({
   options,
   maxSelections,
   label,
+  value,
   onChange,
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>(
-    [] as MultiValue<Option>,
+    [] as MultiValue<Option>
   )
 
   const handleChange = (selected: MultiValue<Option>) => {
@@ -131,7 +133,7 @@ const MultiSelectComboBox: React.FC<MultiSelectComboBoxProps> = ({
       <Select
         options={options}
         isMulti
-        value={selectedOptions}
+        value={value ? value : selectedOptions}
         onChange={handleChange}
         placeholder="Selecione uma ou mais opções"
         closeMenuOnSelect={false}

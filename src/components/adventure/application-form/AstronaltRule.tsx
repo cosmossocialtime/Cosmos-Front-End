@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '../../button'
+import { Button } from '../../Button'
 import { Header } from '../Header'
 import Image, { StaticImageData } from 'next/image'
 import { ReactNode } from 'react'

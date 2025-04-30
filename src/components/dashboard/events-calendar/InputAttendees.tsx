@@ -18,17 +18,20 @@ export function InputAttendees({
   function deleteSelectedAttendee(attendee: number) {
     let updateAttendeesId = [...attendeesId]
     updateAttendeesId = updateAttendeesId.filter(
-      (upAttendee) => upAttendee !== attendee,
+      (upAttendee) => upAttendee !== undefined && upAttendee !== attendee
     )
 
     changeAttendeesId(updateAttendeesId)
   }
-  const companions = users.filter((user) => user.userId !== ownerUser.id)
+
+  const companions = users.filter(
+    (user) => user.userId !== undefined && user.userId !== ownerUser.id
+  )
 
   function selectAttendee(value: string) {
     const companion = companions.find((companion) => companion.byname === value)
 
-    if (companion) {
+    if (companion?.userId !== undefined) {
       changeAttendeesId([...attendeesId, companion.userId])
     }
   }
@@ -50,7 +53,7 @@ export function InputAttendees({
               >
                 {
                   companions.find(
-                    (companion) => companion.userId === attendeerId,
+                    (companion) => companion.userId === attendeerId
                   )?.byname
                 }
                 <X
@@ -74,7 +77,9 @@ export function InputAttendees({
           <Select.Viewport className="cursor-pointer text-violet-500">
             {companions.map((companion) => {
               return (
-                !attendeesId.includes(companion.userId) && (
+                companion?.userId !== undefined &&
+                companion?.byname !== undefined &&
+                !attendeesId.includes(companion?.userId) && (
                   <Select.Item
                     key={companion.id}
                     value={companion.byname}

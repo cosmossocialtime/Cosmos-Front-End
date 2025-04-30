@@ -1,9 +1,9 @@
-import { Button } from '../../../../../components/button'
+import { Button } from '../../../../../components/Button'
 import LogoCosmos from '../../../../../../public/images/logoCosmosBranco.svg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useOnboarding } from '../../../../../hooks/useOnboarding'
-import FormatText from '../../../../../utils/formatText'
+import FormatText from '../../../../../utils/FormatText'
 
 export default function YourRole() {
   const { rootRoute, currentMentorship } = useOnboarding()
@@ -26,7 +26,7 @@ export default function YourRole() {
   ]
 
   const messageShow = roleMessages.find(
-    (message) => message.role === role,
+    (message) => message.role === role
   )?.message
 
   return (

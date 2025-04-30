@@ -18,7 +18,7 @@ export default function CurrentAchievement({
   achievements,
 }: CurrentAchievementProps) {
   const firstAchievementId = achievements.filter(
-    (achievement) => achievement.completed,
+    (achievement) => achievement.completed
   ).length
   const idOfAchievementShow = [0, 1, 2, 3, 7, 7, 7, 7, 7]
   const [currentSlide, setCurrentSlide] = useState(firstAchievementId)

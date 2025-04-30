@@ -24,7 +24,7 @@ interface MentorshipProps {
     {
       sectorId: number
       sector: string
-    },
+    }
   ]
   previousMentorship: string
   roleId: number

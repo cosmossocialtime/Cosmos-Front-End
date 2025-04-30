@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import InputMask from 'react-input-mask'
 import DatePicker from 'react-datepicker'
@@ -12,6 +12,7 @@ interface MaskedDateFieldProps {
   register: UseFormRegister<any> // eslint-disable-line @typescript-eslint/no-explicit-any
   error?: string
   setValue: UseFormSetValue<any> // eslint-disable-line @typescript-eslint/no-explicit-any
+  defaultDate?: Date | null
 }
 
 export default function MaskedDateField({
@@ -20,9 +21,21 @@ export default function MaskedDateField({
   placeholder = 'Escreva ou selecione uma data',
   error,
   setValue,
+  defaultDate = null,
 }: MaskedDateFieldProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(
+    defaultDate !== null ? defaultDate.toLocaleDateString('pt-BR') : ''
+  )
+
+  useEffect(() => {
+    if (defaultDate !== null) {
+      const formatted = defaultDate.toLocaleDateString('pt-BR')
+      setSelectedDate(defaultDate)
+      setInputValue(formatted)
+      setValue(name, formatted, { shouldValidate: true })
+    }
+  }, [defaultDate, name, setValue])
 
   const handleDateChange = (date: Date | null) => {
     if (date) {

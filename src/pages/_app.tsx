@@ -12,6 +12,8 @@ import 'keen-slider/keen-slider.min.css'
 import { ToastContainer } from 'react-toastify'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from '../services/queryClient'
+import { OnboardingInstitutionProvider } from '../context/OnboardingInstituionProvider'
+import { HeaderProvider } from '../context/HeaderContext'
 
 registerLocale('ptBR', ptBR)
 setDefaultLocale('ptBR')
@@ -28,8 +30,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           options={{ showSpinner: false }}
         />
         <AppProvider>
-          <Component {...pageProps} />
-          <ToastContainer autoClose={2000} limit={3} />
+          <HeaderProvider>
+            <OnboardingInstitutionProvider>
+              <Component {...pageProps} />
+              <ToastContainer autoClose={2000} limit={3} />
+            </OnboardingInstitutionProvider>
+          </HeaderProvider>
         </AppProvider>
         <GlobalStyle />
       </QueryClientProvider>

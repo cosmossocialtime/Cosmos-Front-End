@@ -15,3 +15,8 @@ export const roleId = [
     roleName: 'Comandante',
   },
 ]
+
+export const permissionsLabels: Map<string, string> = new Map([
+  ['social_organization_manager', 'Administrador'],
+  ['social_organization_member', 'Membro'],
+])

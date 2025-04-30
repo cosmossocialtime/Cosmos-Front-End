@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import Cropper, { Area, Point } from 'react-easy-crop'
 import CropImage from './CropImage'
-import { Button } from '../button'
+import { Button } from '../Button'
 
 interface SettingCropAreaProps {
   selectedImgSrc: string
@@ -27,7 +27,7 @@ export default function SettingCropArea({
     (croppedArea: Area, croppedAreaPixels: Area) => {
       setCroppedArea(croppedAreaPixels)
     },
-    [],
+    []
   )
 
   function cropImg() {

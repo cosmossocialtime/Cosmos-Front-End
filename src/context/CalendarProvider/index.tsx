@@ -32,7 +32,7 @@ type CalendarContextProps = {
 }
 
 const CalendarContext = createContext<CalendarContextProps>(
-  {} as CalendarContextProps,
+  {} as CalendarContextProps
 )
 
 export const popovers = {
@@ -48,7 +48,7 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const { dashboard } = useDashboard()
 
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )
   const ownerUser = dashboard?.user
 

@@ -31,7 +31,6 @@ export default function Login() {
       toast.success('Acesso autorizado, ligando os foguetes')
     } catch (error) {
       setIsSubmiting(false)
-      console.log(error)
       toast.error('Credenciais incorretas')
     }
   }

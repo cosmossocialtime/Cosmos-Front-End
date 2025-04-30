@@ -1,35 +1,55 @@
 import { X } from 'phosphor-react'
+import { useTeam } from '../../../../hooks/useTeam'
 
 type CloseModalProps = {
   closeModal: () => void
   memberName: string
+  userId: number
+  socialOrganizationId: number
 }
 
-export const DeleteMember = ({ closeModal, memberName }: CloseModalProps) => {
-  return (
-    <section className="absolute left-0 top-0 z-[60] flex min-h-screen w-full items-center justify-center bg-black/25">
-      <section className="rounded-md bg-white p-10 shadow-lg md:min-w-[500px]">
-        <div className="flex items-center justify-between gap-3 border-b pb-2">
-          <h1 className="text-xl font-semibold">
-            Deseja mesmo remover {memberName} da equipe ?
-          </h1>
-          <button type="button">
-            <X
-              onClick={closeModal}
-              className="cursor-pointer text-gray-500 hover:text-gray-700"
-              size={20}
-            />
-          </button>
-        </div>
-        <p>Essa ação não poderá ser desfeita</p>
+export const DeleteMember = ({
+  closeModal,
+  memberName,
+  userId,
+  socialOrganizationId,
+}: CloseModalProps) => {
+  const { deleteUser } = useTeam(socialOrganizationId)
 
-        <div className="mt-5 flex items-center gap-4">
-          <button className="rounded-md bg-red-400 p-3 px-16 font-semibold text-white">
+  const handleRemoveMember = () => {
+    deleteUser(userId)
+    closeModal()
+  }
+
+  return (
+    <section className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/10">
+      <section className="relative h-[223px] rounded-lg bg-white p-8 md:w-[640px]">
+        <button
+          onClick={closeModal}
+          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
+        >
+          <X size={20} />
+        </button>
+
+        <h1 className="mb-2 text-xl font-semibold text-gray-900">
+          Deseja mesmo remover {memberName} da equipe ?
+        </h1>
+
+        <p className="text-m mb-6 text-gray-500">
+          Essa ação não poderá ser desfeita
+        </p>
+
+        {/* Botões */}
+        <div className="justify-left mt-12 flex gap-[32px]">
+          <button
+            className="h-[48px] w-[240px] rounded-md bg-red-500 font-semibold text-white transition-colors hover:bg-red-600"
+            onClick={() => handleRemoveMember()}
+          >
             Remover
           </button>
           <button
             onClick={closeModal}
-            className="rounded-md border border-blue-600 bg-white p-3 px-5 font-semibold text-c-blue-500 shadow-sm shadow-black/10"
+            className="h-[48px] w-[163px] rounded-md border border-solid border-blue-500 bg-transparent px-6 py-3 font-semibold text-blue-500 transition-colors hover:bg-blue-50"
           >
             Não Remover
           </button>
