@@ -6,7 +6,7 @@ import { api } from '../../../services/api'
 import { UserProps } from '../../../types/user'
 import { Camera, Pencil } from 'phosphor-react'
 
-import Header from '../../../components/main-painel/Header'
+import Header from '../../../components/header/Header'
 import UploadImage from '../../../components/Crop/UploadImage'
 import FormUserData from '../../../components/main-painel/profile/FormUserData'
 import SettingCropArea from '../../../components/Crop/SettingCropArea'

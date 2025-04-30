@@ -1,60 +1,59 @@
 /* verifyEmail.module.css */
 .container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    background-color: #f9fafb; /* bg-gray-50 */
-  }
-   
-  .logo {
-    position: absolute;
-    left: 1.5rem; /* left-6 */
-    top: 1.5rem; /* top-6 */
-  }
-   
-  .mainContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
-  }
-   
-  .title {
-    margin-top: 1.5rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #1f2937; /* text-gray-800 */
-  }
-   
-  .description {
-    margin-top: 1rem;
-    padding-bottom: 40%;
-    font-size: 1.125rem;
-    color: #4b5563; /* text-gray-600 */
-    line-height: 1.625rem;
-    max-width: 32rem;
-    padding-right: 10px;
-  }
-   
-  .resendLink {
-    margin-top: 1.5rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-  }
-   
-  .resendLink.enabled {
-    color: #7c3aed; /* text-violet-500 */
-    font-weight: bold;
-  }
-   
-  .resendLink.disabled {
-    color: #c4b5fd; /* text-violet-300 */
-    cursor: not-allowed;
-  }
-    
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  background-color: white;
+}
+
+.logo {
+  position: absolute;
+  left: 1.5rem; /* left-6 */
+  top: 1.5rem; /* top-6 */
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  margin-top: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2937; /* text-gray-800 */
+}
+
+.description {
+  margin-top: 1rem;
+  padding-bottom: 40%;
+  font-size: 1.125rem;
+  color: #4b5563; /* text-gray-600 */
+  line-height: 1.625rem;
+  max-width: 32rem;
+  padding-right: 10px;
+}
+
+.resendLink {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.resendLink.enabled {
+  color: #7c3aed; /* text-violet-500 */
+  font-weight: bold;
+}
+
+.resendLink.disabled {
+  color: #c4b5fd; /* text-violet-300 */
+  cursor: not-allowed;
+}

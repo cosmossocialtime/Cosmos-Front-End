@@ -31,7 +31,6 @@ export default function Login() {
       toast.success('Acesso autorizado, ligando os foguetes')
     } catch (error) {
       setIsSubmiting(false)
-      console.log(error)
       toast.error('Credenciais incorretas')
     }
   }
@@ -107,7 +106,11 @@ export default function Login() {
               </span>
             </div>
 
-            <button type="submit" className="colorButton" disabled={isSubmiting}>
+            <button
+              type="submit"
+              className="colorButton"
+              disabled={isSubmiting}
+            >
               Entrar
             </button>
           </form>
@@ -115,7 +118,7 @@ export default function Login() {
             <h3>
               Ainda não tem uma conta?{' '}
               <strong className="font-bold text-purple-700 transition-all duration-200 hover:text-purple-600">
-                <Link href="/user/register">Cadastre-se</Link>
+                <Link href="/institutions/select-role">Cadastre-se</Link>
               </strong>
             </h3>
           </div>

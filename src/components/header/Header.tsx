@@ -1,4 +1,4 @@
-import Menu from './Menu'
+import Menu from '../main-painel/Menu'
 import CosmosLogo from '../../assets/cosmos-logo-white.svg'
 import Image from 'next/image'
 import Link from 'next/link'

@@ -13,7 +13,7 @@ export function useOnboarding() {
   const user = dashboard?.user
   const company = dashboard?.company
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )
 
   const rootRoute = `/user/adventure/onboarding/${mentorshipId}`

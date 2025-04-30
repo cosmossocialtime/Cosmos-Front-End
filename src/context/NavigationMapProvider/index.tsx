@@ -30,7 +30,7 @@ type NavigationMapContextProps = {
 }
 
 const NavigationMapContext = createContext<NavigationMapContextProps>(
-  {} as NavigationMapContextProps,
+  {} as NavigationMapContextProps
 )
 
 const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
@@ -39,7 +39,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
 
   const { dashboard } = useDashboard()
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )
 
   const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null)
@@ -67,7 +67,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
 
   function changeGoal(updatedGoal: GoalProps) {
     const newGoals = goals.map((goal) =>
-      goal.id === updatedGoal.id ? updatedGoal : goal,
+      goal.id === updatedGoal.id ? updatedGoal : goal
     )
     queryClient.setQueriesData(['goals'], newGoals)
   }
@@ -88,7 +88,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível criar o objetivo. Tente novamente mais tarde!',
+          'Não foi possível criar o objetivo. Tente novamente mais tarde!'
         )
       })
   }
@@ -111,7 +111,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível deletar o objetivo. Tente novamente mais tarde!',
+          'Não foi possível deletar o objetivo. Tente novamente mais tarde!'
         )
       })
   }

@@ -45,7 +45,7 @@ export default function TermsOfUse() {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+          'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
       })
   }

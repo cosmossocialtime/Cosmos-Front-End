@@ -34,14 +34,14 @@ export default function AboutYou1() {
       .then((response) => {
         if (response.status === 200) {
           Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/about-you-2`,
+            `/user/adventure/${programId}/subscribe/application-form/about-you-2`
           )
         }
       })
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+          'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
       })
   }

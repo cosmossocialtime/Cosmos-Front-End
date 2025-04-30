@@ -2,7 +2,7 @@ import { Area } from 'react-easy-crop'
 
 export default function CropImage(
   { width, height, x, y }: Area,
-  source: string,
+  source: string
 ) {
   const canvas = document.createElement('canvas')
 

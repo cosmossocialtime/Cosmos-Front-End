@@ -21,7 +21,7 @@ export function MenuOption({
       onClick={onClick}
       className={twMerge(
         'flex cursor-pointer items-center gap-1 text-gray-300',
-        className,
+        className
       )}
     >
       <Icon size={24} />

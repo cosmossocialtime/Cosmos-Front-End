@@ -123,9 +123,9 @@ export default function FormUserData({
         </Input.Root>
 
         <LocationInput
-          cityData={newUserData.city}
-          stateData={newUserData.state}
-          livesInBrasil={newUserData.country}
+          cityData={newUserData.city || ''}
+          stateData={newUserData.state || ''}
+          livesInBrasil={newUserData.country || false}
           handleLocation={handleLocation}
           enableForm={enableForm}
         />
@@ -134,7 +134,7 @@ export default function FormUserData({
           <Input.Select
             disabled={!enableForm}
             items={gendersOpt}
-            option={newUserData.gender}
+            option={newUserData.gender || ''}
             changeOption={(option) =>
               setNewUserData({ ...newUserData, gender: option })
             }

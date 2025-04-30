@@ -32,7 +32,7 @@ export function Calendar({ currentDay }: CalendarProps) {
 
   const firstDayWeekOfMonth = Number(daysOfMonth[0].format('d'))
   const daysOfPreviousMonth = daysOfLastMonth.slice(
-    daysOfLastMonth.length - firstDayWeekOfMonth,
+    daysOfLastMonth.length - firstDayWeekOfMonth
   )
 
   const daysOfNextMonth = Array.from({
@@ -62,10 +62,10 @@ export function Calendar({ currentDay }: CalendarProps) {
         ))}
         {daysOfMonth.map((day) => {
           const eventsOfTheDay = events.filter((event) =>
-            dayjs(event.startAt).isSame(dayjs(day), 'day'),
+            dayjs(event.startAt).isSame(dayjs(day), 'day')
           )
           const ordenedEvents = eventsOfTheDay.sort((a, b) =>
-            dayjs(a.startAt).diff(dayjs(b.startAt)),
+            dayjs(a.startAt).diff(dayjs(b.startAt))
           )
           const noEvents = ordenedEvents.length === 0
           const formattedDay = dayjs(day).format('DD')

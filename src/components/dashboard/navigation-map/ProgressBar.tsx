@@ -10,7 +10,7 @@ export default function ProgressBar({
   const circumferenceSize = 377
   const percentOfCircumference = amountTask > 0 ? completedTask / amountTask : 0
   const completedSize = Math.abs(
-    Math.round(percentOfCircumference * circumferenceSize) - circumferenceSize,
+    Math.round(percentOfCircumference * circumferenceSize) - circumferenceSize
   )
 
   return (

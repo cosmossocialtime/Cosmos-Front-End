@@ -1,20 +1,22 @@
-interface ButtonProps{
-    text: string;
-    type?: "button" | "submit" | "reset";
-    disabled? : boolean;
-    isLoading?: boolean;
-    onClick?: () => void;
+interface ButtonProps {
+  text: string
+  type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
+  isLoading?: boolean
+  onClick?: () => void
 }
 
-export function Button({ text, type, disabled, onClick}: ButtonProps) {
-    return(
-        <button
-        type ={type}
-        disabled= {disabled}
-        onClick = {onClick}
-        className={`w-full rounded-md p-2 mt-[20px] text-white transition colorButton ${disabled ? "disabled" : ""}`}
-        >
-            {text}
-        </button>
-    );
+export function Button({ text, type, disabled, onClick }: ButtonProps) {
+  return (
+    <button
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      className={`colorButton mt-[20px] w-full rounded-md p-2 font-normal text-white transition ${
+        disabled ? 'disabled' : ''
+      }`}
+    >
+      {text}
+    </button>
+  )
 }

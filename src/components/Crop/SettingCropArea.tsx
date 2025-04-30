@@ -27,7 +27,7 @@ export default function SettingCropArea({
     (croppedArea: Area, croppedAreaPixels: Area) => {
       setCroppedArea(croppedAreaPixels)
     },
-    [],
+    []
   )
 
   function cropImg() {

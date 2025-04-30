@@ -35,16 +35,16 @@ export default function ModalInstitute({
   const decimalPart = String(annualRevenue).slice(-2)
   const annualRevenueInteger = String(integerPart).replace(
     /(\d)(?=(\d{3})+(?!\d))/g,
-    '$1.',
+    '$1.'
   )
   const beneficiariesFormated = String(beneficiaries).replace(
     /(\d)(?=(\d{3})+(?!\d))/g,
-    '$1.',
+    '$1.'
   )
 
   const collaboratorsFormated = String(totalCollaborators).replace(
     /(\d)(?=(\d{3})+(?!\d))/g,
-    '$1.',
+    '$1.'
   )
 
   return (

@@ -10,10 +10,10 @@ export function PopoverEvents() {
   }
 
   const eventsOfTheDay = events.filter((event) =>
-    dayjs(event.startAt).isSame(dayjs(selectedDay), 'day'),
+    dayjs(event.startAt).isSame(dayjs(selectedDay), 'day')
   )
   const ordenedEvents = eventsOfTheDay.sort((a, b) =>
-    dayjs(a.startAt).diff(dayjs(b.startAt)),
+    dayjs(a.startAt).diff(dayjs(b.startAt))
   )
 
   return (

@@ -39,7 +39,7 @@ export function Goals() {
         {goals.length !== 0 ? (
           goals.map((goal, index) => {
             const ordenedTasks = goal.tasks.sort((a, b) =>
-              dayjs(b.createdAt).diff(dayjs(a.createdAt)),
+              dayjs(b.createdAt).diff(dayjs(a.createdAt))
             )
             const organizedGoal: GoalProps = { ...goal, tasks: ordenedTasks }
             return (

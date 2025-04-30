@@ -9,9 +9,7 @@ interface UserProps {
 }
 
 export default function Iniciar() {
-  const { data } = useFetch<UserProps>(
-    'https://api.cosmossocial.com.br/api/dashboard',
-  )
+  const { data } = useFetch<UserProps>('http://localhost:8080/api/dashboard')
   const completedOboarding = data?.user.completedOnboarding
   if (completedOboarding) {
     Router.push('/user/painel')

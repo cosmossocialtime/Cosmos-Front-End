@@ -53,10 +53,10 @@ export default function ApplicationForm() {
     linkedinUrl,
   }: formProps) {
     const professionalExperienceId = timeExperienceOpts.findIndex(
-      (option) => option === professionalExperience,
+      (option) => option === professionalExperience
     )
     const avaiableId = timesAvaiable.findIndex(
-      (option) => option === availableTime,
+      (option) => option === availableTime
     )
     api
       .patch('user/volunteering', {
@@ -69,14 +69,14 @@ export default function ApplicationForm() {
       .then((response) => {
         if (response.status === 200) {
           Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/about-you-1`,
+            `/user/adventure/${programId}/subscribe/application-form/about-you-1`
           )
         }
       })
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possível enviar os dados. Tente novamente mais tarde!',
+          'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
       })
   }

@@ -25,7 +25,7 @@ export function InputCheckBox({
         ` ${
           isLineThrough && checked ? 'text-gray-400 line-through' : ''
         }  flex cursor-pointer gap-2`,
-        className,
+        className
       )}
     >
       <Checkbox.Root

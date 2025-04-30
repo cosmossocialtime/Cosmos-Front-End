@@ -29,16 +29,16 @@ export function LocationInput({
   const liveOutside = !livesInBrasil
   const [city, setCity] = useState<cityProps[]>()
   const { data: statesOfBrazil } = useFetch<stateProps[]>(
-    'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome',
+    'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
   )
   useEffect(() => {
     async function fetchCidadesPorEstado() {
       const estadoEncontrado = statesOfBrazil?.find(
-        (e) => e.sigla === stateData,
+        (e) => e.sigla === stateData
       )
       axios
         .get(
-          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`,
+          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`
         )
         .then(({ data: cidades }: { data: cityProps[] }) => {
           setCity(cidades)

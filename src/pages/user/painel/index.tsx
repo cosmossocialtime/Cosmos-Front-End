@@ -1,4 +1,4 @@
-import Header from '../../../components/main-painel/Header'
+import Header from '../../../components/header/Header'
 import CurrentAchievement from '../../../components/main-painel/painel/CurrentAchievement'
 import CurrentMissionsArea from '../../../components/main-painel/painel/CurrentMissionsArea'
 import AdventureArea from '../../../components/main-painel/painel/AdventureArea'
@@ -48,9 +48,9 @@ export default function Painel() {
         <div className="flex w-1/3 flex-col gap-6">
           <div className="relative flex flex-1 flex-col items-center overflow-hidden rounded-lg bg-[#1E2543] py-11 pb-7">
             <PerfilArea
-              bannerPicture={user.banner}
-              profilePicture={user.profilePicture}
-              name={user.byname}
+              bannerPicture={user.banner || ''}
+              profilePicture={user.profilePicture || ''}
+              name={user.byname || ''}
             />
           </div>
 

@@ -28,7 +28,7 @@ export function InputSelect({
           `${
             rest.disabled ? 'border-0 border-b' : 'border'
           } group flex flex-1 items-center justify-between gap-12 rounded border-solid border-gray-400 px-4 py-3`,
-          className,
+          className
         )}
       >
         <Select.Value asChild>

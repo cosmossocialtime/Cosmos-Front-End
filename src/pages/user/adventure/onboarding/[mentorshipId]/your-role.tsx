@@ -26,7 +26,7 @@ export default function YourRole() {
   ]
 
   const messageShow = roleMessages.find(
-    (message) => message.role === role,
+    (message) => message.role === role
   )?.message
 
   return (

@@ -16,12 +16,12 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
   const barGrayWidth = 100 - stepWidth
 
   const completedSteps = currentMentorship.steps.filter(
-    (step) => step.active === true,
+    (step) => step.active === true
   )
   const completedStepsLength = completedSteps.length
 
   const currentStep = currentMentorship.steps.find(
-    (step) => step.active === false,
+    (step) => step.active === false
   )
 
   const marginBar = stepWidth / 2
@@ -62,7 +62,7 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
         >
           {currentMentorship.steps.map((step) => {
             const stepName = stepsNames.find(
-              (stepName) => stepName.stepId === step.stepId,
+              (stepName) => stepName.stepId === step.stepId
             )
 
             return (
@@ -120,7 +120,7 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
                   className="h-[10px] w-[10px] rounded-full bg-[#D1D5DB] data-[currentStep=true]:bg-violet-400"
                 />
               </div>
-            ),
+            )
           )}
         </div>
 

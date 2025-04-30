@@ -27,7 +27,7 @@ export default function Book() {
 
   const { dashboard } = useDashboard()
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )
 
   const [event, setEvent] = useState<EventProps | null>(null)
@@ -72,7 +72,7 @@ export default function Book() {
       .catch((error) => {
         console.error(error)
         toast.error(
-          'Não foi possivel salvar os dados. Tente novamente mais tarde!',
+          'Não foi possivel salvar os dados. Tente novamente mais tarde!'
         )
       })
   }

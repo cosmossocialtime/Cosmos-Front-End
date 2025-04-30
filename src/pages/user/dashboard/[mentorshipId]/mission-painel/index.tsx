@@ -19,7 +19,7 @@ export default function MissionPainel() {
   const { dashboard } = useDashboard()
 
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId,
+    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )
 
   const [openDialog, setOpenDialog] = useState(true)
@@ -35,7 +35,7 @@ export default function MissionPainel() {
         'Etapa atual ainda não disponível. Aguarde a data de lançamento para receber novas instruções.',
         {
           autoClose: 5000,
-        },
+        }
       )
       return
     }

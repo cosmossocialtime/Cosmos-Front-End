@@ -43,7 +43,7 @@ export function PopoverEventForm() {
 
   const { control, handleSubmit, register } = useForm<formProps>()
   const attendeesId = selectedEvent?.attendees.map(
-    (attendee) => attendee.userId,
+    (attendee) => attendee.userId
   )
   const day = dayjs(selectedDay).toDate()
 
@@ -78,7 +78,7 @@ export function PopoverEventForm() {
       })
       .catch((error) => {
         toast.error(
-          'Não foi possível marcar a reunião. Tente novamente mais tarde!',
+          'Não foi possível marcar a reunião. Tente novamente mais tarde!'
         )
         console.error(error)
       })
@@ -116,7 +116,7 @@ export function PopoverEventForm() {
       })
       .catch((error) => {
         toast.error(
-          'Não foi possível marcar a reunião. Tente novamente mais tarde!',
+          'Não foi possível marcar a reunião. Tente novamente mais tarde!'
         )
         console.error(error)
       })
