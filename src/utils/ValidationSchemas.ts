@@ -180,16 +180,27 @@ export const numeroSchema = z
 
 // 🔹 Validação para Upload de Arquivo (Apenas PDF, DOC, etc.)
 export const fileSchema = z.preprocess(
-  (file) => (file instanceof File ? file : undefined),
+  (file) => {
+    // No servidor, retorna undefined para evitar erros
+    if (typeof window === 'undefined') return undefined
+    return file instanceof File ? file : undefined
+  },
   z
-    .instanceof(File)
-    .refine((file) => file.size > 0, {
-      message: 'Arquivo vazio. Selecione um arquivo válido.',
-    })
+    .any()
+    .refine(
+      (file) => {
+        // Validação só ocorre no client-side
+        if (typeof window === 'undefined') return true
+        return file instanceof File && file.size > 0
+      },
+      {
+        message: 'Arquivo vazio. Selecione um arquivo válido.',
+      }
+    )
     .refine(
       (file) => {
         if (typeof window === 'undefined') return true
-        return file instanceof File && file.size <= 10 * 1024 * 1024 // até 10MB
+        return file instanceof File && file.size <= 10 * 1024 * 1024
       },
       {
         message: 'O arquivo deve ser menor que 10MB',
@@ -197,13 +208,14 @@ export const fileSchema = z.preprocess(
     )
     .refine(
       (file) => {
+        if (typeof window === 'undefined') return true
         const validTypes = [
           'application/pdf',
           'application/msword',
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           'image/jpeg',
         ]
-        return validTypes.includes(file.type)
+        return file instanceof File && validTypes.includes(file.type)
       },
       {
         message:

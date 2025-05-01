@@ -3,7 +3,6 @@ import DynamicHeader from '../../../components/header/DynamicHeader'
 import { useQuery } from '@tanstack/react-query'
 import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import AdventureAreaInstitution from '../../../components/main-painel/painel/AdventureAreaInstitution'
-import { DashboardProps } from '../../../types/dashboard'
 import { Loading } from '../../../components/Loading'
 import AchievementsAreaInstitution from '../../../components/main-painel/painel/AchievementsAreaInstitution'
 import CurrentAchievementInstitution from '../../../components/main-painel/painel/CurrentAchievementInstitution'
@@ -35,6 +34,7 @@ export default function Home() {
       setUserName('Erro ao carregar')
       setOrganizationName(null)
     },
+    refetchOnWindowFocus: true, // Recarrega quando a janela ganha foco
   })
 
   useEffect(() => {
