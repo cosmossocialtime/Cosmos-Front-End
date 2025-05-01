@@ -141,14 +141,28 @@ export const dataFundacaoSchema = z.string().refine(
     const match = data.match(regex)
     if (!match) return false
 
-    const [dia, mes, ano] = match
-    const inputDate = new Date(`${ano}-${mes}-${dia}`)
+    const [_, dia, mes, ano] = match
+    const day = parseInt(dia, 10)
+    const month = parseInt(mes, 10)
+    const year = parseInt(ano, 10)
 
+    const tempDate = new Date(year, month - 1, day)
+    if (
+      tempDate.getFullYear() !== year ||
+      tempDate.getMonth() + 1 !== month ||
+      tempDate.getDate() !== day
+    ) {
+      return false
+    }
+
+    const inputDate = new Date(Date.UTC(year, month - 1, day))
     const today = new Date()
-    return inputDate.getDate() <= today.getDate()
+    today.setHours(0, 0, 0, 0)
+
+    return inputDate <= today
   },
   {
-    message: 'A data de fundação não pode estar no futuro.',
+    message: 'A data de fundação não pode estar no futuro e deve ser válida.',
   }
 )
 
@@ -165,20 +179,36 @@ export const numeroSchema = z
   })
 
 // 🔹 Validação para Upload de Arquivo (Apenas PDF, DOC, etc.)
-export const fileSchema = z
-  .instanceof(File)
-  .refine(
-    (file) => {
-      const validTypes = [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'image/jpeg',
-      ]
-      return validTypes.includes(file.type)
-    },
-    {
-      message: 'Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.',
-    }
-  )
-  .optional()
+export const fileSchema = z.preprocess(
+  (file) => (file instanceof File ? file : undefined),
+  z
+    .instanceof(File)
+    .refine((file) => file.size > 0, {
+      message: 'Arquivo vazio. Selecione um arquivo válido.',
+    })
+    .refine(
+      (file) => {
+        if (typeof window === 'undefined') return true
+        return file instanceof File && file.size <= 10 * 1024 * 1024 // até 10MB
+      },
+      {
+        message: 'O arquivo deve ser menor que 10MB',
+      }
+    )
+    .refine(
+      (file) => {
+        const validTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'image/jpeg',
+        ]
+        return validTypes.includes(file.type)
+      },
+      {
+        message:
+          'Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.',
+      }
+    )
+    .optional()
+)

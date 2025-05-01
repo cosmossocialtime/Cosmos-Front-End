@@ -67,7 +67,6 @@ export default function ResetPassword() {
         { statusCode: number; body: string }
       >('user-reset-password-lambda', payload)
 
-      console.log(response)
       if (response.statusCode == 200) {
         toast.success('Senha alterada com sucesso')
         Router.push('/user/login')

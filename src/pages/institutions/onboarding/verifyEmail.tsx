@@ -3,26 +3,63 @@ import Image from 'next/image'
 import Mensagem from '../../../assets/icons/Envelope.svg'
 import { useEffect, useState } from 'react'
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css' // Importando CSS
-// import DynamicHeader from '../../../components/main-painel/DynamicHeader'
-import StaticHeader from '../../../components/instituition/StaticHeader'
+import { getFormData } from '../../../utils/localStroge'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { toast } from 'react-toastify'
+import DynamicHeader from '../../../components/header/DynamicHeader'
 
 export default function VerifyEmail() {
-  const [seconds, setSeconds] = useState(60)
-  const [isResendEnabled, setIsResendEnabled] = useState(false)
-  const userEmail = 'email@email.com'
+  const [secondsAmount, setSecondsAmount] = useState(60)
+  const [timeExpire, setTimeExpire] = useState(false)
+  const [email, setEmail] = useState('')
+
+  const minutes = Math.floor(secondsAmount / 60)
+  const seconds = secondsAmount % 60
 
   useEffect(() => {
-    if (seconds > 0) {
-      const timer = setTimeout(() => setSeconds((prev) => prev - 1), 1000)
-      return () => clearTimeout(timer)
-    } else {
-      setIsResendEnabled(true)
+    if (secondsAmount > 0) {
+      setTimeout(() => {
+        setSecondsAmount((state) => state - 1)
+      }, 1000)
     }
-  }, [seconds])
+    if (secondsAmount === 0) {
+      setTimeExpire(true)
+    }
+  }, [secondsAmount])
+
+  useEffect(() => {
+    const email = getFormData('cosmos.user')
+    setEmail(email)
+  }, [])
+
+  async function resendCode() {
+    try {
+      const payload = { email: email }
+
+      const response = await invokeLambda<
+        {
+          email: string
+        },
+        { statusCode: number; body: string }
+      >('user-resend-confirmation-lambda', payload)
+
+      if (response.statusCode === 200) {
+        toast.success('Email reenviado!')
+      } else {
+        toast.error(
+          'Não foi possivel enviar, tente novamente em alguns instantes'
+        )
+      }
+    } catch (error) {
+      toast.error(
+        'Não foi possivel enviar, tente novamente em alguns instantes'
+      )
+    }
+  }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-gray-100">
-      <StaticHeader />
+    <div className="flex min-h-screen w-full flex-col">
+      <DynamicHeader />
 
       {/* Container principal */}
       <div className="flex w-full flex-1 items-center justify-center px-4">
@@ -39,8 +76,8 @@ export default function VerifyEmail() {
               <h1 className={styles.title}>Verifique seu e-mail</h1>
               <p className={styles.description}>
                 Confirme sua conta clicando no link que enviamos para o e-mail{' '}
-                <span className="font-semibold">{userEmail}</span> e depois
-                finalize seu cadastro.
+                <span className="font-semibold">{email}</span> e depois finalize
+                seu cadastro.
               </p>
               <p className="mt-4 text-center text-sm text-gray-500">
                 Caso não tenha recebido o link, verifique sua caixa de spam.
@@ -48,19 +85,12 @@ export default function VerifyEmail() {
 
               <a
                 className={`${styles.resendLink} ${
-                  isResendEnabled ? styles.enabled : styles.disabled
+                  timeExpire ? styles.enabled : styles.disabled
                 }`}
                 href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  if (isResendEnabled) {
-                    setSeconds(60)
-                    setIsResendEnabled(false)
-                    console.log('Simulando envio do link...')
-                  }
-                }}
+                onClick={resendCode}
               >
-                {isResendEnabled
+                {timeExpire
                   ? 'Enviar novo link de confirmação'
                   : `Enviar novo link em: ${String(
                       Math.floor(seconds / 60)

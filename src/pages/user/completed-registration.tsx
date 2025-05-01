@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import logo from '../../../public/images/logo.png'
-import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
-import { api } from '../../services/api'
 import { toast } from 'react-toastify'
 import Router from 'next/router'
+import { getFormData } from '../../utils/localStroge'
+import { invokeLambda } from '../../lib/aws/invokeLambda'
 
 export default function CompletedRegistration() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -26,27 +26,32 @@ export default function CompletedRegistration() {
   }, [secondsAmount])
 
   useEffect(() => {
-    const { 'cosmos.user': email } = parseCookies()
+    const email = getFormData('cosmos.user')
     setEmail(email)
   }, [])
 
-  function resendCode() {
+  async function resendCode() {
     try {
-      api
-        .post('/auth/resendVerification', {
-          email,
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            toast.success('Email reenviado!')
-          }
-        })
-    } catch (error: any) {
-      if (error.response.status === 404) {
+      const payload = { email: email }
+
+      const response = await invokeLambda<
+        {
+          email: string
+        },
+        { statusCode: number; body: string }
+      >('user-resend-confirmation-lambda', payload)
+
+      if (response.statusCode === 200) {
+        toast.success('Email reenviado!')
+      } else {
         toast.error(
           'Não foi possivel enviar, tente novamente em alguns instantes'
         )
       }
+    } catch (error) {
+      toast.error(
+        'Não foi possivel enviar, tente novamente em alguns instantes'
+      )
     }
   }
 
