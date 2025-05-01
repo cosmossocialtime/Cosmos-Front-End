@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import logo from '../../../public/images/logo.png'
-import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import CheckIcon from '../../../public/images/CheckCircle.svg'
 import Router from 'next/router'
+import { getFormData } from '../../utils/localStroge'
 
 export default function CompletedResetPassword() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -25,7 +25,7 @@ export default function CompletedResetPassword() {
   }, [secondsAmount])
 
   useEffect(() => {
-    const { 'cosmos.user': email } = parseCookies()
+    const email = getFormData('cosmos.user')
     setEmail(email)
   }, [])
 

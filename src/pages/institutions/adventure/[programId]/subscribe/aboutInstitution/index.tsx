@@ -64,6 +64,12 @@ interface cityProps {
 interface stateProps extends cityProps {
   sigla: string
 }
+interface CustomFile {
+  name: string
+  size: number
+  type: string
+  fileObject?: File
+}
 
 export default function AboutInstitution() {
   const [semCnpj, setSemCnpj] = useState(false)
@@ -76,7 +82,7 @@ export default function AboutInstitution() {
   )
   const [selectedReceitaAnual, setSelectedReceitaAnual] = useState('')
   const [cidades, setCidades] = useState<Option[]>([])
-  const [selectedFile] = useState<File | null>(null)
+  const [selectedFile, setSelectedFile] = useState<CustomFile | null>(null)
   const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>(
     [] as MultiValue<Option>
   )
@@ -499,9 +505,16 @@ export default function AboutInstitution() {
             <FileUpload
               label="Estatuto ou Contrato Social"
               onFileChange={(file) => {
-                if (file) {
+                if (typeof window !== 'undefined' && file) {
+                  setSelectedFile({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    fileObject: file,
+                  })
                   setValue('estatuto', file, { shouldValidate: true })
                 } else {
+                  setSelectedFile(null)
                   setValue('estatuto', undefined, { shouldValidate: true })
                 }
               }}
