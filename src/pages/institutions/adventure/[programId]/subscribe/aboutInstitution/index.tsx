@@ -19,7 +19,7 @@ import { z } from 'zod'
 import MaskedDateField from '../../../../../../components/Input/MaskedDateField'
 import { CustomCheckbox } from '../../../../../../components/Button/CustomCheckbox'
 import SingleSelectComboBox from '../../../../../../components/combobox/SingleSelectComboBox'
-import FileUpload from '../../../../../../components/file/FileUpload'
+import dynamic from 'next/dynamic'
 import MultiSelectComboBox from '../../../../../../components/combobox/MultiSelectComboBox'
 import { Option } from '../../../../../../types/MultiselectCombobox'
 import { MultiValue } from 'react-select'
@@ -33,6 +33,22 @@ import Router from 'next/router'
 import { useOnboardingInstitution } from '../../../../../../context/OnboardingInstituionProvider'
 import dayjs from 'dayjs'
 import formatCurrency from '../../../../../../utils/formatCurrency'
+
+// Carregamento dinâmico do FileUpload com SSR desabilitado
+const FileUpload = dynamic(
+  () => import('../../../../../../components/file/FileUpload'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium text-gray-700">
+          Estatuto ou Contrato Social
+        </label>
+        <div className="h-[72px] rounded-lg border-2 border-dashed border-gray-300 bg-gray-50"></div>
+      </div>
+    ),
+  }
+)
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -64,12 +80,6 @@ interface cityProps {
 interface stateProps extends cityProps {
   sigla: string
 }
-interface CustomFile {
-  name: string
-  size: number
-  type: string
-  fileObject?: File
-}
 
 export default function AboutInstitution() {
   const [semCnpj, setSemCnpj] = useState(false)
@@ -82,10 +92,7 @@ export default function AboutInstitution() {
   )
   const [selectedReceitaAnual, setSelectedReceitaAnual] = useState('')
   const [cidades, setCidades] = useState<Option[]>([])
-  const [selectedFile, setSelectedFile] = useState<CustomFile | null>(null)
-  const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>(
-    [] as MultiValue<Option>
-  )
+  const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>([])
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const [currentStep, setCurrentStep] = useState(3)
   const { program, socialOrganization, changeSocialOrganization } =
@@ -215,16 +222,16 @@ export default function AboutInstitution() {
   }
 
   useEffect(() => {
-    const nomeInstituicao = watch('nomeInstituicao')?.trim() !== '' // Nome preenchido
-    const cause = selectedOptions.length > 0 // Pelo menos uma causa
-    const cnpjValido = watch('cnpj')?.trim() !== '' || semCnpj // CNPJ preenchido ou checkbox marcada
-    const receitaValida = watch('receitaAnual')?.trim() !== '' // Receita preenchida
-    const dataFundacaoValida = watch('dataFundacao')?.trim() !== '' // Data de Fundação preenchida
-    const estadoValido = selectedEstado !== null || foraDoBrasil // Estado selecionado ou checkbox marcada
-    const cidadeValida = selectedCidade !== null || foraDoBrasil // Cidade selecionada ou checkbox marcada
-    const nFuncionariosValido = watch('nFuncionarios')?.trim() !== '' // Número de funcionários preenchido
-    const nBeneficiariosValido = watch('nBeneficiarios')?.trim() !== '' // Número de beneficiários preenchido
-    const estatutoValido = watch('estatuto') !== undefined || semEstatuto // Estatuto enviado ou checkbox marcada
+    const nomeInstituicao = watch('nomeInstituicao')?.trim() !== ''
+    const cause = selectedOptions.length > 0
+    const cnpjValido = watch('cnpj')?.trim() !== '' || semCnpj
+    const receitaValida = watch('receitaAnual')?.trim() !== ''
+    const dataFundacaoValida = watch('dataFundacao')?.trim() !== ''
+    const estadoValido = selectedEstado !== null || foraDoBrasil
+    const cidadeValida = selectedCidade !== null || foraDoBrasil
+    const nFuncionariosValido = watch('nFuncionarios')?.trim() !== ''
+    const nBeneficiariosValido = watch('nBeneficiarios')?.trim() !== ''
+    const estatutoValido = watch('estatuto') !== undefined || semEstatuto
 
     const todosCamposPreenchidos =
       nomeInstituicao &&
@@ -310,8 +317,9 @@ export default function AboutInstitution() {
       setSemEstatuto(socialOrganization.semEstatuto || false)
       setForaDoBrasil(socialOrganization.foraDoBrasil || false)
       setSelectedCreationDate(
-        socialOrganization.creationDate !== undefined
-          ? socialOrganization.creationDate
+        socialOrganization.creationDate !== undefined &&
+          socialOrganization.creationDate !== null
+          ? new Date(socialOrganization.creationDate)
           : null
       )
       setSelectedReceitaAnual(
@@ -505,20 +513,10 @@ export default function AboutInstitution() {
             <FileUpload
               label="Estatuto ou Contrato Social"
               onFileChange={(file) => {
-                if (typeof window !== 'undefined' && file) {
-                  setSelectedFile({
-                    name: file.name,
-                    size: file.size,
-                    type: file.type,
-                    fileObject: file,
-                  })
-                  setValue('estatuto', file, { shouldValidate: true })
-                } else {
-                  setSelectedFile(null)
-                  setValue('estatuto', undefined, { shouldValidate: true })
-                }
+                setValue('estatuto', file || undefined, {
+                  shouldValidate: true,
+                })
               }}
-              error={errors.estatuto}
             />
             <div className="mt-[-25px] flex items-center">
               <CustomCheckbox
@@ -529,7 +527,7 @@ export default function AboutInstitution() {
             </div>
             <Button
               text="Continuar"
-              disabled={isButtonDisabled}
+              disabled={isButtonDisabled || isLoading}
               type="submit"
             />
           </form>

@@ -168,7 +168,6 @@ const OnboardingInstitutionProvider = ({
           },
           { statusCode: number; body: string }
         >('onboardingProgram-create-lambda', payload)
-
         if (response.statusCode == 201) {
           toast.success('Cadastro concluído!')
           Router.push(`/institutions/adventure/${program?.id}/subscribe/thanks`)

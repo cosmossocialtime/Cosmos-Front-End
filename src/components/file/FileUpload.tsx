@@ -26,9 +26,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
     }
   }
 
-  const handleRemoveFile = () => {
+  const handleRemoveFile = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setFile(null)
     onFileChange(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -40,6 +44,16 @@ const FileUpload: React.FC<FileUploadProps> = ({
       setFile(droppedFile)
       onFileChange(droppedFile)
     }
+  }
+
+  // Renderização condicional para SSR
+  if (typeof window === 'undefined') {
+    return (
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <div className="h-[72px] rounded-lg border-2 border-dashed border-gray-300 bg-gray-50"></div>
+      </div>
+    )
   }
 
   return (
@@ -56,12 +70,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
         }`}
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
+        onClick={() => !disabled && fileInputRef.current?.click()}
         role="button"
         aria-label="Upload de arquivo"
+        tabIndex={0}
       >
         {!file ? (
-          <div className="flex cursor-pointer flex-col items-center">
+          <div className="flex flex-col items-center">
             <Upload size={24} className="text-gray-400" />
             <span className="text-sm text-gray-500">
               Arraste um arquivo ou clique para selecionar
@@ -72,7 +87,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
               onChange={handleFileChange}
               ref={fileInputRef}
               disabled={disabled}
-              accept="image/*,application/pdf,application/msword"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg"
             />
           </div>
         ) : (
