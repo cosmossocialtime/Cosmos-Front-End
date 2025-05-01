@@ -155,7 +155,7 @@ export const AboutInstitutionModal = ({
     setCidades(
       selected
         ? cidadesPorEstado[selected.value as keyof typeof cidadesPorEstado] ||
-            []
+        []
         : []
     )
   }
@@ -396,7 +396,6 @@ export const AboutInstitutionModal = ({
                     setValue('estatuto', file, { shouldValidate: true })
                   }
                 }}
-                error={errors.estatuto}
               />
               <div className="mt-[-25px] flex items-center">
                 <CustomCheckbox
