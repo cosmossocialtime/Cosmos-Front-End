@@ -28,6 +28,8 @@ type OnboardingInstitutionContextProps = {
   saveOnboardingMember: (updatedUser: UserProps) => void
   saveMentorshipApplicant: (updatedMentorship: MentorshipApplicantProps) => void
   setOnboardingMember: (onboarding: boolean) => void
+  setNewFocalPoint: () => void
+  setNewMentorshipApplicant: () => void
 }
 
 const OnboardingInstitutionContext =
@@ -48,6 +50,14 @@ const OnboardingInstitutionProvider = ({
   const [focalPoint, setFocalPoint] = useState<FocalPointProps | null>(null)
   const [program, setProgram] = useState<ProgramProps | null>(null)
   const [onboardingMember, setOnboardingMember] = useState<boolean>(false)
+
+  function setNewFocalPoint() {
+    setFocalPoint(null)
+  }
+
+  function setNewMentorshipApplicant() {
+    setMentorshipApplicant(null)
+  }
 
   function changeSocialOrganization(
     updatedOrganization: SocialOrganizationProps
@@ -196,6 +206,8 @@ const OnboardingInstitutionProvider = ({
         saveOnboardingMember,
         saveMentorshipApplicant,
         setOnboardingMember,
+        setNewFocalPoint,
+        setNewMentorshipApplicant,
       }}
     >
       {children}
