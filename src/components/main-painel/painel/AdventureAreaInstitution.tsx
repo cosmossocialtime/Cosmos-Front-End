@@ -20,12 +20,21 @@ export default function AdventureAreaInstitution({
   user,
   socialOrganization,
 }: AdventureAreaInstitutionProps) {
-  const { changeUser, changeProgram, changeSocialOrganization } =
-    useOnboardingInstitution()
+  const {
+    changeUser,
+    changeProgram,
+    changeSocialOrganization,
+    setNewMentorshipApplicant,
+    setNewFocalPoint,
+  } = useOnboardingInstitution()
   const programsSubscribed = programs.filter((p) => p.completed)
   const programsUnsubscribed = programs.filter((p) => !p.completed)
 
   function selectProgram(program: ProgramProps) {
+    if (!program.completed) {
+      setNewFocalPoint()
+      setNewMentorshipApplicant()
+    }
     changeUser(user)
     changeProgram(program)
     changeSocialOrganization(socialOrganization)
@@ -102,7 +111,7 @@ export default function AdventureAreaInstitution({
             {programsUnsubscribed.length > 0 &&
               programsUnsubscribed.map((program, key) => (
                 <>
-                  <h2 className="mb-2 mb-4 text-lg text-gray-600">
+                  <h2 className="mb-2 mb-4 mt-4 text-lg text-gray-600">
                     Inscreva-se em uma nova aventura
                   </h2>
                   <Link

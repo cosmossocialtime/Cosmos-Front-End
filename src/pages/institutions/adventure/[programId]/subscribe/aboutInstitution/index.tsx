@@ -428,19 +428,25 @@ export default function AboutInstitution() {
     let storageId: number | null = null
     let downloadUrl: { downloadUrl: string | null } = { downloadUrl: null }
 
-    if (!semEstatuto && data.estatuto) {
-      const key = `social-organization/${socialOrganization?.id || 0}/statute/${
-        data.estatuto.name
-      }`
-      storageId = await uploadFile(data.estatuto, key)
-      const res = await fetch('/api/get-download-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          key,
-        }),
-      })
-      downloadUrl = await res.json()
+    if (!semEstatuto) {
+      if (data.estatuto) {
+        const key = `social-organization/${
+          socialOrganization?.id || 0
+        }/statute/${data.estatuto.name}`
+        storageId = await uploadFile(data.estatuto, key)
+        const res = await fetch('/api/get-download-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            key,
+          }),
+        })
+        downloadUrl = await res.json()
+      } else {
+        storageId = socialOrganization?.storageId ?? null
+        downloadUrl.downloadUrl =
+          socialOrganization?.estatutoFileLocation ?? null
+      }
     }
 
     changeSocialOrganization({
