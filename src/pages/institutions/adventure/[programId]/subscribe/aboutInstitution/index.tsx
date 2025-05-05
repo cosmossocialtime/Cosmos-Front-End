@@ -231,7 +231,11 @@ export default function AboutInstitution() {
     const cidadeValida = selectedCidade !== null || foraDoBrasil
     const nFuncionariosValido = watch('nFuncionarios')?.trim() !== ''
     const nBeneficiariosValido = watch('nBeneficiarios')?.trim() !== ''
-    const estatutoValido = watch('estatuto') !== undefined || semEstatuto
+    const estatutoValido =
+      watch('estatuto') !== undefined ||
+      semEstatuto ||
+      socialOrganization?.estatutoFileLocation !== undefined ||
+      socialOrganization?.estatutoFileLocation !== null
 
     const todosCamposPreenchidos =
       nomeInstituicao &&
@@ -361,11 +365,83 @@ export default function AboutInstitution() {
     }
   }, [socialOrganization])
 
+  const uploadFile = async (
+    file: File,
+    key: string
+  ): Promise<number | null> => {
+    try {
+      // Requisição da Presigned URL para upload do arquivo
+      const res = await fetch('/api/get-presigned-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileType: file.type,
+          key,
+        }),
+      })
+
+      if (!res.ok) throw new Error('Erro ao obter Presigned URL')
+
+      const { uploadUrl } = await res.json()
+
+      // Upload para S3
+      const upload = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type },
+        body: file,
+      })
+
+      if (!upload.ok) throw new Error('Erro ao enviar o arquivo para o S3')
+
+      // Invoca Lambda para salvar metadados
+      const payload = {
+        bucketName: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
+        directoryPath: key,
+        mime: file.type,
+      }
+
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('storage-create-lambda', payload)
+
+      if (response.statusCode === 201) {
+        const { storageId } = JSON.parse(response.body)
+        return Number(storageId)
+      } else {
+        console.error('Erro ao salvar metadados no storage')
+        return null
+      }
+    } catch (err) {
+      console.error(err)
+      return null
+    }
+  }
+
   async function handleForm(data: formProps) {
     setIsLoading(true)
     const dateParts = data.dataFundacao.split('/')
     const [day, month, year] = dateParts.map((part) => parseInt(part, 10))
     const date = new Date(year, month - 1, day)
+
+    let storageId: number | null = null
+    let downloadUrl: { downloadUrl: string | null } = { downloadUrl: null }
+
+    if (!semEstatuto && data.estatuto) {
+      const key = `social-organization/${socialOrganization?.id || 0}/statute/${
+        data.estatuto.name
+      }`
+      storageId = await uploadFile(data.estatuto, key)
+      const res = await fetch('/api/get-download-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key,
+        }),
+      })
+      downloadUrl = await res.json()
+    }
 
     changeSocialOrganization({
       name: data.nomeInstituicao,
@@ -386,6 +462,8 @@ export default function AboutInstitution() {
       semCnpj: semCnpj,
       semEstatuto: semEstatuto,
       foraDoBrasil: foraDoBrasil,
+      storageId: storageId ?? undefined,
+      estatutoFileLocation: downloadUrl?.downloadUrl ?? undefined,
     })
     Router.push(
       `/institutions/adventure/${program?.id}/subscribe/descriptiveData`
@@ -517,6 +595,7 @@ export default function AboutInstitution() {
                   shouldValidate: true,
                 })
               }}
+              fileUrl={socialOrganization?.estatutoFileLocation}
             />
             <div className="mt-[-25px] flex items-center">
               <CustomCheckbox

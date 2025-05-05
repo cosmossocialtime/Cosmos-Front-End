@@ -17,6 +17,8 @@ export type SocialOrganizationProps = {
   socialImpact?: string
   mainChallenges?: string
   cnpj?: string
+  storageId?: number
+  estatutoFileLocation?: string
   semCnpj?: boolean
   semEstatuto?: boolean
   foraDoBrasil?: boolean
