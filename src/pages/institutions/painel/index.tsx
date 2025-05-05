@@ -34,7 +34,9 @@ export default function Home() {
       setUserName('Erro ao carregar')
       setOrganizationName(null)
     },
-    refetchOnWindowFocus: true, // Recarrega quando a janela ganha foco
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
   })
 
   useEffect(() => {

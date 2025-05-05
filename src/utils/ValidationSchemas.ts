@@ -214,12 +214,14 @@ export const fileSchema = z.preprocess(
           'application/msword',
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           'image/jpeg',
+          'image/jpg',
+          'image/png',
         ]
         return file instanceof File && validTypes.includes(file.type)
       },
       {
         message:
-          'Formato inválido. Apenas PDF, DOC, DOCX ou JPG são permitidos.',
+          'Formato inválido. Apenas PDF, DOC, DOCX, PNG ou JPG são permitidos.',
       }
     )
     .optional()

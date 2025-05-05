@@ -7,6 +7,7 @@ interface FileUploadProps {
   onFileChange: (file: File | null) => void
   disabled?: boolean
   error?: string | FieldError
+  fileUrl?: string
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
@@ -14,6 +15,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   onFileChange,
   disabled = false,
   error,
+  fileUrl,
 }) => {
   const [file, setFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -59,7 +61,16 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium text-gray-700">{label}</label>
-
+      {fileUrl && (
+        <a
+          href={fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 text-sm text-blue-600 underline"
+        >
+          Visualizar arquivo enviado
+        </a>
+      )}
       <div
         className={`flex items-center justify-center rounded-lg border-2 p-4 transition ${
           file ? 'border-blue-300 bg-blue-50' : 'border-dashed border-gray-300'
@@ -81,6 +92,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             <span className="text-sm text-gray-500">
               Arraste um arquivo ou clique para selecionar
             </span>
+
             <input
               type="file"
               className="hidden"
