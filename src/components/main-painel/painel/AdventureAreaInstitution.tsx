@@ -70,10 +70,12 @@ export default function AdventureAreaInstitution({
           </div>
         ) : (
           <>
+            {programsSubscribed.length > 0 && (
+              <h2 className="mb-4 text-lg text-gray-600">Inscrições</h2>
+            )}
             {programsSubscribed.length > 0 &&
               programsSubscribed.map((program, key) => (
                 <>
-                  <h2 className="mb-4 text-lg text-gray-600">Inscrições</h2>
                   <Link
                     key={key}
                     href={`/institutions/adventure/${program.id}/subscribe`}
@@ -81,7 +83,7 @@ export default function AdventureAreaInstitution({
                   >
                     <div
                       key={key}
-                      className="flex items-center justify-between rounded-lg bg-white p-4 shadow"
+                      className="mb-4 mt-4 flex items-center justify-between rounded-lg bg-white p-4 shadow"
                     >
                       <div>
                         <h3 className="font-semibold text-blue-500">
@@ -108,12 +110,14 @@ export default function AdventureAreaInstitution({
                   </Link>
                 </>
               ))}
+            {programsUnsubscribed.length > 0 && (
+              <h2 className="mb-2 mb-4 mt-4 text-lg text-gray-600">
+                Inscreva-se em uma nova aventura
+              </h2>
+            )}
             {programsUnsubscribed.length > 0 &&
               programsUnsubscribed.map((program, key) => (
                 <>
-                  <h2 className="mb-2 mb-4 mt-4 text-lg text-gray-600">
-                    Inscreva-se em uma nova aventura
-                  </h2>
                   <Link
                     key={key}
                     href={`/institutions/adventure/${program.id}/subscribe`}
@@ -121,7 +125,7 @@ export default function AdventureAreaInstitution({
                   >
                     <div
                       key={key}
-                      className="flex items-center justify-between rounded-lg bg-white p-4 shadow"
+                      className="mb-4 mt-4 flex items-center justify-between rounded-lg bg-white p-4 shadow"
                     >
                       <div>
                         <h3 className="font-semibold text-blue-500">
