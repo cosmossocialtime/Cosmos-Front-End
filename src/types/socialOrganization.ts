@@ -1,3 +1,5 @@
+import { SectorProps } from './sector'
+
 export interface Option {
   value: string
   label: string
@@ -7,6 +9,7 @@ export type SocialOrganizationProps = {
   id?: number
   name: string
   causes: Option[]
+  sectors?: SectorProps[]
   creationDate?: Date
   city?: string
   state?: string
