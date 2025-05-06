@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     >('user-login-lambda', payload)
     const res = JSON.parse(response.body)
 
-    console.log(res)
     if (res) {
       const decoded: {
         id: number

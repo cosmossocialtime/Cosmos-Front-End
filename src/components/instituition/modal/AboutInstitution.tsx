@@ -465,9 +465,8 @@ export const AboutInstitutionModal = ({
 
       if (!semEstatuto) {
         if (data.estatuto) {
-          const key = `social-organization/${
-            socialOrganization?.id || 0
-          }/statute/${data.estatuto.name}`
+          const key = `social-organization/${socialOrganization?.id || 0
+            }/statute/${data.estatuto.name}`
           storageId = await uploadFile(data.estatuto, key)
           const res = await fetch('/api/get-download-url', {
             method: 'POST',
@@ -511,14 +510,12 @@ export const AboutInstitutionModal = ({
           mainChallenges: data.challenges,
         },
       }
-      console.log(payload)
       const response = await invokeLambda<
         {
           socialOrganization: SocialOrganizationProps
         },
         { statusCode: number; body: string }
       >('social-organization-update-lambda', payload)
-      console.log(response)
       if (response.statusCode == 201) {
         toast.success('Informações salvas com sucesso!')
         queryClient.invalidateQueries([
@@ -540,9 +537,8 @@ export const AboutInstitutionModal = ({
     <section className="fixed left-0 top-0 z-[50] flex h-screen w-full items-center justify-center bg-black/50">
       <section className="relative flex h-[672px] w-[800px] flex-col items-center overflow-y-scroll  rounded-xl bg-white p-6 shadow-lg">
         <main
-          className={`mt-[32px] flex w-full flex-col px-4 ${
-            isEditing ? 'items-center' : ''
-          }`}
+          className={`mt-[32px] flex w-full flex-col px-4 ${isEditing ? 'items-center' : ''
+            }`}
         >
           {!isEditing ? (
             <div className="flex items-center">
@@ -638,8 +634,8 @@ export const AboutInstitutionModal = ({
                         <p className="whitespace-pre-line text-gray-800">
                           {socialOrganization.annualRevenue !== undefined
                             ? formatCurrency(
-                                String(socialOrganization.annualRevenue)
-                              )
+                              String(socialOrganization.annualRevenue)
+                            )
                             : ''}
                         </p>
                       </div>
