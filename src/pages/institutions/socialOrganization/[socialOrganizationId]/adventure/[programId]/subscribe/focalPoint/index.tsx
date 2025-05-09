@@ -1,22 +1,22 @@
 import { useEffect, useState } from 'react'
-import { Button } from '../../../../../../components/Button/ButtonSubmit'
+import { Button } from '../../../../../../../../components/Button/ButtonSubmit'
 import { useForm } from 'react-hook-form'
 import {
   emailSchema,
   nameSchema,
   phoneSchema,
-} from '../../../../../../utils/ValidationSchemas'
+} from '../../../../../../../../utils/ValidationSchemas'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
 import Router from 'next/router'
-import InputField from '../../../../../../components/Input/InputField'
-import MaskedInputField from '../../../../../../components/Input/MaskedInputField'
-import { InputEmail } from '../../../../../../components/Input/InputEmail'
-import { CustomCheckbox } from '../../../../../../components/Button/CustomCheckbox'
-import Layout from '../../../../../../components/Layout'
-import ProgressBar from '../../../../../../components/menu/ProgressBar'
-import { useOnboardingInstitution } from '../../../../../../context/OnboardingInstituionProvider'
+import InputField from '../../../../../../../../components/Input/InputField'
+import MaskedInputField from '../../../../../../../../components/Input/MaskedInputField'
+import { InputEmail } from '../../../../../../../../components/Input/InputEmail'
+import { CustomCheckbox } from '../../../../../../../../components/Button/CustomCheckbox'
+import Layout from '../../../../../../../../components/Layout'
+import ProgressBar from '../../../../../../../../components/menu/ProgressBar'
+import { useOnboardingInstitution } from '../../../../../../../../context/OnboardingInstituionProvider'
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -57,9 +57,15 @@ export default function FocalPoint() {
       if (user !== null) {
         setValue('name', user.fullName || '', { shouldValidate: true })
         setValue('phone', user.phone || '', { shouldValidate: true })
-        setValue('professionalRole', user.professionalRole || '', {
-          shouldValidate: true,
-        })
+        setValue(
+          'professionalRole',
+          (user.socialOrganizations &&
+            user.socialOrganizations[0].professionalRole) ||
+            '',
+          {
+            shouldValidate: true,
+          }
+        )
         setValue('email', user.email || '', { shouldValidate: true })
       }
     } else {
@@ -98,7 +104,9 @@ export default function FocalPoint() {
         usePlatformData: useUserPlataformData,
       })
       Router.push(
-        `/institutions/adventure/${program?.id || 0}/subscribe/aboutInstitution`
+        `/institutions/socialOrganization/${
+          socialOrganization?.id || 0
+        }/adventure/${program?.id || 0}/subscribe/aboutInstitution`
       )
     } catch (error) {
       toast.error('Erro ao criar conta, tente novamente.')
@@ -115,7 +123,9 @@ export default function FocalPoint() {
           currentStep={currentStep}
           onBack={() =>
             Router.push(
-              `/institutions/adventure/${program?.id || 0}/subscribe/terms`
+              `/institutions/socialOrganization/${
+                socialOrganization?.id || 0
+              }/adventure/${program?.id || 0}/subscribe/terms`
             )
           }
         />

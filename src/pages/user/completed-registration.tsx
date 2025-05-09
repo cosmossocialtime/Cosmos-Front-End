@@ -3,7 +3,7 @@ import logo from '../../../public/images/logo.png'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Router from 'next/router'
-import { getFormData } from '../../utils/localStroge'
+import { getFormData } from '../../utils/localStorage'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 
 export default function CompletedRegistration() {

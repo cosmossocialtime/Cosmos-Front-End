@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Button } from '../../../../../../components/Button/ButtonSubmit'
+import { Button } from '../../../../../../../../components/Button/ButtonSubmit'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import InputField from '../../../../../../components/Input/InputField'
-import MaskedInputField from '../../../../../../components/Input/MaskedInputField'
+import InputField from '../../../../../../../../components/Input/InputField'
+import MaskedInputField from '../../../../../../../../components/Input/MaskedInputField'
 import {
   nameSchema,
   cnpjSchema,
@@ -14,29 +14,30 @@ import {
   numeroSchema,
   fileSchema,
   createMultiSelectSchema,
-} from '../../../../../../utils/ValidationSchemas'
+} from '../../../../../../../../utils/ValidationSchemas'
 import { z } from 'zod'
-import MaskedDateField from '../../../../../../components/Input/MaskedDateField'
-import { CustomCheckbox } from '../../../../../../components/Button/CustomCheckbox'
-import SingleSelectComboBox from '../../../../../../components/combobox/SingleSelectComboBox'
+import MaskedDateField from '../../../../../../../../components/Input/MaskedDateField'
+import { CustomCheckbox } from '../../../../../../../../components/Button/CustomCheckbox'
+import SingleSelectComboBox from '../../../../../../../../components/combobox/SingleSelectComboBox'
 import dynamic from 'next/dynamic'
-import MultiSelectComboBox from '../../../../../../components/combobox/MultiSelectComboBox'
-import { Option } from '../../../../../../types/MultiselectCombobox'
+import MultiSelectComboBox from '../../../../../../../../components/combobox/MultiSelectComboBox'
+import { Option } from '../../../../../../../../types/MultiselectCombobox'
 import { MultiValue } from 'react-select'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
+import { invokeLambda } from '../../../../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
-import useFetch from '../../../../../../hooks/useFetch'
+import useFetch from '../../../../../../../../hooks/useFetch'
 import axios from 'axios'
-import DynamicHeader from '../../../../../../components/header/DynamicHeader'
-import ProgressBar from '../../../../../../components/menu/ProgressBar'
+import DynamicHeader from '../../../../../../../../components/header/DynamicHeader'
+import ProgressBar from '../../../../../../../../components/menu/ProgressBar'
 import Router from 'next/router'
-import { useOnboardingInstitution } from '../../../../../../context/OnboardingInstituionProvider'
+import { useOnboardingInstitution } from '../../../../../../../../context/OnboardingInstituionProvider'
 import dayjs from 'dayjs'
-import formatCurrency from '../../../../../../utils/formatCurrency'
+import formatCurrency from '../../../../../../../../utils/formatCurrency'
+import { toast } from 'react-toastify'
 
 // Carregamento dinâmico do FileUpload com SSR desabilitado
 const FileUpload = dynamic(
-  () => import('../../../../../../components/file/FileUpload'),
+  () => import('../../../../../../../../components/file/FileUpload'),
   {
     ssr: false,
     loading: () => (
@@ -129,11 +130,16 @@ export default function AboutInstitution() {
     []
 
   async function getCauses() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('cause-select-lambda', {})
-    return JSON.parse(response.body)
+    try {
+      const response = await invokeLambda<
+        Record<string, never>,
+        { statusCode: number; body: string }
+      >('cause-select-lambda', {})
+      return JSON.parse(response.body)
+    } catch (error) {
+      console.error('Erro ao buscar causas!')
+      throw error
+    }
   }
 
   const { data: causes } = useQuery({
@@ -410,11 +416,11 @@ export default function AboutInstitution() {
         const { storageId } = JSON.parse(response.body)
         return Number(storageId)
       } else {
-        console.error('Erro ao salvar metadados no storage')
+        toast.error('Erro ao salvar metadados no storage')
         return null
       }
     } catch (err) {
-      console.error(err)
+      toast.error('Erro ao salvar metadados no storage')
       return null
     }
   }
@@ -472,7 +478,9 @@ export default function AboutInstitution() {
       estatutoFileLocation: downloadUrl?.downloadUrl ?? undefined,
     })
     Router.push(
-      `/institutions/adventure/${program?.id}/subscribe/descriptiveData`
+      `/institutions/socialOrganization/${
+        socialOrganization?.id || 0
+      }/adventure/${program?.id}/subscribe/descriptiveData`
     )
     setIsLoading(false)
   }
@@ -487,7 +495,9 @@ export default function AboutInstitution() {
             currentStep={currentStep}
             onBack={() =>
               Router.push(
-                `/institutions/adventure/${program?.id}/subscribe/focalPoint`
+                `/institutions/socialOrganization/${
+                  socialOrganization?.id || 0
+                }/adventure/${program?.id}/subscribe/focalPoint`
               )
             }
           />

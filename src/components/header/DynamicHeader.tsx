@@ -12,13 +12,22 @@ interface Route {
 }
 
 export default function DynamicHeader() {
-  const { showMenu, showOrganization, routes, userName, organizationName } =
-    useHeader()
+  const {
+    showMenu,
+    showOrganization,
+    routes,
+    userName,
+    organizationName,
+    socialOrganizationId,
+  } = useHeader()
 
   return (
     <header className="flex h-[68px] w-full items-center justify-between bg-white px-6 shadow-md">
       <div className="flex items-center gap-4">
-        <LogoWithLink showOrganization={showOrganization} />
+        <LogoWithLink
+          showOrganization={showOrganization}
+          socialOrganizationId={socialOrganizationId || 0}
+        />
         {showOrganization && (
           <span className="text-gray-700">{organizationName}</span>
         )}
@@ -29,9 +38,22 @@ export default function DynamicHeader() {
   )
 }
 
-function LogoWithLink({ showOrganization }: { showOrganization: boolean }) {
+function LogoWithLink({
+  showOrganization,
+  socialOrganizationId,
+}: {
+  showOrganization: boolean
+  socialOrganizationId: number
+}) {
   return (
-    <Link href={showOrganization ? '/institutions/painel' : '#'} passHref>
+    <Link
+      href={
+        showOrganization
+          ? `/institutions/socialOrganization/${socialOrganizationId}/home`
+          : '#'
+      }
+      passHref
+    >
       <Image
         src={Logo}
         alt="Logo cosmos"

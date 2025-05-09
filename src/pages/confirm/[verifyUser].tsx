@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
-import { getFormData } from '../../utils/localStroge'
+import { getFormData } from '../../utils/localStorage'
 
 export default function VerifyUser() {
   const router = useRouter()

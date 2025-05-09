@@ -17,6 +17,7 @@ import StaticHeader from '../../../../components/instituition/StaticHeader'
 import { useOnboardingInstitution } from '../../../../context/OnboardingInstituionProvider'
 import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 const steps = [
   { id: 1, label: 'Cadastro inicial' },
@@ -56,11 +57,16 @@ export default function AboutOrganizationForm() {
   })
 
   async function getCauses() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('cause-select-lambda', {})
-    return JSON.parse(response.body)
+    try {
+      const response = await invokeLambda<
+        Record<string, never>,
+        { statusCode: number; body: string }
+      >('cause-select-lambda', {})
+      return JSON.parse(response.body)
+    } catch (error) {
+      console.error('Erro ao buscar causas!')
+      throw error
+    }
   }
 
   const { data: causes } = useQuery({

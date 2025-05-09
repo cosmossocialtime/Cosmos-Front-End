@@ -1,15 +1,16 @@
 import { CaretDown, CaretUp, Check } from 'phosphor-react'
-import DynamicHeader from '../../../../../../components/header/DynamicHeader'
+import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { useEffect, useState } from 'react'
-import { InviteForm } from '../../../../../../components/instituition/painel/teams/InviteForm'
-import { DeleteMember } from '../../../../../../components/instituition/painel/teams/DeleteMember'
+import { InviteForm } from '../../../../../components/instituition/painel/teams/InviteForm'
+import { DeleteMember } from '../../../../../components/instituition/painel/teams/DeleteMember'
 import { useRouter } from 'next/router'
-import { Loading } from '../../../../../../components/Loading'
-import { useTeam } from '../../../../../../hooks/useTeam'
-import { permissionsLabels } from '../../../../../../utils/roleId'
-import { UserProps } from '../../../../../../types/user'
-import { SocialOrganizationProps } from '../../../../../../types/socialOrganization'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
+import { Loading } from '../../../../../components/Loading'
+import { useTeam } from '../../../../../hooks/useTeam'
+import { permissionsLabels } from '../../../../../utils/roleId'
+import { UserProps } from '../../../../../types/user'
+import { SocialOrganizationProps } from '../../../../../types/socialOrganization'
+import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
+import { toast } from 'react-toastify'
 
 export default function Teams() {
   const router = useRouter()
@@ -38,11 +39,17 @@ export default function Teams() {
         payload
       )
         .then((response) => {
-          const parsed = JSON.parse(response.body)
-          setSocialOrganization(parsed.socialOrganization)
-          setIsLoadingSocialOrganization(false)
+          if (response.statusCode === 200) {
+            const parsed = JSON.parse(response.body)
+            setSocialOrganization(parsed.socialOrganization)
+            setIsLoadingSocialOrganization(false)
+          } else {
+            toast.error('Erro ao buscar Organização Social!')
+            setIsLoadingSocialOrganization(false)
+          }
         })
         .catch((err) => {
+          toast.error('Erro ao buscar Organização Social!')
           setIsLoadingSocialOrganization(false)
         })
     }
@@ -69,7 +76,10 @@ export default function Teams() {
   }
 
   const togglePermission = (usuario: UserProps, newPermission: string) => {
-    if (usuario.role?.role !== newPermission) {
+    if (
+      usuario.socialOrganizations &&
+      usuario.socialOrganizations[0].role?.role !== newPermission
+    ) {
       changePermission({ userId: usuario.id || 0, newPermission })
     }
     setOpenDropdown(null)
@@ -85,6 +95,7 @@ export default function Teams() {
     return <Loading />
   }
 
+  console.log(user)
   return (
     <section className="min-h-screen bg-gray-400/20">
       {openInviteForm && (
@@ -119,7 +130,9 @@ export default function Teams() {
                 <th className="px-4 py-2 text-left text-sm font-semibold">
                   Permissões
                 </th>
-                {permissionsLabels.get(user.role.role) === 'Administrador' && (
+                {permissionsLabels.get(
+                  user.socialOrganizations[0].role.role
+                ) === 'Administrador' && (
                   <th className="px-4 py-2 text-left text-sm font-semibold">
                     Ações
                   </th>
@@ -131,17 +144,23 @@ export default function Teams() {
                 <tr key={usuario.id} className="border-b border-gray-200">
                   <td className="px-4 py-3 text-sm">{usuario.fullName}</td>
                   <td className="px-4 py-3 text-sm">
-                    {usuario.professionalRole}
+                    {usuario.socialOrganizations &&
+                      usuario.socialOrganizations[0].professionalRole}
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    {permissionsLabels.get(user.role.role) ===
-                      'Administrador' && (
+                    {permissionsLabels.get(
+                      user.socialOrganizations[0].role.role
+                    ) === 'Administrador' && (
                       <div className="relative">
                         <button
                           className="flex items-center gap-2 text-sm"
                           onClick={() => toggleDropdown(index)}
                         >
-                          {permissionsLabels.get(usuario.role?.role || '')}{' '}
+                          {permissionsLabels.get(
+                            (usuario.socialOrganizations &&
+                              usuario.socialOrganizations[0].role?.role) ||
+                              ''
+                          )}{' '}
                           {openDropdown === index ? <CaretUp /> : <CaretDown />}
                         </button>
                         {openDropdown === index && (
@@ -149,7 +168,10 @@ export default function Teams() {
                             <button
                               className={`${
                                 permissionsLabels.get(
-                                  usuario.role?.role || ''
+                                  (usuario.socialOrganizations &&
+                                    usuario.socialOrganizations[0].role
+                                      ?.role) ||
+                                    ''
                                 ) === 'Administrador' && 'bg-blue-400/5'
                               } flex w-full items-center justify-between p-4 text-left`}
                               onClick={() =>
@@ -167,7 +189,9 @@ export default function Teams() {
                                 </p>
                               </div>
                               {permissionsLabels.get(
-                                usuario.role?.role || ''
+                                (usuario.socialOrganizations &&
+                                  usuario.socialOrganizations[0].role?.role) ||
+                                  ''
                               ) === 'Administrador' && (
                                 <Check className="text-green-500" size={24} />
                               )}
@@ -175,7 +199,10 @@ export default function Teams() {
                             <button
                               className={`${
                                 permissionsLabels.get(
-                                  usuario.role?.role || ''
+                                  (usuario.socialOrganizations &&
+                                    usuario.socialOrganizations[0].role
+                                      ?.role) ||
+                                    ''
                                 ) === 'Membro' && 'bg-blue-400/5'
                               } flex w-full items-center justify-between p-4 text-left`}
                               onClick={() =>
@@ -192,7 +219,9 @@ export default function Teams() {
                                 </p>
                               </div>
                               {permissionsLabels.get(
-                                usuario.role?.role || ''
+                                (usuario.socialOrganizations &&
+                                  usuario.socialOrganizations[0].role?.role) ||
+                                  ''
                               ) === 'Membro' && (
                                 <Check className="text-green-500" size={20} />
                               )}
@@ -201,14 +230,21 @@ export default function Teams() {
                         )}
                       </div>
                     )}
-                    {permissionsLabels.get(user.role.role) === 'Membro' && (
+                    {permissionsLabels.get(
+                      user.socialOrganizations[0].role.role
+                    ) === 'Membro' && (
                       <span className="text-gray-500">
-                        {permissionsLabels.get(usuario.role?.role || '')}
+                        {permissionsLabels.get(
+                          (usuario.socialOrganizations &&
+                            usuario.socialOrganizations[0].role?.role) ||
+                            ''
+                        )}
                       </span>
                     )}
                   </td>
-                  {permissionsLabels.get(user.role.role) ===
-                    'Administrador' && (
+                  {permissionsLabels.get(
+                    user.socialOrganizations[0].role.role
+                  ) === 'Administrador' && (
                     <td className="px-4 py-3 text-sm">
                       <button
                         onClick={() => toggleModalDelete(index)}

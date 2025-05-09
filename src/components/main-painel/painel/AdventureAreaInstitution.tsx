@@ -78,7 +78,9 @@ export default function AdventureAreaInstitution({
                 <>
                   <Link
                     key={key}
-                    href={`/institutions/adventure/${program.id}/subscribe`}
+                    href={`/institutions/socialOrganization/${
+                      socialOrganization.id || 0
+                    }/adventure/${program.id}/subscribe`}
                     onClick={() => selectProgram(program)}
                   >
                     <div
@@ -120,7 +122,9 @@ export default function AdventureAreaInstitution({
                 <>
                   <Link
                     key={key}
-                    href={`/institutions/adventure/${program.id}/subscribe`}
+                    href={`/institutions/socialOrganization/${
+                      socialOrganization.id || 0
+                    }/adventure/${program.id}/subscribe`}
                     onClick={() => selectProgram(program)}
                   >
                     <div

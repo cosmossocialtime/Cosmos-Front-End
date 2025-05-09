@@ -25,7 +25,7 @@ export default function Book() {
   const router = useRouter()
   const { bookId, mentorshipId } = router.query
 
-  const { dashboard } = useDashboard()
+  const { dashboard } = useDashboard(null)
   const currentMentorship = dashboard?.currentMentorships.find(
     (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )

@@ -11,11 +11,13 @@ interface HeaderContextType {
   routes: Route[]
   userName: string | null
   organizationName: string | null
+  socialOrganizationId: number | null
   setShowMenu: (show: boolean) => void
   setShowOrganization: (show: boolean) => void
   setRoutes: (routes: Route[]) => void
   setUserName: (name: string | null) => void
   setOrganizationName: (name: string | null) => void
+  setSocialOrganizationId: (id: number | null) => void
   resetHeader: () => void
 }
 
@@ -27,6 +29,9 @@ export function HeaderProvider({ children }: { children: ReactNode }) {
   const [routes, setRoutes] = useState<Route[]>([])
   const [userName, setUserName] = useState<string | null>(null)
   const [organizationName, setOrganizationName] = useState<string | null>(null)
+  const [socialOrganizationId, setSocialOrganizationId] = useState<
+    number | null
+  >(null)
 
   const resetHeader = () => {
     setShowMenu(false)
@@ -44,11 +49,13 @@ export function HeaderProvider({ children }: { children: ReactNode }) {
         routes,
         userName,
         organizationName,
+        socialOrganizationId,
         setShowMenu,
         setShowOrganization,
         setRoutes,
         setUserName,
         setOrganizationName,
+        setSocialOrganizationId,
         resetHeader,
       }}
     >

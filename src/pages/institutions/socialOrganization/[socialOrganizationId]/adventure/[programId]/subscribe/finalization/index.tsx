@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Button } from '../../../../../../components/Button/ButtonSubmit'
+import { Button } from '../../../../../../../../components/Button/ButtonSubmit'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
-import { getFormData } from '../../../../../../utils/localStroge'
-import SingleSelectComboBox from '../../../../../../components/combobox/SingleSelectComboBox'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
-import { Option } from '../../../../../../types/MultiselectCombobox'
+import { getFormData } from '../../../../../../../../utils/localStorage'
+import SingleSelectComboBox from '../../../../../../../../components/combobox/SingleSelectComboBox'
+import { invokeLambda } from '../../../../../../../../lib/aws/invokeLambda'
+import { Option } from '../../../../../../../../types/MultiselectCombobox'
 import { useQuery } from '@tanstack/react-query'
-import ProgressBar from '../../../../../../components/menu/ProgressBar'
-import Layout from '../../../../../../components/Layout'
+import ProgressBar from '../../../../../../../../components/menu/ProgressBar'
+import Layout from '../../../../../../../../components/Layout'
 import Router from 'next/router'
-import { useOnboardingInstitution } from '../../../../../../context/OnboardingInstituionProvider'
+import { useOnboardingInstitution } from '../../../../../../../../context/OnboardingInstituionProvider'
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -34,6 +34,7 @@ export default function Finalization() {
   const {
     program,
     mentorshipApplicant,
+    socialOrganization,
     changeMentorshipApplicant,
     saveMentorshipApplicant,
   } = useOnboardingInstitution()
@@ -49,11 +50,15 @@ export default function Finalization() {
   })
 
   async function getHowToHearAboutOrganization() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('how-hear-about-organization-select-lambda', {})
-    return JSON.parse(response.body)
+    try {
+      const response = await invokeLambda<
+        Record<string, never>,
+        { statusCode: number; body: string }
+      >('how-hear-about-organization-select-lambda', {})
+      return JSON.parse(response.body)
+    } catch (error) {
+      console.error('Erro ao buscar opções!')
+    }
   }
 
   const { data: abouts } = useQuery({
@@ -99,7 +104,9 @@ export default function Finalization() {
           currentStep={currentStep}
           onBack={() =>
             Router.push(
-              `/institutions/adventure/${program?.id}/subscribe/descriptiveData`
+              `/institutions/socialOrganization/${
+                socialOrganization?.id || 0
+              }/adventure/${program?.id}/subscribe/descriptiveData`
             )
           }
         />

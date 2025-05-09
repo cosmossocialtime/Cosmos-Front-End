@@ -2,12 +2,12 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 import { ArrowLeft, Check } from 'phosphor-react'
 import Image from 'next/image'
-import Logo from '../../../../../../public/images/logotipoCosmos.svg'
+import Logo from '../../../../../../../../public/images/logotipoCosmos.svg'
 import Router from 'next/router'
-import { useOnboardingInstitution } from '../../../../../context/OnboardingInstituionProvider'
-import DynamicHeader from '../../../../../components/header/DynamicHeader'
-import { Button } from '../../../../../components/Button'
-import { useHeader } from '../../../../../context/HeaderContext'
+import { useOnboardingInstitution } from '../../../../../../../context/OnboardingInstituionProvider'
+import DynamicHeader from '../../../../../../../components/header/DynamicHeader'
+import { Button } from '../../../../../../../components/Button'
+import { useHeader } from '../../../../../../../context/HeaderContext'
 import { useEffect } from 'react'
 
 export default function AdventureInstitution() {
@@ -27,7 +27,13 @@ export default function AdventureInstitution() {
           <div className="mt-10 pl-3">
             <ArrowLeft
               className="cursor-pointer"
-              onClick={() => Router.push('/institutions/painel')}
+              onClick={() =>
+                Router.push(
+                  `/institutions/socialOrganization/${
+                    socialOrganization.id || 0
+                  }/home`
+                )
+              }
               size={30}
             />
           </div>
@@ -97,7 +103,9 @@ export default function AdventureInstitution() {
                 </div>
               ) : (
                 <Link
-                  href={`/institutions/adventure/${program.id}/subscribe/terms`}
+                  href={`/institutions/socialOrganization/${
+                    socialOrganization.id || 0
+                  }/adventure/${program.id}/subscribe/terms`}
                 >
                   <Button.Primary className="px-20 py-2">
                     Embarcar nesta jornada

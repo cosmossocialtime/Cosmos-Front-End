@@ -1,23 +1,28 @@
-import DynamicHeader from '../../../../../../components/header/DynamicHeader'
+import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { useRouter } from 'next/router'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
+import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
-import { Loading } from '../../../../../../components/Loading'
-import { CentralStar } from '../../../../../../components/instituition/painel/solarSystem/centralStar'
-import { PlanetGrid } from '../../../../../../components/instituition/painel/solarSystem/planetGrid'
-import { useCombinedPlanetsData } from '../../../../../../hooks/useCombinedPlanetsData'
+import { Loading } from '../../../../../components/Loading'
+import { CentralStar } from '../../../../../components/instituition/painel/solarSystem/centralStar'
+import { PlanetGrid } from '../../../../../components/instituition/painel/solarSystem/planetGrid'
+import { useCombinedPlanetsData } from '../../../../../hooks/useCombinedPlanetsData'
 
 export default function SolarSystem() {
   const router = useRouter()
   const { socialOrganizationId } = router.query
   const organizationId = Number(socialOrganizationId || '0')
 
-  const getSectors = async () => {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('sector-select-lambda', {})
-    return JSON.parse(response.body)
+  async function getSectors() {
+    try {
+      const response = await invokeLambda<
+        Record<string, never>,
+        { statusCode: number; body: string }
+      >('sector-select-lambda', {})
+      return JSON.parse(response.body)
+    } catch (error) {
+      console.error('Erro ao buscar setores!')
+      throw error
+    }
   }
 
   const { data: sectors } = useQuery({
@@ -26,15 +31,19 @@ export default function SolarSystem() {
   })
 
   const fetchSocialOrganization = async (organizationId: number) => {
-    const payload = { socialOrganizationId: organizationId }
+    try {
+      const payload = { socialOrganizationId: organizationId }
 
-    const response = await invokeLambda<
-      typeof payload,
-      { statusCode: number; body: string }
-    >('social-organization-select-lambda', payload)
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('social-organization-select-lambda', payload)
 
-    const parsed = JSON.parse(response.body)
-    return parsed.socialOrganization
+      const parsed = JSON.parse(response.body)
+      return parsed.socialOrganization
+    } catch (error) {
+      console.error('Erro ao buscar Organização Social!')
+    }
   }
 
   const {

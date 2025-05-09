@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react'
-import DynamicHeader from '../../../components/header/DynamicHeader'
+import React, { useEffect, useState } from 'react'
+import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { useQuery } from '@tanstack/react-query'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
-import AdventureAreaInstitution from '../../../components/main-painel/painel/AdventureAreaInstitution'
-import { Loading } from '../../../components/Loading'
-import AchievementsAreaInstitution from '../../../components/main-painel/painel/AchievementsAreaInstitution'
-import CurrentAchievementInstitution from '../../../components/main-painel/painel/CurrentAchievementInstitution'
-import CurrentMissionsInstitutionArea from '../../../components/main-painel/painel/CurrentMissionsInstitutionArea'
-import { useHeader } from '../../../context/HeaderContext'
-import { AchievementProps } from '../../../types/achievement'
+import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
+import AdventureAreaInstitution from '../../../../../components/main-painel/painel/AdventureAreaInstitution'
+import { Loading } from '../../../../../components/Loading'
+import AchievementsAreaInstitution from '../../../../../components/main-painel/painel/AchievementsAreaInstitution'
+import CurrentAchievementInstitution from '../../../../../components/main-painel/painel/CurrentAchievementInstitution'
+import CurrentMissionsInstitutionArea from '../../../../../components/main-painel/painel/CurrentMissionsInstitutionArea'
+import { useHeader } from '../../../../../context/HeaderContext'
+import { AchievementProps } from '../../../../../types/achievement'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
 
 export default function Home() {
   const {
@@ -16,24 +18,41 @@ export default function Home() {
     setShowOrganization,
     setRoutes,
     setOrganizationName,
+    setSocialOrganizationId,
     setUserName,
   } = useHeader()
 
+  const router = useRouter()
+  const { socialOrganizationId } = router.query
+  const organizationId = Number(socialOrganizationId || '0')
+  const [hasShownError, setHasShownError] = useState(false)
+
   async function getDashboard() {
+    const payload = { socialOrganizationId: organizationId }
     const response = await invokeLambda<
-      Record<string, never>,
+      typeof payload,
       { statusCode: number; body: string }
-    >('dashboard-select-lambda', {})
-    return JSON.parse(response.body)
+    >('dashboard-select-lambda', payload)
+    if (response.statusCode === 200) {
+      return JSON.parse(response.body)
+    } else {
+      throw new Error('Erro ao buscar informações')
+    }
   }
 
   const { data: dashboard, error } = useQuery({
     queryKey: ['dashboard'],
-    queryFn: getDashboard,
+    queryFn: () => getDashboard(),
     onError: () => {
-      setUserName('Erro ao carregar')
+      if (!hasShownError) {
+        toast.error('Erro ao buscar informações!')
+        setHasShownError(true)
+      }
+      setUserName(null)
       setOrganizationName(null)
+      setSocialOrganizationId(null)
     },
+    retry: false,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
@@ -46,28 +65,34 @@ export default function Home() {
     setShowMenu(true)
     setShowOrganization(true)
     setRoutes([
-      { label: 'Painel Principal', href: '/institutions/painel' },
+      {
+        label: 'Painel Principal',
+        href: `/institutions/socialOrganization/${
+          dashboard.socialOrganization.id || 0
+        }/home`,
+      },
       {
         label: 'Equipe',
-        href: `/institutions/painel/socialOrganization/${
+        href: `/institutions/socialOrganization/${
           dashboard.socialOrganization.id || 0
         }/team`,
       },
       {
         label: 'Sistema Estelar',
-        href: `/institutions/painel/socialOrganization/${
+        href: `/institutions/socialOrganization/${
           dashboard.socialOrganization.id || 0
         }/starSystem`,
       },
       {
         label: 'Trocar de organização',
-        href: `/institutions/painel/socialOrganization/${
+        href: `/institutions/socialOrganization/${
           dashboard.socialOrganization.id || 0
         }/changeOrganization`,
       },
     ])
     setUserName(dashboard.user.fullName)
     setOrganizationName(dashboard.socialOrganization.name)
+    setSocialOrganizationId(dashboard.socialOrganization.id)
   }, [dashboard])
 
   if (!dashboard) {

@@ -47,6 +47,7 @@ export default function AboutYouForm() {
   } = useOnboardingInstitution()
   const searchParams = useSearchParams()
   const isMember = searchParams.get('member')
+  const organizationId = searchParams.get('socialOrganizationId')
 
   if (isMember !== null) {
     setOnboardingMember(true)
@@ -65,11 +66,16 @@ export default function AboutYouForm() {
   })
 
   async function getSectors() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('sector-select-lambda', {})
-    return JSON.parse(response.body)
+    try {
+      const response = await invokeLambda<
+        Record<string, never>,
+        { statusCode: number; body: string }
+      >('sector-select-lambda', {})
+      return JSON.parse(response.body)
+    } catch (error) {
+      console.error('Erro ao buscar setores!')
+      throw error
+    }
   }
 
   const { data: sectors } = useQuery({
@@ -120,10 +126,11 @@ export default function AboutYouForm() {
   }
 
   async function handleForm(data: formProps) {
+    console.log(data)
     setIsLoading(true)
     try {
       if (onboardingMember) {
-        saveOnboardingMember({
+        saveOnboardingMember(Number(organizationId || '0'), {
           fullName: data.fullName,
           phone: data.phone,
           professionalSector: selectedOption,

@@ -37,7 +37,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   const route = useRouter()
   const { mentorshipId } = route.query
 
-  const { dashboard } = useDashboard()
+  const { dashboard } = useDashboard(null)
   const currentMentorship = dashboard?.currentMentorships.find(
     (mentorship) => String(mentorship.mentorshipId) === mentorshipId
   )

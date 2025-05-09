@@ -3,7 +3,7 @@ import logo from '../../../public/images/logo.png'
 import { useEffect, useState } from 'react'
 import CheckIcon from '../../../public/images/CheckCircle.svg'
 import Router from 'next/router'
-import { getFormData } from '../../utils/localStroge'
+import { getFormData } from '../../utils/localStorage'
 
 export default function CompletedResetPassword() {
   const [secondsAmount, setSecondsAmount] = useState(60)

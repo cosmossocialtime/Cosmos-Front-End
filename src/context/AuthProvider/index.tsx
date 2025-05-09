@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         id: number
         exp: number
         iat: number
-        socialOrganizationId: number
+        socialOrganizations: { socialOrganizationId: number }[]
         fullName: string
         role: string
       } = jwtDecode(res?.accessToken)
@@ -44,12 +44,19 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       if (decoded.role === 'volunteer') {
         Router.push('/user/onboarding/start')
       } else {
-        if (decoded.socialOrganizationId && decoded.socialOrganizationId > 0) {
+        console.log(decoded)
+        if (decoded.socialOrganizations.length === 1) {
           if (decoded.fullName !== null && decoded.fullName !== '') {
-            Router.push('/institutions/painel')
+            router.push(
+              `/institutions/socialOrganization/${decoded.socialOrganizations[0].socialOrganizationId}/home`
+            )
           } else {
-            router.push('/institutions/onboarding/aboutYou?member=1')
+            router.push(
+              `/institutions/onboarding/aboutYou?member=1&socialOrganizationId=${decoded.socialOrganizations[0].socialOrganizationId}`
+            )
           }
+        } else if (decoded.socialOrganizations.length > 1) {
+          Router.push('/institutions/socialOrganization/selectOrganization')
         } else {
           Router.push('/institutions/onboarding/aboutOrganization')
         }

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Mensagem from '../../../assets/icons/Envelope.svg'
 import { useEffect, useState } from 'react'
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css' // Importando CSS
-import { getFormData } from '../../../utils/localStroge'
+import { getFormData } from '../../../utils/localStorage'
 import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import DynamicHeader from '../../../components/header/DynamicHeader'

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { invokeLambda } from '../lib/aws/invokeLambda'
-import { UserProps } from '../types/user'
 import { toast } from 'react-toastify'
+import { UserSocialOrganizationProps } from '../types/userSocialOrganization'
 
 export function useTeam(socialOrganizationId: number) {
   const queryClient = useQueryClient()
@@ -16,7 +16,19 @@ export function useTeam(socialOrganizationId: number) {
         Record<string, never>,
         { statusCode: number; body: string }
       >('user-select-lambda', {})
-      return JSON.parse(response.body)
+      if (response.statusCode === 200) {
+        const parsed = JSON.parse(response.body)
+        const userSocialOrganizations =
+          parsed.socialOrganizations &&
+          parsed.socialOrganizations.filter(
+            (so: UserSocialOrganizationProps) =>
+              so.socialOrganizationId === socialOrganizationId
+          )
+        parsed.socialOrganizations = userSocialOrganizations
+        return parsed
+      } else {
+        return null
+      }
     },
   })
 
@@ -46,7 +58,7 @@ export function useTeam(socialOrganizationId: number) {
         userId: number
         newPermission: string
       }) => {
-        const payload = { userId, role: newPermission }
+        const payload = { userId, role: newPermission, socialOrganizationId }
         const response = await invokeLambda<
           typeof payload,
           { statusCode: number; body: string }

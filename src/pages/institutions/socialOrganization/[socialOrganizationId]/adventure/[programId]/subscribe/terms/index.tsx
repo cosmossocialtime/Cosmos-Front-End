@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Button } from '../../../../../../components/Button/ButtonSubmit'
-import { CustomCheckbox } from '../../../../../../components/Button/CustomCheckbox'
-import { TermsText } from '../../../../../../components/TitlesAndLinks/TermsText'
-import ProgressBar from '../../../../../../components/menu/ProgressBar'
-import Layout from '../../../../../../components/Layout'
-import { useOnboardingInstitution } from '../../../../../../context/OnboardingInstituionProvider'
+import { Button } from '../../../../../../../../components/Button/ButtonSubmit'
+import { CustomCheckbox } from '../../../../../../../../components/Button/CustomCheckbox'
+import { TermsText } from '../../../../../../../../components/TitlesAndLinks/TermsText'
+import ProgressBar from '../../../../../../../../components/menu/ProgressBar'
+import Layout from '../../../../../../../../components/Layout'
+import { useOnboardingInstitution } from '../../../../../../../../context/OnboardingInstituionProvider'
 import Router from 'next/router'
-import DynamicHeader from '../../../../../../components/header/DynamicHeader'
-import { useHeader } from '../../../../../../context/HeaderContext'
+import DynamicHeader from '../../../../../../../../components/header/DynamicHeader'
+import { useHeader } from '../../../../../../../../context/HeaderContext'
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -56,7 +56,9 @@ export default function TermsPage() {
     }
     if (acceptTerms) {
       Router.push(
-        `/institutions/adventure/${program?.id || 0}/subscribe/focalPoint`
+        `/institutions/socialOrganization/${
+          socialOrganization?.id || 0
+        }/adventure/${program?.id || 0}/subscribe/focalPoint`
       )
     }
   }
@@ -73,7 +75,9 @@ export default function TermsPage() {
               backFirstPage={true}
               onBack={() =>
                 Router.push(
-                  `/institutions/adventure/${program?.id || 0}/subscribe`
+                  `/institutions/socialOrganization/${
+                    socialOrganization?.id || 0
+                  }/adventure/${program?.id || 0}/subscribe`
                 )
               }
             />

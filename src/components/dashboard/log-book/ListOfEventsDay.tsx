@@ -8,7 +8,7 @@ import { groupDatesByMonth } from './groupDatesByMonth'
 import { LoadingLight } from '../../LoadingLight'
 
 export function ListOfEventsDay() {
-  const { dashboard } = useDashboard()
+  const { dashboard } = useDashboard(null)
   const currentMentorship = dashboard?.currentMentorships[0]
 
   const [events, setEvents] = useState<EventProps[]>()
