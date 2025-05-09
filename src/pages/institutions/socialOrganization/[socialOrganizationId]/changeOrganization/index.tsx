@@ -44,7 +44,6 @@ export default function ChangeOrganizationPage() {
       Record<string, never>,
       { statusCode: number; body: string }
     >('user-select-lambda', {})
-    console.log(response)
     if (response.statusCode === 200) {
       return JSON.parse(response.body)
     } else {
@@ -92,21 +91,19 @@ export default function ChangeOrganizationPage() {
                     <CaretLeft
                       size={32}
                       onClick={() => instanceRef.current?.prev()}
-                      className={`absolute left-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer text-blue-400 ${
-                        currentSlide === 0
+                      className={`absolute left-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer text-blue-400 ${currentSlide === 0
                           ? 'cursor-not-allowed opacity-20'
                           : ''
-                      }`}
+                        }`}
                     />
                     <CaretRight
                       size={32}
                       onClick={() => instanceRef.current?.next()}
-                      className={`absolute right-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer text-blue-400 ${
-                        currentSlide ===
-                        instanceRef.current.track.details.slides.length - 3
+                      className={`absolute right-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer text-blue-400 ${currentSlide ===
+                          instanceRef.current.track.details.slides.length - 3
                           ? 'cursor-not-allowed opacity-20'
                           : ''
-                      }`}
+                        }`}
                     />
                   </>
                 )}
@@ -114,22 +111,20 @@ export default function ChangeOrganizationPage() {
             )}
             <div
               ref={user?.socialOrganizations?.length > 3 ? sliderRef : null}
-              className={`flex w-full ${
-                user?.socialOrganizations?.length > 3
+              className={`flex w-full ${user?.socialOrganizations?.length > 3
                   ? 'keen-slider gap-2'
                   : 'flex-wrap justify-center gap-12'
-              }`}
+                }`}
             >
               {user &&
                 user.socialOrganizations?.map(
                   (userSocialOrganization: UserSocialOrganizationProps) => (
                     <div
                       key={userSocialOrganization.id}
-                      className={`${
-                        user?.socialOrganizations?.length > 3
+                      className={`${user?.socialOrganizations?.length > 3
                           ? 'keen-slider__slide'
                           : ''
-                      } flex items-center justify-center`}
+                        } flex items-center justify-center`}
                     >
                       <div className="flex h-[266px] w-[218px] flex-shrink-0 flex-col justify-between rounded-xl bg-white p-5 shadow-md">
                         <h1 className="text-m font-semibold text-gray-600">
@@ -153,7 +148,7 @@ export default function ChangeOrganizationPage() {
                         </div>
                         <div className="mt-auto pt-3">
                           {organizationId ===
-                          userSocialOrganization.socialOrganizationId ? (
+                            userSocialOrganization.socialOrganizationId ? (
                             <span className="flex items-center gap-2 text-sm text-blue-500">
                               Organização Atual <Check />
                             </span>
@@ -176,11 +171,10 @@ export default function ChangeOrganizationPage() {
                 )}
               <div
                 key="999"
-                className={`${
-                  user?.socialOrganizations?.length > 3
+                className={`${user?.socialOrganizations?.length > 3
                     ? 'keen-slider__slide'
                     : ''
-                } flex items-center justify-center`}
+                  } flex items-center justify-center`}
               >
                 <div className="flex h-[266px] w-[218px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-gray-400 p-5 text-center shadow-md">
                   <Link
