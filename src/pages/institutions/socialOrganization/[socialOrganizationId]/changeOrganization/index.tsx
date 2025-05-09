@@ -84,7 +84,7 @@ export default function ChangeOrganizationPage() {
           </p>
         </div>
         <section className="mt-10 flex flex-col items-center justify-center md:min-h-[500px]">
-          <div className="relative w-full max-w-5xl overflow-hidden">
+          <div className="relative w-full max-w-5xl overflow-hidden px-[40px]">
             {loaded && instanceRef.current && (
               <>
                 {user && user.socialOrganizations?.length > 3 && (

@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { MultiValue } from 'react-select'
 import { Option } from '../../../../../types/MultiselectCombobox'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useHeader } from '../../../../../context/HeaderContext'
@@ -39,6 +39,7 @@ export default function CreateOrganization() {
   )
   const { socialOrganizationId } = router.query
   const organizationId = Number(socialOrganizationId || '0')
+  const queryClient = useQueryClient()
 
   const {
     setShowMenu,
@@ -190,6 +191,8 @@ export default function CreateOrganization() {
         setUserName(parsed.userName)
         setOrganizationName(data.name)
         setSocialOrganizationId(parsed.socialOrganizationId)
+        await queryClient.invalidateQueries(['user'])
+        await queryClient.refetchQueries(['user'])
         router.push(
           `/institutions/socialOrganization/${parsed.socialOrganizationId}/changeOrganization`
         )
