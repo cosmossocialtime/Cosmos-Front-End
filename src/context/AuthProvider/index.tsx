@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       if (decoded.role === 'volunteer') {
         Router.push('/user/onboarding/start')
       } else {
-        console.log(decoded)
         if (decoded.socialOrganizations.length === 1) {
           if (decoded.fullName !== null && decoded.fullName !== '') {
             router.push(

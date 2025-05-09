@@ -126,7 +126,6 @@ export default function AboutYouForm() {
   }
 
   async function handleForm(data: formProps) {
-    console.log(data)
     setIsLoading(true)
     try {
       if (onboardingMember) {

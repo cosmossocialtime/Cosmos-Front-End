@@ -61,7 +61,7 @@ const customStyles: StylesConfig<any, false> = {
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isSelected ? '#E6E6FA' : 'white',
-    color: state.isSelected ? 'black' : 'black',
+    color: state.isSelected ? 'black' : 'light-grey',
     '&:hover': { backgroundColor: '#E6E6FA !important' },
     display: 'flex',
     alignItems: 'center',
@@ -90,7 +90,7 @@ const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({
       <Select
         instanceId={instanceId}
         options={options}
-        value={value}
+        value={value && value.value !== '' ? value : null}
         onChange={onChange}
         placeholder="Selecione uma opção"
         isDisabled={isDisabled}
