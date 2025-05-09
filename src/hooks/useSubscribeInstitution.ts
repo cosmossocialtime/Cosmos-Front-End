@@ -1,12 +1,15 @@
 import Router, { useRouter } from 'next/router'
 import { useDashboard } from './useDashboard'
 
-export function useSubscribeInstitution({
-  disableRedirect = false,
-}: Partial<{
-  disableRedirect?: boolean
-}> = {}) {
-  const { dashboard } = useDashboard()
+export function useSubscribeInstitution(
+  socialOrganizationId: number,
+  {
+    disableRedirect = false,
+  }: Partial<{
+    disableRedirect?: boolean
+  }> = {}
+) {
+  const { dashboard } = useDashboard(socialOrganizationId)
   const router = useRouter()
   const { programId } = router.query
 

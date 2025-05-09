@@ -1,14 +1,14 @@
 import { useForm } from 'react-hook-form'
-import { Button } from '../../../../../../components/Button/ButtonSubmit'
+import { Button } from '../../../../../../../../components/Button/ButtonSubmit'
 import { useEffect, useState } from 'react'
-import { textAreaSchema } from '../../../../../../utils/ValidationSchemas'
+import { textAreaSchema } from '../../../../../../../../utils/ValidationSchemas'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import TextAreaField from '../../../../../../components/Input/TextAreaField'
-import Layout from '../../../../../../components/Layout'
-import ProgressBar from '../../../../../../components/menu/ProgressBar'
+import TextAreaField from '../../../../../../../../components/Input/TextAreaField'
+import Layout from '../../../../../../../../components/Layout'
+import ProgressBar from '../../../../../../../../components/menu/ProgressBar'
 import Router from 'next/router'
-import { useOnboardingInstitution } from '../../../../../../context/OnboardingInstituionProvider'
+import { useOnboardingInstitution } from '../../../../../../../../context/OnboardingInstituionProvider'
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -94,7 +94,11 @@ export default function DescriptiveData() {
       changeMentorshipApplicant(updatedMentorshipApplicant)
     }
     setIsLoading(true)
-    Router.push(`/institutions/adventure/${program?.id}/subscribe/finalization`)
+    Router.push(
+      `/institutions/socialOrganization/${
+        socialOrganization?.id || 0
+      }/adventure/${program?.id}/subscribe/finalization`
+    )
     setIsLoading(false)
   }
 
@@ -106,7 +110,9 @@ export default function DescriptiveData() {
           currentStep={currentStep}
           onBack={() =>
             Router.push(
-              `/institutions/adventure/${program?.id}/subscribe/aboutInstitution`
+              `/institutions/socialOrganization/${
+                socialOrganization?.id || 0
+              }/adventure/${program?.id}/subscribe/aboutInstitution`
             )
           }
         />

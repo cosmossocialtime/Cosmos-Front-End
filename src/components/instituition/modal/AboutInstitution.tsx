@@ -160,11 +160,16 @@ export const AboutInstitutionModal = ({
     []
 
   async function getCauses() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('cause-select-lambda', {})
-    return JSON.parse(response.body)
+    try {
+      const response = await invokeLambda<
+        Record<string, never>,
+        { statusCode: number; body: string }
+      >('cause-select-lambda', {})
+      return JSON.parse(response.body)
+    } catch (error) {
+      console.error('Erro ao buscar causas!')
+      throw error
+    }
   }
 
   const { data: causes } = useQuery({
@@ -444,11 +449,11 @@ export const AboutInstitutionModal = ({
         const { storageId } = JSON.parse(response.body)
         return Number(storageId)
       } else {
-        console.error('Erro ao salvar metadados no storage')
+        toast.error('Erro ao salvar metadados no storage')
         return null
       }
     } catch (err) {
-      console.error(err)
+      toast.error('Erro ao salvar metadados no storage')
       return null
     }
   }

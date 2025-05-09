@@ -6,7 +6,7 @@ export function useSubscribe({
 }: Partial<{
   disableRedirect?: boolean
 }> = {}) {
-  const { dashboard } = useDashboard()
+  const { dashboard } = useDashboard(null)
   const router = useRouter()
   const { programId } = router.query
 

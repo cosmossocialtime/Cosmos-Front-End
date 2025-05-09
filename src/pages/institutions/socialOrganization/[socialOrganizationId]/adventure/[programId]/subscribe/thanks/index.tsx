@@ -1,13 +1,19 @@
-import { Button } from '../../../../../../components/Button'
-import { Loading } from '../../../../../../components/Loading'
+import { Button } from '../../../../../../../../components/Button'
+import { Loading } from '../../../../../../../../components/Loading'
 import dayjs from 'dayjs'
-import { useSubscribeInstitution } from '../../../../../../hooks/useSubscribeInstitution'
-import DynamicHeader from '../../../../../../components/header/DynamicHeader'
+import { useSubscribeInstitution } from '../../../../../../../../hooks/useSubscribeInstitution'
+import DynamicHeader from '../../../../../../../../components/header/DynamicHeader'
 import { Check } from 'phosphor-react'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 
 export default function Thanks() {
-  const { program } = useSubscribeInstitution({ disableRedirect: true })
+  const router = useRouter()
+  const { socialOrganizationId } = router.query
+  const organizationId = Number(socialOrganizationId || '0')
+  const { socialOrganization, program } = useSubscribeInstitution(
+    organizationId,
+    { disableRedirect: true }
+  )
 
   if (!program) {
     return <Loading />
@@ -40,7 +46,11 @@ export default function Thanks() {
             <Button.Primary
               className="mt-8 px-20 py-3"
               onClick={() => {
-                Router.push('/institutions/painel')
+                Router.push(
+                  `/institutions/socialOrganization/${
+                    socialOrganization?.id || 0
+                  }/home`
+                )
               }}
             >
               Voltar ao Painel Principal

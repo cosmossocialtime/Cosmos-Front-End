@@ -16,7 +16,7 @@ import { Button } from '../../../../components/Button/ButtonSubmit'
 import Link from 'next/link'
 import { useState } from 'react'
 import { invokeLambda } from '../../../../lib/aws/invokeLambda'
-import { saveFormData } from '../../../../utils/localStroge'
+import { saveFormData } from '../../../../utils/localStorage'
 
 const schema = z.object({
   email: emailSchema,

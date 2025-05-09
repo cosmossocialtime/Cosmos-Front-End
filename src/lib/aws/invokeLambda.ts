@@ -1,6 +1,7 @@
 import { InvokeCommand } from '@aws-sdk/client-lambda'
 import { lambdaClient } from './lambdaClient'
 import { parseCookies } from 'nookies'
+import { LambdaError } from './lambdaError'
 
 export async function invokeLambda<TInput, TOutput>(
   functionName: string,
@@ -21,5 +22,20 @@ export async function invokeLambda<TInput, TOutput>(
     throw new Error(`Lambda error: ${response.FunctionError}`)
   }
 
-  return JSON.parse(Buffer.from(response.Payload!).toString()) as TOutput
+  const parsed = JSON.parse(Buffer.from(response.Payload!).toString())
+
+  if (![200, 201].includes(parsed.statusCode)) {
+    const message =
+      typeof parsed.body === 'string'
+        ? parsed.body
+        : JSON.stringify(parsed.body)
+
+    throw new LambdaError(
+      `Erro ${parsed.statusCode}: ${message}`,
+      parsed.statusCode,
+      parsed.body
+    )
+  }
+
+  return parsed as TOutput
 }

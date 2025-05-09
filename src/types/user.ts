@@ -1,3 +1,5 @@
+import { UserSocialOrganizationProps } from './userSocialOrganization'
+
 export type UserProps = {
   id?: number
   userId?: number
@@ -12,7 +14,6 @@ export type UserProps = {
   city?: string
   company?: string
   companyId?: number
-  socialOrganizationId?: number
   completedOnboarding?: boolean
   professionalExperience?: number
   professionalSector?: string
@@ -31,4 +32,5 @@ export type UserProps = {
     role?: string
   }
   isVerified?: boolean
+  socialOrganizations?: UserSocialOrganizationProps[]
 }

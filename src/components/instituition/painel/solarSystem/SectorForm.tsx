@@ -12,6 +12,7 @@ import { SectorProps } from '../../../../types/sector'
 import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { EditButton } from '../../../Button/EditButton'
+import { useQueryClient } from '@tanstack/react-query'
 
 const options = [
   { value: '1', label: '1 - Não precisa' },
@@ -67,6 +68,7 @@ export const SectorForm = ({
     value: string
     label: string
   } | null>(null)
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (organizationSector !== undefined) {
@@ -124,11 +126,17 @@ export const SectorForm = ({
         { statusCode: number; body: string }
       >('social-organization-sector-upsert-lambda', payload)
       if (response.statusCode == 201) {
+        queryClient.invalidateQueries([
+          'socialOrganization',
+          socialOrganizationId,
+        ])
         toast.success('Informações salvas com sucesso!')
-        closeModal()
+      } else {
+        toast.error('Erro ao salvar informações!')
       }
     } catch (error) {
       toast.error('Erro ao salvar informações!')
+    } finally {
       closeModal()
     }
   }

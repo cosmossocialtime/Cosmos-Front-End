@@ -4,7 +4,7 @@ import { useDashboard } from './useDashboard'
 export function useOnboarding() {
   const router = useRouter()
 
-  const { dashboard } = useDashboard()
+  const { dashboard } = useDashboard(null)
   const { mentorshipId } = router.query
 
   // const program =

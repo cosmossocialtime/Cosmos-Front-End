@@ -25,7 +25,10 @@ type OnboardingInstitutionContextProps = {
   changeFocalPoint: (updatedFocalPoint: FocalPointProps) => void
   changeProgram: (updatedProgram: ProgramProps) => void
   saveOnboarding: (user: UserProps) => void
-  saveOnboardingMember: (updatedUser: UserProps) => void
+  saveOnboardingMember: (
+    socialOrganizationId: number,
+    updatedUser: UserProps
+  ) => void
   saveMentorshipApplicant: (updatedMentorship: MentorshipApplicantProps) => void
   setOnboardingMember: (onboarding: boolean) => void
   setNewFocalPoint: () => void
@@ -103,29 +106,32 @@ const OnboardingInstitutionProvider = ({
       }
 
       const response = await invokeLambda<
-        {
-          socialOrganizationName: string
-          causes: number[]
-          fullName: string
-          phone: string
-          professionalSector: string
-          professionalRole: string
-        },
+        typeof payload,
         { statusCode: number; body: string }
       >('onboarding-create-lambda', payload)
 
       if (response.statusCode == 201) {
+        const parsed = JSON.parse(response.body)
         toast.success('Cadastro concluído!')
-        Router.push('/institutions/painel')
+        Router.push(
+          `/institutions/socialOrganization/${parsed.socialOrganizationId}/home`
+        )
+      } else {
+        toast.error('Erro ao salvar as informações!')
       }
     } catch (error) {
+      toast.error('Erro ao salvar as informações!')
       throw error
     }
   }
 
-  async function saveOnboardingMember(updatedUser: UserProps) {
+  async function saveOnboardingMember(
+    socialOrganizationId: number,
+    updatedUser: UserProps
+  ) {
     try {
       const payload = {
+        socialOrganizationId: socialOrganizationId,
         fullName: (updatedUser && updatedUser.fullName) || '',
         phone: (updatedUser && updatedUser.phone) || '',
         professionalSector:
@@ -134,20 +140,20 @@ const OnboardingInstitutionProvider = ({
       }
 
       const response = await invokeLambda<
-        {
-          fullName: string
-          phone: string
-          professionalSector: string
-          professionalRole: string
-        },
+        typeof payload,
         { statusCode: number; body: string }
       >('onboarding-member-create-lambda', payload)
 
       if (response.statusCode == 201) {
         toast.success('Cadastro concluído!')
-        Router.push('/institutions/painel')
+        Router.push(
+          `/institutions/socialOrganization/${socialOrganizationId}/home`
+        )
+      } else {
+        toast.error('Erro ao salvar as informações!')
       }
     } catch (error) {
+      toast.error('Erro ao salvar as informações!')
       throw error
     }
   }
@@ -170,20 +176,22 @@ const OnboardingInstitutionProvider = ({
         }
 
         const response = await invokeLambda<
-          {
-            socialOrganization: SocialOrganizationProps
-            focalPoint: FocalPointProps
-            mentorshipApplicant: MentorshipApplicantProps
-            program: ProgramProps
-          },
+          typeof payload,
           { statusCode: number; body: string }
         >('onboardingProgram-create-lambda', payload)
         if (response.statusCode == 201) {
           toast.success('Cadastro concluído!')
-          Router.push(`/institutions/adventure/${program?.id}/subscribe/thanks`)
+          Router.push(
+            `/institutions/socialOrganization/${
+              socialOrganization.id || 0
+            }/adventure/${program?.id}/subscribe/thanks`
+          )
+        } else {
+          toast.error('Erro ao salvar as informações!')
         }
       }
     } catch (error) {
+      toast.error('Erro ao salvar as informações!')
       throw error
     }
   }
