@@ -26,7 +26,7 @@ export function PlanetItem({
   const closeModalSector = () => setIsOpenSector(false)
 
   return (
-    <div className="flex flex-col items-center justify-center text-center">
+    <div className="flex flex-col items-center justify-center">
       {isOpenSector && (
         <SectorForm
           closeModal={closeModalSector}
@@ -45,7 +45,7 @@ export function PlanetItem({
         src={imageSrc}
         alt={name}
       />
-      <h4 className="text-sm text-white">{name}</h4>
+      <h4 className="text-center text-sm  text-white">{name}</h4>
       <button
         onClick={() => setIsOpenSector(true)}
         className="text-[12px] text-blue-300"

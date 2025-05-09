@@ -85,7 +85,7 @@ const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <label className="text-sm font-medium text-gray-600">{label}</label>
       )}
       <Select
         instanceId={instanceId}

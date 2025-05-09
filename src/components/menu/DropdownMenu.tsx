@@ -13,12 +13,6 @@ interface DropdownMenuProps {
 export default function DropdownMenu({ routes, onClose }: DropdownMenuProps) {
   const [isModalFeedbackOpen, setIsModalFeedbackOpen] = useState<boolean>(false)
   const [isModalLogoutOpen, setIsModalLogoutOpen] = useState<boolean>(false)
-  const othersOptionsMenu = [
-    {
-      title: 'Precisa de Ajuda?',
-      link: '/',
-    },
-  ]
 
   const closeModalFeedback = () => {
     setIsModalFeedbackOpen(false)
@@ -44,17 +38,14 @@ export default function DropdownMenu({ routes, onClose }: DropdownMenuProps) {
           </Link>
         ))}
         <div className={`h-[1px] w-full bg-black/5`} />
-        {othersOptionsMenu.map((option, index) => (
-          <Link
-            className={`text-gray-500 hover:text-blue-500`}
-            href={option.link}
-            key={index}
-          >
-            {/* A lógica deverá ser trocada pelo link dinamico */}
-            {option.title}
-            {option.title === 'Painel Principal' && <Check />}
-          </Link>
-        ))}
+        <a
+          href="https://wa.me/554191473667"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`text-gray-500 hover:text-blue-500`}
+        >
+          Precisa de ajuda?
+        </a>
         <span
           className="cursor-pointer text-gray-500 hover:text-blue-500"
           onClick={() => setIsModalFeedbackOpen(true)}

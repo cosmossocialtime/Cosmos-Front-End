@@ -8,6 +8,7 @@ interface TextAreaFieldProps {
   placeholder?: string
   register: UseFormRegister<any>
   error?: string
+  rows?: number
   minLength?: number
   maxLength?: number
   value?: string
@@ -20,6 +21,7 @@ export default function TextAreaField({
   register,
   error,
   dynamicLabel = '',
+  rows = 4,
   minLength = 100,
   maxLength = 300,
   value,
@@ -39,12 +41,12 @@ export default function TextAreaField({
 
   return (
     <div
-      className={`w-full rounded-lg border p-4 transition-all duration-200 focus-within:border-purple-500 hover:border-purple-500
+      className={`w-full rounded-lg border transition-all duration-200 focus-within:border-purple-500 hover:border-purple-500
             ${error ? 'border-red-500' : 'border-gray-300'}`}
     >
       <label
         htmlFor={name}
-        className="mb-1 block text-sm font-medium text-gray-700"
+        className="mb-1 block text-sm font-medium text-gray-600"
       >
         {label.replace('[Nome do programa]', dynamicLabel)}
       </label>
@@ -53,7 +55,7 @@ export default function TextAreaField({
           {...register(name)} // Mantém a integração com o react-hook-form
           id={name}
           placeholder={placeholder}
-          rows={4}
+          rows={rows}
           value={value} // Controle do valor via props
           maxLength={maxLength}
           className={`w-full rounded-md border border-solid p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 
@@ -69,12 +71,12 @@ export default function TextAreaField({
       </div>
       {error && <span className="mt-1 text-sm text-red-500">{error}</span>}
 
-      {isMinNotReached && (
+      {!error && isMinNotReached && (
         <span className="mt-1 text-sm text-red-500">
           O campo é obrigatório, mínimo de {minLength} caracteres
         </span>
       )}
-      {isMaxReached && (
+      {!error && isMaxReached && (
         <span className="mt-1 text-sm text-red-500">
           O limite de caracteres já foi atingido
         </span>

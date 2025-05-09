@@ -567,7 +567,7 @@ export const AboutInstitutionModal = ({
               <div className="flex gap-2">
                 <button
                   onClick={closeModal}
-                  className="absolute right-4 top-8 text-gray-500 hover:text-gray-800"
+                  className="absolute right-4 top-8 text-gray-600 hover:text-gray-800"
                 >
                   <X size={24} />
                 </button>
@@ -583,7 +583,7 @@ export const AboutInstitutionModal = ({
               <div className="flex gap-2">
                 <button
                   onClick={closeModal}
-                  className="absolute right-4 top-8 text-gray-500 hover:text-gray-800"
+                  className="absolute right-4 top-8 text-gray-600 hover:text-gray-800"
                 >
                   <X size={24} />
                 </button>
@@ -598,11 +598,11 @@ export const AboutInstitutionModal = ({
           >
             {!isEditing ? (
               <>
-                <div className="p-6">
+                <div className="mt-8  p-6">
                   <div className="mt-6 grid grid-cols-1 gap-6 text-sm text-gray-800">
                     {/* Bloco 1: Dados básicos */}
                     <div className="text-left">
-                      <span className="font-medium text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Nome da organização
                       </span>
                       <p className="whitespace-pre-line text-gray-800">
@@ -611,7 +611,7 @@ export const AboutInstitutionModal = ({
                     </div>
 
                     <div className="text-left">
-                      <span className="mb-1 block font-medium text-gray-400">
+                      <span className="mb-1 block font-medium text-gray-600">
                         Causa(s) em que atua
                       </span>
                       <div className="flex flex-row gap-1">
@@ -629,13 +629,13 @@ export const AboutInstitutionModal = ({
                     {/* Grid de 2 colunas: CNPJ, Receita, Estado, Cidade, etc */}
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                       <div className="text-left">
-                        <span className="font-medium text-gray-400">CNPJ</span>
+                        <span className="font-medium text-gray-600">CNPJ</span>
                         <p className="whitespace-pre-line text-gray-800">
                           {socialOrganization.cnpj || ''}
                         </p>
                       </div>
                       <div className="text-left">
-                        <span className="font-medium text-gray-400">
+                        <span className="font-medium text-gray-600">
                           Receita anual
                         </span>
                         <p className="whitespace-pre-line text-gray-800">
@@ -647,7 +647,7 @@ export const AboutInstitutionModal = ({
                         </p>
                       </div>
                       <div className="text-left">
-                        <span className="font-medium text-gray-400">
+                        <span className="font-medium text-gray-600">
                           Estado
                         </span>
                         <p className="whitespace-pre-line text-gray-800">
@@ -655,7 +655,7 @@ export const AboutInstitutionModal = ({
                         </p>
                       </div>
                       <div className="text-left">
-                        <span className="font-medium text-gray-400">
+                        <span className="font-medium text-gray-600">
                           Cidade
                         </span>
                         <p className="whitespace-pre-line text-gray-800">
@@ -663,7 +663,7 @@ export const AboutInstitutionModal = ({
                         </p>
                       </div>
                       <div className="text-left">
-                        <span className="font-medium text-gray-400">
+                        <span className="font-medium text-gray-600">
                           Nº de funcionários
                         </span>
                         <p className="whitespace-pre-line text-gray-800">
@@ -671,7 +671,7 @@ export const AboutInstitutionModal = ({
                         </p>
                       </div>
                       <div className="text-left">
-                        <span className="font-medium text-gray-400">
+                        <span className="font-medium text-gray-600">
                           Nº de beneficiários
                         </span>
                         <p className="whitespace-pre-line text-gray-800">
@@ -682,7 +682,7 @@ export const AboutInstitutionModal = ({
 
                     {/* Bloco de arquivos */}
                     <div className="text-left">
-                      <span className="font-medium text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Estatuto ou Contrato Social
                       </span>
                       {socialOrganization.estatutoFileLocation ? (
@@ -705,7 +705,7 @@ export const AboutInstitutionModal = ({
 
                     {/* Blocos de texto longo */}
                     <div className="text-left">
-                      <span className="font-medium text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Escreva brevemente a história da instituição
                       </span>
                       <p className="whitespace-pre-line text-gray-800">
@@ -714,7 +714,7 @@ export const AboutInstitutionModal = ({
                     </div>
 
                     <div className="text-left">
-                      <span className="font-medium text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Qual a atuação e o impacto da organização?
                       </span>
                       <p className="whitespace-pre-line text-gray-800">
@@ -723,7 +723,7 @@ export const AboutInstitutionModal = ({
                     </div>
 
                     <div className="text-left">
-                      <span className="font-medium text-gray-400">
+                      <span className="font-medium text-gray-600">
                         Quais são as principais necessidades e desafios que a
                         sua organização enfrenta no momento?
                       </span>
@@ -737,7 +737,7 @@ export const AboutInstitutionModal = ({
             ) : (
               <>
                 {currentStep === 1 && (
-                  <div className="w-[736px] p-6">
+                  <div className="mt-8 w-[736px] p-6">
                     <InputField
                       label="Nome da organização"
                       name="nomeInstituicao"
@@ -860,7 +860,7 @@ export const AboutInstitutionModal = ({
                 )}
                 {currentStep === 2 && (
                   <section className="w-full">
-                    <div className="flex w-full flex-col gap-3">
+                    <div className="mt-8 flex w-full flex-col gap-3 p-6">
                       <TextAreaField
                         label="Escreva brevemente a história da instituição?"
                         name="history"
