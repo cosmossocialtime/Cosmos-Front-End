@@ -5,13 +5,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useEffect, useState } from 'react'
 import { Button } from '../../Button/ButtonSubmit'
+import { textAreaSchema } from '../../../utils/ValidationSchemas'
+import { toast } from 'react-toastify'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 interface FeedbackModalProps {
   closeModal: () => void
 }
 
 const schema = z.object({
-  feedback: z.string().min(100).max(300),
+  feedback: textAreaSchema,
 })
 
 type formProps = z.infer<typeof schema>
@@ -41,31 +44,49 @@ export const FeedbackModal = ({ closeModal }: FeedbackModalProps) => {
     checkInput()
   }, [feedbackW])
 
-  const handleForm = (data: formProps) => {
-    console.log(data)
+  async function handleForm(data: formProps) {
+    try {
+      const payload = {
+        feedback: data.feedback,
+      }
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-feedback-create-lambda', payload)
+      if (response.statusCode == 201) {
+        toast.success('Feedback enviado com sucesso')
+      } else {
+        toast.error('Erro ao enviar feedback')
+      }
+    } catch (error) {
+      toast.error('Erro ao enviar feedback')
+    } finally {
+      closeModal()
+    }
   }
 
   return (
-    <section className="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black/10">
-      <section className="rounded-md bg-white p-5 md:w-[650px]">
-        <div className="flex items-center justify-between">
-          <h1 className="mb-2 text-xl font-semibold text-gray-900">
+    <section className="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black/50">
+      <section className="gap-6 rounded-md bg-white  p-6 md:h-[391px] md:w-[720px]">
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-xl font-semibold text-gray-800">
             Ajude a Cosmos a alcançar novos horizontes
           </h1>
 
           <X className="cursor-pointer" onClick={closeModal} />
         </div>
 
-        <form onSubmit={handleSubmit(handleForm)} className="mt-5">
-          <TextAreaField
-            label="Conte-nos a sua sugestão ou feedback para a plataforma"
-            maxLength={300}
-            minLength={100}
-            name="feedback"
-            value={feedbackW}
-            register={register}
-            error={errors.feedback?.message}
-          />
+        <form onSubmit={handleSubmit(handleForm)} className="text-m">
+          <div className="mb-6">
+            <TextAreaField
+              label="Conte-nos a sua sugestão ou feedback para a plataforma"
+              rows={6}
+              name="feedback"
+              value={feedbackW}
+              register={register}
+              error={errors.feedback?.message}
+            />
+          </div>
 
           <div className="max-w-[240px]">
             <Button text="Enviar" disabled={isDisabled} type="submit" />

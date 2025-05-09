@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { X } from 'phosphor-react'
 import SingleSelectComboBox from '../../../combobox/SingleSelectComboBox'
-import { InputTextArea } from '../../../Input/InputTextArea'
 import { Button } from '../../../Button/ButtonSubmit'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,6 +12,8 @@ import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { EditButton } from '../../../Button/EditButton'
 import { useQueryClient } from '@tanstack/react-query'
+import TextAreaField from '../../../Input/TextAreaField'
+import { textAreaSchema } from '../../../../utils/ValidationSchemas'
 
 const options = [
   { value: '1', label: '1 - Não precisa' },
@@ -24,8 +25,8 @@ const options = [
 
 const schema = z.object({
   ranking: z.string().min(1, 'Selecione um valor.'),
-  currentlyWorking: z.string().min(100, 'Mínimo de 100 caracteres').max(300),
-  effectiveness: z.string().min(100, 'Mínimo de 100 caracteres').max(300),
+  currentlyWorking: textAreaSchema,
+  effectiveness: textAreaSchema,
 })
 
 type FormProps = z.infer<typeof schema>
@@ -88,7 +89,19 @@ export const SectorForm = ({
   const effectiveness = watch('effectiveness')
 
   useEffect(() => {
-    setIsDisabled(!(ranking && currentlyWorking && effectiveness))
+    const checkInput = () => {
+      if (
+        ranking &&
+        currentlyWorking.length >= 100 &&
+        effectiveness.length >= 100
+      ) {
+        setIsDisabled(false)
+      } else {
+        setIsDisabled(true)
+      }
+    }
+
+    checkInput()
   }, [ranking, currentlyWorking, effectiveness])
 
   const handleChange = (selected: { value: string; label: string } | null) => {
@@ -115,14 +128,7 @@ export const SectorForm = ({
       }
 
       const response = await invokeLambda<
-        {
-          id: number | null
-          sectorId: number
-          socialOrganizationId: number
-          ranking: number
-          currentlyWorking: string
-          effectiveness: string
-        },
+        typeof payload,
         { statusCode: number; body: string }
       >('social-organization-sector-upsert-lambda', payload)
       if (response.statusCode == 201) {
@@ -143,7 +149,7 @@ export const SectorForm = ({
 
   return (
     <section className="fixed left-0 top-0 z-[50] flex h-screen w-full items-center justify-center bg-black/50">
-      <section className="flex h-[672px] w-[720px] flex-col overflow-y-scroll rounded-xl bg-white p-6 shadow-lg">
+      <section className="flex h-[669px] w-[720px] flex-col overflow-y-scroll rounded-xl bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center">
             <Image
@@ -202,59 +208,35 @@ export const SectorForm = ({
         ) : (
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="h-[500px] overflow-y-scroll p-1"
+            className="flex flex-col gap-6 overflow-y-scroll"
           >
-            <div>
-              <h5 className="font-medium">
-                O quanto a instituição considera que a área {name} precisa ser
-                trabalhada?
-              </h5>
-              <SingleSelectComboBox
-                instanceId="ranking"
-                options={options}
-                onChange={handleChange}
-                value={selectedHowMuch}
-              />
-              {errors.ranking && (
-                <p className="text-sm text-red-500">{errors.ranking.message}</p>
-              )}
-            </div>
+            <SingleSelectComboBox
+              instanceId="ranking"
+              label={`O quanto a instituição considera que a área ${name} precisa ser trabalhada?`}
+              options={options}
+              onChange={handleChange}
+              value={selectedHowMuch}
+            />
 
-            <div>
-              <h5 className="mt-5 font-medium">
-                Como é feito {name} na instituição hoje?
-              </h5>
-              <InputTextArea
-                register={register}
-                name="currentlyWorking"
-                className="min-h-[150px]"
-                minChar={100}
-                maxChar={300}
-              />
-              {errors.currentlyWorking && (
-                <p className="text-sm text-red-500">
-                  {errors.currentlyWorking.message}
-                </p>
-              )}
-            </div>
+            <TextAreaField
+              label={`Como é feito ${name} na instituição hoje?`}
+              name="currentlyWorking"
+              value={currentlyWorking}
+              placeholder="Digite aqui"
+              register={register}
+              rows={6}
+              error={errors.currentlyWorking?.message}
+            />
 
-            <div>
-              <h5 className="mt-5 font-medium">
-                O que pode melhorar na área {name} da organização?
-              </h5>
-              <InputTextArea
-                register={register}
-                name="effectiveness"
-                className="min-h-[150px]"
-                minChar={100}
-                maxChar={300}
-              />
-              {errors.effectiveness && (
-                <p className="text-sm text-red-500">
-                  {errors.effectiveness.message}
-                </p>
-              )}
-            </div>
+            <TextAreaField
+              label={`O que pode melhorar na área ${name} da organização?`}
+              name="effectiveness"
+              value={effectiveness}
+              placeholder="Digite aqui"
+              register={register}
+              rows={6}
+              error={errors.effectiveness?.message}
+            />
 
             <div className="w-[250px]">
               <Button

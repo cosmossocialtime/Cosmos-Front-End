@@ -17,7 +17,7 @@ export function CentralStar({
   const closeModalAboutInstitution = () => setIsOpenAboutInstitution(false)
 
   return (
-    <div className="flex flex-col items-center justify-center text-center">
+    <div className="flex flex-col items-center justify-center">
       {isOpenAboutInstitution && (
         <AboutInstitutionModal
           closeModal={closeModalAboutInstitution}
@@ -32,7 +32,9 @@ export function CentralStar({
         src={Star}
         alt=""
       />
-      <h4 className="text-xl text-white">{socialOrganization.name}</h4>
+      <h4 className="text-center text-xl text-white">
+        {socialOrganization.name}
+      </h4>
       <button
         className="text-m text-blue-300"
         onClick={() => setIsOpenAboutInstitution(true)}
