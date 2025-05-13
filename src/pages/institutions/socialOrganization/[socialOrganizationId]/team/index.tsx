@@ -95,7 +95,6 @@ export default function Teams() {
     return <Loading />
   }
 
-  console.log(user)
   return (
     <section className="min-h-screen bg-gray-400/20">
       {openInviteForm && (

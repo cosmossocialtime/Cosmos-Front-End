@@ -14,7 +14,7 @@ export function EditButton({ text, type, disabled, onClick }: ButtonProps) {
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`flex w-full items-center gap-2 rounded-md border border-solid border-gray-300 p-2 text-sm font-normal text-blue-400 transition-colors hover:bg-blue-50 ${
+      className={`flex w-full justify-center gap-2 rounded-md border border-solid border-gray-300 p-2 text-sm font-semibold text-blue-400 transition-colors hover:bg-blue-50 ${
         disabled ? 'disabled' : ''
       }`}
     >

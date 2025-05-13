@@ -16,8 +16,10 @@ export function InputEmail({
   ...rest
 }: InputEmailProps) {
   return (
-    <div className="flex w-full max-w-md flex-col gap-1">
-      <label htmlFor={id}>{label}</label>
+    <div className="flex w-full flex-col gap-1">
+      <label htmlFor={id} className="text-sm font-medium text-gray-700">
+        {label}
+      </label>
       <input
         {...register(id, {
           required: 'O campo e-mail é obrigatório',

@@ -47,7 +47,7 @@ export default function Login() {
             onSubmit={handleSubmit(SubmitForm)}
             className="mt-4 flex w-1/2 flex-col gap-2"
           >
-            <div className="flex w-full max-w-md flex-col gap-2">
+            <div className="flex w-full flex-col gap-2">
               <div>
                 <label htmlFor="email" className="text">
                   Email
@@ -68,11 +68,11 @@ export default function Login() {
                 {errors.email.message}
               </span>
             )}
-            <div className="flex w-full max-w-md flex-col gap-2">
+            <div className="flex w-full flex-col gap-2">
               <div>
                 <label htmlFor="password">Senha</label>
               </div>
-              <div className="group relative flex w-full max-w-md gap-2">
+              <div className="group relative flex w-full gap-2">
                 <input
                   {...register('password')}
                   id="password"
