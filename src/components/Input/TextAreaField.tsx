@@ -27,14 +27,12 @@ export default function TextAreaField({
   value,
 }: TextAreaFieldProps) {
   const [charCount, setCharCount] = useState(value?.length || 0)
-  const [hasInteracted, setHasInteracted] = useState(false)
 
-  // Atualiza o contador de caracteres e a interação com o campo
   useEffect(() => {
     if (value) {
       setCharCount(value.length)
     }
-  }, [value]) // Executa sempre que o valor mudar
+  }, [value])
 
   const isMaxReached = charCount >= maxLength
   const isMinNotReached = charCount > 0 && charCount < minLength
@@ -52,11 +50,11 @@ export default function TextAreaField({
       </label>
       <div className="relative">
         <textarea
-          {...register(name)} // Mantém a integração com o react-hook-form
+          {...register(name)}
           id={name}
           placeholder={placeholder}
           rows={rows}
-          value={value} // Controle do valor via props
+          value={value}
           maxLength={maxLength}
           className={`w-full rounded-md border border-solid p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 
                         ${error ? 'border-red-500' : 'border-gray-400'}`}

@@ -20,6 +20,7 @@ export default function Home() {
     setOrganizationName,
     setSocialOrganizationId,
     setUserName,
+    setProfilePicture,
   } = useHeader()
 
   const router = useRouter()
@@ -93,6 +94,7 @@ export default function Home() {
     setUserName(dashboard.user.fullName)
     setOrganizationName(dashboard.socialOrganization.name)
     setSocialOrganizationId(dashboard.socialOrganization.id)
+    setProfilePicture(dashboard.user.profilePicture)
   }, [dashboard])
 
   if (!dashboard) {

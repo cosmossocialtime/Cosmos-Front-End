@@ -12,10 +12,12 @@ interface HeaderContextType {
   userName: string | null
   organizationName: string | null
   socialOrganizationId: number | null
+  profilePicture: string | null
   setShowMenu: (show: boolean) => void
   setShowOrganization: (show: boolean) => void
   setRoutes: (routes: Route[]) => void
   setUserName: (name: string | null) => void
+  setProfilePicture: (picture: string | null) => void
   setOrganizationName: (name: string | null) => void
   setSocialOrganizationId: (id: number | null) => void
   resetHeader: () => void
@@ -28,6 +30,7 @@ export function HeaderProvider({ children }: { children: ReactNode }) {
   const [showOrganization, setShowOrganization] = useState(false)
   const [routes, setRoutes] = useState<Route[]>([])
   const [userName, setUserName] = useState<string | null>(null)
+  const [profilePicture, setProfilePicture] = useState<string | null>(null)
   const [organizationName, setOrganizationName] = useState<string | null>(null)
   const [socialOrganizationId, setSocialOrganizationId] = useState<
     number | null
@@ -48,12 +51,14 @@ export function HeaderProvider({ children }: { children: ReactNode }) {
         showOrganization,
         routes,
         userName,
+        profilePicture,
         organizationName,
         socialOrganizationId,
         setShowMenu,
         setShowOrganization,
         setRoutes,
         setUserName,
+        setProfilePicture,
         setOrganizationName,
         setSocialOrganizationId,
         resetHeader,

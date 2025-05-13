@@ -18,7 +18,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useHeader } from '../../../../../context/HeaderContext'
-import StaticHeader from '../../../../../components/instituition/StaticHeader'
+import DynamicHeader from '../../../../../components/header/DynamicHeader'
 
 const schema = z.object({
   name: z.string().nonempty(),
@@ -95,6 +95,11 @@ export default function CreateOrganization() {
       throw error
     }
   }
+
+  useEffect(() => {
+    setShowMenu(false)
+    setShowOrganization(false)
+  }, [])
 
   const { data: sectors } = useQuery({
     queryKey: ['sectors'],
@@ -207,16 +212,18 @@ export default function CreateOrganization() {
 
   return (
     <section>
-      <StaticHeader />
+      <DynamicHeader />
 
       <div className="mt-10 p-3">
         <ArrowLeft
           className="cursor-pointer"
-          onClick={() =>
+          onClick={() => {
+            setShowMenu(true)
+            setShowOrganization(true)
             router.push(
               `/institutions/socialOrganization/${organizationId}/changeOrganization`
             )
-          }
+          }}
           size={30}
         />
       </div>

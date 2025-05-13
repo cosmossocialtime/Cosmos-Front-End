@@ -21,9 +21,12 @@ export function InputPassword({
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-1">
-      <label htmlFor={id}> {label} </label>
-      <div className="relative flex w-full max-w-md">
+    <div className="flex w-full flex-col gap-1">
+      <label htmlFor={id} className="text-sm font-medium text-gray-700">
+        {' '}
+        {label}{' '}
+      </label>
+      <div className="relative flex w-full">
         <input
           {...register(id, {
             required: 'O campo senha é obrigatório',
