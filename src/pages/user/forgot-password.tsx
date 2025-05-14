@@ -6,6 +6,8 @@ import { FormEvent, useState } from 'react'
 import { setCookie } from 'nookies'
 import Router from 'next/router'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
+import { sendEmail } from '../../lib/aws/sesSendMail'
+import { forgotPasswordTemplate } from '../../lib/email/templates/templates'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -24,9 +26,23 @@ export default function ForgotPassword() {
         { statusCode: number; body: string }
       >('user-forgot-password-lambda', payload)
 
+      const parsed = JSON.parse(response.body)
+
       if (response.statusCode == 200) {
-        toast.success('Enviado um link para redefinição de senha no seu email')
-        Router.push('/user/completed-reset-password')
+        const { subject, html } = forgotPasswordTemplate(
+          parsed.name,
+          parsed.confirmationCode
+        )
+        sendEmail(email, subject, html)
+          .then(() => {
+            toast.success(
+              'Enviado um link para redefinição de senha no seu email'
+            )
+            Router.push('/user/completed-reset-password')
+          })
+          .catch((error) => {
+            toast.error('Erro ao enviar email de redefinção de senha')
+          })
       }
       if (response.statusCode == 401) {
         toast.error('Email inválido')
