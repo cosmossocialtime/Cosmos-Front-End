@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import Router from 'next/router'
 import { getFormData } from '../../utils/localStorage'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
+import { resendConfirmationTemplate } from '../../lib/email/templates/templates'
+import { sendEmail } from '../../lib/aws/sesSendMail'
 
 export default function CompletedRegistration() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -42,7 +44,19 @@ export default function CompletedRegistration() {
       >('user-resend-confirmation-lambda', payload)
 
       if (response.statusCode === 200) {
-        toast.success('Email reenviado!')
+        const parsed = JSON.parse(response.body)
+        const { subject, html } = resendConfirmationTemplate(
+          parsed.confirmationCode
+        )
+        sendEmail([email], subject, html)
+          .then(() => {
+            toast.success('Email reenviado')
+          })
+          .catch(() => {
+            toast.error(
+              'Não foi possivel enviar, tente novamente em alguns instantes'
+            )
+          })
       } else {
         toast.error(
           'Não foi possivel enviar, tente novamente em alguns instantes'

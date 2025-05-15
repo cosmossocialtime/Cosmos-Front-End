@@ -9,7 +9,7 @@ const sesClient = new SESClient({
 })
 
 export async function sendEmail(
-  toAdress: string,
+  toAdresses: string[],
   subject: string,
   message: string
 ) {
@@ -17,7 +17,7 @@ export async function sendEmail(
     new SendEmailCommand({
       Source: process.env.NEXT_PUBLIC_AWS_EMAIL_SOURCE,
       Destination: {
-        ToAddresses: [toAdress],
+        ToAddresses: toAdresses,
       },
       Message: {
         Subject: { Data: subject },

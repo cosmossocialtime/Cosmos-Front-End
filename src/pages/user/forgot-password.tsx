@@ -33,7 +33,7 @@ export default function ForgotPassword() {
           parsed.name,
           parsed.confirmationCode
         )
-        sendEmail(email, subject, html)
+        sendEmail([email], subject, html)
           .then(() => {
             toast.success(
               'Enviado um link para redefinição de senha no seu email'

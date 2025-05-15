@@ -6,8 +6,9 @@ import { SocialOrganizationProps } from '../../../../types/socialOrganization'
 import { Button } from '../../../Button/ButtonSubmit'
 import { emailSchema } from '../../../../utils/ValidationSchemas'
 import { InputEmailList } from '../../../Input/InputEmailList'
-import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
+import { inviteMemberTemplate } from '../../../../lib/email/templates/templates'
+import { sendEmail } from '../../../../lib/aws/sesSendMail'
 
 const schema = z.object({
   emails: z
@@ -59,33 +60,21 @@ export const InviteForm = ({
   })
 
   async function handleForm(data: FormProps) {
-    try {
-      const payload = {
-        emails: data.emails,
-        socialOrganizationId: socialOrganization.id || 0,
-        socialOrganizationName: socialOrganization.name,
-      }
-
-      const response = await invokeLambda<
-        {
-          emails: { email: string }[]
-          socialOrganizationId: number
-          socialOrganizationName: string
-        },
-        { statusCode: number; body: string }
-      >('social-organization-invite-members-lambda', payload)
-
-      if (response.statusCode == 201) {
+    const { subject, html } = inviteMemberTemplate(
+      socialOrganization.name,
+      socialOrganization.id || 0
+    )
+    const emails = data.emails.map((e) => {
+      return e.email
+    })
+    sendEmail(emails, subject, html)
+      .then(() => {
         toast.success('Convites enviados!')
-      } else {
+      })
+      .catch(() => {
         toast.error('Erro ao enviar convites')
-      }
-    } catch (error) {
-      toast.error('Erro ao enviar convites')
-      throw error
-    } finally {
-      closeModal()
-    }
+      })
+      .finally(() => closeModal())
   }
 
   return (
