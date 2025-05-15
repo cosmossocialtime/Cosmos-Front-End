@@ -17,6 +17,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { saveFormData } from '../../../../utils/localStorage'
+import { signupInstitutionConfirmationTemplate } from '../../../../lib/email/templates/templates'
+import { sendEmail } from '../../../../lib/aws/sesSendMail'
 
 const schema = z.object({
   email: emailSchema,
@@ -59,10 +61,20 @@ export default function RegisterInstituition() {
 
       if (response.statusCode === 201) {
         saveFormData('cosmos.user', data.email)
-        toast.success('Criado com sucesso!')
-        Router.push({
-          pathname: '/institutions/onboarding/verifyEmail',
-        })
+        const parsed = JSON.parse(response.body)
+        const { subject, html } = signupInstitutionConfirmationTemplate(
+          parsed.confirmationCode
+        )
+        sendEmail([email], subject, html)
+          .then(() => {
+            toast.success('Criado com sucesso!')
+            Router.push({
+              pathname: '/institutions/onboarding/verifyEmail',
+            })
+          })
+          .catch(() => {
+            toast.error('Não foi possivel enviar email de confirmação de conta')
+          })
       }
 
       if (response.statusCode === 400) {

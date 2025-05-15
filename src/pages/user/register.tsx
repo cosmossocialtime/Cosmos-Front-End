@@ -12,6 +12,8 @@ import Link from 'next/link'
 import { setCookie } from 'nookies'
 import Router from 'next/router'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
+import { sendEmail } from '../../lib/aws/sesSendMail'
+import { signupConfirmationTemplate } from '../../lib/email/templates/templates'
 
 const schema = z
   .object({
@@ -88,8 +90,19 @@ export default function Cadastrar() {
       setCookie(undefined, 'cosmos.user', data.email, {
         maxAge: 60 * 60 * 12,
       })
-      toast.success('Criado com sucesso!')
-      Router.push('/user/completed-registration')
+      const parsed = JSON.parse(response.body)
+      const { subject, html } = signupConfirmationTemplate(
+        parsed.name,
+        parsed.confirmationCode
+      )
+      sendEmail([data.email], subject, html)
+        .then(() => {
+          toast.success('Criado com sucesso!')
+          Router.push('/user/completed-registration')
+        })
+        .catch(() => {
+          toast.error('Não foi possivel enviar email de confirmação de conta')
+        })
     }
 
     if (response.statusCode === 400) {
