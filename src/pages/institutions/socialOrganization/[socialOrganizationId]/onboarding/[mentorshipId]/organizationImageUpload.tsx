@@ -1,4 +1,4 @@
-import { ArrowLeft, Camera, DownloadSimple, UploadSimple } from 'phosphor-react'
+import { ArrowLeft, Camera, UploadSimple } from 'phosphor-react'
 import DynamicHeader from '../../../../../../components/header/DynamicHeader'
 import Router, { useRouter } from 'next/router'
 import { Button } from '../../../../../../components/Button/ButtonSubmit'
@@ -8,7 +8,7 @@ import { ButtonSecondary } from '../../../../../../components/Button/ButtonSubmi
 import { DownloadButton } from '../../../../../../components/Button/DownloadButton'
 import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import UploadImage from '../../../../../../components/Crop/UploadImage'
 import { DialogCrop } from '../../../../../../components/Crop/DialogCrop'
 import SettingCropArea from '../../../../../../components/Crop/SettingCropArea'
@@ -30,7 +30,6 @@ export default function OrganizationImageUpload() {
   const program = dashboard?.programs.find(
     (p: ProgramProps) => p.id === mentorship?.programId
   )
-  const [downloadUrl, setDownloadUrl] = useState('')
 
   const [selectedImg, setSelectedImg] = useState('')
   const [onDialog, setOnDialog] = useState(false)
@@ -164,7 +163,7 @@ export default function OrganizationImageUpload() {
                         className="h-full w-full rounded-[10px] object-cover"
                         alt="Logo da organização"
                         onLoad={takeScreenshot}
-                        src={socialOrganization.logo}
+                        src={socialOrganization?.logo}
                         width={197}
                         height={197}
                       />

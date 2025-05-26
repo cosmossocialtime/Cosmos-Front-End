@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { SocialOrganizationProps } from '../types/socialOrganization'
 import { PlanetItemProps } from '../components/instituition/painel/solarSystem/planetItem'
 import { Option } from '../types/MultiselectCombobox'
+import { SectorProps } from '../types/sector'
 
 export function useCombinedPlanetsData(
   sectors: Option[] | undefined,
@@ -86,7 +87,7 @@ export function useCombinedPlanetsData(
 
       const sectorData = sectors.find((s) => Number(s.value) === planet.id)
       const organizationData = socialOrganization.sectors?.find(
-        (s) => s.sectorId === planet.id
+        (s: SectorProps) => s.sectorId === planet.id
       )
 
       return {
