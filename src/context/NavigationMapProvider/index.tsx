@@ -39,7 +39,8 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
 
   const { dashboard } = useDashboard(null)
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
+    (mentorship: MentorshipProps) =>
+      String(mentorship.mentorshipId) === mentorshipId
   )
 
   const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null)
