@@ -13,6 +13,7 @@ import { EventProps } from '../../../../../types/event'
 import Link from 'next/link'
 import { DashboardLoading } from '../../../../../components/dashboard/DashboardLoading'
 import SideBar from '../sideBar'
+import { MentorshipProps } from '../../../../../types/mentorship'
 
 const schema = z.object({
   meetingAccomplishments: z.string(),
@@ -27,7 +28,8 @@ export default function Book() {
 
   const { dashboard } = useDashboard(null)
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
+    (mentorship: MentorshipProps) =>
+      String(mentorship.mentorshipId) === mentorshipId
   )
 
   const [event, setEvent] = useState<EventProps | null>(null)

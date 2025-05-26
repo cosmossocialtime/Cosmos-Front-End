@@ -1,8 +1,7 @@
 import Image from 'next/image'
-// import Logo from '../../../assets/logotipoCosmos.svg'
-import Mensagem from '../../../assets/icons/Envelope.svg'
+import Mensagem from '../../../../assets/icons/Envelope.svg'
 import { useEffect, useState } from 'react'
-import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css' // Importando CSS
+import styles from '../../../../components/instituition/verifyEmail/verifyEmail.module.css'
 import { getFormData } from '../../../../utils/localStorage'
 import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
@@ -15,7 +14,6 @@ export default function VerifyEmail() {
   const [timeExpire, setTimeExpire] = useState(false)
   const [email, setEmail] = useState('')
 
-  const minutes = Math.floor(secondsAmount / 60)
   const seconds = secondsAmount % 60
 
   useEffect(() => {
