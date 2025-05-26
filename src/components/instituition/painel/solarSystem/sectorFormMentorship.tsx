@@ -6,14 +6,10 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { Option } from '../../../../types/MultiselectCombobox'
-import { SectorProps } from '../../../../types/sector'
-import { invokeLambda } from '../../../../lib/aws/invokeLambda'
-import { toast } from 'react-toastify'
 import { EditButton } from '../../../Button/EditButton'
-import { useQueryClient } from '@tanstack/react-query'
 import TextAreaField from '../../../Input/TextAreaField'
 import { textAreaSchema } from '../../../../utils/ValidationSchemas'
+import { MentorshipSectorProps } from '../../../../types/mentorshipSector'
 
 const options = [
   { value: '1', label: '1 - Não precisa' },
@@ -31,25 +27,30 @@ const schema = z.object({
 
 type FormProps = z.infer<typeof schema>
 
-interface SectorFormProps {
+interface SectorFormMentorshipProps {
   closeModal: () => void
+  onSave: (mentorshipSector: MentorshipSectorProps) => void
   isFilled: boolean
+  isInformationSend: boolean
   name: string
   image: string
-  sector?: Option
-  socialOrganizationId?: number
-  organizationSector?: SectorProps
+  sectorData: {
+    sectorId: number
+    sector: string
+  }
+  mentorshipSector?: MentorshipSectorProps
 }
 
-export const SectorForm = ({
+export const SectorFormMentorship = ({
   closeModal,
+  onSave,
   isFilled,
+  isInformationSend,
   name,
   image,
-  sector,
-  socialOrganizationId,
-  organizationSector,
-}: SectorFormProps) => {
+  sectorData,
+  mentorshipSector,
+}: SectorFormMentorshipProps) => {
   const {
     register,
     handleSubmit,
@@ -69,20 +70,19 @@ export const SectorForm = ({
     value: string
     label: string
   } | null>(null)
-  const queryClient = useQueryClient()
 
   useEffect(() => {
-    if (organizationSector !== undefined) {
-      setValue('ranking', String(organizationSector.ranking || ''))
-      setValue('currentlyWorking', organizationSector.currentlyWorking || '')
+    if (mentorshipSector !== undefined) {
+      setValue('ranking', String(mentorshipSector.ranking || ''))
+      setValue('currentlyWorking', mentorshipSector.currentlyWorking || '')
       setSelectedHowMuch(
         options.find(
-          (item) => item.value === String(organizationSector.ranking || '')
-        ) || { value: String(organizationSector.ranking || ''), label: '' }
+          (item) => item.value === String(mentorshipSector.ranking || '')
+        ) || { value: String(mentorshipSector.ranking || ''), label: '' }
       )
-      setValue('effectiveness', organizationSector.effectiveness || '')
+      setValue('effectiveness', mentorshipSector.effectiveness || '')
     }
-  }, [organizationSector])
+  }, [mentorshipSector])
 
   const ranking = watch('ranking')
   const currentlyWorking = watch('currentlyWorking')
@@ -116,35 +116,18 @@ export const SectorForm = ({
   }
 
   async function onSubmit(data: FormProps) {
-    try {
-      const payload = {
-        id:
-          organizationSector === undefined ? null : organizationSector.id || 0,
-        sectorId: Number(sector?.value || 0),
-        socialOrganizationId: socialOrganizationId || 0,
-        ranking: Number(data.ranking),
-        currentlyWorking: data.currentlyWorking,
-        effectiveness: data.effectiveness,
-      }
-
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-sector-upsert-lambda', payload)
-      if (response.statusCode == 201) {
-        queryClient.invalidateQueries([
-          'socialOrganization',
-          socialOrganizationId,
-        ])
-        toast.success('Informações salvas com sucesso!')
-      } else {
-        toast.error('Erro ao salvar informações!')
-      }
-    } catch (error) {
-      toast.error('Erro ao salvar informações!')
-    } finally {
-      closeModal()
+    const payload = {
+      id: mentorshipSector?.id,
+      sectorId: sectorData.sectorId,
+      sector: sectorData.sector,
+      mentorshipSocialOrganizationId:
+        mentorshipSector?.mentorshipSocialOrganizationId,
+      ranking: Number(data.ranking || '0'),
+      currentlyWorking: data.currentlyWorking || '',
+      effectiveness: data.effectiveness || '',
     }
+    closeModal()
+    onSave(payload)
   }
 
   return (
@@ -159,7 +142,7 @@ export const SectorForm = ({
               alt={`Ícone de ${name}`}
             />
             <h1 className="text-3xl font-semibold">{name}</h1>
-            {!isEditing && (
+            {!isEditing && !isInformationSend && (
               <div className="ml-6">
                 <EditButton
                   text="Editar"
@@ -192,7 +175,7 @@ export const SectorForm = ({
                 Como é feito {name} na instituição hoje?
               </h5>
               <p className="whitespace-pre-line break-words text-gray-800">
-                {organizationSector?.currentlyWorking}
+                {mentorshipSector?.currentlyWorking}
               </p>
             </div>
 
@@ -201,7 +184,7 @@ export const SectorForm = ({
                 O que pode melhorar na área de {name} da organização?
               </h5>
               <p className="whitespace-pre-line break-words text-gray-800">
-                {organizationSector?.effectiveness}
+                {mentorshipSector?.effectiveness}
               </p>
             </div>
           </div>

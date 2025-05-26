@@ -4,10 +4,7 @@ module.exports = {
     './src/**/*.tsx',
     './node_modules/tailwind-datepicker-react/dist/**/*.tsx',
   ],
-  plugins: [
-    // ...
-    require('@tailwindcss/line-clamp'),
-  ],
+  plugins: [require('@tailwindcss/line-clamp')],
 
   theme: {
     extend: {
@@ -84,6 +81,11 @@ module.exports = {
         bgPortal: 'url(/images/bg-portal.jpg)',
         bgEspaço: 'url(/images/bg-espaco.jpg)',
         bgError500: 'url(/images/bg-error-500.jpg)',
+        bgWelcomeAdventureInstitution:
+          'url(/images/bg-welcome-adventure-institution.png)',
+        bgSpaceInstitution: 'url(/images/bg-space-institution.png)',
+        bgFuturisticPedestal: 'url(/images/bg-futuristic-pedestal.png)',
+        bgFrenteNave: 'url(/images/bg-frente-nave.png)',
       },
     },
   },

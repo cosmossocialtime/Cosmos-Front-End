@@ -1,3 +1,4 @@
+import { MentorshipSectorProps } from './mentorshipSector'
 import { SectorProps } from './sector'
 
 export interface Option {
@@ -5,11 +6,13 @@ export interface Option {
   label: string
 }
 
-export type SocialOrganizationProps = {
+export type MentorshipSocialOrganizationProps = {
   id?: number
+  mentorshipId: number
+  socialOrganizationId: number
   name: string
   causes: Option[]
-  sectors?: SectorProps[]
+  mentorshipSectors?: MentorshipSectorProps[]
   creationDate?: Date
   city?: string
   state?: string
@@ -22,8 +25,10 @@ export type SocialOrganizationProps = {
   cnpj?: string
   storageId?: number
   estatutoFileLocation?: string
+  directoryPathEstatuto?: string
   semCnpj?: boolean
   semEstatuto?: boolean
   foraDoBrasil?: boolean
   logo?: string
+  mimeEstatuto?: string
 }

@@ -42,12 +42,7 @@ export default function AdventureAreaInstitution({
 
   return (
     <div>
-      <div
-        className={`overflow-y-auto pb-5 pr-4 ${
-          programs.length > 0 &&
-          ' scrollbar-thin scrollbar-w-1 scrollbar-h-1/2 scrollbar-thumb-grey-300 scrollbar-track-[#8779B5]/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full relative max-h-[16rem]'
-        }`}
-      >
+      <div className={`overflow-y-auto pb-5 pr-4 `}>
         {programs.length === 0 ? (
           <div className="mt-60 flex flex-col items-center space-y-4">
             <div>
@@ -88,7 +83,7 @@ export default function AdventureAreaInstitution({
                       className="mb-4 mt-4 flex items-center justify-between rounded-lg bg-white p-4 shadow"
                     >
                       <div>
-                        <h3 className="font-semibold text-blue-500">
+                        <h3 className="font-semibold text-blue-400">
                           {program.name}
                         </h3>
                         <p className="text-sm text-gray-600">
@@ -113,7 +108,7 @@ export default function AdventureAreaInstitution({
                 </>
               ))}
             {programsUnsubscribed.length > 0 && (
-              <h2 className="mb-2 mb-4 mt-4 text-lg text-gray-600">
+              <h2 className="mb-4 mt-4 text-lg text-gray-600">
                 Inscreva-se em uma nova aventura
               </h2>
             )}
@@ -132,7 +127,7 @@ export default function AdventureAreaInstitution({
                       className="mb-4 mt-4 flex items-center justify-between rounded-lg bg-white p-4 shadow"
                     >
                       <div>
-                        <h3 className="font-semibold text-blue-500">
+                        <h3 className="font-semibold text-blue-400">
                           {program.name}
                         </h3>
                         <p className="text-sm text-gray-600">

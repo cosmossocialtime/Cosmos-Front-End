@@ -25,7 +25,7 @@ import MultiSelectComboBox from '../../combobox/MultiSelectComboBox'
 import { Option } from '../../../types/MultiselectCombobox'
 import { MultiValue } from 'react-select'
 import { invokeLambda } from '../../../lib/aws/invokeLambda'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import useFetch from '../../../hooks/useFetch'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -33,16 +33,18 @@ import formatCurrency from '../../../utils/formatCurrency'
 import ProgressBar from '../../menu/ProgressBar'
 import { X } from 'phosphor-react'
 import TextAreaField from '../../Input/TextAreaField'
-import { SocialOrganizationProps } from '../../../types/socialOrganization'
+import { MentorshipSocialOrganizationProps } from '../../../types/mentorshipSocialOrganization'
 import { EditButton } from '../../Button/EditButton'
 import StarFour from '../../../assets/star-four.svg'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
 
-interface AboutInstitutionModalProps {
+interface AboutInstitutionMentorshipModalProps {
   closeModal: () => void
-  socialOrganization: SocialOrganizationProps
+  onSave: (socialOrganization: MentorshipSocialOrganizationProps) => void
+  socialOrganization: MentorshipSocialOrganizationProps
   isFilled: boolean
+  isInformationSend: boolean
 }
 // Carregamento dinâmico do FileUpload com SSR desabilitado
 const FileUpload = dynamic(() => import('../../file/FileUpload'), {
@@ -88,11 +90,13 @@ interface stateProps extends cityProps {
   sigla: string
 }
 
-export const AboutInstitutionModal = ({
+export const AboutInstitutionMentorshipModal = ({
   closeModal,
+  onSave,
   socialOrganization,
   isFilled,
-}: AboutInstitutionModalProps) => {
+  isInformationSend,
+}: AboutInstitutionMentorshipModalProps) => {
   const [currentStep, setCurrentStep] = useState(1)
   const [isEditing, setIsEditing] = useState<boolean>(!isFilled)
   const [semCnpj, setSemCnpj] = useState(false)
@@ -107,7 +111,6 @@ export const AboutInstitutionModal = ({
   const [cidades, setCidades] = useState<Option[]>([])
   const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option>>([])
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
-  const queryClient = useQueryClient()
 
   const {
     register,
@@ -458,6 +461,49 @@ export const AboutInstitutionModal = ({
     }
   }
 
+  const copyFile = async (
+    sourceKey: string,
+    destinationKey: string,
+    mime: string
+  ): Promise<number | null> => {
+    try {
+      // Requisição da cópia do arquivo
+      const res = await fetch('/api/copy-s3-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sourceKey: sourceKey,
+          destinationKey: destinationKey,
+        }),
+      })
+
+      if (!res.ok) throw new Error('Erro ao copiar arquivo do S3')
+
+      // Invoca Lambda para salvar metadados
+      const payload = {
+        bucketName: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
+        directoryPath: destinationKey,
+        mime: mime,
+      }
+
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('storage-create-lambda', payload)
+
+      if (response.statusCode === 201) {
+        const { storageId } = JSON.parse(response.body)
+        return Number(storageId)
+      } else {
+        toast.error('Erro ao salvar metadados no storage')
+        return null
+      }
+    } catch (err) {
+      toast.error('Erro ao salvar metadados no storage')
+      return null
+    }
+  }
+
   async function handleForm(data: formProps) {
     try {
       setIsLoading(true)
@@ -470,8 +516,8 @@ export const AboutInstitutionModal = ({
 
       if (!semEstatuto) {
         if (data.estatuto) {
-          const key = `social-organization/${
-            socialOrganization?.id || 0
+          const key = `mentorship-social-organization/${
+            socialOrganization?.socialOrganizationId || 0
           }/statute/${data.estatuto.name}`
           storageId = await uploadFile(data.estatuto, key)
           const res = await fetch('/api/get-download-url', {
@@ -483,55 +529,53 @@ export const AboutInstitutionModal = ({
           })
           downloadUrl = await res.json()
         } else {
-          storageId = socialOrganization?.storageId ?? null
-          downloadUrl.downloadUrl =
-            socialOrganization?.estatutoFileLocation ?? null
+          const key = socialOrganization?.directoryPathEstatuto || ''
+          const newKey = 'mentorship-' + key
+          storageId = await copyFile(
+            key,
+            newKey,
+            socialOrganization?.mimeEstatuto || ''
+          )
+          const res = await fetch('/api/get-download-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              key: newKey,
+            }),
+          })
+          downloadUrl = await res.json()
         }
       }
       const payload = {
-        socialOrganization: {
-          id: socialOrganization.id || 0,
-          name: data.nomeInstituicao,
-          causes: data.causes.selectedOptions,
-          cnpj: data.cnpj,
-          annualRevenue: Number(data.receitaAnual || 0),
-          creationDate: date,
-          state: selectedEstado?.value,
-          city: selectedCidade?.value,
-          collaborators:
-            data.nFuncionarios !== undefined
-              ? Number(data.nFuncionarios)
-              : undefined,
-          beneficiaries:
-            data.nBeneficiarios !== undefined
-              ? Number(data.nBeneficiarios)
-              : undefined,
-          semCnpj: semCnpj,
-          semEstatuto: semEstatuto,
-          foraDoBrasil: foraDoBrasil,
-          storageId: storageId ?? undefined,
-          estatutoFileLocation: downloadUrl?.downloadUrl ?? undefined,
-          history: data.history,
-          socialImpact: data.impact,
-          mainChallenges: data.challenges,
-        },
+        id: socialOrganization.id,
+        name: data.nomeInstituicao,
+        causes: data.causes.selectedOptions,
+        cnpj: data.cnpj,
+        annualRevenue: Number(data.receitaAnual || 0),
+        creationDate: date,
+        state: selectedEstado?.value,
+        city: selectedCidade?.value,
+        collaborators:
+          data.nFuncionarios !== undefined
+            ? Number(data.nFuncionarios)
+            : undefined,
+        beneficiaries:
+          data.nBeneficiarios !== undefined
+            ? Number(data.nBeneficiarios)
+            : undefined,
+        semCnpj: semCnpj,
+        semEstatuto: semEstatuto,
+        foraDoBrasil: foraDoBrasil,
+        storageId: storageId ?? undefined,
+        estatutoFileLocation: downloadUrl?.downloadUrl ?? undefined,
+        history: data.history,
+        socialImpact: data.impact,
+        mainChallenges: data.challenges,
+        mentorshipId: socialOrganization.mentorshipId,
+        socialOrganizationId: socialOrganization.socialOrganizationId,
       }
-      const response = await invokeLambda<
-        {
-          socialOrganization: SocialOrganizationProps
-        },
-        { statusCode: number; body: string }
-      >('social-organization-update-lambda', payload)
-      if (response.statusCode == 201) {
-        toast.success('Informações salvas com sucesso!')
-        queryClient.invalidateQueries([
-          'socialOrganization',
-          socialOrganization.id || 0,
-        ])
-        closeModal()
-      } else {
-        toast.error('Erro ao salvar informações!')
-      }
+      closeModal()
+      onSave(payload)
     } catch (error) {
       toast.error('Erro ao salvar informações!')
     } finally {
@@ -557,13 +601,15 @@ export const AboutInstitutionModal = ({
               <h1 className="ml-4 text-3xl font-semibold">
                 {socialOrganization.name}
               </h1>
-              <div className="ml-6">
-                <EditButton
-                  text="Editar"
-                  onClick={() => setIsEditing(true)}
-                  type="submit"
-                />
-              </div>
+              {!isInformationSend && (
+                <div className="ml-6">
+                  <EditButton
+                    text="Editar"
+                    onClick={() => setIsEditing(true)}
+                    type="submit"
+                  />
+                </div>
+              )}
               <div className="flex gap-2">
                 <button
                   onClick={closeModal}

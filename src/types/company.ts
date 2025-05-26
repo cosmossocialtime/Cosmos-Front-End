@@ -1,5 +1,5 @@
 export type CompanyProps = {
-  id: 1
+  id: number
   name: string
   logo: null | string
 }

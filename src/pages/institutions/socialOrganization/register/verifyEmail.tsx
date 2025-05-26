@@ -3,12 +3,12 @@ import Image from 'next/image'
 import Mensagem from '../../../assets/icons/Envelope.svg'
 import { useEffect, useState } from 'react'
 import styles from '../../../components/instituition/verifyEmail/verifyEmail.module.css' // Importando CSS
-import { getFormData } from '../../../utils/localStorage'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { getFormData } from '../../../../utils/localStorage'
+import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
-import DynamicHeader from '../../../components/header/DynamicHeader'
-import { resendConfirmationTemplate } from '../../../lib/email/templates/templates'
-import { sendEmail } from '../../../lib/aws/sesSendMail'
+import DynamicHeader from '../../../../components/header/DynamicHeader'
+import { resendConfirmationTemplate } from '../../../../lib/email/templates/templates'
+import { sendEmail } from '../../../../lib/aws/sesSendMail'
 
 export default function VerifyEmail() {
   const [secondsAmount, setSecondsAmount] = useState(60)

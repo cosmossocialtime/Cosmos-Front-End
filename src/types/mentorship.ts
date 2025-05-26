@@ -17,4 +17,5 @@ export type MentorshipProps = {
   weeklyHours: number
   completedOnboarding: boolean
   volunteerId: number
+  socialOrganizationFocalPointId: number
 }

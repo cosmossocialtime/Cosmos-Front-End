@@ -26,7 +26,9 @@ export default function SelectRoleOnboarding() {
               <SelectableButton
                 text="Quero conectar minha Organização Social a pessoas voluntárias"
                 icon={<UsersThree size={20} />}
-                onClick={() => router.push('/institutions/onboarding/register')}
+                onClick={() =>
+                  router.push('/institutions/socialOrganization/register')
+                }
                 arrow={<CaretRight size={20} />}
               />
             </div>

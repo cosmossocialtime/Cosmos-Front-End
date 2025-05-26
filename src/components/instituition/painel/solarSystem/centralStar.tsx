@@ -36,7 +36,7 @@ export function CentralStar({
         {socialOrganization.name}
       </h4>
       <button
-        className="text-m text-blue-300"
+        className="text-base text-blue-300"
         onClick={() => setIsOpenAboutInstitution(true)}
       >
         {isFilled ? 'Visualizar' : 'Preencher'}

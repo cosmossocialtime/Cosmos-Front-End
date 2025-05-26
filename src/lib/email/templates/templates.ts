@@ -52,7 +52,7 @@ export function inviteMemberTemplate(
     <h1>Olá!</h1>
         <p style="font-size: 15px">
           Você foi convidado a se juntar ao time da ${socialOrganizationName} na Cosmos.
-          Para criar sua conta é só <a href=${process.env.NEXT_PUBLIC_APP_URL}/institutions/onboarding/register/${socialOrganizationId}>clicar aqui</a>
+          Para criar sua conta é só <a href=${process.env.NEXT_PUBLIC_APP_URL}/institutions/socialOrganization/register/${socialOrganizationId}>clicar aqui</a>
         </p>
   `
   return { subject, html }

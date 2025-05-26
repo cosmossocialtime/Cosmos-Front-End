@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import { useState } from 'react'
-import { SectorForm } from './SectorForm'
 import { Option } from '../../../../types/MultiselectCombobox'
 import { SectorProps } from '../../../../types/sector'
+import { SectorForm } from './SectorForm'
 
 export interface PlanetItemProps {
   imageSrc: string
@@ -40,15 +40,15 @@ export function PlanetItem({
       )}
       <Image
         className={isFilled ? '' : 'grayscale filter'}
-        width={40}
-        height={40}
+        width={47}
+        height={53}
         src={imageSrc}
         alt={name}
       />
-      <h4 className="text-center text-sm  text-white">{name}</h4>
+      <h4 className="text-center text-base  text-white">{name}</h4>
       <button
         onClick={() => setIsOpenSector(true)}
-        className="text-[12px] text-blue-300"
+        className="text-sm text-blue-300"
       >
         {isFilled ? 'Visualizar' : 'Preencher'}
       </button>
