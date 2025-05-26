@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import defaultBannerPerfil from '../../../../../assets/default-banner-perfil-institution.png'
 import { Camera, Pencil } from 'phosphor-react'
 import UploadImage from '../../../../../components/Crop/UploadImage'
@@ -27,7 +27,6 @@ import {
   phoneSchema,
 } from '../../../../../utils/ValidationSchemas'
 import { Option } from '../../../../../types/MultiselectCombobox'
-import { UserSocialOrganizationProps } from '../../../../../types/userSocialOrganization'
 import { InputChangePassword } from '../../../../../components/Input/InputChangePassword'
 import { ChangePasswordInstitutionModal } from '../../../../../components/main-painel/profile/ChangePasswordInstitutionModal'
 import formatPhone from '../../../../../utils/formatPhone'
@@ -54,7 +53,6 @@ export default function Profile() {
   const [selectedImgSrc, setSelectedImgSrc] = useState('')
   const [cropType, setCroptType] = useState<'profile' | 'banner'>('profile')
   const [onDialog, setOnDialog] = useState(false)
-  const [hasShownError, setHasShownError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
   const [selectedOption, setSelectedOption] = useState<string>('')

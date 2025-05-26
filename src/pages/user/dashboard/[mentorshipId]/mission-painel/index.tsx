@@ -11,6 +11,7 @@ import Router, { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { DashboardLoading } from '../../../../../components/dashboard/DashboardLoading'
 import { useDashboard } from '../../../../../hooks/useDashboard'
+import { MentorshipProps } from '../../../../../types/mentorship'
 
 export default function MissionPainel() {
   const route = useRouter()
@@ -19,7 +20,8 @@ export default function MissionPainel() {
   const { dashboard } = useDashboard(null)
 
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
+    (mentorship: MentorshipProps) =>
+      String(mentorship.mentorshipId) === mentorshipId
   )
 
   const [openDialog, setOpenDialog] = useState(true)

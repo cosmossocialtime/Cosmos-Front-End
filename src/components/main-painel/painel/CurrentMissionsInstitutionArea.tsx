@@ -30,11 +30,11 @@ export default function CurrentMissionsInstitutionArea({
   })
 
   return (
-    <div className="relative flex min-h-[16rem] flex-col rounded-lg bg-gray-200 p-6">
+    <div className="relative mb-4 mt-4 flex min-h-[16rem] flex-col  rounded-lg bg-gray-200  pr-4 ">
       <span className="absolute text-xl text-gray-600">Missões atuais</span>
 
       {mentorships.length === 0 ? (
-        <div className="relative mt-10 flex h-60 items-center justify-center overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat">
+        <div className="relativeflex h-50 items-center justify-center overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat">
           <h1 className="z-10 px-4 text-center text-xl font-semibold text-gray-200">
             Atualmente você não está participando de nenhuma missão. <br />{' '}
             Acesse as opções abaixo e inscreva-se em uma nova aventura!
@@ -50,18 +50,20 @@ export default function CurrentMissionsInstitutionArea({
                   'number-slide' + (key + 1)
                 } keen-slider__slide relative flex flex-1 justify-between`}
               >
-                <div className="absolute bottom-0 h-60 w-full overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat" />
-                <div className="z-10 ml-10 flex h-60 flex-col justify-center self-end">
-                  <h2 className="mb-3 text-2xl font-semibold text-gray-200">
+                <div className="absolute bottom-0 h-80 w-full overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat" />
+                <div className="z-10 ml-10 mt-10 flex h-80 flex-col">
+                  <h2 className="mb-3 mt-10 text-2xl font-semibold text-blue-300">
                     {mentorship.name}
                   </h2>
-                  <p className="mb-6 text-gray-200">{mentorship.description}</p>
+                  <p className="mb-6 text-gray-300">
+                    Sua nave está pronta para o embarque
+                  </p>
                   <Link
-                    className="block max-w-max rounded-lg bg-violet-400 px-24 py-4 text-lg font-semibold text-white transition-colors hover:bg-violet-600"
+                    className="block rounded-lg bg-violet-400 px-24 py-4 text-lg font-semibold text-white transition-colors hover:bg-violet-600"
                     href={
                       mentorship.completedOnboarding
-                        ? `/user/dashboard/${mentorship.mentorshipId}/mission-painel`
-                        : `/user/adventure/onboarding/${mentorship.mentorshipId}`
+                        ? `/institutions/socialOrganization/${mentorship.socialOrganizationId}/dashboard/${mentorship.mentorshipId}/mission-painel`
+                        : `/institutions/socialOrganization/${mentorship.socialOrganizationId}/onboarding/${mentorship.mentorshipId}/welcome`
                     }
                   >
                     Vamos lá!
@@ -70,7 +72,7 @@ export default function CurrentMissionsInstitutionArea({
                 <Image
                   src={AstronautaImg}
                   alt="Foto de um astronauta"
-                  className="z-10 mr-16 w-[19rem]"
+                  className="z-10 mr-16 h-[350px] w-[347px]"
                 />
               </div>
             )

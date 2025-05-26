@@ -74,7 +74,7 @@ export const GlobalStyle = createGlobalStyle`
   .colorButton{
     background: var(--purple-500);
     color: #fff;
-    font-weight: bold;
+    font-weight: 600;
     height: 3rem;
     border-radius: .5rem;
     transition: background .2s;
@@ -90,4 +90,26 @@ export const GlobalStyle = createGlobalStyle`
       cursor: not-allowed;
     }
   }
+
+  .colorButtonSecondary {
+  background-color: #0A84FF; /* azul vibrante */
+  color: #ffffff;
+  font-weight: regular;
+  height: 3rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.colorButtonSecondary:hover {
+  background-color: #006FE0; /* azul mais escuro no hover */
+}
+
+.colorButtonSecondary:disabled {
+  background-color: #D0D5E5;
+  cursor: not-allowed;
+}
 `

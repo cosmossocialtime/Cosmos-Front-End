@@ -1,4 +1,3 @@
-// hooks/useCombinedPlanetsData.ts
 import { useEffect, useState } from 'react'
 import { SocialOrganizationProps } from '../types/socialOrganization'
 import { PlanetItemProps } from '../components/instituition/painel/solarSystem/planetItem'

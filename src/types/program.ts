@@ -6,6 +6,7 @@ export type ProgramProps = {
   completed: boolean
   weeklyHours: number
   companyName: string
+  companyLogo?: string
   createdAt: Date
   startDate: Date
   endDate: Date

@@ -7,7 +7,7 @@ import { CentralStar } from '../../../../../components/instituition/painel/solar
 import { PlanetGrid } from '../../../../../components/instituition/painel/solarSystem/planetGrid'
 import { useCombinedPlanetsData } from '../../../../../hooks/useCombinedPlanetsData'
 
-export default function SolarSystem() {
+export default function StarSystem() {
   const router = useRouter()
   const { socialOrganizationId } = router.query
   const organizationId = Number(socialOrganizationId || '0')

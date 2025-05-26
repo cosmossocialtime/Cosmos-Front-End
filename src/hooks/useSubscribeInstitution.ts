@@ -1,5 +1,6 @@
 import Router, { useRouter } from 'next/router'
 import { useDashboard } from './useDashboard'
+import { ProgramProps } from '../types/program'
 
 export function useSubscribeInstitution(
   socialOrganizationId: number,
@@ -14,8 +15,9 @@ export function useSubscribeInstitution(
   const { programId } = router.query
 
   const program =
-    dashboard?.programs.find((program) => String(program.id) === programId) ||
-    null
+    dashboard?.programs.find(
+      (program: ProgramProps) => String(program.id) === programId
+    ) || null
   const user = dashboard?.user
   const socialOrganization = dashboard?.socialOrganization
 
