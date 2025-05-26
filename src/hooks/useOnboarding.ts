@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { useDashboard } from './useDashboard'
+import { MentorshipProps } from '../types/mentorship'
 
 export function useOnboarding() {
   const router = useRouter()
@@ -13,7 +14,8 @@ export function useOnboarding() {
   const user = dashboard?.user
   const company = dashboard?.company
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
+    (mentorship: MentorshipProps) =>
+      String(mentorship.mentorshipId) === mentorshipId
   )
 
   const rootRoute = `/user/adventure/onboarding/${mentorshipId}`
