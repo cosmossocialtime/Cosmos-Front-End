@@ -48,7 +48,7 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const { dashboard } = useDashboard(null)
 
   const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship) => String(mentorship.mentorshipId) === mentorshipId
+    (mentorship: MentorshipProps) => String(mentorship.mentorshipId) === mentorshipId
   )
   const ownerUser = dashboard?.user
 
