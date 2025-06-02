@@ -4,10 +4,10 @@ import { GoalProps } from '../../../types/Goal'
 import { TaskProps } from '../../../types/Task'
 import { Task } from './Task'
 import { InputTask } from './InputTask'
-import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 interface TasksProps {
   goal: GoalProps
@@ -30,17 +30,22 @@ export function Tasks({ goal }: TasksProps) {
   }
 
   function completeTask(task: TaskProps) {
-    api
-      .patch(`/mentorship/task/${task.id}/completed`, {
-        completed: !task.completed,
-      })
+    const payload = { taskId: task.id }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'mentorship-goal-task-complete-lambda',
+      payload
+    )
       .then((response) => {
-        if (response.status === 200) {
+        if (response.statusCode === 201) {
           const newTasks = goal.tasks.map((t) =>
             t.id === task.id ? { ...task, completed: !task.completed } : t
           )
           const newGoal = { ...goal, tasks: newTasks }
           changeGoal(newGoal)
+        } else {
+          toast.error(
+            'Não foi possível validar a tarefa. Tente novamente mais tarde!'
+          )
         }
       })
       .catch((error) => {

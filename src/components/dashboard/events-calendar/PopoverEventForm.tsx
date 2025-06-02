@@ -5,32 +5,54 @@ import { Calendar, X } from 'phosphor-react'
 import { Controller, useForm } from 'react-hook-form'
 
 import 'react-datepicker/dist/react-datepicker.css'
-import { api } from '../../../services/api'
 import { z } from 'zod'
 import { toast } from 'react-toastify'
 import { InputAttendees } from './InputAttendees'
 import { popovers, useCalendar } from '../../../context/CalendarProvider'
 import dayjs from 'dayjs'
+
 import { InputTime } from './InputTime'
 import { useState } from 'react'
 
 import MeetIcon from '../../../assets/meet-icon.svg'
 import Image from 'next/image'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import SingleSelectComboBoxSecondary from '../../combobox/SingleSelectComboBoxSecondary'
+import { Option } from '../../../types/MultiselectCombobox'
 
-const schema = z.object({
-  title: z.string().nonempty(),
-  description: z.string(),
-  link: z.string().nonempty(),
-  startAt: z.string().nonempty(),
-  endAt: z.string().nonempty(),
-  eventAt: z.date(),
-  attendees: z.array(z.number()),
-})
+const schema = z
+  .object({
+    title: z.string().nonempty(),
+    description: z.string(),
+    link: z.string().nonempty(),
+    startAt: z.string().nonempty(),
+    endAt: z.string().nonempty(),
+    eventAt: z.date(),
+    repeatUntil: z.date().optional(),
+    attendees: z.array(z.number()),
+    recurrence: z.enum(['weekly', 'biweekly']).optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.repeatUntil) {
+        const start = dayjs(data.eventAt, 'MM/DD/YYYY')
+        const end = dayjs(data.repeatUntil, 'MM/DD/YYYY')
+        return end.isAfter(start, 'day')
+      }
+      return true
+    },
+    {
+      message:
+        'A data final da recorrência deve ser posterior à data do evento.',
+      path: ['repeatUntil'],
+    }
+  )
 
 type formProps = z.infer<typeof schema>
 
 export function PopoverEventForm() {
   const [onLinkMeet, setOnLinkMeet] = useState(false)
+  const [onRepeatEvent, setOnRepeatEvent] = useState(false)
 
   const {
     changePopover,
@@ -46,87 +68,56 @@ export function PopoverEventForm() {
     (attendee) => attendee.userId
   )
   const day = dayjs(selectedDay).toDate()
+  const [selectedRecurrence, setSelectedRecurrence] = useState<Option | null>(
+    null
+  )
 
-  function createEvent({
-    title,
-    description,
-    link,
-    attendees,
-    eventAt,
-    startAt,
-    endAt,
-  }: formProps) {
-    const dayEvent = dayjs(eventAt).format('MM/DD/YYYY')
-    const startHour = dayjs(`${dayEvent} ${startAt}`)
-    const endHour = dayjs(`${dayEvent} ${endAt}`)
-    api
-      .post(`/mentorship/${currentMentorship.programId}/event`, {
-        title,
-        description,
-        link,
-        attendees,
-        startAt: startHour,
-        endAt: endHour,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          toast.success('Evento criado com sucesso!')
-          changePopover(popovers.Event)
-          selectDay(null)
-          getEvents()
-        }
-      })
-      .catch((error) => {
-        toast.error(
-          'Não foi possível marcar a reunião. Tente novamente mais tarde!'
-        )
-        console.error(error)
-      })
-  }
+  const options: Option[] = [
+    { value: 'weekly', label: 'Semanal' },
+    { value: 'biweekly', label: 'Quinzenal' },
+  ]
 
-  function updateEvent({
-    title,
-    description,
-    link,
-    attendees,
-    eventAt,
-    startAt,
-    endAt,
-  }: formProps) {
-    const dayEvent = dayjs(eventAt).format('MM/DD/YYYY')
-    const startHour = dayjs(`${dayEvent} ${startAt}`)
-    const endHour = dayjs(`${dayEvent} ${endAt}`)
+  async function submitForm(data: formProps) {
+    try {
+      const dayEvent = dayjs(data.eventAt).format('MM/DD/YYYY')
+      const startHour = dayjs(`${dayEvent} ${data.startAt}`)
+      const endHour = dayjs(`${dayEvent} ${data.endAt}`)
 
-    api
-      .patch(`/mentorship/event/${selectedEvent?.id}`, {
-        title,
-        description,
-        link,
-        attendees,
-        startAt: startHour,
-        endAt: endHour,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success('Evento Editado com sucesso!')
-          changePopover(popovers.Event)
-          selectDay(null)
-          getEvents()
-        }
-      })
-      .catch((error) => {
-        toast.error(
-          'Não foi possível marcar a reunião. Tente novamente mais tarde!'
-        )
-        console.error(error)
-      })
-  }
+      const payload = {
+        id: selectedEvent?.id,
+        mentorshipId: currentMentorship.mentorshipId,
+        title: data.title,
+        description: data.description,
+        link: data.link,
+        attendees:
+          data.attendees &&
+          data.attendees.map((at) => {
+            return {
+              userId: at,
+            }
+          }),
+        startAt: dayjs(startHour).format('YYYY-MM-DD HH:mm'),
+        endAt: dayjs(endHour).format('YYYY-MM-DD HH:mm'),
+        recurrenceType: selectedRecurrence?.value,
+        repeatUntil: dayjs(data.repeatUntil).format('YYYY-MM-DD'),
+      }
 
-  function submitForm(data: formProps) {
-    if (event) {
-      updateEvent(data)
-    } else {
-      createEvent(data)
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('mentorship-event-upsert-lambda', payload)
+
+      if (response.statusCode == 201) {
+        toast.success('Evento salvo')
+        changePopover(popovers.Event)
+        selectDay(null)
+        getEvents()
+      } else {
+        toast.error('Erro ao salvar as informações!')
+      }
+    } catch (error) {
+      toast.error('Erro ao salvar as informações!')
+      throw error
     }
   }
 
@@ -169,7 +160,7 @@ export function PopoverEventForm() {
 
         <div className="flex w-full items-center gap-3">
           <label htmlFor="startTime" className="absolute h-0 w-0 opacity-0">
-            Horario de inicio da reunião
+            Horário de início da reunião
           </label>
           <Controller
             name="startAt"
@@ -187,7 +178,7 @@ export function PopoverEventForm() {
           <span className="font-semibold">até</span>
 
           <label htmlFor="endTime" className="absolute h-0 w-0 opacity-0">
-            Horario de fim da reunião
+            Horário de fim da reunião
           </label>
           <Controller
             name="endAt"
@@ -202,6 +193,52 @@ export function PopoverEventForm() {
             )}
           />
         </div>
+
+        <div className="mt-2 flex items-center gap-2">
+          <button
+            type="button"
+            data-meet={onRepeatEvent}
+            className="group relative flex h-6 w-12 items-center rounded-full border border-solid border-gray-300 data-[meet=true]:border-blue-500 data-[meet=true]:bg-blue-500"
+            onClick={() => setOnRepeatEvent(!onRepeatEvent)}
+          >
+            <div className=" absolute left-0 m-1 h-4 w-4 rounded-full bg-gray-500 transition-all group-data-[meet=true]:left-6 group-data-[meet=true]:bg-white" />
+          </button>
+          <span>Repetir agenda?</span>
+        </div>
+        {onRepeatEvent && (
+          <>
+            <div>
+              <SingleSelectComboBoxSecondary
+                instanceId="recurrence"
+                options={options}
+                label="Frequência"
+                onChange={(option) => setSelectedRecurrence(option)}
+                value={selectedRecurrence}
+              />
+            </div>
+            <div className="mb-2">
+              <label htmlFor="repeatUntil" className="font-semibold">
+                Repetir até
+              </label>
+              <div className="group flex items-center gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 focus-within:border-white focus:border-white">
+                <Calendar size={24} />
+                <Controller
+                  name="repeatUntil"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      required
+                      className="outline-none"
+                      selected={field.value}
+                      onChange={(option) => field.onChange(option)}
+                      dateFormat={'dd/MM/yyyy'}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         <Controller
           name="attendees"
@@ -233,7 +270,7 @@ export function PopoverEventForm() {
             className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-4 py-2 outline-none placeholder:text-white/40 focus:border-white"
             required
             disabled={onLinkMeet}
-            pattern="https://.*"
+            pattern="https?://.*"
             {...register('link')}
           />
           <div className="mt-2 flex items-center gap-2">

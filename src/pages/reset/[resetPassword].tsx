@@ -87,9 +87,9 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Main />
-      <div className="flex h-screen w-full max-w-lg flex-col items-center justify-center bg-zinc-50 text-zinc-900">
+      <div className="flex h-screen w-full max-w-xl flex-col items-center justify-center bg-zinc-50 text-zinc-900">
         <form
           onSubmit={handleSubmit(handleForm, (formErrors) => {
             console.error('ERROS DE VALIDAÇÃO:', formErrors)
@@ -117,7 +117,7 @@ export default function ResetPassword() {
               </HoverCard.Portal>
             </HoverCard.Root>
           </div>
-          <div className="group relative flex w-full max-w-md gap-2">
+          <div className="group relative flex w-full max-w-xl gap-2">
             <input
               {...register('password')}
               required
@@ -144,7 +144,7 @@ export default function ResetPassword() {
           )}
 
           <label htmlFor="confirm-password">Confirme a nova senha</label>
-          <div className="group relative flex w-full max-w-md justify-between gap-2">
+          <div className="group relative flex w-full max-w-xl justify-between gap-2">
             <input
               {...register('confirmPassword')}
               required

@@ -13,10 +13,18 @@ export interface User {
 
 export interface IContext {
   isAutenticate: boolean
-  user: User | null
+  user: UserLogged | null
   signIn: (data: SignInData) => Promise<void>
+  signOut: () => void
 }
 
 export interface IAuthProvider {
   children: ReactNode
+}
+
+export interface UserLogged {
+  id: number
+  fullName: string
+  role: string
+  socialOrganizations: { socialOrganizationId: number }[]
 }

@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Tabs from '@radix-ui/react-tabs'
 import Close from '../../../../public/images/tripulacao/Close.svg'
-import BackgroundModal from '../../../../public/images/tripulacao/backgroundModal.png'
+import defaultBannerPerfil from '../../../assets/default-banner-perfil-institution.png'
 import Astronauta from '../../../../public/images/astronauta.png'
 import Image from 'next/image'
 import AstroPilot from '../../../../public/images/tripulacao/Astro.png'
@@ -11,6 +11,7 @@ import RetactanglePiloto from '../../../../public/images/tripulacao/Retangulo.sv
 import RetactangleLeader from '../../../../public/images/tripulacao/rectangleLeader.svg'
 import RetactangleSpecialist from '../../../../public/images/tripulacao/RectangleSpecialist.svg'
 import { Suspense } from 'react'
+import { volunteerRoleLabel } from '../../../utils/roleId'
 
 type DatasProfile = {
   id: number
@@ -38,36 +39,26 @@ const arrayColors = ['bg-blue-500', 'bg-[#18A6AC]', 'bg-violet-500']
 
 export default function Modal(ModalProps: DatasProfile) {
   return (
-    <div className="overflow-hidden rounded-2xl">
+    <div className="rounded-4xl overflow-hidden">
       <div className="flex">
         <Suspense fallback={<span>Carregando...</span>}>
           <div className="w-full">
-            {ModalProps.banner ? (
-              <Image
-                width={600}
-                height={600}
-                src={ModalProps.banner}
-                alt="background modal"
-                quality={100}
-                className="cover w-full "
-              />
-            ) : (
-              <Image
-                width={300}
-                height={300}
-                src={BackgroundModal}
-                alt="background modal"
-                quality={100}
-                className="cover w-full "
-              />
-            )}
+            <Image
+              draggable="false"
+              className="h-48 w-full rounded-t-xl object-cover"
+              src={ModalProps.banner ? ModalProps.banner : defaultBannerPerfil}
+              width={1500}
+              height={256}
+              quality={100}
+              alt="banner do perfil"
+            />
           </div>
         </Suspense>
         <Dialog.Close className="absolute right-8 top-10">
           <Image src={Close} alt="Button Close" className="rounded-md" />
         </Dialog.Close>
       </div>
-      <div className="relative flex items-center justify-around gap-24 px-10">
+      <div className="relative flex items-center justify-between gap-24 px-10 ">
         <div className="relative flex gap-12">
           <div className="relative -top-8 h-36 w-36 overflow-hidden rounded-full border-4 border-gray-50 shadow-lg shadow-black/20 drop-shadow-sm">
             {ModalProps.profilePicture ? (
@@ -132,7 +123,7 @@ export default function Modal(ModalProps: DatasProfile) {
               )}
 
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-50 text-sm font-semibold">
-                {ModalProps.roleName}
+                {volunteerRoleLabel.get(ModalProps.roleName)}
               </span>
             </div>
           </div>
@@ -148,7 +139,7 @@ export default function Modal(ModalProps: DatasProfile) {
             </span>
           </div>
         </div>
-        <div className="flex h-8 items-center gap-2">
+        <div className="flex h-8 items-center gap-2 pr-8">
           {ModalProps.knowledgeAreas &&
             ModalProps.knowledgeAreas.map((areas, index) => (
               <span
@@ -164,34 +155,34 @@ export default function Modal(ModalProps: DatasProfile) {
         defaultValue="tab1"
         className="flex flex-col items-center justify-center gap-2"
       >
-        <Tabs.List className="flex justify-between gap-2 rounded-md bg-gray-200 px-2 py-2 font-medium text-indigo-200 lg:gap-28">
+        <Tabs.List className="flex w-11/12 justify-between gap-2 rounded-md bg-gray-200 px-2 py-2 text-base text-gray-500 lg:gap-28">
           <Tabs.Trigger
-            className="rounded px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold"
+            className="rounded px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold data-[state=active]:text-gray-800"
             value="tab1"
           >
             Experiências
           </Tabs.Trigger>
           <Tabs.Trigger
-            className="rounded  px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold"
+            className="rounded  px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold data-[state=active]:text-gray-800"
             value="tab2"
           >
             Competências
           </Tabs.Trigger>
           <Tabs.Trigger
-            className="rounded px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold"
+            className="rounded px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold data-[state=active]:text-gray-800"
             value="tab3"
           >
             Motivação
           </Tabs.Trigger>
           <Tabs.Trigger
-            className="rounded px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold"
+            className="rounded px-5 py-2 data-[state=active]:bg-gray-50 data-[state=active]:font-semibold data-[state=active]:text-gray-800"
             value="tab4"
           >
             Voluntariado
           </Tabs.Trigger>
         </Tabs.List>
-        <div className="mb-10 flex w-3/4 items-center justify-center rounded border border-gray-300 px-2 text-black lg:w-full lg:max-w-4xl ">
-          <div className="w-full px-3 py-3">
+        <div className="mb-10 flex h-[calc(40vh-80px)] w-11/12 overflow-y-auto rounded border border-solid border-gray-300 px-2 text-sm text-gray-800 ">
+          <div className="w-full px-8 py-8">
             <Tabs.Content value="tab1">
               <span className="break-words">
                 {ModalProps.professionalPreviousExperiences}

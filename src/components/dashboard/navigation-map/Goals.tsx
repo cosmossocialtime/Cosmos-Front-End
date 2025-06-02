@@ -13,6 +13,7 @@ export function Goals() {
 
   const {
     currentMentorship,
+    socialOrganization,
     goals,
     selectGoalId,
     selectedGoalId,
@@ -62,8 +63,7 @@ export function Goals() {
           })
         ) : (
           <p className="rounded-lg bg-gray-700 bg-opacity-5 p-8 text-center font-normal text-white backdrop-blur-3xl">
-            {currentMentorship?.socialOrganization} ainda não tem nenhum
-            objetivo... <br />
+            {socialOrganization?.name} ainda não tem nenhum objetivo... <br />
             Aguarde o encontro do Mapa da Navegação para criá-los.
           </p>
         )}

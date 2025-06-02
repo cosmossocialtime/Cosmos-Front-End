@@ -1,5 +1,8 @@
+import * as Popover from '@radix-ui/react-popover'
 import { popovers, useCalendar } from '../../../context/CalendarProvider'
 import dayjs from 'dayjs'
+import { PopoverEvent } from './PopoverEvent'
+import { X } from 'phosphor-react'
 
 export function PopoverEvents() {
   const { changeSelectedEvent, changePopover, events, selectedDay } =
@@ -16,35 +19,59 @@ export function PopoverEvents() {
     dayjs(a.startAt).diff(dayjs(b.startAt))
   )
 
+  function createNewEvent() {
+    changeSelectedEvent(null)
+    changePopover(popovers.EventForm)
+  }
+
   return (
     <>
-      <span className="absolute right-4 top-4 text-xl">
-        {dayjs(selectedDay).format('ddd, DD MMM')}
-      </span>
-      <h3 className="text-xl">Eventos</h3>
+      <Popover.Close className="absolute right-4 top-4">
+        <X size={24} />
+      </Popover.Close>
+      <span className="text-xl">Eventos</span>
       <div className="my-4 flex max-h-[24rem] w-full flex-col gap-3 overflow-y-auto">
         {ordenedEvents.map((event) => {
           const hourStart = dayjs(event.startAt).format('HH:mm')
           const hourEnd = dayjs(event.endAt).format('HH:mm')
 
           return (
-            <button
-              onClick={() => changeSelectedEvent(event)}
-              key={event.id}
-              className="cursor-pointer rounded-lg border border-solid border-white/40 p-3  hover:border-white"
-            >
-              <span>
-                {hourStart} - {hourEnd}
-              </span>
-              <p className="mt-2 break-words">{event.title}</p>
-            </button>
+            <Popover.Root key={event.startAt.toString()}>
+              <Popover.Trigger className="group">
+                <button
+                  onClick={() => {
+                    changeSelectedEvent(event)
+                    changePopover(popovers.Event)
+                  }}
+                  key={event.id}
+                  className="w-full cursor-pointer rounded-lg border border-solid border-white/40 p-3 hover:border-white"
+                >
+                  <div className="flex w-full justify-between">
+                    <span className="break-words">{event.title}</span>
+                    <span className="ml-4 whitespace-nowrap">
+                      {hourStart} - {hourEnd}
+                    </span>
+                  </div>
+                </button>
+              </Popover.Trigger>
+
+              <Popover.Portal>
+                <Popover.Content
+                  key={'popoverEvent'}
+                  side={'right'}
+                  className="relative z-[2] m-4 w-[28rem] rounded-2xl bg-violet-500 px-6 pb-10 pt-14 text-white 2xl:w-[32rem]"
+                >
+                  <PopoverEvent />
+                </Popover.Content>
+              </Popover.Portal>
+            </Popover.Root>
           )
         })}
       </div>
 
       <button
         className=" rounded-lg border border-solid bg-white px-10 py-2 font-semibold text-violet-500 transition-colors hover:border-white hover:bg-violet-600 hover:text-white"
-        onClick={() => changePopover(popovers.EventForm)}
+        onClick={() => createNewEvent()}
       >
         Marcar novo evento
       </button>

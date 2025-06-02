@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import DynamicHeader from '../../../../../../../components/header/DynamicHeader'
 import SideBar from '../sideBar'
 import { invokeLambda } from '../../../../../../../lib/aws/invokeLambda'
-import { Loading } from '../../../../../../../components/Loading'
 import Image from 'next/image'
 import { Button } from '../../../../../../../components/Button/ButtonSubmit'
 import { useDashboard } from '../../../../../../../hooks/useDashboard'
@@ -18,6 +17,7 @@ import { SectorFormMentorship } from '../../../../../../../components/instituiti
 import { MentorshipSocialOrganizationProps } from '../../../../../../../types/mentorshipSocialOrganization'
 import { AboutInstitutionMentorshipModal } from '../../../../../../../components/instituition/modal/AboutInstitutionMentorship'
 import Star from '../../../../../../../assets/star.svg'
+import DashboardLoadingInstitution from '../DashboardLoadingInstitution'
 
 interface PlanetItemProps {
   imageSrc: string
@@ -228,7 +228,7 @@ export default function SateliteImages() {
   }, [originalSocialOrganization])
 
   if (isLoadingSocialOrganization || !socialOrganization) {
-    return <Loading />
+    return <DashboardLoadingInstitution />
   }
 
   const currentMentorship = dashboard?.currentMentorships.find(
