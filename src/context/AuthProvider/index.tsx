@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         )
       } else {
         Router.push(
-          `/institutions/socialOrganization/register/onboarding/aboutYou?member=1&socialOrganizationId=${decoded.socialOrganizations[0].socialOrganizationId}`
+          `/institutions/socialOrganization/register/aboutYou?member=1&socialOrganizationId=${decoded.socialOrganizations[0].socialOrganizationId}`
         )
       }
     } else if (decoded.socialOrganizations.length > 1) {
