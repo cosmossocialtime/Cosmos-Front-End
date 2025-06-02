@@ -1,15 +1,15 @@
 import Router, { useRouter } from 'next/router'
 
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Eye, EyeClosed, Question } from 'phosphor-react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Main from '../../components/Main'
 import * as HoverCard from '@radix-ui/react-hover-card'
-import { parseCookies } from 'nookies'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
+import { getFormData } from '../../utils/localStorage'
 
 const schema = z
   .object({
@@ -42,13 +42,18 @@ export default function ResetPassword() {
   const [showPassword1, setShowPassword1] = useState(false)
   const router = useRouter()
   const { resetPassword } = router.query
-  const { 'cosmos.user': email } = parseCookies()
+  const [email, setEmail] = useState('')
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<formProps>({ resolver: zodResolver(schema) })
+
+  useEffect(() => {
+    const email = getFormData('cosmos.user')
+    setEmail(email)
+  }, [])
 
   async function handleForm(data: formProps) {
     try {

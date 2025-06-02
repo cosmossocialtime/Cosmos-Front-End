@@ -72,7 +72,7 @@ export default function RegisterInstituitionMember() {
           .then(() => {
             toast.success('Criado com sucesso!')
             Router.push({
-              pathname: '/institutions/onboarding/verifyEmail',
+              pathname: '/institutions/socialOrganization/register/verifyEmail',
             })
           })
           .catch(() => {
@@ -105,10 +105,11 @@ export default function RegisterInstituitionMember() {
       <div className="flex h-screen">
         <Main />
         <main className="flex w-full flex-col items-center justify-center gap-2">
-          <PageTitle text="Crie sua conta gratuito"></PageTitle>
+          <PageTitle text="Crie sua conta gratuita"></PageTitle>
           <form
             onSubmit={handleSubmit(handleForm)}
             className="mt-4 flex w-1/2 flex-col gap-2"
+            noValidate
           >
             <InputEmail
               id="email"
@@ -137,7 +138,7 @@ export default function RegisterInstituitionMember() {
             ></Button>
 
             <p className="mt-[20px] text-center text-xs text-gray-800">
-              Ao clicar em `&quot;`Criar conta`&quot;`, você aceita os{' '}
+              {`Ao clicar em "Criar conta", você aceita os `}
               <Link
                 href="#"
                 className="font-semibold"

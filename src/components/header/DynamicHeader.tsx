@@ -53,7 +53,7 @@ function LogoWithLink({
       href={
         socialOrganizationId && socialOrganizationId !== 0
           ? `/institutions/socialOrganization/${socialOrganizationId}/home`
-          : ''
+          : '/user/login'
       }
       passHref
     >

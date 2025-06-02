@@ -135,6 +135,7 @@ export default function FocalPoint() {
         <form
           onSubmit={handleSubmit(handleForm)}
           className="flex flex-col gap-4"
+          noValidate
         >
           <p className="font-inter mt-2 pt-4 text-[16px] font-normal leading-[20px] text-[#1B2031]">
             O Ponto focal da instituição é a pessoa responsável por participar

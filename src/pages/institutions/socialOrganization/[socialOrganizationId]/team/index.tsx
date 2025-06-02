@@ -102,6 +102,7 @@ export default function Teams() {
           closeModal={closeModalInvite}
           onOpenInviteForm={handleInviteForm}
           socialOrganization={socialOrganization}
+          requestMemberName={user.fullName}
         />
       )}
       <DynamicHeader />

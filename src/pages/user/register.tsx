@@ -14,6 +14,7 @@ import Router from 'next/router'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { sendEmail } from '../../lib/aws/sesSendMail'
 import { signupConfirmationTemplate } from '../../lib/email/templates/templates'
+import { saveFormData } from '../../utils/localStorage'
 
 const schema = z
   .object({
@@ -87,9 +88,7 @@ export default function Cadastrar() {
     >('user-create-lambda', payload)
 
     if (response.statusCode === 201) {
-      setCookie(undefined, 'cosmos.user', data.email, {
-        maxAge: 60 * 60 * 12,
-      })
+      saveFormData('cosmos.user', data.email)
       const parsed = JSON.parse(response.body)
       const { subject, html } = signupConfirmationTemplate(
         parsed.name,
@@ -132,6 +131,7 @@ export default function Cadastrar() {
           <form
             onSubmit={handleSubmit(handleForm)}
             className="mt-4 flex w-1/2 flex-col gap-2"
+            noValidate
           >
             <div className="flex w-full max-w-md flex-col gap-2">
               <label htmlFor="Nome">Nome completo</label>

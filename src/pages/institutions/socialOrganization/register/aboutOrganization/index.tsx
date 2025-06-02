@@ -118,7 +118,7 @@ export default function AboutOrganizationForm() {
       causes: data.causes.selectedOptions,
     })
     Router.push({
-      pathname: '/institutions/onboarding/aboutYou',
+      pathname: '/institutions/socialOrganization/register/aboutYou',
     })
   }
 
