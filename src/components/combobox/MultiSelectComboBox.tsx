@@ -76,7 +76,6 @@ const customStyles: StylesConfig<any, true> = {
     ...base,
     backgroundColor: '#E6F4FF', // Fundo do item selecionado
     borderRadius: '100px', // Bordas arredondadas para os itens selecionados
-    padding: '6px 8px', // Padding interno
     border: '1px solid #0890F7', // Cor da borda
   }),
   multiValueLabel: (base) => ({
@@ -142,7 +141,7 @@ const MultiSelectComboBox: React.FC<MultiSelectComboBoxProps> = ({
         components={{ ClearIndicator, DropdownIndicator }} // Remove o "X |" extra
       />
 
-      {maxSelections && selectedOptions.length >= maxSelections && (
+      {maxSelections && selectedOptions.length > maxSelections && (
         <p className="mt-1 text-sm text-red-500">
           Você só pode selecionar até {maxSelections} opções.
         </p>

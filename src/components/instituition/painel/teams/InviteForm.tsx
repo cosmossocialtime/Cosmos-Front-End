@@ -37,12 +37,14 @@ type InviteFormProps = {
   onOpenInviteForm: () => void
   closeModal: () => void
   socialOrganization: SocialOrganizationProps
+  requestMemberName: string
 }
 
 export const InviteForm = ({
   onOpenInviteForm,
   closeModal,
   socialOrganization,
+  requestMemberName,
 }: InviteFormProps) => {
   const {
     register,
@@ -62,7 +64,8 @@ export const InviteForm = ({
   async function handleForm(data: FormProps) {
     const { subject, html } = inviteMemberTemplate(
       socialOrganization.name,
-      socialOrganization.id || 0
+      socialOrganization.id || 0,
+      requestMemberName
     )
     const emails = data.emails.map((e) => {
       return e.email

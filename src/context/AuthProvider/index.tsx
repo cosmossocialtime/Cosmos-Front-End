@@ -46,9 +46,9 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       } catch (error) {
         signOut()
       }
-    } else {
+    } /*else {
       Router.push('/user/login') // sem token
-    }
+    }*/
   }, [])
 
   async function signIn({ email, password }: SignInData) {
@@ -90,13 +90,13 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         )
       } else {
         Router.push(
-          `/institutions/onboarding/aboutYou?member=1&socialOrganizationId=${decoded.socialOrganizations[0].socialOrganizationId}`
+          `/institutions/socialOrganization/register/onboarding/aboutYou?member=1&socialOrganizationId=${decoded.socialOrganizations[0].socialOrganizationId}`
         )
       }
     } else if (decoded.socialOrganizations.length > 1) {
       Router.push('/institutions/socialOrganization/selectOrganization')
     } else {
-      Router.push('/institutions/onboarding/aboutOrganization')
+      Router.push('/institutions/socialOrganization/register/aboutOrganization')
     }
   }
 

@@ -8,13 +8,14 @@ import Router from 'next/router'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { sendEmail } from '../../lib/aws/sesSendMail'
 import { forgotPasswordTemplate } from '../../lib/email/templates/templates'
+import { saveFormData } from '../../utils/localStorage'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
 
   const SubmitForm = async (e: FormEvent) => {
     e.preventDefault()
-    setCookie(undefined, 'cosmos.user', email)
+    saveFormData('cosmos.user', email)
     try {
       const payload = {
         email: email,
@@ -31,7 +32,8 @@ export default function ForgotPassword() {
       if (response.statusCode == 200) {
         const { subject, html } = forgotPasswordTemplate(
           parsed.name,
-          parsed.confirmationCode
+          parsed.confirmationCode,
+          parsed.role
         )
         sendEmail([email], subject, html)
           .then(() => {

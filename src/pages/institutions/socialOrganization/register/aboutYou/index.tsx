@@ -162,7 +162,9 @@ export default function AboutYouForm() {
               steps={steps}
               currentStep={currentStep}
               onBack={() =>
-                Router.push('/institutions/onboarding/aboutOrganization')
+                Router.push(
+                  '/institutions/socialOrganization/register/aboutOrganization'
+                )
               }
             />
           )}

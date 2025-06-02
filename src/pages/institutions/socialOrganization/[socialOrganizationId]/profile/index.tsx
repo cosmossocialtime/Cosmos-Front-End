@@ -317,6 +317,7 @@ export default function Profile() {
                     onSubmit={handleSubmit(handleForm, (formErrors) => {
                       console.error('ERROS DE VALIDAÇÃO:', formErrors)
                     })}
+                    noValidate
                   >
                     <div className="grid grid-cols-1 gap-6">
                       <div className="absolute right-10 h-[48px] w-[240px]">

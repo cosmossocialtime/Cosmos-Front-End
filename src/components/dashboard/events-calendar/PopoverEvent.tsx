@@ -12,7 +12,6 @@ import {
   User,
   X,
 } from 'phosphor-react'
-import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
 import { popovers, useCalendar } from '../../../context/CalendarProvider'
 import { DeleteConfirmation } from '../../DeleteConfirmation'

@@ -1,21 +1,22 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { Eye, EyeClosed } from 'phosphor-react'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useAuth } from '../../context/AuthProvider/useAuth'
 import Main from '../../components/Main'
+import { emailSchema, passwordSchema } from '../../utils/ValidationSchemas'
+import { InputPassword } from '../../components/Input/InputPassword'
+import { InputEmail } from '../../components/Input/InputEmail'
 
 const schema = z.object({
-  email: z.string(),
-  password: z.string().nonempty('O campo senha é obrigatório'),
+  email: emailSchema,
+  password: passwordSchema,
 })
 type formProps = z.infer<typeof schema>
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false)
   const [isSubmiting, setIsSubmiting] = useState(false)
   const {
     register,
@@ -46,62 +47,34 @@ export default function Login() {
           <form
             onSubmit={handleSubmit(SubmitForm)}
             className="mt-4 flex w-1/2 flex-col gap-2"
+            noValidate
           >
             <div className="flex w-full flex-col gap-2">
-              <div>
-                <label htmlFor="email" className="text">
-                  Email
-                </label>
-              </div>
-              <input
-                {...register('email')}
-                autoFocus
-                required
+              <InputEmail
                 id="email"
-                type="email"
+                label="Email"
+                register={register}
+                error={errors.email?.message}
+                autoFocus
                 placeholder="nome@email.com.br"
-                className="rounded-md border border-solid border-gray-400 p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
               />
             </div>
-            {errors.email && (
-              <span className="text-sm text-rose-600">
-                {errors.email.message}
-              </span>
-            )}
             <div className="flex w-full flex-col gap-2">
-              <div>
-                <label htmlFor="password">Senha</label>
-              </div>
-              <div className="group relative flex w-full gap-2">
-                <input
-                  {...register('password')}
-                  id="password"
-                  min={8}
-                  required
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Digite sua senha aqui"
-                  className="w-full rounded-md border border-solid border-gray-400 p-2 transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="button-show-password absolute right-2 top-3"
-                >
-                  {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-              {errors.password && (
-                <span className="text-sm text-rose-600">
-                  {errors.password.message}
-                </span>
-              )}
+              <InputPassword
+                id="password"
+                label="Senha"
+                register={register}
+                error={errors.password?.message}
+                placeholder="Digite sua senha aqui"
+                helperText="A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número"
+              />
 
               <span className="py-3 text-right  text-sm">
                 <Link
                   href="/user/forgot-password"
                   className="text-purple-500 hover:text-purple-700"
                 >
-                  Esqueci a minha senha
+                  Esqueci minha senha
                 </Link>
               </span>
             </div>
