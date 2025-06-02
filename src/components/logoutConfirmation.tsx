@@ -1,10 +1,12 @@
 import { X } from 'phosphor-react'
+import { useAuth } from '../context/AuthProvider/useAuth'
 
 interface LogoutConfirmationProps {
   closeModal: () => void
 }
 
 export const LogoutConfirmation = ({ closeModal }: LogoutConfirmationProps) => {
+  const auth = useAuth()
   return (
     <section className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/10">
       <section className="relative h-[223px] rounded-lg bg-white p-8 md:w-[640px]">
@@ -26,7 +28,10 @@ export const LogoutConfirmation = ({ closeModal }: LogoutConfirmationProps) => {
         {/* Botões */}
         <div className="justify-left mt-12 flex gap-[32px]">
           <button
-            onClick={closeModal}
+            onClick={() => {
+              auth.signOut()
+              closeModal()
+            }}
             className="h-[48px] w-[240px] rounded-md bg-red-500 font-semibold text-white transition-colors hover:bg-red-600"
           >
             Sair

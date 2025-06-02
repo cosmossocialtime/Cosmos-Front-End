@@ -44,7 +44,7 @@ export default function EventsCalendar() {
         </header>
 
         <CalendarProvider>
-          <Calendar currentDay={currentDay} />
+          <Calendar />
         </CalendarProvider>
       </main>
     </div>

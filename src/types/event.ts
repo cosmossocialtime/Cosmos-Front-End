@@ -13,7 +13,7 @@ export type EventProps = {
     byname: string
     eventId: number
     id: number
-    invitedAt: Date
+    invitedAt?: Date
     userId: number
   }[]
   logbook: {

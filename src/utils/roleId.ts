@@ -20,3 +20,9 @@ export const permissionsLabels: Map<string, string> = new Map([
   ['social_organization_manager', 'Administrador'],
   ['social_organization_member', 'Membro'],
 ])
+
+export const volunteerRoleLabel: Map<string, string> = new Map([
+  ['specialist', 'Especialista'],
+  ['pilot', 'Piloto(a)'],
+  ['leader', 'Comandante'],
+])

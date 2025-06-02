@@ -5,10 +5,11 @@ import Image from 'next/image'
 import Astronauta from '../../../../public/images/astronauta.png'
 import ModalContent from './CreateModal'
 import Modal from './Modal'
-import { api } from '../../../services/api'
 import { useKeenSlider } from 'keen-slider/react'
 import { CaretLeft, CaretRight } from 'phosphor-react'
 import { useRouter } from 'next/router'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { volunteerRoleLabel } from '../../../utils/roleId'
 
 interface MentorshipProps {
   id: number
@@ -57,8 +58,16 @@ export default function Slider() {
 
   useEffect(() => {
     if (mentorshipId) {
-      api.get(`/mentorship/${mentorshipId}/volunteers`).then((response) => {
-        setMentorshipVolunteers(response.data)
+      const payload = { mentorshipId: Number(mentorshipId || '0') }
+      invokeLambda<typeof payload, { statusCode: number; body: string }>(
+        'mentorship-volunteers-select-lambda',
+        payload
+      ).then((response) => {
+        if (response.statusCode === 200) {
+          setMentorshipVolunteers(JSON.parse(response.body))
+        } else {
+          setMentorshipVolunteers([])
+        }
       })
     }
   }, [mentorshipId])
@@ -91,7 +100,7 @@ export default function Slider() {
                     <div className="flex w-full justify-between">
                       <div className="flex flex-col">
                         <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
-                          {volunteer.roleName}
+                          {volunteerRoleLabel.get(volunteer.roleName)}
                         </h2>
                         <span className="text-left text-[18px] font-medium text-indigo-500">
                           {volunteer.byname}
@@ -115,8 +124,8 @@ export default function Slider() {
                           />
                         ) : (
                           <Image
-                            width={300}
-                            height={300}
+                            width={125}
+                            height={125}
                             onLoad={() => Astronauta}
                             src={Astronauta}
                             alt="Imagem de perfil"

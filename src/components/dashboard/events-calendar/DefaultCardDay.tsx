@@ -20,7 +20,7 @@ export function DefaultCardDay({
     <div
       data-disabled={disabled}
       className={twMerge(
-        'relative flex h-full w-full cursor-pointer flex-col rounded-2xl border-2 border-solid border-transparent bg-zinc-100 p-2 text-sm font-bold transition-all duration-200 hover:border-violet-400 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:border-none data-[disabled=true]:opacity-60',
+        'text-grey-600 relative flex h-full w-full cursor-pointer flex-col rounded-2xl border-2 border-solid border-transparent bg-zinc-100 p-2 text-sm transition-all duration-200 hover:border-violet-400 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:border-none data-[disabled=true]:opacity-60',
         className
       )}
       onClick={onClick}

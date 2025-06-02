@@ -1,5 +1,4 @@
 import React, {
-  ElementType,
   createContext,
   useCallback,
   useContext,
@@ -9,24 +8,21 @@ import React, {
 import { EventProps } from '../../types/event'
 import { UserProps } from '../../types/user'
 import { useDashboard } from '../../hooks/useDashboard'
-import { api } from '../../services/api'
 import { MentorshipProps } from '../../types/mentorship'
 import { LoadingLight } from '../../components/LoadingLight'
-import { PopoverEvent } from '../../components/dashboard/events-calendar/PopoverEvent'
-import { PopoverEventForm } from '../../components/dashboard/events-calendar/PopoverEventForm'
-import { PopoverEvents } from '../../components/dashboard/events-calendar/PopoverEvents'
 import { useRouter } from 'next/router'
+import { invokeLambda } from '../../lib/aws/invokeLambda'
 
 type CalendarContextProps = {
   selectedDay: Date | null
   currentMentorship: MentorshipProps
   ownerUser: UserProps
-  popover: ElementType
+  popover: PopoverType
   users: UserProps[]
   events: EventProps[]
   selectedEvent: EventProps | null
   selectDay: (day: Date | null) => void
-  changePopover: (popover: ElementType) => void
+  changePopover: (popover: PopoverType) => void
   changeSelectedEvent: (event: EventProps | null) => void
   getEvents: () => void
 }
@@ -35,17 +31,21 @@ const CalendarContext = createContext<CalendarContextProps>(
   {} as CalendarContextProps
 )
 
+type PopoverType = 'Event' | 'EventForm' | 'Events' | null
+
 export const popovers = {
-  Event: PopoverEvent,
-  EventForm: PopoverEventForm,
-  Events: PopoverEvents,
-}
+  Event: 'Event',
+  EventForm: 'EventForm',
+  Events: 'Events',
+} as const
 
 const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const route = useRouter()
-  const { mentorshipId } = route.query
+  const { mentorshipId, socialOrganizationId } = route.query
 
-  const { dashboard } = useDashboard(null)
+  const { dashboard } = useDashboard(
+    socialOrganizationId ? Number(socialOrganizationId) : null
+  )
 
   const currentMentorship = dashboard?.currentMentorships.find(
     (mentorship: MentorshipProps) =>
@@ -56,15 +56,18 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<UserProps[]>([])
   const [events, setEvents] = useState<EventProps[]>([])
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null)
-  const [popover, setPopover] = useState<ElementType>(PopoverEvent)
+  const [popover, setPopover] = useState<PopoverType>('Event')
   const [selectedDay, setSelectedDay] = useState<Date | null>(null)
 
   const getEvents = useCallback(() => {
-    api
-      .get(`/mentorship/${currentMentorship?.programId}/calendar`)
+    const payload = { mentorshipId: Number(mentorshipId || '0') }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'mentorship-calendar-select-lambda',
+      payload
+    )
       .then((response) => {
-        if (response.status === 200) {
-          setEvents(response.data)
+        if (response.statusCode === 200) {
+          setEvents(JSON.parse(response.body))
         }
       })
       .catch((error) => {
@@ -76,11 +79,14 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
     if (!currentMentorship) {
       return
     }
-    api
-      .get(`/mentorship/${currentMentorship.programId}/volunteers`)
+    const payload = { mentorshipId: Number(mentorshipId || '0') }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'mentorship-participants-select-lambda',
+      payload
+    )
       .then((response) => {
-        if (response.status === 200) {
-          setUsers(response.data)
+        if (response.statusCode === 200) {
+          setUsers(JSON.parse(response.body))
         }
       })
       .catch((error) => {
@@ -94,9 +100,10 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedDay(day)
   }
 
-  function changePopover(popover: ElementType) {
-    setPopover(popover)
+  function changePopover(type: PopoverType) {
+    setPopover(type)
   }
+
   function changeSelectedEvent(event: EventProps | null) {
     setSelectedEvent(event)
     setPopover(popovers.Event)

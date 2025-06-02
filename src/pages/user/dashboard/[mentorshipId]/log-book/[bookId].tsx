@@ -3,17 +3,16 @@ import dayjs from 'dayjs'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'react-toastify'
-import { api } from '../../../../../services/api'
 import { Input } from '../../../../../components/Input'
 import { Button } from '../../../../../components/Button'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { useDashboard } from '../../../../../hooks/useDashboard'
+import Router, { useRouter } from 'next/router'
 import { EventProps } from '../../../../../types/event'
 import Link from 'next/link'
 import { DashboardLoading } from '../../../../../components/dashboard/DashboardLoading'
 import SideBar from '../sideBar'
-import { MentorshipProps } from '../../../../../types/mentorship'
+import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
+import { useQuery } from '@tanstack/react-query'
+import { queryClient } from '../../../../../services/queryClient'
 
 const schema = z.object({
   meetingAccomplishments: z.string(),
@@ -26,58 +25,64 @@ export default function Book() {
   const router = useRouter()
   const { bookId, mentorshipId } = router.query
 
-  const { dashboard } = useDashboard(null)
-  const currentMentorship = dashboard?.currentMentorships.find(
-    (mentorship: MentorshipProps) =>
-      String(mentorship.mentorshipId) === mentorshipId
-  )
-
-  const [event, setEvent] = useState<EventProps | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    if (!currentMentorship || !bookId) {
-      return
+  async function getEvents() {
+    try {
+      const payload = { mentorshipId: Number(mentorshipId || '0') }
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('mentorship-calendar-select-lambda', payload)
+      return JSON.parse(response.body)
+    } catch (error) {
+      console.error('Erro ao buscar eventos!')
+      throw error
     }
+  }
 
-    api
-      .get(`/mentorship/${currentMentorship?.programId}/calendar`)
-      .then((response) => {
-        if (response.status === 200) {
-          const events: EventProps[] = response.data
-          const eventFound = events.find((event) => String(event.id) === bookId)
-
-          setEvent(eventFound || null)
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [currentMentorship, bookId])
+  const {
+    data: events,
+    isLoading,
+    isError,
+  } = useQuery<EventProps[]>({
+    queryKey: ['events', mentorshipId],
+    queryFn: getEvents,
+    enabled: !!mentorshipId,
+  })
 
   const { handleSubmit, control } = useForm<formProps>()
 
-  function submitForm({ meetingAccomplishments, nextMeetingGoals }: formProps) {
-    api
-      .post(`mentorship/event/${event?.id}/logbook`, {
-        meetingAccomplishments,
-        nextMeetingGoals,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success('Os dados foram salvos com sucesso!')
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-        toast.error(
-          'Não foi possivel salvar os dados. Tente novamente mais tarde!'
-        )
-      })
+  async function submitForm({
+    meetingAccomplishments,
+    nextMeetingGoals,
+  }: formProps) {
+    try {
+      const payload = {
+        bookId: bookId,
+        meetingAccomplishments: meetingAccomplishments,
+        nextMeetingGoals: nextMeetingGoals,
+      }
+
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('mentorship-event-logbook-upsert-lambda', payload)
+      if (response.statusCode == 201) {
+        queryClient.invalidateQueries(['events', mentorshipId])
+        toast.success('Informações salvas com sucesso!')
+        Router.push(`/user/dashboard/${mentorshipId}/log-book`)
+      } else {
+        toast.error('Erro ao salvar informações!')
+      }
+    } catch (error) {
+      toast.error('Erro ao salvar informações!')
+    }
   }
+
+  if (isLoading) {
+    return <DashboardLoading />
+  }
+
+  const event = events?.find((event: EventProps) => String(event.id) === bookId)
 
   if (isLoading) {
     return <DashboardLoading />

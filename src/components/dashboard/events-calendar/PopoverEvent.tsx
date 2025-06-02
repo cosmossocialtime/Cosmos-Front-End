@@ -16,11 +16,13 @@ import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
 import { popovers, useCalendar } from '../../../context/CalendarProvider'
 import { DeleteConfirmation } from '../../DeleteConfirmation'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 export function PopoverEvent() {
   const {
     changePopover,
-    changeSelectedEvent,
+    events,
+    selectedDay,
     selectedEvent,
     getEvents,
     selectDay,
@@ -39,49 +41,61 @@ export function PopoverEvent() {
   const { title, description, startAt, endAt, link, attendees } = selectedEvent
   const hourStart = dayjs(startAt).format('HH:mm')
   const hourEnd = dayjs(endAt).format('HH:mm')
+  const eventsOfTheDay = events.filter((event) =>
+    dayjs(event.startAt).isSame(dayjs(selectedDay), 'day')
+  )
 
-  function deleteEvent() {
-    api
-      .delete(`/mentorship/event/${selectedEvent?.id}`)
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success('Evento deletado com sucesso!')
-          changePopover(popovers.Events)
-          selectDay(null)
-          getEvents()
-        }
-      })
-      .catch((error) => {
-        toast.error('Nao foi possível deletar o evento!')
-        console.error(error)
-      })
-  }
+  async function deleteEvent() {
+    try {
+      const payload = {
+        eventId: selectedEvent?.id || 0,
+      }
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('mentorship-event-delete-lambda', payload)
 
-  function backPopover() {
-    changeSelectedEvent(null)
-    changePopover(popovers.Events)
+      if (response.statusCode === 200) {
+        toast.success('Evento excluído com sucesso')
+        changePopover(popovers.Event)
+        selectDay(null)
+        getEvents()
+      } else {
+        toast.error('Erro ao excluir o evento!')
+      }
+    } catch (error) {
+      toast.error('Erro ao excluir o evento!')
+      throw error
+    }
   }
 
   return (
     <>
-      <ArrowLeft
-        size={24}
-        weight="bold"
-        className="absolute cursor-pointer"
-        onClick={backPopover}
-      />
+      {eventsOfTheDay.length > 1 && (
+        <ArrowLeft
+          size={24}
+          weight="bold"
+          className="absolute cursor-pointer"
+          onClick={() => changePopover(popovers.Events)}
+        />
+      )}
       <div className="absolute right-4 top-4 flex items-center justify-center gap-3">
         <Popover.Root>
           <Popover.Trigger>
             <DotsThree size={36} className="cursor-pointer" weight="bold" />
           </Popover.Trigger>
-          <Popover.Content className="rounded-lg bg-c-blue-900 p-6 ">
+          <Popover.Content
+            key={'popoverEventForm'}
+            className="rounded-lg bg-c-blue-900 p-6 "
+          >
             <Popover.Arrow width={15} height={10} fill="#0B1340" />
 
             <div className="mr-14 flex flex-col items-start gap-7">
               <button
                 className="flex cursor-pointer items-center gap-1"
-                onClick={() => changePopover(popovers.EventForm)}
+                onClick={() => {
+                  changePopover(popovers.EventForm)
+                }}
               >
                 <PencilSimpleLine size={24} />
                 <span>Editar</span>

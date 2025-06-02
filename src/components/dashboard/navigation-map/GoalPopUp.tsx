@@ -10,17 +10,16 @@ import { z } from 'zod'
 import { Button } from '../../Button'
 import { Menu } from '../../menu'
 import WarningGoalDeletion from './WarningGoalDeletion'
-import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ErrorMessage } from '@hookform/error-message'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 const editGoalFormSchema = z.object({
   title: z.string().nonempty('O título é obrigatório!'),
   tasks: z.array(
     z.object({
       name: z.string().nonempty('A tarefa precisa de uma descrição!'),
-      completed: z.boolean(),
       id: z.number().optional(),
     })
   ),
@@ -65,16 +64,24 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
   } = newCycleForm
 
   function submitForm({ title, tasks }: formProps) {
-    api
-      .put(`mentorship/goal/${goal.id}`, {
-        name: title,
-        tasks: tasks.map((task) => ({ name: task.name, id: task.id })),
-      })
+    const payload = {
+      goalId: goal.id,
+      name: title,
+      tasks: tasks.map((task) => ({ name: task.name, id: task.id })),
+    }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'mentorship-goal-update-lambda',
+      payload
+    )
       .then((response) => {
-        if (response.status === 200) {
+        if (response.statusCode === 201) {
           toast.success('Dados salvos com sucesso!')
           updateGoals()
           changeEdit(false)
+        } else {
+          toast.error(
+            'Não foi possível salvar as alterações. Tente novamente mais tarde!'
+          )
         }
       })
       .catch((error) => {

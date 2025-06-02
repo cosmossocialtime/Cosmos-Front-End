@@ -9,10 +9,10 @@ import { VideoPopUp } from '../../../../../../../components/dashboard/mission-pa
 import { StepProps } from '../../../../../../../types/step'
 import Router, { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import { DashboardLoading } from '../../../../../../../components/dashboard/DashboardLoading'
 import { useDashboard } from '../../../../../../../hooks/useDashboard'
 import { MentorshipProps } from '../../../../../../../types/mentorship'
 import DynamicHeader from '../../../../../../../components/header/DynamicHeader'
+import DashboardLoadingInstitution from '../DashboardLoadingInstitution'
 
 export default function MissionPainel() {
   const route = useRouter()
@@ -53,7 +53,7 @@ export default function MissionPainel() {
   }
 
   if (!currentMentorship) {
-    return <DashboardLoading />
+    return <DashboardLoadingInstitution />
   }
 
   return (

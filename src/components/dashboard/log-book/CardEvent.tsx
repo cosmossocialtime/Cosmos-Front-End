@@ -6,18 +6,23 @@ import { useRouter } from 'next/router'
 
 interface CardEventProps {
   event: EventProps
+  source: string
 }
 
-export function CardEvent({ event }: CardEventProps) {
+export function CardEvent({ event, source }: CardEventProps) {
   const route = useRouter()
-  const { mentorshipId } = route.query
+  const { mentorshipId, socialOrganizationId } = route.query
 
   const eventDay = dayjs(event.startAt)
   const endEvent = dayjs(event.endAt)
 
   return (
     <Link
-      href={`/user/dashboard/${mentorshipId}/log-book/${event.id}`}
+      href={`${
+        source === 'volunteer'
+          ? `/user/dashboard/${mentorshipId}/log-book/${event.id}`
+          : `/institutions/socialOrganization/${socialOrganizationId}/dashboard/${mentorshipId}/log-book/${event.id}`
+      }`}
       className="flex max-w-full cursor-pointer items-center justify-between overflow-hidden rounded-lg border border-solid border-transparent bg-gray-200 px-8 py-5 text-gray-600 hover:border-violet-500"
     >
       <div className="flex items-center gap-8">

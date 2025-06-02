@@ -7,15 +7,17 @@ import React, {
 } from 'react'
 import { GoalProps } from '../../types/Goal'
 import { useDashboard } from '../../hooks/useDashboard'
-import { api } from '../../services/api'
 import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 import { queryClient } from '../../services/queryClient'
 import { useRouter } from 'next/router'
 import { MentorshipProps } from '../../types/mentorship'
+import { invokeLambda } from '../../lib/aws/invokeLambda'
+import { SocialOrganizationProps } from '../../types/socialOrganization'
 
 type NavigationMapContextProps = {
   currentMentorship?: MentorshipProps
+  socialOrganization?: SocialOrganizationProps
   goals: GoalProps[]
   selectedGoalId: number | null
   editEnable: boolean
@@ -35,22 +37,33 @@ const NavigationMapContext = createContext<NavigationMapContextProps>(
 
 const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   const route = useRouter()
-  const { mentorshipId } = route.query
+  const { mentorshipId, socialOrganizationId } = route.query
+  const { dashboard } = useDashboard(
+    socialOrganizationId ? Number(socialOrganizationId) : null
+  )
 
-  const { dashboard } = useDashboard(null)
   const currentMentorship = dashboard?.currentMentorships.find(
     (mentorship: MentorshipProps) =>
       String(mentorship.mentorshipId) === mentorshipId
   )
+
+  const socialOrganization = dashboard?.socialOrganization
 
   const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null)
   const [editEnable, setEditEnable] = useState(false)
   const [editTitle, setEditTitle] = useState(false)
 
   async function getGoals() {
-    const response = await api.get<GoalProps[]>(`/mentorship/1/goals`)
-
-    return response.data
+    const payload = { mentorshipId: Number(mentorshipId || '0') }
+    const response = await invokeLambda<
+      typeof payload,
+      { statusCode: number; body: string }
+    >('mentorship-goals-select-lambda', payload)
+    if (response.statusCode === 200) {
+      return JSON.parse(response.body)
+    }
+    console.error('Falha ao obter objetivos da missão')
+    return []
   }
 
   const { data: goals = [], refetch } = useQuery({
@@ -67,24 +80,35 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function changeGoal(updatedGoal: GoalProps) {
-    const newGoals = goals.map((goal) =>
+    const newGoals = goals.map((goal: GoalProps) =>
       goal.id === updatedGoal.id ? updatedGoal : goal
     )
     queryClient.setQueriesData(['goals'], newGoals)
   }
 
   function createGoal() {
-    api
-      .post(`/mentorship/${currentMentorship?.programId}/goal`, {
-        name: 'Novo objetivo',
-      })
+    const payload = {
+      mentorshipId: Number(mentorshipId || '0'),
+      name: 'Novo objetivo',
+    }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'mentorship-goal-create-lambda',
+      payload
+    )
       .then((response) => {
-        selectGoalId(response.data.id)
-        updateGoals()
-        setEditEnable(true)
-        setEditTitle(true)
+        if (response.statusCode === 201) {
+          const parsed = JSON.parse(response.body)
+          selectGoalId(parsed.id)
+          updateGoals()
+          setEditEnable(true)
+          setEditTitle(true)
 
-        toast.success('Objetivo criado com sucesso!')
+          toast.success('Objetivo criado com sucesso!')
+        } else {
+          toast.error(
+            'Não foi possível criar o objetivo. Tente novamente mais tarde!'
+          )
+        }
       })
       .catch((error) => {
         console.error(error)
@@ -99,14 +123,23 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
       toast.error('Objetivo não encontrado!')
       return
     }
-    api
-      .delete(`/mentorship/goal/${selectedGoalId}`)
+    const payload = { goalId: selectedGoalId }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'mentorship-goal-delete-lambda',
+      payload
+    )
       .then((response) => {
-        if (response.status === 200) {
-          const newGoals = goals.filter((goal) => goal.id !== selectedGoalId)
+        if (response.statusCode === 200) {
+          const newGoals = goals.filter(
+            (goal: GoalProps) => goal.id !== selectedGoalId
+          )
           queryClient.setQueriesData(['goals'], newGoals)
 
           toast.success('Objetivo deletado com sucesso!')
+        } else {
+          toast.error(
+            'Não foi possível deletar o objetivo. Tente novamente mais tarde!'
+          )
         }
       })
       .catch((error) => {
@@ -137,6 +170,7 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
     <NavigationMapContext.Provider
       value={{
         currentMentorship,
+        socialOrganization,
         goals,
         selectedGoalId,
         editEnable,
