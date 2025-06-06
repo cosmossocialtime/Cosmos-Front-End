@@ -1,5 +1,4 @@
 import { Calendar, CaretRight, Check, Clock } from 'phosphor-react'
-import adventuresData from '../../../data/AdventuresData'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 import { ProgramProps } from '../../../types/program'
