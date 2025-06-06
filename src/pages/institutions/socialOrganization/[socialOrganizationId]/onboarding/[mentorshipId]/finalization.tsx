@@ -47,7 +47,7 @@ export default function Finalization() {
 
       <div className="relative flex flex-1 items-center justify-center bg-bgFrenteNave bg-cover bg-center text-white">
         {/* Botão de voltar */}
-        <div className="absolute left-6 top-6 z-10">
+        <div className="absolute left-10 top-8 z-10">
           <ArrowLeft
             className="cursor-pointer text-white"
             onClick={() =>
@@ -55,7 +55,7 @@ export default function Finalization() {
                 `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationImageUpload`
               )
             }
-            size={30}
+            size={24}
           />
         </div>
 

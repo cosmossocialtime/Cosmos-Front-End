@@ -214,9 +214,9 @@ export default function CreateOrganization() {
     <section>
       <DynamicHeader />
 
-      <div className="mt-10 p-3">
+      <div className="mt-8 pl-10">
         <ArrowLeft
-          className="cursor-pointer"
+          className="cursor-pointer text-gray-800"
           onClick={() => {
             setShowMenu(true)
             setShowOrganization(true)
@@ -224,7 +224,7 @@ export default function CreateOrganization() {
               `/institutions/socialOrganization/${organizationId}/changeOrganization`
             )
           }}
-          size={30}
+          size={24}
         />
       </div>
 

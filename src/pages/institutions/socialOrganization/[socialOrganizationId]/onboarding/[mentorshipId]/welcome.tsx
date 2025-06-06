@@ -33,7 +33,7 @@ export default function Welcome() {
       <DynamicHeader />
 
       <div className="relative flex flex-1 items-center justify-center overflow-hidden bg-bgWelcomeAdventureInstitution bg-cover bg-center text-white">
-        <div className="absolute left-6 top-6 z-10">
+        <div className="absolute left-10 top-8 z-10">
           <ArrowLeft
             className="cursor-pointer text-white"
             onClick={() => {
@@ -43,7 +43,7 @@ export default function Welcome() {
                 `/institutions/socialOrganization/${organizationId}/home`
               )
             }}
-            size={30}
+            size={24}
           />
         </div>
 

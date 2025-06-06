@@ -148,15 +148,15 @@ export default function OrganizationImageUpload() {
         id="fullPage"
         className="relative flex flex-1 flex-col bg-bgFuturisticPedestal bg-cover bg-center bg-no-repeat text-white"
       >
-        <header className="hide-during-print absolute left-0 right-0 top-0 z-10 flex h-20 items-center justify-between px-6 backdrop-blur-xl">
+        <header className="hide-during-print absolute left-0 right-0 top-0 z-10 flex h-20 items-center justify-between px-10 backdrop-blur-xl">
           <ArrowLeft
-            className="hide-during-print cursor-pointer text-white"
+            className="hide-during-print mt-2 cursor-pointer text-white"
             onClick={() =>
               Router.push(
                 `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationUploadImageAdvisor`
               )
             }
-            size={30}
+            size={24}
           />
           <div className="hide-during-print flex gap-4">
             <div className="px-4 py-2">

@@ -32,7 +32,7 @@ export default function OrganizationInfo() {
 
       {/* Conteúdo com fundo */}
       <div className="relative flex flex-1 flex-col items-center justify-center bg-bgSpaceInstitution bg-cover bg-center px-6 py-10 text-white">
-        <div className="absolute left-6 top-6 z-10">
+        <div className="absolute left-10 top-8 z-10">
           <ArrowLeft
             className="cursor-pointer text-white"
             onClick={() =>
@@ -40,7 +40,7 @@ export default function OrganizationInfo() {
                 `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/welcome`
               )
             }
-            size={30}
+            size={24}
           />
         </div>
 

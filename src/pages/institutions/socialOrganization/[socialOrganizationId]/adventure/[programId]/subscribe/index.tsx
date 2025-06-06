@@ -24,9 +24,9 @@ export default function AdventureInstitution() {
       {program && socialOrganization && user && (
         <section className="min-h-screen w-full bg-white">
           <DynamicHeader />
-          <div className="mt-10 pl-3">
+          <div className="mt-8 pl-10">
             <ArrowLeft
-              className="cursor-pointer"
+              className="cursor-pointer text-gray-800"
               onClick={() =>
                 Router.push(
                   `/institutions/socialOrganization/${
@@ -34,7 +34,7 @@ export default function AdventureInstitution() {
                   }/home`
                 )
               }
-              size={30}
+              size={24}
             />
           </div>
           <div className="mx-auto max-w-4xl px-4 ">
