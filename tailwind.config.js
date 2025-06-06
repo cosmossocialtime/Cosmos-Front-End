@@ -70,6 +70,8 @@ module.exports = {
         bgsatelites: "url('/images/satelites/bgSatelite.png')",
         bgArtBoard: 'url(/images/bg-art-board.jpg)',
         currentMission: 'url(/images/bg-current-mission.jpg)',
+        currentMissionInstitution:
+          'url(/images/bg-current-mission-institution.jpg)',
         espaco: 'url(/images/bg-espaco.jpg)',
         bgCadastro: 'url(/images/bg-cadastro.jpg)',
         bgTerra: 'url(/images/bg-terra.jpg)',

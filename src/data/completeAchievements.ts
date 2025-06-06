@@ -83,7 +83,7 @@ export const completeAchievements = [
     image: meteorOnIcon,
     title: 'Mestre das galáxias',
     description: 'Complete os dados sobre as áreas da organização',
-    completeLink: false,
+    completeLink: true,
   },
   {
     id: 12,

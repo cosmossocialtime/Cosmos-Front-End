@@ -46,17 +46,23 @@ const ClearIndicator = () => {
 const customStyles: StylesConfig<any, false> = {
   control: (base, state) => ({
     ...base,
-    border: '1px solid #9CA3AF',
-    borderRadius: '6px',
-    padding: '6px 8px',
+    border: 'border solid',
+    borderRadius: 'rounded-md',
+    padding: '2px 0 2px 0',
     transition: 'all 0.2s ease-in-out',
-    width: '100%',
+    width: 'w-full',
     '&:hover': {
-      borderColor: '#9333EA',
-      boxShadow: '0 1px 2px rgba(147, 51, 234, 0.2)',
+      borderColor: 'border-purple-500',
+      boxShadow: 'shadow-sm shadow-purple-500',
     },
-    boxShadow: state.isFocused ? '0 0 0 2px rgba(147, 51, 234, 0.4)' : 'none',
-    borderColor: state.isFocused ? '#9333EA' : '#9CA3AF',
+    boxShadow: state.isFocused ? 'outline-none ring-1 ring-purple-500' : 'none', // Foco com roxo
+    borderColor: state.isFocused ? 'border-purple-500' : 'border-gray-400',
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: 'text-gray-400',
+    fontFamily: 'Inter',
+    fontSize: 'text-base',
   }),
   option: (base, state) => ({
     ...base,
@@ -85,7 +91,7 @@ const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="text-sm font-medium text-gray-600">{label}</label>
+        <label className="text-sm font-medium text-gray-700">{label}</label>
       )}
       <Select
         instanceId={instanceId}
@@ -95,7 +101,14 @@ const SingleSelectComboBox: React.FC<SingleSelectComboBoxProps> = ({
         placeholder="Selecione uma opção"
         isDisabled={isDisabled}
         styles={customStyles}
-        className="mt-1"
+        classNames={{
+          control:
+            () => `mt-1 w-full rounded-md border border-solid border-gray-400 p-2
+          transition-all duration-200 hover:border-purple-500 hover:shadow-sm hover:shadow-purple-500 
+          focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500`,
+          placeholder: () => 'text-gray-400 text-base',
+          valueContainer: () => 'text-base',
+        }}
         components={{ ClearIndicator, DropdownIndicator }}
       />
     </div>

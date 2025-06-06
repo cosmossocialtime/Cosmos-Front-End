@@ -47,7 +47,7 @@ export default function OrganizationInfo() {
         {/* Conteúdo central */}
         <div className="max-w-8xl flex w-full flex-col items-center justify-center gap-10 md:flex-row md:gap-20">
           {/* Texto à esquerda */}
-          <div className="max-w-2xl text-center backdrop-blur-xl md:text-left">
+          <div className="max-w-3xl p-14 text-center backdrop-blur-xl md:text-left">
             <h1 className="mb-6 text-3xl font-semibold leading-tight md:text-4xl">
               Na Cosmos, cada organização social é uma Estrela que gera um
               impacto positivo no universo.
@@ -55,7 +55,7 @@ export default function OrganizationInfo() {
 
             <p className="mb-6 text-xl text-gray-300">
               Neste programa, você será a(o) Guia de uma das estrelas mais
-              brilhantes da galáxia, a organização {socialOrganization?.name}
+              brilhantes da galáxia, a organização {socialOrganization?.name}!
             </p>
 
             <p className="text-xl text-gray-300">
@@ -68,7 +68,7 @@ export default function OrganizationInfo() {
 
           {/* Card da estrela à direita */}
           <button onClick={() => setIsModalOpen(true)}>
-            <div className="group flex cursor-pointer flex-col items-center backdrop-blur-xl">
+            <div className="gradient-border group flex cursor-pointer flex-col items-center p-12 backdrop-blur-xl">
               <div className="flex h-60 w-60 items-center justify-center transition-transform hover:scale-110">
                 <Image
                   width={200}

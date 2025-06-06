@@ -131,106 +131,114 @@ export const SectorFormMentorship = ({
   }
 
   return (
-    <section className="fixed left-0 top-0 z-[50] flex h-screen w-full items-center justify-center bg-black/50">
-      <section className="flex h-[669px] w-[720px] flex-col overflow-y-scroll rounded-xl bg-white p-6 shadow-lg">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <Image
-              width={50}
-              height={50}
-              src={image}
-              alt={`Ícone de ${name}`}
-            />
-            <h1 className="text-3xl font-semibold">{name}</h1>
-            {!isEditing && !isInformationSend && (
-              <div className="ml-6">
-                <EditButton
-                  text="Editar"
-                  onClick={() => setIsEditing(true)}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={closeModal}
+    >
+      <section className="flex h-screen w-full items-center justify-center">
+        <section
+          className="flex max-h-[80vh] max-w-md flex-col overflow-y-auto rounded-xl bg-white p-6 shadow-lg md:max-w-lg lg:max-w-xl xl:max-w-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center">
+              <Image
+                width={50}
+                height={50}
+                src={image}
+                alt={`Ícone de ${name}`}
+              />
+              <h1 className="text-3xl font-semibold">{name}</h1>
+              {!isEditing && !isInformationSend && (
+                <div className="ml-6">
+                  <EditButton
+                    text="Editar"
+                    onClick={() => setIsEditing(true)}
+                    type="submit"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={closeModal}>
+                <X size={24} />
+              </button>
+            </div>
+          </div>
+
+          {!isEditing ? (
+            <div className="mt-10 space-y-6">
+              <div className="text-left">
+                <h5 className="text-gray-500">
+                  O quanto a instituição considera que a área de {name} precisa
+                  ser trabalhada?
+                </h5>
+                <p>{selectedHowMuch?.label}</p>
+              </div>
+
+              <div className="text-left">
+                <h5 className="text-gray-500">
+                  Como a área de {name} funciona na instituição hoje?
+                </h5>
+                <p className="whitespace-pre-line break-words text-gray-800">
+                  {mentorshipSector?.currentlyWorking}
+                </p>
+              </div>
+
+              <div className="text-left">
+                <h5 className="text-gray-500">
+                  O que pode melhorar na área de {name} da organização?
+                </h5>
+                <p className="whitespace-pre-line break-words text-gray-800">
+                  {mentorshipSector?.effectiveness}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-6"
+            >
+              <SingleSelectComboBox
+                instanceId="ranking"
+                label={`O quanto a instituição considera que a área de ${name} precisa ser trabalhada?`}
+                options={options}
+                onChange={handleChange}
+                value={selectedHowMuch}
+              />
+
+              <TextAreaField
+                label={`Como a área de ${name} funciona na instituição hoje?`}
+                name="currentlyWorking"
+                value={currentlyWorking}
+                placeholder="Digite aqui"
+                register={register}
+                rows={6}
+                error={errors.currentlyWorking?.message}
+              />
+
+              <TextAreaField
+                label={`O que pode melhorar na área de ${name} da organização?`}
+                name="effectiveness"
+                value={effectiveness}
+                placeholder="Digite aqui"
+                register={register}
+                rows={6}
+                error={errors.effectiveness?.message}
+              />
+
+              <div className="w-[250px]">
+                <Button
+                  text="Salvar Informações"
+                  disabled={isDisabled}
                   type="submit"
                 />
               </div>
-            )}
-          </div>
-
-          <div className="flex gap-2">
-            <button onClick={closeModal}>
-              <X size={24} />
-            </button>
-          </div>
-        </div>
-
-        {!isEditing ? (
-          <div className="mt-10 space-y-6">
-            <div className="text-left">
-              <h5 className="text-gray-500">
-                O quanto a instituição considera que a área de {name} precisa
-                ser trabalhada?
-              </h5>
-              <p>{selectedHowMuch?.label}</p>
-            </div>
-
-            <div className="text-left">
-              <h5 className="text-gray-500">
-                Como é feito {name} na instituição hoje?
-              </h5>
-              <p className="whitespace-pre-line break-words text-gray-800">
-                {mentorshipSector?.currentlyWorking}
-              </p>
-            </div>
-
-            <div className="text-left">
-              <h5 className="text-gray-500">
-                O que pode melhorar na área de {name} da organização?
-              </h5>
-              <p className="whitespace-pre-line break-words text-gray-800">
-                {mentorshipSector?.effectiveness}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-6 overflow-y-scroll"
-          >
-            <SingleSelectComboBox
-              instanceId="ranking"
-              label={`O quanto a instituição considera que a área ${name} precisa ser trabalhada?`}
-              options={options}
-              onChange={handleChange}
-              value={selectedHowMuch}
-            />
-
-            <TextAreaField
-              label={`Como é feito ${name} na instituição hoje?`}
-              name="currentlyWorking"
-              value={currentlyWorking}
-              placeholder="Digite aqui"
-              register={register}
-              rows={6}
-              error={errors.currentlyWorking?.message}
-            />
-
-            <TextAreaField
-              label={`O que pode melhorar na área ${name} da organização?`}
-              name="effectiveness"
-              value={effectiveness}
-              placeholder="Digite aqui"
-              register={register}
-              rows={6}
-              error={errors.effectiveness?.message}
-            />
-
-            <div className="w-[250px]">
-              <Button
-                text="Salvar Informações"
-                disabled={isDisabled}
-                type="submit"
-              />
-            </div>
-          </form>
-        )}
+            </form>
+          )}
+        </section>
       </section>
-    </section>
+    </div>
   )
 }

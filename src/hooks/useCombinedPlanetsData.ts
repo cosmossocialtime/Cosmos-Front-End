@@ -19,7 +19,7 @@ export function useCombinedPlanetsData(
     // Configuração base dos planetas
     const baseLeftPlanets: (PlanetItemProps | null)[] = [
       {
-        imageSrc: '/images/satelites/financas.png',
+        imageSrc: '/images/satelites/recursos.png',
         name: 'Captação de recursos',
         id: 7,
       },

@@ -36,6 +36,21 @@ export const textAreaSchema = z
       .join(' ')
   )
 
+// 🔹 Validação para TextArea
+export const textAreaFeedbackSchema = z
+  .string()
+  .min(1, { message: 'O campo é obrigatório' })
+  .max(2500, { message: 'O limite de caracteres já foi atingido' })
+  .transform((name) =>
+    name
+      .trim()
+      .split(' ')
+      .map((word) =>
+        word.length > 1 ? word[0].toLocaleUpperCase() + word.substring(1) : word
+      )
+      .join(' ')
+  )
+
 // 🔹 Validação para E-mail
 export const emailSchema = z
   .string()
@@ -135,36 +150,55 @@ export const receitaSchema = z
   )
 
 // 🔹 Validação para Data de Fundação (Não pode ser no futuro)
-export const dataFundacaoSchema = z.string().refine(
-  (data) => {
-    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/
-    const match = data.match(regex)
-    if (!match) return false
+export const dataFundacaoSchema = z.string().superRefine((data, ctx) => {
+  const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/
+  const match = data.match(regex)
 
-    const [_, dia, mes, ano] = match
-    const day = parseInt(dia, 10)
-    const month = parseInt(mes, 10)
-    const year = parseInt(ano, 10)
-
-    const tempDate = new Date(year, month - 1, day)
-    if (
-      tempDate.getFullYear() !== year ||
-      tempDate.getMonth() + 1 !== month ||
-      tempDate.getDate() !== day
-    ) {
-      return false
-    }
-
-    const inputDate = new Date(Date.UTC(year, month - 1, day))
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    return inputDate <= today
-  },
-  {
-    message: 'A data de fundação não pode estar no futuro e deve ser válida.',
+  if (!match) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'A data deve estar no formato dd/mm/aaaa.',
+    })
+    return
   }
-)
+
+  const [_, dia, mes, ano] = match
+  const day = parseInt(dia, 10)
+  const month = parseInt(mes, 10)
+  const year = parseInt(ano, 10)
+
+  if (year < 1800) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'O ano deve ser igual ou maior que 1800.',
+    })
+    return
+  }
+
+  const tempDate = new Date(year, month - 1, day)
+  if (
+    tempDate.getFullYear() !== year ||
+    tempDate.getMonth() + 1 !== month ||
+    tempDate.getDate() !== day
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'A data informada é inválida.',
+    })
+    return
+  }
+
+  const inputDate = new Date(Date.UTC(year, month - 1, day))
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  if (inputDate > today) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'A data de fundação não pode estar no futuro.',
+    })
+  }
+})
 
 // 🔹 Validação para Estado e Cidade (Devem ser preenchidos se organização for do Brasil)
 export const estadoSchema = z.string().optional()

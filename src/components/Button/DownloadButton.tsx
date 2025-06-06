@@ -5,9 +5,15 @@ interface ButtonProps {
   disabled?: boolean
   isLoading?: boolean
   printImage?: string
+  onClick?: () => void
 }
 
-export function DownloadButton({ text, disabled, printImage }: ButtonProps) {
+export function DownloadButton({
+  text,
+  disabled,
+  printImage,
+  onClick,
+}: ButtonProps) {
   return (
     <a
       className={`flex h-12 items-center justify-center gap-2 rounded-md border border-solid border-white px-4 text-sm font-semibold text-white transition hover:bg-white hover:text-black ${
@@ -15,9 +21,7 @@ export function DownloadButton({ text, disabled, printImage }: ButtonProps) {
       }`}
       href={printImage}
       download
-      onClick={(e) => {
-        !printImage && e.preventDefault()
-      }}
+      onClick={onClick}
     >
       <Upload size={16} weight="bold" />
       {text}

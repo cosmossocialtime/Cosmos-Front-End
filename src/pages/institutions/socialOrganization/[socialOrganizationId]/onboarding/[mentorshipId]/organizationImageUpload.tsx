@@ -107,19 +107,50 @@ export default function OrganizationImageUpload() {
   }
 
   async function takeScreenshot() {
-    const canvas = await html2canvas(document.querySelector('.card')!)
-    const base64Image = canvas.toDataURL('image/jpg')
+    if (typeof window === 'undefined') return // garante execução só no client
 
-    setPrintImage(base64Image)
+    const element = document.querySelector('#fullPage') as HTMLElement | null
+    if (!element) {
+      console.warn('Elemento #fullPage não encontrado.')
+      return
+    }
+
+    // Esconde temporariamente os elementos com a classe
+    const elementsToHide = element.querySelectorAll('.hide-during-print')
+    elementsToHide.forEach((el) => {
+      ;(el as HTMLElement).style.visibility = 'hidden'
+    })
+
+    try {
+      const canvas = await html2canvas(element, {
+        scrollY: -window.scrollY,
+        useCORS: true,
+        scale: 2,
+      })
+
+      const base64Image = canvas.toDataURL('image/jpeg', 1.0)
+      setPrintImage(base64Image)
+    } catch (error) {
+      console.error('Erro ao gerar imagem:', error)
+      toast.error('Não foi possível gerar a imagem.')
+    } finally {
+      // Restaura a visibilidade mesmo se der erro
+      elementsToHide.forEach((el) => {
+        ;(el as HTMLElement).style.visibility = 'visible'
+      })
+    }
   }
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-white">
       <DynamicHeader />
-      <div className="relative flex flex-1 flex-col bg-bgFuturisticPedestal bg-cover bg-center bg-no-repeat text-white">
-        <header className="absolute left-0 right-0 top-0 z-10 flex h-20 items-center justify-between px-6 backdrop-blur-xl">
+      <div
+        id="fullPage"
+        className="relative flex flex-1 flex-col bg-bgFuturisticPedestal bg-cover bg-center bg-no-repeat text-white"
+      >
+        <header className="hide-during-print absolute left-0 right-0 top-0 z-10 flex h-20 items-center justify-between px-6 backdrop-blur-xl">
           <ArrowLeft
-            className="cursor-pointer text-white"
+            className="hide-during-print cursor-pointer text-white"
             onClick={() =>
               Router.push(
                 `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationUploadImageAdvisor`
@@ -127,11 +158,12 @@ export default function OrganizationImageUpload() {
             }
             size={30}
           />
-          <div className="flex gap-4">
+          <div className="hide-during-print flex gap-4">
             <div className="px-4 py-2">
               <DownloadButton
                 text="Baixar imagem"
                 printImage={printImage}
+                onClick={takeScreenshot}
                 disabled={
                   socialOrganization?.logo || socialOrganization?.logo !== ''
                     ? false
@@ -139,7 +171,7 @@ export default function OrganizationImageUpload() {
                 }
               />
             </div>
-            <div className="px-4 py-2">
+            <div className="hide-during-print px-4 py-2">
               <ButtonSecondary
                 text="Compartilhar imagem"
                 onClick={() =>
@@ -162,7 +194,6 @@ export default function OrganizationImageUpload() {
                       <Image
                         className="h-full w-full rounded-[10px] object-cover"
                         alt="Logo da organização"
-                        onLoad={takeScreenshot}
                         src={socialOrganization?.logo}
                         width={197}
                         height={197}
@@ -201,13 +232,15 @@ export default function OrganizationImageUpload() {
               </div>
             </div>
 
-            <div className="mt-8 flex items-center gap-6">
-              <Image
-                width={140}
-                height={20}
-                src={program?.companyLogo || ''}
-                alt={`Logo ${program?.companyName}`}
-              />
+            <div className="mt-8 flex items-end gap-6">
+              {program?.companyLogo && (
+                <Image
+                  width={140}
+                  height={20}
+                  src={program?.companyLogo || ''}
+                  alt={`Logo ${program?.companyName}`}
+                />
+              )}
               <Image
                 width={140}
                 height={20}
@@ -218,8 +251,8 @@ export default function OrganizationImageUpload() {
           </main>
         </div>
 
-        <footer className="absolute bottom-0 left-0 right-0 z-10 mb-10 px-4 pb-6 md:px-8">
-          <div className="mx-auto w-full max-w-xs">
+        <footer className="hide-during-print absolute bottom-0 left-0 right-0 z-10 mb-4 px-4 pb-6 md:px-8">
+          <div className="hide-during-print mx-auto w-full max-w-xs">
             <Button
               text="Continuar"
               onClick={() =>

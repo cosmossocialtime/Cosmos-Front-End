@@ -9,6 +9,7 @@ import Main from '../../components/Main'
 import { emailSchema, passwordSchema } from '../../utils/ValidationSchemas'
 import { InputPassword } from '../../components/Input/InputPassword'
 import { InputEmail } from '../../components/Input/InputEmail'
+import { useSearchParams } from 'next/navigation'
 
 const schema = z.object({
   email: emailSchema,
@@ -18,6 +19,8 @@ type formProps = z.infer<typeof schema>
 
 export default function Login() {
   const [isSubmiting, setIsSubmiting] = useState(false)
+  const searchParams = useSearchParams()
+  const organizationId = searchParams.get('socialOrganizationId')
   const {
     register,
     handleSubmit,
@@ -28,7 +31,7 @@ export default function Login() {
   const SubmitForm = async ({ email, password }: formProps) => {
     setIsSubmiting(true)
     try {
-      await auth.signIn({ email, password })
+      await auth.signIn({ email, password }, organizationId)
       toast.success('Acesso autorizado, ligando os foguetes')
     } catch (error) {
       setIsSubmiting(false)

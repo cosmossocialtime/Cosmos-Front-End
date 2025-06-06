@@ -59,41 +59,49 @@ export const ChangePasswordInstitutionModal = ({
   }
 
   return (
-    <section className="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black/50">
-      <section className="gap-6 rounded-md bg-white p-6 md:w-[720px]">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-gray-800">
-            Alteração de senha
-          </h1>
-          <X className="cursor-pointer" onClick={closeModal} />
-        </div>
-        <div className="mt-[20px] w-full">
-          <InputPassword
-            id="currentPassword"
-            label="Senha antiga"
-            register={register}
-            error={errors.currentPassword?.message}
-            placeholder="Escreva sua senha antiga"
-          />
-        </div>
-        <div className="mt-[20px] w-full">
-          <InputPassword
-            id="newPassword"
-            label="Crie sua nova senha"
-            register={register}
-            error={errors.newPassword?.message}
-            placeholder="Escreva sua nova senha"
-            helperText="A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número"
-          />
-        </div>
-        <div className="mb-[20px] mt-[30px] w-[240px]">
-          <Button
-            text="Alterar senha"
-            disabled={isDisabled}
-            onClick={handleSubmit(handleForm)}
-          />
-        </div>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={closeModal}
+    >
+      <section className="flex h-screen w-full items-center justify-center">
+        <section
+          className="gap-6 rounded-md bg-white p-6 md:w-[720px]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="text-xl font-semibold text-gray-800">
+              Alteração de senha
+            </h1>
+            <X className="cursor-pointer" onClick={closeModal} />
+          </div>
+          <div className="mt-[20px] w-full">
+            <InputPassword
+              id="currentPassword"
+              label="Senha antiga"
+              register={register}
+              error={errors.currentPassword?.message}
+              placeholder="Escreva sua senha antiga"
+            />
+          </div>
+          <div className="mt-[20px] w-full">
+            <InputPassword
+              id="newPassword"
+              label="Crie sua nova senha"
+              register={register}
+              error={errors.newPassword?.message}
+              placeholder="Escreva sua nova senha"
+              helperText="A senha deve ter no mínimo 8 caracteres, com pelo menos 1 letra maiúscula e 1 número"
+            />
+          </div>
+          <div className="mb-[20px] mt-[30px] w-[240px]">
+            <Button
+              text="Alterar senha"
+              disabled={isDisabled}
+              onClick={handleSubmit(handleForm)}
+            />
+          </div>
+        </section>
       </section>
-    </section>
+    </div>
   )
 }

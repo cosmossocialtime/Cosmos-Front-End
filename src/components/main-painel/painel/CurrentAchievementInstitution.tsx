@@ -43,17 +43,17 @@ export default function CurrentAchievementInstitution({
         <p
           className={`${
             achievement !== undefined && achievement.completed
-              ? 'text-xl text-gray-300'
-              : 'text-xl text-gray-600'
+              ? 'text-xl font-medium text-gray-500'
+              : 'text-xl font-medium text-gray-600'
           }`}
         >
           {currentAchievement.description}
         </p>
-        <p className="text-sm text-gray-300">e conquiste uma medalha!</p>
+        <p className="text-base text-gray-500">e conquiste uma medalha!</p>
         {currentAchievement.completeLink && (
           <a
             href="#"
-            className="mt-2 block text-sm font-semibold text-blue-500"
+            className="mt-2 block text-base font-semibold text-blue-400"
           >
             Completar
           </a>

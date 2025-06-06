@@ -72,10 +72,10 @@ export default function SelectOrganizationPage() {
       <DynamicHeader />
       <section className="min-h-screen w-full bg-gray-200 p-10">
         <div>
-          <h4 className="font-semibold text-gray-500">
+          <p className="mb-4 text-base text-gray-600">
             Organizações que faço parte
-          </h4>
-          <p className="text-gray-500">
+          </p>
+          <p className="text-sm text-gray-500">
             Selecione a organização que você quer acessar
           </p>
         </div>
@@ -154,7 +154,7 @@ export default function SelectOrganizationPage() {
                                 `/institutions/socialOrganization/${userSocialOrganization.socialOrganizationId}/home`
                               )
                             }
-                            className="text-sm text-violet-500"
+                            className="text-sm font-semibold text-purple-500"
                           >
                             Acessar
                           </button>

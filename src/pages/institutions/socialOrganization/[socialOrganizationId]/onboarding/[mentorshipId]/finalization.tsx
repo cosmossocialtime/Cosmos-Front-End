@@ -29,7 +29,9 @@ export default function Finalization() {
         toast.success('Onboarding concluído')
         setShowMenu(true)
         setShowOrganization(true)
-        Router.push(`/institutions/socialOrganization/${organizationId}/home`)
+        Router.push(
+          `/institutions/socialOrganization/${organizationId}/dashboard/${mentorId}/mission-painel`
+        )
       } else {
         toast.error('Erro ao salvar as informações!')
       }

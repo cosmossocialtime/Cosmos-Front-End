@@ -83,7 +83,7 @@ export default function StarSystem() {
   return (
     <section className="min-h-screen bg-gray-400/20">
       <DynamicHeader />
-      <div className="p-6">
+      <div className="h-[calc(100vh-68px)] p-6">
         <h2 className="text-gray-500">Sistema Estelar</h2>
         <p className="my-3 max-w-[640px] text-gray-500">
           O sistema estelar é um resumo de toda a organização{' '}
@@ -94,7 +94,7 @@ export default function StarSystem() {
         </p>
 
         <div
-          className="relative mt-8 h-[500px] w-full rounded-3xl border border-violet-400 bg-black"
+          className="relative mt-8 h-[30vw] w-full rounded-3xl border border-violet-400 bg-black"
           style={{
             backgroundImage: "url('/images/Planetas/bgLogin.jpg')",
             backgroundSize: 'cover',

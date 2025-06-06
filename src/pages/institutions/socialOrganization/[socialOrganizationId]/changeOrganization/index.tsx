@@ -71,18 +71,20 @@ export default function ChangeOrganizationPage() {
   }
 
   return (
-    <section>
+    <section className="min-h-screen w-full overflow-hidden bg-gray-200">
       <DynamicHeader />
-      <section className="min-h-screen w-full bg-gray-200 p-10">
-        <div>
-          <h4 className="font-semibold text-gray-500">
+      <section className="flex h-[calc(100vh-68px)] flex-col">
+        <div className="mt-6 flex px-10">
+          <p className="mb-4 text-base text-gray-600">
             Organizações que faço parte
-          </h4>
-          <p className="text-gray-500">
-            Selecione a organização que você quer acessar ou crie uma nova
           </p>
         </div>
-        <section className="mt-10 flex flex-col items-center justify-center md:min-h-[500px]">
+        <div className="flex px-10">
+          <p className="text-sm text-gray-500">
+            Selecione a organização que você quer acessar ou crie uma nova.
+          </p>
+        </div>
+        <section className="mt-20 flex h-[50%] flex-col items-center justify-center">
           <div className="relative w-full max-w-5xl overflow-hidden px-[40px]">
             {loaded && instanceRef.current && (
               <>
@@ -130,7 +132,7 @@ export default function ChangeOrganizationPage() {
                           : ''
                       } flex items-center justify-center`}
                     >
-                      <div className="flex h-[266px] w-[218px] flex-shrink-0 flex-col justify-between rounded-xl bg-white p-5 shadow-md">
+                      <div className="flex h-[266px] w-[218px] flex-shrink-0 flex-col justify-between rounded-xl bg-white px-8 py-10 shadow-md">
                         <h1 className="text-m font-semibold text-gray-600">
                           {userSocialOrganization.socialOrganizationName || ''}
                         </h1>
@@ -153,7 +155,7 @@ export default function ChangeOrganizationPage() {
                         <div className="mt-auto pt-3">
                           {organizationId ===
                           userSocialOrganization.socialOrganizationId ? (
-                            <span className="flex items-center gap-2 text-sm text-blue-500">
+                            <span className="flex items-center gap-2 text-sm text-blue-400">
                               Organização Atual <Check />
                             </span>
                           ) : (
@@ -163,7 +165,7 @@ export default function ChangeOrganizationPage() {
                                   `/institutions/socialOrganization/${userSocialOrganization.socialOrganizationId}/home`
                                 )
                               }
-                              className="text-sm text-violet-500"
+                              className="text-sm font-semibold text-purple-500"
                             >
                               Acessar
                             </button>
@@ -184,7 +186,7 @@ export default function ChangeOrganizationPage() {
                 <div className="flex h-[266px] w-[218px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-gray-400 p-5 text-center shadow-md">
                   <Link
                     href={`/institutions/socialOrganization/${organizationId}/createOrganization`}
-                    className="text-violet-600"
+                    className="text-purple-500"
                   >
                     <div className="mb-2 text-4xl">+</div>
                     <h4 className="text-m font-semibold">

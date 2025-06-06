@@ -32,8 +32,8 @@ export default function AchievementsAreaInstitution({
               <h2
                 className={`${
                   achievement.completed
-                    ? 'text-sm font-medium text-gray-500'
-                    : 'text-sm font-medium text-gray-300'
+                    ? 'text-sm font-medium text-gray-800'
+                    : 'text-sm text-gray-400'
                 }`}
               >
                 {currentAchivement.title}
@@ -41,8 +41,8 @@ export default function AchievementsAreaInstitution({
               <p
                 className={`${
                   achievement.completed
-                    ? 'text-xs text-gray-300'
-                    : 'text-xs text-gray-500'
+                    ? 'text-xs text-gray-500'
+                    : 'text-xs text-gray-600'
                 }`}
               >
                 {currentAchivement.description}
@@ -50,7 +50,7 @@ export default function AchievementsAreaInstitution({
               {!achievement.completed && currentAchivement.completeLink && (
                 <a
                   href="#"
-                  className="mt-2 block text-xs font-semibold text-blue-500"
+                  className="mt-2 block text-xs font-semibold text-blue-400"
                 >
                   Completar
                 </a>
