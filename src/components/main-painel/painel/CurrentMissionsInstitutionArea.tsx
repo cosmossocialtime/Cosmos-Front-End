@@ -30,32 +30,32 @@ export default function CurrentMissionsInstitutionArea({
   })
 
   return (
-    <div className="relative mb-4 mt-4 flex min-h-[16rem] flex-col  rounded-lg bg-gray-200  pr-4 ">
+    <div className="relative mb-8 mt-4 flex min-h-[16rem] flex-col rounded-lg bg-gray-200 pr-4">
       <span className="absolute text-xl text-gray-600">Missões atuais</span>
 
       {mentorships.length === 0 ? (
-        <div className="relativeflex h-50 items-center justify-center overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat">
+        <div className="relativeflex h-50 mt-2 items-center justify-center overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat">
           <h1 className="z-10 px-4 text-center text-xl font-semibold text-gray-200">
             Atualmente você não está participando de nenhuma missão. <br />{' '}
             Acesse as opções abaixo e inscreva-se em uma nova aventura!
           </h1>
         </div>
       ) : (
-        <div ref={sliderRef} className="keen-slider w-full">
+        <div ref={sliderRef} className="keen-slider mt-2 w-full">
           {mentorships.map((mentorship, key) => {
             return (
               <div
                 key={mentorship.mentorshipId}
-                className={`${
+                className={`mt-4 ${
                   'number-slide' + (key + 1)
                 } keen-slider__slide relative flex flex-1 justify-between`}
               >
-                <div className="absolute bottom-0 h-80 w-full overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat" />
-                <div className="z-10 ml-10 mt-10 flex h-80 flex-col">
-                  <h2 className="mb-3 mt-10 text-2xl font-semibold text-blue-300">
+                <div className="absolute bottom-0 h-80 w-full overflow-hidden rounded-lg bg-currentMissionInstitution bg-cover bg-no-repeat" />
+                <div className="z-10 ml-10 flex h-80 flex-col">
+                  <h2 className="mb-3 mt-20 text-2xl font-semibold text-blue-300">
                     {mentorship.name}
                   </h2>
-                  <p className="mb-6 text-gray-300">
+                  <p className="mb-6 text-sm text-gray-300">
                     Sua nave está pronta para o embarque
                   </p>
                   <Link

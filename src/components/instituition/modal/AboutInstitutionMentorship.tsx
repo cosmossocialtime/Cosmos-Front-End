@@ -584,369 +584,379 @@ export const AboutInstitutionMentorshipModal = ({
   }
 
   return (
-    <section className="fixed left-0 top-0 z-[50] flex h-screen w-full items-center justify-center bg-black/50">
-      <section className="relative flex h-[672px] w-[800px] flex-col items-center overflow-y-scroll  rounded-xl bg-white p-6 shadow-lg">
-        <main
-          className={`mt-[32px] flex w-full flex-col px-4 ${
-            isEditing ? 'items-center' : ''
-          }`}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={closeModal}
+    >
+      <section className="flex h-screen w-full items-center justify-center">
+        <section
+          className="relative flex max-h-[80vh] max-w-3xl flex-col items-center overflow-y-scroll rounded-xl bg-white p-6 shadow-lg xl:max-w-3xl"
+          onClick={(e) => e.stopPropagation()}
         >
-          {!isEditing ? (
-            <div className="flex items-center">
-              <Image
-                src={StarFour}
-                alt="Estrela de quatro pontas"
-                className="h-[38px] w-[38px]"
-              />
-              <h1 className="ml-4 text-3xl font-semibold">
-                {socialOrganization.name}
-              </h1>
-              {!isInformationSend && (
-                <div className="ml-6">
-                  <EditButton
-                    text="Editar"
-                    onClick={() => setIsEditing(true)}
-                    type="submit"
-                  />
-                </div>
-              )}
-              <div className="flex gap-2">
-                <button
-                  onClick={closeModal}
-                  className="absolute right-4 top-8 text-gray-600 hover:text-gray-800"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-            </div>
-          ) : (
-            <section className="flex items-center">
-              <ProgressBar
-                steps={steps}
-                currentStep={currentStep}
-                onBack={() => (currentStep === 2 ? backBtn() : null)}
-              />
-              <div className="flex gap-2">
-                <button
-                  onClick={closeModal}
-                  className="absolute right-4 top-8 text-gray-600 hover:text-gray-800"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-            </section>
-          )}
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(handleForm, (formErrors) => {
-              console.error('ERROS DE VALIDAÇÃO:', formErrors)
-            })}
+          <main
+            className={`mt-[32px] flex w-full flex-col px-4 ${
+              isEditing ? 'items-center' : ''
+            }`}
           >
             {!isEditing ? (
-              <>
-                <div className="mt-8  p-6">
-                  <div className="mt-6 grid grid-cols-1 gap-6 text-sm text-gray-800">
-                    {/* Bloco 1: Dados básicos */}
-                    <div className="text-left">
-                      <span className="font-medium text-gray-600">
-                        Nome da organização
-                      </span>
-                      <p className="whitespace-pre-line text-gray-800">
-                        {socialOrganization.name}
-                      </p>
-                    </div>
-
-                    <div className="text-left">
-                      <span className="mb-1 block font-medium text-gray-600">
-                        Causa(s) em que atua
-                      </span>
-                      <div className="flex flex-row gap-1">
-                        {socialOrganization.causes.map((causa, index) => (
-                          <span
-                            key={index}
-                            className="w-fit rounded-full border-solid border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-gray-600"
-                          >
-                            {causa.label}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Grid de 2 colunas: CNPJ, Receita, Estado, Cidade, etc */}
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                      <div className="text-left">
-                        <span className="font-medium text-gray-600">CNPJ</span>
-                        <p className="whitespace-pre-line text-gray-800">
-                          {socialOrganization.cnpj || ''}
-                        </p>
-                      </div>
-                      <div className="text-left">
-                        <span className="font-medium text-gray-600">
-                          Receita anual
-                        </span>
-                        <p className="whitespace-pre-line text-gray-800">
-                          {socialOrganization.annualRevenue !== undefined
-                            ? formatCurrency(
-                                String(socialOrganization.annualRevenue)
-                              )
-                            : ''}
-                        </p>
-                      </div>
-                      <div className="text-left">
-                        <span className="font-medium text-gray-600">
-                          Estado
-                        </span>
-                        <p className="whitespace-pre-line text-gray-800">
-                          {socialOrganization.state || ''}
-                        </p>
-                      </div>
-                      <div className="text-left">
-                        <span className="font-medium text-gray-600">
-                          Cidade
-                        </span>
-                        <p className="whitespace-pre-line text-gray-800">
-                          {selectedCidade?.label || ''}
-                        </p>
-                      </div>
-                      <div className="text-left">
-                        <span className="font-medium text-gray-600">
-                          Nº de funcionários
-                        </span>
-                        <p className="whitespace-pre-line text-gray-800">
-                          {socialOrganization.collaborators || ''}
-                        </p>
-                      </div>
-                      <div className="text-left">
-                        <span className="font-medium text-gray-600">
-                          Nº de beneficiários
-                        </span>
-                        <p className="whitespace-pre-line text-gray-800">
-                          {socialOrganization.beneficiaries || ''}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Bloco de arquivos */}
-                    <div className="text-left">
-                      <span className="font-medium text-gray-600">
-                        Estatuto ou Contrato Social
-                      </span>
-                      {socialOrganization.estatutoFileLocation ? (
-                        <div>
-                          <a
-                            href={socialOrganization.estatutoFileLocation}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-2 text-blue-600 underline"
-                          >
-                            Arquivo
-                          </a>
-                        </div>
-                      ) : (
-                        <p className="whitespace-pre-line text-gray-800">
-                          Sem estatuto
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Blocos de texto longo */}
-                    <div className="text-left">
-                      <span className="font-medium text-gray-600">
-                        Escreva brevemente a história da instituição
-                      </span>
-                      <p className="whitespace-pre-line break-words text-gray-800">
-                        {socialOrganization.history || ''}
-                      </p>
-                    </div>
-
-                    <div className="text-left">
-                      <span className="font-medium text-gray-600">
-                        Qual a atuação e o impacto da organização?
-                      </span>
-                      <p className="whitespace-pre-line break-words text-gray-800">
-                        {socialOrganization.socialImpact || ''}
-                      </p>
-                    </div>
-
-                    <div className="text-left">
-                      <span className="font-medium text-gray-600">
-                        Quais são as principais necessidades e desafios que a
-                        sua organização enfrenta no momento?
-                      </span>
-                      <p className="whitespace-pre-line break-words text-gray-800">
-                        {socialOrganization.mainChallenges || ''}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                {currentStep === 1 && (
-                  <div className="mt-8 w-[736px] p-6">
-                    <InputField
-                      label="Nome da organização"
-                      name="nomeInstituicao"
-                      placeholder="Ex: Amigos da Cosmos"
-                      register={register}
-                      error={errors.nomeInstituicao?.message}
-                    />
-                    <br />
-
-                    <MultiSelectComboBox
-                      options={causes}
-                      maxSelections={3}
-                      value={selectedOptions}
-                      onChange={handleChange}
-                      label="Causa(s) em que atua (até 3)"
-                    />
-
-                    <div className="mb-4 mt-4 flex gap-4">
-                      <MaskedInputField
-                        label="CNPJ"
-                        name="cnpj"
-                        placeholder="00.000.000/0000-00"
-                        register={register}
-                        setValue={setValue}
-                        error={errors.cnpj?.message}
-                        disabled={semCnpj}
-                      />
-
-                      <MaskedInputField
-                        label="Receita Anual"
-                        name="receitaAnual"
-                        placeholder="R$ 0,00"
-                        register={register}
-                        setValue={setValue}
-                        defaultValue={selectedReceitaAnual}
-                        error={errors.receitaAnual?.message}
-                      />
-                    </div>
-                    <div className="mb-2 mt-[-25px] flex items-center">
-                      <CustomCheckbox
-                        checked={semCnpj}
-                        setChecked={handleSemCnpjChange}
-                        labelText="Não possui CNPJ"
-                      />
-                    </div>
-                    <MaskedDateField
-                      label="Data de Fundação"
-                      name="dataFundacao"
-                      register={register}
-                      setValue={setValue}
-                      error={errors.dataFundacao?.message}
-                      defaultDate={selectedCreationDate}
-                    />
-
-                    <div className="mb-4 mt-4 flex gap-4">
-                      <SingleSelectComboBox
-                        instanceId="estado-instance"
-                        options={estados}
-                        label="Estado"
-                        onChange={handleEstadoChange}
-                        value={selectedEstado}
-                        isDisabled={foraDoBrasil}
-                      />
-                      <SingleSelectComboBox
-                        instanceId="cidade-instance"
-                        options={cidades}
-                        label="Cidade"
-                        onChange={handleCidadeChange}
-                        value={selectedCidade}
-                        isDisabled={!selectedEstado || foraDoBrasil}
-                      />
-                    </div>
-
-                    <div className="mb-2 mt-[-25px] flex items-center">
-                      <CustomCheckbox
-                        checked={foraDoBrasil}
-                        setChecked={handleForaDoBrasilChange}
-                        labelText="Organização localizada fora do Brasil"
-                      />
-                    </div>
-                    <div className="mb-4 flex gap-4">
-                      <InputField
-                        label="Número de Funcionários"
-                        name="nFuncionarios"
-                        register={register}
-                        placeholder="0"
-                        error={errors.nFuncionarios?.message}
-                      />
-                      <InputField
-                        label="Número de Beneficiários"
-                        name="nBeneficiarios"
-                        register={register}
-                        placeholder="0"
-                        error={errors.nBeneficiarios?.message}
-                      />
-                    </div>
-
-                    <FileUpload
-                      label="Estatuto ou Contrato Social"
-                      onFileChange={(file) => {
-                        setValue('estatuto', file || undefined, {
-                          shouldValidate: true,
-                        })
-                      }}
-                      fileUrl={socialOrganization?.estatutoFileLocation}
-                    />
-                    <div className="mb-2 mt-[12px] flex items-center">
-                      <CustomCheckbox
-                        checked={semEstatuto}
-                        setChecked={(value) => setSemEstatuto(value)}
-                        labelText="Não possui Estatuto ou Contrato Social"
-                      />
-                    </div>
-                    <Button
-                      text="Continuar"
-                      disabled={isButtonDisabled || isLoading}
-                      onClick={() => setCurrentStep(2)}
+              <div className="flex items-center">
+                <Image
+                  src={StarFour}
+                  alt="Estrela de quatro pontas"
+                  className="h-[38px] w-[38px]"
+                />
+                <h1 className="ml-4 text-3xl font-semibold">
+                  {socialOrganization.name}
+                </h1>
+                {!isInformationSend && (
+                  <div className="ml-6">
+                    <EditButton
+                      text="Editar"
+                      onClick={() => setIsEditing(true)}
+                      type="submit"
                     />
                   </div>
                 )}
-                {currentStep === 2 && (
-                  <section className="w-full">
-                    <div className="mt-8 flex w-full flex-col gap-3 p-6">
-                      <TextAreaField
-                        label="Escreva brevemente a história da instituição?"
-                        name="history"
-                        placeholder="Digite aqui"
-                        value={history}
+                <div className="flex gap-2">
+                  <button
+                    onClick={closeModal}
+                    className="absolute right-4 top-8 text-gray-600 hover:text-gray-800"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <section className="flex items-center">
+                <ProgressBar
+                  steps={steps}
+                  currentStep={currentStep}
+                  onBack={() => (currentStep === 2 ? backBtn() : null)}
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={closeModal}
+                    className="absolute right-4 top-8 text-gray-600 hover:text-gray-800"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+              </section>
+            )}
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit(handleForm, (formErrors) => {
+                console.error('ERROS DE VALIDAÇÃO:', formErrors)
+              })}
+            >
+              {!isEditing ? (
+                <>
+                  <div className="mt-8  p-6">
+                    <div className="mt-6 grid grid-cols-1 gap-6 text-sm text-gray-800">
+                      {/* Bloco 1: Dados básicos */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-600">
+                          Nome da organização
+                        </span>
+                        <p className="whitespace-pre-line text-gray-800">
+                          {socialOrganization.name}
+                        </p>
+                      </div>
+
+                      <div className="text-left">
+                        <span className="mb-1 block font-medium text-gray-600">
+                          Causa(s) em que atua
+                        </span>
+                        <div className="flex flex-row gap-1">
+                          {socialOrganization.causes.map((causa, index) => (
+                            <span
+                              key={index}
+                              className="w-fit rounded-full border-solid border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-gray-600"
+                            >
+                              {causa.label}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Grid de 2 colunas: CNPJ, Receita, Estado, Cidade, etc */}
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div className="text-left">
+                          <span className="font-medium text-gray-600">
+                            CNPJ
+                          </span>
+                          <p className="whitespace-pre-line text-gray-800">
+                            {socialOrganization.cnpj || ''}
+                          </p>
+                        </div>
+                        <div className="text-left">
+                          <span className="font-medium text-gray-600">
+                            Receita anual
+                          </span>
+                          <p className="whitespace-pre-line text-gray-800">
+                            {socialOrganization.annualRevenue !== undefined
+                              ? formatCurrency(
+                                  String(socialOrganization.annualRevenue)
+                                )
+                              : ''}
+                          </p>
+                        </div>
+                        <div className="text-left">
+                          <span className="font-medium text-gray-600">
+                            Estado
+                          </span>
+                          <p className="whitespace-pre-line text-gray-800">
+                            {socialOrganization.state || ''}
+                          </p>
+                        </div>
+                        <div className="text-left">
+                          <span className="font-medium text-gray-600">
+                            Cidade
+                          </span>
+                          <p className="whitespace-pre-line text-gray-800">
+                            {selectedCidade?.label || ''}
+                          </p>
+                        </div>
+                        <div className="text-left">
+                          <span className="font-medium text-gray-600">
+                            Nº de funcionários
+                          </span>
+                          <p className="whitespace-pre-line text-gray-800">
+                            {socialOrganization.collaborators || ''}
+                          </p>
+                        </div>
+                        <div className="text-left">
+                          <span className="font-medium text-gray-600">
+                            Nº de beneficiários
+                          </span>
+                          <p className="whitespace-pre-line text-gray-800">
+                            {socialOrganization.beneficiaries || ''}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Bloco de arquivos */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-600">
+                          Estatuto ou Contrato Social
+                        </span>
+                        {socialOrganization.estatutoFileLocation ? (
+                          <div>
+                            <a
+                              href={socialOrganization.estatutoFileLocation}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-2 text-blue-600 underline"
+                            >
+                              Arquivo
+                            </a>
+                          </div>
+                        ) : (
+                          <p className="whitespace-pre-line text-gray-800">
+                            Sem estatuto
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Blocos de texto longo */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-600">
+                          Escreva brevemente a história da instituição
+                        </span>
+                        <p className="whitespace-pre-line break-words text-gray-800">
+                          {socialOrganization.history || ''}
+                        </p>
+                      </div>
+
+                      <div className="text-left">
+                        <span className="font-medium text-gray-600">
+                          Qual a atuação e o impacto da organização?
+                        </span>
+                        <p className="whitespace-pre-line break-words text-gray-800">
+                          {socialOrganization.socialImpact || ''}
+                        </p>
+                      </div>
+
+                      <div className="text-left">
+                        <span className="font-medium text-gray-600">
+                          Quais são as principais necessidades e desafios que a
+                          sua organização enfrenta no momento?
+                        </span>
+                        <p className="whitespace-pre-line break-words text-gray-800">
+                          {socialOrganization.mainChallenges || ''}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {currentStep === 1 && (
+                    <div className="mt-8 w-[736px] p-6">
+                      <InputField
+                        label="Nome da organização"
+                        name="nomeInstituicao"
+                        placeholder="Ex: Amigos da Cosmos"
                         register={register}
-                        error={errors.history?.message}
+                        error={errors.nomeInstituicao?.message}
                       />
-                      <TextAreaField
-                        label="Qual a atuação e o impacto da organização?"
-                        name="impact"
-                        placeholder="Digite aqui"
-                        value={impact}
-                        register={register}
-                        error={errors.impact?.message}
-                      />
-                      <TextAreaField
-                        label="Quais são as principais necessidades e desafios que a sua organização enfrenta no momento?"
-                        name="challenges"
-                        value={challenges}
-                        placeholder="Digite aqui"
-                        register={register}
-                        error={errors.challenges?.message}
+                      <br />
+
+                      <MultiSelectComboBox
+                        options={causes}
+                        maxSelections={3}
+                        value={selectedOptions}
+                        onChange={handleChange}
+                        label="Causa(s) em que atua (até 3)"
                       />
 
-                      <div className="max-w-[240px]">
-                        <Button
-                          text="Continuar"
-                          disabled={isButtonDisabled}
-                          type="submit"
+                      <div className="mb-4 mt-4 flex gap-4">
+                        <MaskedInputField
+                          label="CNPJ"
+                          name="cnpj"
+                          placeholder="00.000.000/0000-00"
+                          register={register}
+                          setValue={setValue}
+                          error={errors.cnpj?.message}
+                          disabled={semCnpj}
+                        />
+
+                        <MaskedInputField
+                          label="Receita Anual"
+                          name="receitaAnual"
+                          placeholder="R$ 0,00"
+                          register={register}
+                          setValue={setValue}
+                          defaultValue={selectedReceitaAnual}
+                          error={errors.receitaAnual?.message}
                         />
                       </div>
+                      <div className="mb-2 mt-[-25px] flex items-center">
+                        <CustomCheckbox
+                          checked={semCnpj}
+                          setChecked={handleSemCnpjChange}
+                          labelText="Não possui CNPJ"
+                        />
+                      </div>
+                      <MaskedDateField
+                        label="Data de Fundação"
+                        name="dataFundacao"
+                        register={register}
+                        setValue={setValue}
+                        error={errors.dataFundacao?.message}
+                        defaultDate={selectedCreationDate}
+                      />
+
+                      <div className="mb-4 mt-4 flex gap-4">
+                        <SingleSelectComboBox
+                          instanceId="estado-instance"
+                          options={estados}
+                          label="Estado"
+                          onChange={handleEstadoChange}
+                          value={selectedEstado}
+                          isDisabled={foraDoBrasil}
+                        />
+                        <SingleSelectComboBox
+                          instanceId="cidade-instance"
+                          options={cidades}
+                          label="Cidade"
+                          onChange={handleCidadeChange}
+                          value={selectedCidade}
+                          isDisabled={!selectedEstado || foraDoBrasil}
+                        />
+                      </div>
+
+                      <div className="mb-2 mt-[-25px] flex items-center">
+                        <CustomCheckbox
+                          checked={foraDoBrasil}
+                          setChecked={handleForaDoBrasilChange}
+                          labelText="Organização localizada fora do Brasil"
+                        />
+                      </div>
+                      <div className="mb-4 flex gap-4">
+                        <InputField
+                          label="Número de Funcionários"
+                          name="nFuncionarios"
+                          register={register}
+                          placeholder="0"
+                          error={errors.nFuncionarios?.message}
+                        />
+                        <InputField
+                          label="Número de Beneficiários"
+                          name="nBeneficiarios"
+                          register={register}
+                          placeholder="0"
+                          error={errors.nBeneficiarios?.message}
+                        />
+                      </div>
+
+                      <FileUpload
+                        label="Estatuto ou Contrato Social"
+                        onFileChange={(file) => {
+                          setValue('estatuto', file || undefined, {
+                            shouldValidate: true,
+                          })
+                        }}
+                        fileUrl={socialOrganization?.estatutoFileLocation}
+                      />
+                      <div className="mb-2 mt-[12px] flex items-center">
+                        <CustomCheckbox
+                          checked={semEstatuto}
+                          setChecked={(value) => setSemEstatuto(value)}
+                          labelText="Não possui Estatuto ou Contrato Social"
+                        />
+                      </div>
+                      <Button
+                        text="Continuar"
+                        disabled={isButtonDisabled || isLoading}
+                        onClick={() => setCurrentStep(2)}
+                      />
                     </div>
-                  </section>
-                )}
-              </>
-            )}
-          </form>
-        </main>
+                  )}
+                  {currentStep === 2 && (
+                    <section className="w-full">
+                      <div className="mt-8 flex w-full flex-col gap-3 p-6">
+                        <TextAreaField
+                          label="Escreva brevemente a história da instituição?"
+                          name="history"
+                          placeholder="Digite aqui"
+                          value={history}
+                          register={register}
+                          error={errors.history?.message}
+                        />
+                        <TextAreaField
+                          label="Qual a atuação e o impacto da organização?"
+                          name="impact"
+                          placeholder="Digite aqui"
+                          value={impact}
+                          register={register}
+                          error={errors.impact?.message}
+                        />
+                        <TextAreaField
+                          label="Quais são as principais necessidades e desafios que a sua organização enfrenta no momento?"
+                          name="challenges"
+                          value={challenges}
+                          placeholder="Digite aqui"
+                          register={register}
+                          error={errors.challenges?.message}
+                        />
+
+                        <div className="max-w-[240px]">
+                          <Button
+                            text="Continuar"
+                            disabled={isButtonDisabled}
+                            type="submit"
+                          />
+                        </div>
+                      </div>
+                    </section>
+                  )}
+                </>
+              )}
+            </form>
+          </main>
+        </section>
       </section>
-    </section>
+    </div>
   )
 }

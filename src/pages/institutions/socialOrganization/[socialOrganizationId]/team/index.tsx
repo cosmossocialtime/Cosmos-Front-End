@@ -1,4 +1,3 @@
-import { CaretDown, CaretUp, Check } from 'phosphor-react'
 import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { useEffect, useState } from 'react'
 import { InviteForm } from '../../../../../components/instituition/painel/teams/InviteForm'
@@ -11,6 +10,7 @@ import { UserProps } from '../../../../../types/user'
 import { SocialOrganizationProps } from '../../../../../types/socialOrganization'
 import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
+import { PermissionDropdown } from '../../../../../components/instituition/painel/teams/PermissionDropdown'
 
 export default function Teams() {
   const router = useRouter()
@@ -29,6 +29,14 @@ export default function Teams() {
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<number | null>(
     null
   )
+  const adminCount =
+    users &&
+    users.filter(
+      (u: UserProps) =>
+        permissionsLabels.get(
+          (u.socialOrganizations && u.socialOrganizations[0].role?.role) || ''
+        ) === 'Administrador'
+    ).length
 
   useEffect(() => {
     if (organizationId) {
@@ -55,8 +63,17 @@ export default function Teams() {
     }
   }, [organizationId])
 
-  const toggleModalDelete = (index: number) => {
-    setIsOpenModalDelete((prev) => (prev === index ? null : index))
+  const toggleModalDelete = (index: number, usuario: UserProps) => {
+    const currentRole =
+      usuario.socialOrganizations &&
+      permissionsLabels.get(usuario.socialOrganizations[0].role?.role || '')
+    const isOnlyAdmin =
+      currentRole === 'Administrador' &&
+      adminCount === 1 &&
+      usuario.id === user.id
+    if (!isOnlyAdmin) {
+      setIsOpenModalDelete((prev) => (prev === index ? null : index))
+    }
   }
 
   const toggleDropdown = (index: number) => {
@@ -108,7 +125,7 @@ export default function Teams() {
       <DynamicHeader />
       <div className="p-6">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-500">Equipe</h2>
+          <h2 className="text-base text-gray-600">Equipe</h2>
           <button
             onClick={handleInviteForm}
             className="rounded-md bg-violet-600 px-6 py-2 text-white"
@@ -117,23 +134,23 @@ export default function Teams() {
           </button>
         </div>
 
-        <div className="rounded-lg bg-white p-4 shadow-lg">
-          <table className="min-w-full table-auto">
+        <div>
+          <table className="min-w-full table-auto rounded-lg bg-white shadow-lg">
             <thead>
-              <tr className="border-b-2 border-gray-300">
-                <th className="px-4 py-2 text-left text-sm font-semibold">
+              <tr className="border border-l-0 border-r-0 border-t-0 border-solid border-gray-200 p-4">
+                <th className="px-8 py-6 text-left text-sm font-semibold">
                   Nome
                 </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">
+                <th className="px-8 py-6 text-left text-sm font-semibold">
                   Cargo
                 </th>
-                <th className="px-4 py-2 text-left text-sm font-semibold">
+                <th className="px-8 py-6 text-left text-sm font-semibold">
                   Permissões
                 </th>
                 {permissionsLabels.get(
                   user.socialOrganizations[0].role.role
                 ) === 'Administrador' && (
-                  <th className="px-4 py-2 text-left text-sm font-semibold">
+                  <th className="px-8 py-6 text-left text-sm font-semibold">
                     Ações
                   </th>
                 )}
@@ -141,98 +158,29 @@ export default function Teams() {
             </thead>
             <tbody>
               {users.map((usuario: UserProps, index: number) => (
-                <tr key={usuario.id} className="border-b border-gray-200">
-                  <td className="px-4 py-3 text-sm">{usuario.fullName}</td>
-                  <td className="px-4 py-3 text-sm">
+                <tr
+                  key={usuario.id}
+                  className="border border-l-0 border-r-0 border-t-0 border-solid border-gray-200 p-4 last:border-b-0"
+                >
+                  <td className="px-8 py-6 text-sm">{usuario.fullName}</td>
+                  <td className="px-8 py-6 text-sm">
                     {usuario.socialOrganizations &&
                       usuario.socialOrganizations[0].professionalRole}
                   </td>
-                  <td className="px-4 py-3 text-sm">
+                  <td className="px-8 py-6 text-sm">
                     {permissionsLabels.get(
                       user.socialOrganizations[0].role.role
-                    ) === 'Administrador' && (
-                      <div className="relative">
-                        <button
-                          className="flex items-center gap-2 text-sm"
-                          onClick={() => toggleDropdown(index)}
-                        >
-                          {permissionsLabels.get(
-                            (usuario.socialOrganizations &&
-                              usuario.socialOrganizations[0].role?.role) ||
-                              ''
-                          )}{' '}
-                          {openDropdown === index ? <CaretUp /> : <CaretDown />}
-                        </button>
-                        {openDropdown === index && (
-                          <div className="absolute left-0 z-50 mt-2 w-[400px] rounded-md border bg-white shadow-lg">
-                            <button
-                              className={`${
-                                permissionsLabels.get(
-                                  (usuario.socialOrganizations &&
-                                    usuario.socialOrganizations[0].role
-                                      ?.role) ||
-                                    ''
-                                ) === 'Administrador' && 'bg-blue-400/5'
-                              } flex w-full items-center justify-between p-4 text-left`}
-                              onClick={() =>
-                                togglePermission(
-                                  usuario,
-                                  'social_organization_manager'
-                                )
-                              }
-                            >
-                              <div>
-                                <h1 className="font-semibold">Administrador</h1>
-                                <p className="text-sm">
-                                  Pode visualizar e editar informações, mudar
-                                  permissões e adicionar e remover membros
-                                </p>
-                              </div>
-                              {permissionsLabels.get(
-                                (usuario.socialOrganizations &&
-                                  usuario.socialOrganizations[0].role?.role) ||
-                                  ''
-                              ) === 'Administrador' && (
-                                <Check className="text-green-500" size={24} />
-                              )}
-                            </button>
-                            <button
-                              className={`${
-                                permissionsLabels.get(
-                                  (usuario.socialOrganizations &&
-                                    usuario.socialOrganizations[0].role
-                                      ?.role) ||
-                                    ''
-                                ) === 'Membro' && 'bg-blue-400/5'
-                              } flex w-full items-center justify-between p-4 text-left`}
-                              onClick={() =>
-                                togglePermission(
-                                  usuario,
-                                  'social_organization_member'
-                                )
-                              }
-                            >
-                              <div>
-                                <h1 className="font-semibold">Membro</h1>
-                                <p className="text-sm">
-                                  Pode visualizar e editar informações
-                                </p>
-                              </div>
-                              {permissionsLabels.get(
-                                (usuario.socialOrganizations &&
-                                  usuario.socialOrganizations[0].role?.role) ||
-                                  ''
-                              ) === 'Membro' && (
-                                <Check className="text-green-500" size={20} />
-                              )}
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    {permissionsLabels.get(
-                      user.socialOrganizations[0].role.role
-                    ) === 'Membro' && (
+                    ) === 'Administrador' ? (
+                      <PermissionDropdown
+                        usuario={usuario}
+                        user={user}
+                        isOpen={openDropdown === index}
+                        toggleDropdown={() => toggleDropdown(index)}
+                        index={index}
+                        togglePermission={togglePermission}
+                        adminCount={adminCount}
+                      />
+                    ) : (
                       <span className="text-gray-500">
                         {permissionsLabels.get(
                           (usuario.socialOrganizations &&
@@ -245,9 +193,9 @@ export default function Teams() {
                   {permissionsLabels.get(
                     user.socialOrganizations[0].role.role
                   ) === 'Administrador' && (
-                    <td className="px-4 py-3 text-sm">
+                    <td className="px-8 py-6 text-sm">
                       <button
-                        onClick={() => toggleModalDelete(index)}
+                        onClick={() => toggleModalDelete(index, usuario)}
                         className="text-red-500 hover:text-red-700"
                       >
                         Remover

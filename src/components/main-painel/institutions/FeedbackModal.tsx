@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useEffect, useState } from 'react'
 import { Button } from '../../Button/ButtonSubmit'
-import { textAreaSchema } from '../../../utils/ValidationSchemas'
+import { textAreaFeedbackSchema } from '../../../utils/ValidationSchemas'
 import { toast } from 'react-toastify'
 import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
@@ -14,7 +14,7 @@ interface FeedbackModalProps {
 }
 
 const schema = z.object({
-  feedback: textAreaSchema,
+  feedback: textAreaFeedbackSchema,
 })
 
 type formProps = z.infer<typeof schema>
@@ -34,7 +34,7 @@ export const FeedbackModal = ({ closeModal }: FeedbackModalProps) => {
 
   useEffect(() => {
     const checkInput = () => {
-      if (feedbackW?.length >= 100) {
+      if (feedbackW?.length >= 1) {
         setIsDisabled(false)
       } else {
         setIsDisabled(true)
@@ -66,33 +66,43 @@ export const FeedbackModal = ({ closeModal }: FeedbackModalProps) => {
   }
 
   return (
-    <section className="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black/50">
-      <section className="gap-6 rounded-md bg-white  p-6 md:h-[391px] md:w-[720px]">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-gray-800">
-            Ajude a Cosmos a alcançar novos horizontes
-          </h1>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={closeModal}
+    >
+      <section className="flex h-screen w-full items-center justify-center">
+        <section
+          className="gap-6 rounded-md bg-white  p-6 md:h-[391px] md:w-[720px]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="text-xl font-semibold text-gray-800">
+              Ajude a Cosmos a alcançar novos horizontes
+            </h1>
 
-          <X className="cursor-pointer" onClick={closeModal} />
-        </div>
-
-        <form onSubmit={handleSubmit(handleForm)} className="text-m">
-          <div className="mb-6">
-            <TextAreaField
-              label="Conte-nos a sua sugestão ou feedback para a plataforma"
-              rows={6}
-              name="feedback"
-              value={feedbackW}
-              register={register}
-              error={errors.feedback?.message}
-            />
+            <X className="cursor-pointer" onClick={closeModal} />
           </div>
 
-          <div className="max-w-[240px]">
-            <Button text="Enviar" disabled={isDisabled} type="submit" />
-          </div>
-        </form>
+          <form onSubmit={handleSubmit(handleForm)} className="text-m">
+            <div className="mb-6">
+              <TextAreaField
+                label="Conte-nos a sua sugestão ou feedback para a plataforma"
+                rows={6}
+                name="feedback"
+                value={feedbackW}
+                register={register}
+                error={errors.feedback?.message}
+                minLength={1}
+                maxLength={2500}
+              />
+            </div>
+
+            <div className="max-w-[240px]">
+              <Button text="Enviar" disabled={isDisabled} type="submit" />
+            </div>
+          </form>
+        </section>
       </section>
-    </section>
+    </div>
   )
 }

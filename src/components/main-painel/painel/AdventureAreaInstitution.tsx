@@ -42,7 +42,7 @@ export default function AdventureAreaInstitution({
 
   return (
     <div>
-      <div className={`overflow-y-auto pb-5 pr-4 `}>
+      <div className={`overflow-y-auto pb-5 pr-4`}>
         {programs.length === 0 ? (
           <div className="mt-60 flex flex-col items-center space-y-4">
             <div>
@@ -66,7 +66,7 @@ export default function AdventureAreaInstitution({
         ) : (
           <>
             {programsSubscribed.length > 0 && (
-              <h2 className="mb-4 text-lg text-gray-600">Inscrições</h2>
+              <h2 className="text-lg text-gray-600">Inscrições</h2>
             )}
             {programsSubscribed.length > 0 &&
               programsSubscribed.map((program, key) => (
@@ -88,12 +88,12 @@ export default function AdventureAreaInstitution({
                         </h3>
                         <p className="text-sm text-gray-600">
                           {program.description.length > 100
-                            ? program.description.substring(0, 100)
+                            ? program.description.substring(0, 100) + '...'
                             : program.description}
                         </p>
                       </div>
 
-                      <div className="mr-4 flex items-center gap-1 rounded-full bg-gray-200 px-3 py-2">
+                      <div className="mr-4 flex min-w-[15vw] items-center gap-1 rounded-full bg-gray-200 px-3 py-2">
                         <Check size={24} className="text-[#46CE9D]" />
                         <span className="text-xs text-gray-500">
                           Você já se inscreveu nessa aventura!
@@ -108,7 +108,7 @@ export default function AdventureAreaInstitution({
                 </>
               ))}
             {programsUnsubscribed.length > 0 && (
-              <h2 className="mb-4 mt-4 text-lg text-gray-600">
+              <h2 className="mb-4 mt-12 text-lg text-gray-600">
                 Inscreva-se em uma nova aventura
               </h2>
             )}
@@ -132,7 +132,7 @@ export default function AdventureAreaInstitution({
                         </h3>
                         <p className="text-sm text-gray-600">
                           {program.description.length > 100
-                            ? program.description.substring(0, 100)
+                            ? program.description.substring(0, 100) + '...'
                             : program.description}
                         </p>
                       </div>
@@ -146,7 +146,7 @@ export default function AdventureAreaInstitution({
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex min-w-[15vw] items-center gap-2">
                           <Calendar size={32} />
                           <span className="text-xs">
                             de {dayjs(program.startDate).format('DD/MM/YYYY')}{' '}

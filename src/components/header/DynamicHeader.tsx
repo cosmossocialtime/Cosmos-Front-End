@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Camera, List, X } from 'phosphor-react'
 import Link from 'next/link'
 import Logo from '../../../public/images/logotipoCosmos.svg'
@@ -24,10 +24,10 @@ export default function DynamicHeader() {
 
   return (
     <header className="flex h-[68px] w-full items-center justify-between bg-white px-6 shadow-md">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 px-6">
         <LogoWithLink socialOrganizationId={socialOrganizationId || 0} />
         {showOrganization && (
-          <span className="text-gray-700">{organizationName}</span>
+          <span className="px-6 text-gray-700">{organizationName}</span>
         )}
       </div>
 
@@ -80,6 +80,8 @@ function UserMenu({
   profilePicture: string | null
 }) {
   const [dropdownMenu, setDropdownMenu] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
   function toggleDropdown() {
     setDropdownMenu((prev) => !prev)
   }
@@ -87,6 +89,25 @@ function UserMenu({
   function handleCloseMenu() {
     setDropdownMenu(false)
   }
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownMenu(false)
+      }
+    }
+
+    if (dropdownMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [dropdownMenu])
 
   return (
     <div className="flex items-center gap-4">
@@ -119,9 +140,10 @@ function UserMenu({
             </div>
           </span>
         </Link>
+
         <div className="h-5 w-[1px] bg-slate-100" />
 
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
           {dropdownMenu ? (
             <X
               onClick={toggleDropdown}
@@ -137,7 +159,7 @@ function UserMenu({
               color="#4B5563"
             />
           )}
-          {/* Dropdown */}
+
           {dropdownMenu && (
             <DropdownMenu routes={routes} onClose={handleCloseMenu} />
           )}

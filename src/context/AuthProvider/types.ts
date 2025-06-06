@@ -14,7 +14,10 @@ export interface User {
 export interface IContext {
   isAutenticate: boolean
   user: UserLogged | null
-  signIn: (data: SignInData) => Promise<void>
+  signIn: (
+    data: SignInData,
+    socialOrganizationId: string | null
+  ) => Promise<void>
   signOut: () => void
 }
 

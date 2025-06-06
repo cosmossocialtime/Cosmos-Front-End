@@ -161,7 +161,7 @@ export function Calendar() {
       </header>
 
       {/* Corpo do calendário */}
-      <div className="mt-4 flex h-[calc(100vh-242px)] w-full flex-1 flex-col gap-2 px-8 py-4 text-gray-500 2xl:gap-4">
+      <div className="flex h-[calc(100vh-224px)] w-full flex-1 flex-col gap-2 px-8 pb-2 pt-4 text-gray-500 2xl:gap-4">
         {/* Dias da semana */}
         <div className="grid w-full grid-cols-7 gap-2 text-center 2xl:gap-6">
           {daysOfWeek.map((day) => (
@@ -172,7 +172,7 @@ export function Calendar() {
         </div>
 
         {/* Dias do mês */}
-        <div className="grid flex-1 grid-cols-7 gap-6">
+        <div className="grid flex-1 grid-cols-7 gap-2">
           {/* Dias do mês anterior */}
           {daysOfPreviousMonth.map((day) => (
             <DefaultCardDay
@@ -219,12 +219,12 @@ export function Calendar() {
                     >
                       {hasEvents && (
                         <>
-                          <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 overflow-clip truncate px-2 font-normal">
+                          <span className="mb-2 ml-2 block truncate text-sm">
                             {dayjs(sortedEvents[0].startAt).format('HH:mm')}{' '}
                             {sortedEvents[0].title}
                           </span>
                           {sortedEvents.length > 1 && (
-                            <span className="absolute bottom-2 left-2 font-normal">
+                            <span className="block text-xs">
                               Mais {sortedEvents.length - 1}
                             </span>
                           )}

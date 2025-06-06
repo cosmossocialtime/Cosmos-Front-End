@@ -62,7 +62,7 @@ export function useTeam(socialOrganizationId: number) {
         const response = await invokeLambda<
           typeof payload,
           { statusCode: number; body: string }
-        >('user-role-update-lambda', payload)
+        >('social-organization-member-role-update-lambda', payload)
         return JSON.parse(response.body)
       },
       onSuccess: () => {
@@ -76,11 +76,14 @@ export function useTeam(socialOrganizationId: number) {
 
   const { mutate: deleteUser, isLoading: isDeletingUser } = useMutation({
     mutationFn: async (userId: number) => {
-      const payload = { userId }
+      const payload = {
+        userId: userId,
+        socialOrganizationId: socialOrganizationId,
+      }
       const response = await invokeLambda<
         typeof payload,
         { statusCode: number; body: string }
-      >('user-delete-lambda', payload)
+      >('social-organization-member-delete-lambda', payload)
       return JSON.parse(response.body)
     },
     onSuccess: () => {

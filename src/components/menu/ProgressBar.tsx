@@ -1,6 +1,4 @@
 import Image from 'next/image'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 interface ProgressBarProps {
   steps: { id: number; label: string }[]
@@ -30,14 +28,16 @@ export default function ProgressBar({
   },
 }: ProgressBarProps) {
   return (
-    <div className="flex w-full items-center justify-between">
+    <div className="flex w-full flex-nowrap items-center justify-between">
       {(currentStep > 1 || backFirstPage) && (
-        <button onClick={onBack} className="mr-4 flex items-center">
-          <Image src={icons.backArrow} alt="Voltar" width={24} height={24} />
-        </button>
+        <div className="absolute left-10 z-10">
+          <button onClick={onBack}>
+            <Image src={icons.backArrow} alt="Voltar" width={24} height={24} />
+          </button>
+        </div>
       )}
       {steps.map((step, index) => (
-        <div key={step.id} className="flex items-center">
+        <div key={step.id} className="flex flex-nowrap items-center">
           <div
             className="relative flex h-8 w-8 items-center justify-center"
             style={{ fontSize: '16px' }}
@@ -84,11 +84,11 @@ export default function ProgressBar({
 
           <span
             style={{ fontSize: '14px' }}
-            className={`pl-[10px] ${
+            className={`whitespace-nowrap pl-[10px] ${
               currentStep > step.id
                 ? 'text-black'
                 : currentStep === step.id
-                ? 'font-bold text-black'
+                ? 'font-semibold text-black'
                 : 'text-gray-400'
             }`}
           >

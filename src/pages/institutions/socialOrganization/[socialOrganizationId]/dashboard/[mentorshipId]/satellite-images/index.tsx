@@ -34,7 +34,7 @@ interface PlanetItemProps {
 
 const baseLeftPlanets: (PlanetItemProps | null)[] = [
   {
-    imageSrc: '/images/satelites/financas.png',
+    imageSrc: '/images/satelites/recursos.png',
     name: 'Captação de recursos',
     id: 7,
     sectorData: {
@@ -335,31 +335,31 @@ export default function SateliteImages() {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-y-auto bg-gray-200 text-gray-800">
+    <div
+      className="flex min-h-screen w-full flex-col bg-black bg-gray-200 text-gray-800"
+      style={{
+        backgroundImage: "url('/images/Planetas/bgLogin.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <DynamicHeader />
-      <div className="flex h-[calc(100vh-68px)] w-full overflow-hidden">
+      <div className="flex h-[calc(100vh-68px)] w-full overflow-y-auto">
         <SideBar />
-        <div
-          className="relative h-full w-full bg-black"
-          style={{
-            backgroundImage: "url('/images/Planetas/bgLogin.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
-          <div className="absolute inset-0 flex flex-col items-center justify-start">
+        <div className="relative w-full">
+          <div className="flex h-full flex-1 flex-col items-center">
             {/* Cabeçalho com instruções */}
             {!informationSend && (
               <div className="w-full backdrop-blur-sm">
                 {allFilled ? (
                   <div className="max-w-5xl">
-                    <p className="mt-10 gap-10 pl-10 text-xl leading-relaxed text-white">
+                    <p className="mt-6 gap-10 px-10 text-xl leading-relaxed text-white">
                       Verifique se as informações de cada área da organização
                       estão corretas e envie-as para que os voluntários da
                       missão conheçam a {socialOrganization.name}
                     </p>
-                    <div className="mb-10 h-[48px] w-[453px] pl-10">
+                    <div className="mb-6 w-[453px] px-10">
                       <Button
                         text="Enviar informações"
                         type="submit"
@@ -369,12 +369,12 @@ export default function SateliteImages() {
                   </div>
                 ) : (
                   <div className="max-w-5xl">
-                    <p className="mt-10 gap-10 pl-10 text-xl leading-relaxed text-white">
+                    <p className="mt-10 gap-10 px-10 text-xl leading-relaxed text-white">
                       Clique sobre cada planeta e preencha as informações
                       solicitadas. Esses dados serão compartilhados com a
                       Tripulação de voluntários.
                     </p>
-                    <p className="gap-10 p-10 text-xl leading-relaxed text-white">
+                    <p className="p-10 text-xl leading-relaxed text-white">
                       Caso tenha dúvidas, reveja as{' '}
                       <span
                         className="cursor-pointer text-blue-300"
@@ -390,7 +390,7 @@ export default function SateliteImages() {
             )}
 
             {/* Grade dos planetas */}
-            <div className="flex flex-1 items-center justify-center gap-10">
+            <div className="flex flex-1 items-center justify-center gap-6">
               {selectedPlanet && (
                 <SectorFormMentorship
                   closeModal={() => setSelectedPlanet(null)}
@@ -422,7 +422,7 @@ export default function SateliteImages() {
                 />
               )}
               <div
-                className="grid h-full w-[600px]"
+                className="ml-4 grid h-full w-[40%]"
                 style={{
                   gridTemplateColumns: `repeat(3, 1fr)`,
                   gridTemplateRows: `repeat(3, 1fr)`,
@@ -457,7 +457,7 @@ export default function SateliteImages() {
                 )}
               </div>
 
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex w-[20%] flex-col items-center justify-center">
                 {isOpenAboutInstitution && (
                   <AboutInstitutionMentorshipModal
                     closeModal={closeModalAboutInstitution}
@@ -493,7 +493,7 @@ export default function SateliteImages() {
                 </button>
               </div>
               <div
-                className="grid h-full w-[600px]"
+                className="mr-4 grid h-full w-[40%]"
                 style={{
                   gridTemplateColumns: `repeat(3, 1fr)`,
                   gridTemplateRows: `repeat(3, 1fr)`,

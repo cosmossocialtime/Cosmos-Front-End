@@ -5,6 +5,8 @@ import { api } from '../../services/api'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import Router from 'next/router'
 import jwtDecode from 'jwt-decode'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { publicRoutes } from '../../utils/publicRoutes'
 
 export const AuthContext = createContext<IContext>({} as IContext)
 
@@ -20,10 +22,18 @@ type DecodedToken = {
 export const AuthProvider = ({ children }: IAuthProvider) => {
   const [user, setUser] = useState<UserLogged | null>(null)
   const isAutenticate = !!user
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   // Verifica token na inicialização
   useEffect(() => {
     const { 'cosmos.token': token } = parseCookies()
+    const fullPath = `${window.location.pathname}${window.location.search}`
+
+    const isPublicRoute = publicRoutes.some((route) =>
+      pathname?.startsWith(route)
+    )
 
     if (token) {
       try {
@@ -31,8 +41,9 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
         // Verifica se o token está expirado
         const isExpired = decoded.exp * 1000 < Date.now()
+
         if (isExpired) {
-          signOut()
+          router.push(`/user/login?redirect=${encodeURIComponent(fullPath)}`)
         } else {
           setUser({
             id: decoded.id,
@@ -46,12 +57,19 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       } catch (error) {
         signOut()
       }
-    } /*else {
-      Router.push('/user/login') // sem token
-    }*/
-  }, [])
+    } else {
+      // Só redireciona para login se estiver numa rota privada
+      if (!isPublicRoute) {
+        router.push(`/user/login?redirect=${encodeURIComponent(fullPath)}`)
+      }
+      return
+    }
+  }, [pathname])
 
-  async function signIn({ email, password }: SignInData) {
+  async function signIn(
+    { email, password }: SignInData,
+    socialOrganizationId: string | null
+  ) {
     const payload = { email, password }
     const response = await invokeLambda<
       typeof payload,
@@ -79,6 +97,19 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       role: decoded.role,
       socialOrganizations: decoded.socialOrganizations,
     })
+
+    if (socialOrganizationId !== null) {
+      Router.push(
+        `/institutions/socialOrganization/register/aboutYou?member=1&socialOrganizationId=${socialOrganizationId}`
+      )
+    }
+
+    const redirect = searchParams?.get('redirect')
+
+    if (redirect) {
+      router.push(redirect)
+      return
+    }
 
     // Redirecionamento pós-login
     if (decoded.role === 'volunteer') {

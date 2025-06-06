@@ -33,7 +33,7 @@ export function ListOfEventsDay({ events, source }: ListOfEventsDayProps) {
       {source === 'volunteer' ? (
         <div className="flex h-full flex-1 flex-col">
           <header className="flex min-h-[7rem] items-center px-20 shadow-lg">
-            <h1 className="text-[2.5rem] font-semibold leading-[120%] text-gray-600">
+            <h1 className="text-3xl font-semibold text-gray-600">
               Diário de bordo
             </h1>
           </header>

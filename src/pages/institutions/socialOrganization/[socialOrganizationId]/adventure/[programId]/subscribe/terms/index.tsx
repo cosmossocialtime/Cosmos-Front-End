@@ -68,7 +68,7 @@ export default function TermsPage() {
       <div className="flex min-h-screen w-full flex-col">
         <DynamicHeader />
         <main className="mt-[32px] flex w-full flex-col items-center px-4">
-          <div className="mb-4 w-[980px]">
+          <div className="mb-4 w-[70vw]">
             <ProgressBar
               steps={steps}
               currentStep={1}

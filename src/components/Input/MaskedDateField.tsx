@@ -67,6 +67,10 @@ export default function MaskedDateField({
       const [day, month, year] = dateParts.map((part) => parseInt(part, 10))
       const date = new Date(year, month - 1, day)
 
+      if (year <= 1800) {
+        setInputValue(value) // Limpa o campo se for uma data no futuro
+        setValue(name, value, { shouldValidate: true })
+      }
       // Se a data for válida, atualiza o valor
       if (
         date.getDate() === day &&
@@ -76,9 +80,8 @@ export default function MaskedDateField({
         // Verifica novamente se a data não é no futuro
         const today = new Date()
         if (date > today) {
-          setInputValue('') // Limpa o campo se for uma data no futuro
-          setValue(name, '', { shouldValidate: true })
-          alert('A data de fundação não pode estar no futuro.')
+          setInputValue(value) // Limpa o campo se for uma data no futuro
+          setValue(name, value, { shouldValidate: true })
         } else {
           setSelectedDate(date)
           setValue(name, value, { shouldValidate: true })
@@ -126,7 +129,7 @@ export default function MaskedDateField({
           />
         </div>
       </div>
-      {/* {error && <p className="mt-1 text-sm text-red-500">{error}</p>} */}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   )
 }

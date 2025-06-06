@@ -112,4 +112,33 @@ export const GlobalStyle = createGlobalStyle`
   background-color: #D0D5E5;
   cursor: not-allowed;
 }
+  
+.gradient-border {
+    position: relative;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    background: transparent; /* ou sua cor de fundo */
+  }
+  
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 0.5rem;
+    padding: 1.5px;
+    background: 
+      radial-gradient(46.74% 45.51% at -22.1% 1.95%, rgba(255, 87, 242, 0.49) 0%, rgba(255, 117, 244, 0) 100%),
+      radial-gradient(35.51% 31.45% at 69.2% 96.48%, rgba(255, 87, 242, 0.49) 0%, rgba(255, 117, 244, 0) 100%),
+      radial-gradient(82.97% 24.11% at 64.49% 43.75%, rgba(87, 174, 255, 0.49) 0%, rgba(255, 117, 244, 0) 100%, rgba(117, 222, 255, 0) 100%),
+      radial-gradient(27.54% 23.05% at -25% 96.09%, rgba(87, 174, 255, 0.26) 0%, rgba(255, 117, 244, 0) 100%, rgba(117, 222, 255, 0) 100%);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+    
+.hide-during-print {
+}
 `
