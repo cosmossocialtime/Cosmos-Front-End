@@ -24,17 +24,16 @@ export default function AdventureInstitution() {
       {program && socialOrganization && user && (
         <section className="min-h-screen w-full bg-white">
           <DynamicHeader />
-          <div className="mt-10 pl-3">
+          <div className="mt-8 pl-10">
             <ArrowLeft
-              className="cursor-pointer"
+              className="cursor-pointer text-gray-800"
               onClick={() =>
                 Router.push(
-                  `/institutions/socialOrganization/${
-                    socialOrganization.id || 0
+                  `/institutions/socialOrganization/${socialOrganization.id || 0
                   }/home`
                 )
               }
-              size={30}
+              size={24}
             />
           </div>
           <div className="mx-auto max-w-4xl px-4 ">
@@ -103,9 +102,8 @@ export default function AdventureInstitution() {
                 </div>
               ) : (
                 <Link
-                  href={`/institutions/socialOrganization/${
-                    socialOrganization.id || 0
-                  }/adventure/${program.id}/subscribe/terms`}
+                  href={`/institutions/socialOrganization/${socialOrganization.id || 0
+                    }/adventure/${program.id}/subscribe/terms`}
                 >
                   <Button.Primary className="px-20 py-2">
                     Embarcar nesta jornada
