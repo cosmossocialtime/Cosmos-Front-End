@@ -42,8 +42,9 @@ export default function Home() {
   }
 
   const { data: dashboard, error } = useQuery({
-    queryKey: ['dashboard'],
+    queryKey: ['dashboard', organizationId],
     queryFn: () => getDashboard(),
+    enabled: !!socialOrganizationId,
     onError: () => {
       if (!hasShownError) {
         toast.error('Erro ao buscar informações!')

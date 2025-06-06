@@ -132,8 +132,12 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   }
 
   function signOut() {
-    destroyCookie(undefined, 'cosmos.token')
-    destroyCookie(undefined, 'cosmos.refreshToken')
+    destroyCookie(null, 'cosmos.token', {
+      path: '/',
+    })
+    destroyCookie(null, 'cosmos.refreshToken', {
+      path: '/',
+    })
     setUser(null)
     Router.push('/user/login')
   }
