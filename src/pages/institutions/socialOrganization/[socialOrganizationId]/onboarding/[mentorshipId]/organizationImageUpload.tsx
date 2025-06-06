@@ -118,7 +118,7 @@ export default function OrganizationImageUpload() {
     // Esconde temporariamente os elementos com a classe
     const elementsToHide = element.querySelectorAll('.hide-during-print')
     elementsToHide.forEach((el) => {
-      ; (el as HTMLElement).style.visibility = 'hidden'
+      ;(el as HTMLElement).style.visibility = 'hidden'
     })
 
     try {
@@ -136,7 +136,7 @@ export default function OrganizationImageUpload() {
     } finally {
       // Restaura a visibilidade mesmo se der erro
       elementsToHide.forEach((el) => {
-        ; (el as HTMLElement).style.visibility = 'visible'
+        ;(el as HTMLElement).style.visibility = 'visible'
       })
     }
   }
@@ -150,7 +150,7 @@ export default function OrganizationImageUpload() {
       >
         <header className="hide-during-print absolute left-0 right-0 top-0 z-10 flex h-20 items-center justify-between px-10 backdrop-blur-xl">
           <ArrowLeft
-            className="hide-during-print cursor-pointer text-white mt-2"
+            className="hide-during-print mt-2 cursor-pointer text-white"
             onClick={() =>
               Router.push(
                 `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationUploadImageAdvisor`

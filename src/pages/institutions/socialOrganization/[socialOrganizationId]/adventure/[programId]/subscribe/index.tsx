@@ -29,7 +29,8 @@ export default function AdventureInstitution() {
               className="cursor-pointer text-gray-800"
               onClick={() =>
                 Router.push(
-                  `/institutions/socialOrganization/${socialOrganization.id || 0
+                  `/institutions/socialOrganization/${
+                    socialOrganization.id || 0
                   }/home`
                 )
               }
@@ -102,8 +103,9 @@ export default function AdventureInstitution() {
                 </div>
               ) : (
                 <Link
-                  href={`/institutions/socialOrganization/${socialOrganization.id || 0
-                    }/adventure/${program.id}/subscribe/terms`}
+                  href={`/institutions/socialOrganization/${
+                    socialOrganization.id || 0
+                  }/adventure/${program.id}/subscribe/terms`}
                 >
                   <Button.Primary className="px-20 py-2">
                     Embarcar nesta jornada
