@@ -833,6 +833,7 @@ export const AboutInstitutionMentorshipModal = ({
                       </div>
                       <div className="mb-2 mt-[-25px] flex items-center">
                         <CustomCheckbox
+                          id="semCnpj"
                           checked={semCnpj}
                           setChecked={handleSemCnpjChange}
                           labelText="Não possui CNPJ"
@@ -868,6 +869,7 @@ export const AboutInstitutionMentorshipModal = ({
 
                       <div className="mb-2 mt-[-25px] flex items-center">
                         <CustomCheckbox
+                          id="foraDoBrasil"
                           checked={foraDoBrasil}
                           setChecked={handleForaDoBrasilChange}
                           labelText="Organização localizada fora do Brasil"
@@ -901,6 +903,7 @@ export const AboutInstitutionMentorshipModal = ({
                       />
                       <div className="mb-2 mt-[12px] flex items-center">
                         <CustomCheckbox
+                          id="semEstatuto"
                           checked={semEstatuto}
                           setChecked={(value) => setSemEstatuto(value)}
                           labelText="Não possui Estatuto ou Contrato Social"

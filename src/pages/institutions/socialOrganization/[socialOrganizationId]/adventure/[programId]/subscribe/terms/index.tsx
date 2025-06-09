@@ -98,6 +98,7 @@ export default function TermsPage() {
               <div className="flex items-center pt-12">
                 <div className="mr-4">
                   <CustomCheckbox
+                    id="acceptTerms"
                     checked={acceptTerms}
                     setChecked={handleAcceptTerms}
                     labelText="Aceito que a Cosmos, a empresa parceira e seus colaboradores tenham acesso às minhas respostas"

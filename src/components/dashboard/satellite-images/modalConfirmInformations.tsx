@@ -54,6 +54,7 @@ export function ConfirmInformationsModal({
         {/* Checkbox */}
         <div className="mb-6 flex items-start gap-2 text-sm text-gray-700">
           <CustomCheckbox
+            id="confirmReadInfo"
             checked={isChecked}
             setChecked={() => setIsChecked(!isChecked)}
             labelText="Confirmo que li o aviso e que as informações estão atualizadas"
