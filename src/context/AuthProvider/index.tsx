@@ -28,43 +28,49 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
   // Verifica token na inicialização
   useEffect(() => {
-    const { 'cosmos.token': token } = parseCookies()
-    const fullPath = `${window.location.pathname}${window.location.search}`
+    if (pathname) {
+      const { 'cosmos.token': token } = parseCookies()
+      const fullPath = `${window.location.pathname}${window.location.search}`
 
-    const isPublicRoute = publicRoutes.some((route) =>
-      pathname?.startsWith(route)
-    )
+      const isPublicRoute = publicRoutes.some((route) =>
+        normalizePath(pathname || '').startsWith(normalizePath(route))
+      )
 
-    if (token) {
-      try {
-        const decoded: DecodedToken = jwtDecode(token)
+      if (token) {
+        try {
+          const decoded: DecodedToken = jwtDecode(token)
 
-        // Verifica se o token está expirado
-        const isExpired = decoded.exp * 1000 < Date.now()
+          // Verifica se o token está expirado
+          const isExpired = decoded.exp * 1000 < Date.now()
 
-        if (isExpired) {
-          router.push(`/user/login?redirect=${encodeURIComponent(fullPath)}`)
-        } else {
-          setUser({
-            id: decoded.id,
-            fullName: decoded.fullName,
-            role: decoded.role,
-            socialOrganizations: decoded.socialOrganizations,
-          })
+          if (isExpired) {
+            router.push(`/user/login?redirect=${encodeURIComponent(fullPath)}`)
+          } else {
+            setUser({
+              id: decoded.id,
+              fullName: decoded.fullName,
+              role: decoded.role,
+              socialOrganizations: decoded.socialOrganizations,
+            })
 
-          api.defaults.headers.Authorization = `Bearer ${token}`
+            api.defaults.headers.Authorization = `Bearer ${token}`
+          }
+        } catch (error) {
+          signOut()
         }
-      } catch (error) {
-        signOut()
+      } else {
+        // Só redireciona para login se estiver numa rota privada
+        if (!isPublicRoute) {
+          router.push(`/user/login?redirect=${encodeURIComponent(fullPath)}`)
+        }
+        return
       }
-    } else {
-      // Só redireciona para login se estiver numa rota privada
-      if (!isPublicRoute) {
-        router.push(`/user/login?redirect=${encodeURIComponent(fullPath)}`)
-      }
-      return
     }
   }, [pathname])
+
+  function normalizePath(path: string) {
+    return path.replace(/\/+$/, '') // remove barra final
+  }
 
   async function signIn(
     { email, password }: SignInData,

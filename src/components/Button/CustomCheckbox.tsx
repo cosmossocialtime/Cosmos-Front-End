@@ -3,15 +3,18 @@ import { Check } from 'phosphor-react'
 import { useCallback } from 'react'
 
 interface CustomCheckboxProps {
+  id: string
   checked: boolean
   setChecked: (value: boolean) => void
   labelText: string
 }
 
 export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
+  id,
   checked,
   setChecked,
   labelText,
+  ...rest
 }) => {
   const handleCheckedChange = useCallback(
     (checked: boolean) => {
@@ -23,13 +26,14 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   return (
     <div className="my-4 flex items-end gap-2">
       <Checkbox.Root
+        {...rest}
         className={`flex h-6 w-6 items-center justify-center rounded border-2 
                     border-solid border-[#A2ABCC] bg-zinc-50 ${
                       checked
                         ? 'border-none bg-gradient-to-r from-blue-300 to-[#9D37F2]'
                         : ''
                     }`}
-        id="checkbox"
+        id={id}
         checked={checked}
         onCheckedChange={handleCheckedChange}
         aria-labelledby="checkbox-label"

@@ -41,7 +41,7 @@ export default function CurrentMissionsInstitutionArea({
           </h1>
         </div>
       ) : (
-        <div ref={sliderRef} className="keen-slider mt-2 w-full">
+        <div ref={sliderRef} className="keen-slider mt-2 w-full rounded-lg">
           {mentorships.map((mentorship, key) => {
             return (
               <div

@@ -67,7 +67,7 @@ export function signupConfirmationTemplate(name: string, code: string) {
 
           <p style="font-size: 16px; line-height: 1.6;">
             Caso o botão não funcione, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">
@@ -176,7 +176,7 @@ export function signupInstitutionConfirmationTemplate(code: string) {
 
           <p style="font-size: 16px; line-height: 1.6;">
             Caso o botão não funcione, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">
@@ -280,7 +280,7 @@ export function resendConfirmationTemplate(code: string) {
 
           <p style="font-size: 16px; line-height: 1.6;">
             Caso o botão não funcione, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">
@@ -389,7 +389,7 @@ export function resendInstitutionConfirmationTemplate(code: string) {
 
           <p style="font-size: 16px; line-height: 1.6;">
             Caso o botão não funcione, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/confirm/${code}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">
@@ -496,7 +496,7 @@ export function forgotPasswordTemplate(
 
           <p style="font-size: 16px; line-height: 1.6;">
             Se o botão não funcionar, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">
@@ -600,7 +600,7 @@ export function forgotPasswordTemplate(
 
           <p style="font-size: 16px; line-height: 1.6;">
             Caso o botão não funcione, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">
@@ -715,7 +715,7 @@ export function inviteMemberTemplate(
 
           <p style="font-size: 16px; line-height: 1.6;">
             Se o botão não funcionar, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/institutions/socialOrganization/register/${socialOrganizationId}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/institutions/socialOrganization/register/${socialOrganizationId}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/institutions/socialOrganization/register/${socialOrganizationId}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">
@@ -826,7 +826,7 @@ export function inviteMemberExistingUserTemplate(
 
           <p style="font-size: 16px; line-height: 1.6;">
             Se o botão não funcionar, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}" style="color: #7C3AED;">[Link de Confirmação]</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">

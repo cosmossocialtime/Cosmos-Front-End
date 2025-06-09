@@ -23,8 +23,12 @@ import DynamicHeader from '../../../../../components/header/DynamicHeader'
 const schema = z.object({
   name: z.string().nonempty(),
   causes: createMultiSelectSchema(1, 3),
-  professionalRole: nameSchema,
-  professionalSector: nameSchema,
+  professionalRole: z
+    .string()
+    .nonempty('O campo Seu cargo na organização é obrigatório'),
+  professionalSector: z
+    .string()
+    .nonempty('O campo Área de Trabalho é obrigatório'),
 })
 
 type formProps = z.infer<typeof schema>

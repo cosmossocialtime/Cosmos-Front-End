@@ -29,7 +29,9 @@ const steps = [
 const schema = z.object({
   name: nameSchema,
   phone: phoneSchema,
-  professionalRole: nameSchema,
+  professionalRole: z
+    .string()
+    .nonempty('O campo Cargo na organização é obrigatório'),
   email: emailSchema,
 })
 
@@ -143,6 +145,7 @@ export default function FocalPoint() {
           </p>
 
           <CustomCheckbox
+            id="useUserPlataformData"
             checked={useUserPlataformData}
             setChecked={setUseUserPlataformData}
             labelText="Usar meus dados cadastrados na plataforma"

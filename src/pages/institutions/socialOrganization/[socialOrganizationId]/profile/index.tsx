@@ -37,8 +37,12 @@ const schema = z.object({
   fullName: nameSchema,
   socialOrganizationName: nameSchema,
   phone: phoneSchema,
-  professionalRole: nameSchema,
-  professionalSector: nameSchema,
+  professionalRole: z
+    .string()
+    .nonempty('O campo Cargo na Instituição é obrigatório'),
+  professionalSector: z
+    .string()
+    .nonempty('O campo Área de Trabalho é obrigatório'),
   email: emailSchema,
 })
 

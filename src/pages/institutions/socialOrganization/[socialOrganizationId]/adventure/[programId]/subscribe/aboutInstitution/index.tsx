@@ -548,6 +548,7 @@ export default function AboutInstitution() {
             </div>
             <div className="mt-[-25px] flex items-center">
               <CustomCheckbox
+                id="semCnpj"
                 checked={semCnpj}
                 setChecked={handleSemCnpjChange}
                 labelText="Não possui CNPJ"
@@ -583,6 +584,7 @@ export default function AboutInstitution() {
 
             <div className="mt-[-25px] flex items-center">
               <CustomCheckbox
+                id="foraDoBrasil"
                 checked={foraDoBrasil}
                 setChecked={handleForaDoBrasilChange}
                 labelText="Organização localizada fora do Brasil"
@@ -615,6 +617,7 @@ export default function AboutInstitution() {
             />
             <div className="mt-[-25px] flex items-center">
               <CustomCheckbox
+                id="semEstatuto"
                 checked={semEstatuto}
                 setChecked={(value) => setSemEstatuto(value)}
                 labelText="Não possui Estatuto ou Contrato Social"
