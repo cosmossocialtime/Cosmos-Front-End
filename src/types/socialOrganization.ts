@@ -19,7 +19,7 @@ export type SocialOrganizationProps = {
   history?: string
   socialImpact?: string
   mainChallenges?: string
-  cnpj?: string
+  cnpj?: string | null
   storageId?: number
   estatutoFileLocation?: string
   semCnpj?: boolean

@@ -80,7 +80,7 @@ export function PopoverEvent() {
       )}
       <div className="absolute right-4 top-4 flex items-center justify-center gap-3">
         <Popover.Root>
-          <Popover.Trigger>
+          <Popover.Trigger asChild>
             <DotsThree size={36} className="cursor-pointer" weight="bold" />
           </Popover.Trigger>
           <Popover.Content

@@ -1,5 +1,6 @@
 import { X } from 'phosphor-react'
 import { useAuth } from '../context/AuthProvider/useAuth'
+import { useHeader } from '../context/HeaderContext'
 
 interface LogoutConfirmationProps {
   closeModal: () => void
@@ -7,6 +8,7 @@ interface LogoutConfirmationProps {
 
 export const LogoutConfirmation = ({ closeModal }: LogoutConfirmationProps) => {
   const auth = useAuth()
+  const { resetHeader } = useHeader()
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -36,6 +38,7 @@ export const LogoutConfirmation = ({ closeModal }: LogoutConfirmationProps) => {
           <div className="justify-left mt-12 flex gap-[32px]">
             <button
               onClick={() => {
+                resetHeader()
                 auth.signOut()
                 closeModal()
               }}

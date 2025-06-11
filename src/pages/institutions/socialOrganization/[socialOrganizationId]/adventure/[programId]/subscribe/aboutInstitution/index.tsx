@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../../../../../../../../components/Button/ButtonSubmit'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import InputField from '../../../../../../../../components/Input/InputField'
 import MaskedInputField from '../../../../../../../../components/Input/MaskedInputField'
@@ -34,22 +34,7 @@ import { useOnboardingInstitution } from '../../../../../../../../context/Onboar
 import dayjs from 'dayjs'
 import formatCurrency from '../../../../../../../../utils/formatCurrency'
 import { toast } from 'react-toastify'
-
-// Carregamento dinâmico do FileUpload com SSR desabilitado
-const FileUpload = dynamic(
-  () => import('../../../../../../../../components/file/FileUpload'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-700">
-          Estatuto ou Contrato Social
-        </label>
-        <div className="h-[72px] rounded-lg border-2 border-dashed border-gray-300 bg-gray-50"></div>
-      </div>
-    ),
-  }
-)
+import FileUpload from '../../../../../../../../components/file/FileUpload'
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -100,6 +85,7 @@ export default function AboutInstitution() {
     useOnboardingInstitution()
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -207,6 +193,16 @@ export default function AboutInstitution() {
     }
   }
 
+  const handleEstatutoChange = (value: boolean) => {
+    setSemEstatuto(value)
+
+    if (!value) {
+      setValue('estatuto', undefined, {
+        shouldValidate: true,
+      })
+    }
+  }
+
   const handleChange = (selected: MultiValue<Option>) => {
     setSelectedOptions(selected)
     setValue(
@@ -238,9 +234,8 @@ export default function AboutInstitution() {
     const nFuncionariosValido = watch('nFuncionarios')?.trim() !== ''
     const nBeneficiariosValido = watch('nBeneficiarios')?.trim() !== ''
     const estatutoValido =
-      watch('estatuto') !== undefined ||
       semEstatuto ||
-      socialOrganization?.estatutoFileLocation !== undefined ||
+      watch('estatuto') !== undefined ||
       socialOrganization?.estatutoFileLocation !== null
 
     const todosCamposPreenchidos =
@@ -274,55 +269,57 @@ export default function AboutInstitution() {
 
   useEffect(() => {
     if (socialOrganization !== null) {
-      axios
-        .get(
-          'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
-        )
-        .then(({ data: estados }: { data: stateProps[] }) => {
-          const states = estados.map((c) => {
-            return {
-              id: c.id,
-              value: c.sigla,
-              label: c.nome,
+      if (!socialOrganization.foraDoBrasil) {
+        axios
+          .get(
+            'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
+          )
+          .then(({ data: estados }: { data: stateProps[] }) => {
+            const states = estados.map((c) => {
+              return {
+                id: c.id,
+                value: c.sigla,
+                label: c.nome,
+              }
+            })
+            const estadoEncontrado = states.find(
+              (e) => e.value === String(socialOrganization?.state)
+            )
+            if (estadoEncontrado !== undefined) {
+              handleEstadoChange({
+                value: estadoEncontrado.value,
+                label: estadoEncontrado.label,
+              })
+            }
+            if (
+              socialOrganization.city !== null &&
+              socialOrganization.city !== undefined
+            ) {
+              axios
+                .get(
+                  `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`
+                )
+                .then(({ data: cidades }: { data: cityProps[] }) => {
+                  const cidadeEncontrado = cidades.find(
+                    (c) => c.id === Number(socialOrganization.city || 0)
+                  )
+                  if (cidadeEncontrado !== undefined) {
+                    handleCidadeChange({
+                      value: String(cidadeEncontrado.id),
+                      label: cidadeEncontrado.nome,
+                    })
+                  }
+                })
+                .catch(() => {
+                  console.error('Não foi possível obter a lista de cidades:')
+                  setCidades([])
+                })
             }
           })
-          const estadoEncontrado = states.find(
-            (e) => e.value === String(socialOrganization?.state)
-          )
-          if (estadoEncontrado !== undefined) {
-            handleEstadoChange({
-              value: estadoEncontrado.value,
-              label: estadoEncontrado.label,
-            })
-          }
-          if (
-            socialOrganization.city !== null &&
-            socialOrganization.city !== undefined
-          ) {
-            axios
-              .get(
-                `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`
-              )
-              .then(({ data: cidades }: { data: cityProps[] }) => {
-                const cidadeEncontrado = cidades.find(
-                  (c) => c.id === Number(socialOrganization.city || 0)
-                )
-                if (cidadeEncontrado !== undefined) {
-                  handleCidadeChange({
-                    value: String(cidadeEncontrado.id),
-                    label: cidadeEncontrado.nome,
-                  })
-                }
-              })
-              .catch(() => {
-                console.error('Não foi possível obter a lista de cidades:')
-                setCidades([])
-              })
-          }
-        })
-        .catch(() => {
-          console.error('Não foi possível obter a lista de estados:')
-        })
+          .catch(() => {
+            console.error('Não foi possível obter a lista de estados:')
+          })
+      }
       setSemCnpj(socialOrganization.semCnpj || false)
       setSemEstatuto(socialOrganization.semEstatuto || false)
       setForaDoBrasil(socialOrganization.foraDoBrasil || false)
@@ -458,7 +455,7 @@ export default function AboutInstitution() {
     changeSocialOrganization({
       name: data.nomeInstituicao,
       causes: data.causes.selectedOptions,
-      cnpj: data.cnpj,
+      cnpj: data.cnpj ?? null,
       annualRevenue: Number(data.receitaAnual || 0),
       creationDate: date,
       state: selectedEstado?.value,
@@ -606,20 +603,31 @@ export default function AboutInstitution() {
                 error={errors.nBeneficiarios?.message}
               />
             </div>
-            <FileUpload
-              label="Estatuto ou Contrato Social"
-              onFileChange={(file) => {
-                setValue('estatuto', file || undefined, {
-                  shouldValidate: true,
-                })
+            <Controller
+              control={control}
+              name="estatuto"
+              rules={{
+                validate: (file) => {
+                  if (!semEstatuto && !file) return 'Arquivo obrigatório'
+                  return true
+                },
               }}
-              fileUrl={socialOrganization?.estatutoFileLocation}
+              render={({ field: { value, onChange }, fieldState }) => (
+                <FileUpload
+                  label="Estatuto ou Contrato Social"
+                  file={value}
+                  onFileChange={onChange}
+                  disabled={semEstatuto}
+                  error={fieldState.error}
+                  fileUrl={socialOrganization?.estatutoFileLocation}
+                />
+              )}
             />
-            <div className="mt-[-25px] flex items-center">
+            <div className="mb-2 mt-[12px] flex items-center">
               <CustomCheckbox
                 id="semEstatuto"
                 checked={semEstatuto}
-                setChecked={(value) => setSemEstatuto(value)}
+                setChecked={(value) => handleEstatutoChange(value)}
                 labelText="Não possui Estatuto ou Contrato Social"
               />
             </div>

@@ -10,6 +10,10 @@ import { EditButton } from '../../../Button/EditButton'
 import TextAreaField from '../../../Input/TextAreaField'
 import { textAreaSchema } from '../../../../utils/ValidationSchemas'
 import { MentorshipSectorProps } from '../../../../types/mentorshipSector'
+import { toast } from 'react-toastify'
+import { queryClient } from '../../../../services/queryClient'
+import { invokeLambda } from '../../../../lib/aws/invokeLambda'
+import { Option } from '../../../../types/MultiselectCombobox'
 
 const options = [
   { value: '1', label: '1 - Não precisa' },
@@ -29,27 +33,28 @@ type FormProps = z.infer<typeof schema>
 
 interface SectorFormMentorshipProps {
   closeModal: () => void
-  onSave: (mentorshipSector: MentorshipSectorProps) => void
   isFilled: boolean
-  isInformationSend: boolean
   name: string
   image: string
-  sectorData: {
-    sectorId: number
-    sector: string
-  }
+  sector?: Option
+  mentorshipSocialOrganizationId?: number
+  mentorshipId?: number
+  socialOrganizationId?: number
   mentorshipSector?: MentorshipSectorProps
+  completedOnboarding?: boolean
 }
 
 export const SectorFormMentorship = ({
   closeModal,
-  onSave,
   isFilled,
-  isInformationSend,
   name,
   image,
-  sectorData,
+  sector,
+  mentorshipSocialOrganizationId,
+  mentorshipId,
+  socialOrganizationId,
   mentorshipSector,
+  completedOnboarding,
 }: SectorFormMentorshipProps) => {
   const {
     register,
@@ -116,18 +121,35 @@ export const SectorFormMentorship = ({
   }
 
   async function onSubmit(data: FormProps) {
-    const payload = {
-      id: mentorshipSector?.id,
-      sectorId: sectorData.sectorId,
-      sector: sectorData.sector,
-      mentorshipSocialOrganizationId:
-        mentorshipSector?.mentorshipSocialOrganizationId,
-      ranking: Number(data.ranking || '0'),
-      currentlyWorking: data.currentlyWorking || '',
-      effectiveness: data.effectiveness || '',
+    try {
+      const payload = {
+        id: mentorshipSector === undefined ? null : mentorshipSector.id || 0,
+        sectorId: Number(sector?.value || 0),
+        mentorshipSocialOrganizationId: mentorshipSocialOrganizationId || 0,
+        ranking: Number(data.ranking),
+        currentlyWorking: data.currentlyWorking,
+        effectiveness: data.effectiveness,
+      }
+
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('mentorship-social-organization-sector-upsert-lambda', payload)
+      if (response.statusCode == 201) {
+        queryClient.invalidateQueries([
+          'mentorshipSocialOrganization',
+          socialOrganizationId || 0,
+          mentorshipId || 0,
+        ])
+        toast.success('Informações salvas com sucesso!')
+      } else {
+        toast.error('Erro ao salvar informações!')
+      }
+    } catch (error) {
+      toast.error('Erro ao salvar informações!')
+    } finally {
+      closeModal()
     }
-    closeModal()
-    onSave(payload)
   }
 
   return (
@@ -149,7 +171,7 @@ export const SectorFormMentorship = ({
                 alt={`Ícone de ${name}`}
               />
               <h1 className="text-3xl font-semibold">{name}</h1>
-              {!isEditing && !isInformationSend && (
+              {!isEditing && !completedOnboarding && (
                 <div className="ml-6">
                   <EditButton
                     text="Editar"

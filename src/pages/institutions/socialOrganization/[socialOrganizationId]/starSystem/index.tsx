@@ -77,7 +77,7 @@ export default function StarSystem() {
   const filledCount =
     (socialOrganization.sectors?.filter(
       (s: { id: number }) => s.id && s.id !== 0
-    ).length || 0) + (socialOrganization.cnpj !== undefined ? 1 : 0)
+    ).length || 0) + (socialOrganization.creationDate !== undefined ? 1 : 0)
   const totalCount = 11
 
   return (

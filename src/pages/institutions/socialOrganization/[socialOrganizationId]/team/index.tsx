@@ -192,25 +192,26 @@ export default function Teams() {
                   </td>
                   {permissionsLabels.get(
                     user.socialOrganizations[0].role.role
-                  ) === 'Administrador' && (
-                    <td className="px-8 py-6 text-sm">
-                      <button
-                        onClick={() => toggleModalDelete(index, usuario)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Remover
-                      </button>
+                  ) === 'Administrador' &&
+                    usuario.id !== user.id && (
+                      <td className="px-8 py-6 text-sm">
+                        <button
+                          onClick={() => toggleModalDelete(index, usuario)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          Remover
+                        </button>
 
-                      {isOpenModalDelete === index && (
-                        <DeleteMember
-                          closeModal={closeModalRemover}
-                          memberName={usuario.fullName || ''}
-                          userId={usuario.id || 0}
-                          socialOrganizationId={organizationId}
-                        />
-                      )}
-                    </td>
-                  )}
+                        {isOpenModalDelete === index && (
+                          <DeleteMember
+                            closeModal={closeModalRemover}
+                            memberName={usuario.fullName || ''}
+                            userId={usuario.id || 0}
+                            socialOrganizationId={organizationId}
+                          />
+                        )}
+                      </td>
+                    )}
                 </tr>
               ))}
             </tbody>

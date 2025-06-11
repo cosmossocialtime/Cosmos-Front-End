@@ -22,7 +22,7 @@ export type MentorshipSocialOrganizationProps = {
   history?: string
   socialImpact?: string
   mainChallenges?: string
-  cnpj?: string
+  cnpj?: string | null
   storageId?: number
   estatutoFileLocation?: string
   directoryPathEstatuto?: string
@@ -31,4 +31,5 @@ export type MentorshipSocialOrganizationProps = {
   foraDoBrasil?: boolean
   logo?: string
   mimeEstatuto?: string
+  completedOnboarding: boolean
 }

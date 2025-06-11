@@ -108,6 +108,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       Router.push(
         `/institutions/socialOrganization/register/aboutYou?member=1&socialOrganizationId=${socialOrganizationId}`
       )
+      return
     }
 
     const redirect = searchParams?.get('redirect')

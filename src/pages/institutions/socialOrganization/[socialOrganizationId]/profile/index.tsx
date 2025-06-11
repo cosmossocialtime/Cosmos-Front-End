@@ -386,7 +386,7 @@ export default function Profile() {
                           className={`${errors.phone ? 'border-red-500' : ''}`}
                           label="Celular"
                           name="phone"
-                          placeholder="Ex:+55 (00) 00000-0000"
+                          placeholder="Ex:(00) 00000-0000"
                           register={register}
                           setValue={setValue}
                           error={errors.phone?.message}

@@ -17,7 +17,6 @@ import StaticHeader from '../../../../../components/instituition/StaticHeader'
 import { useOnboardingInstitution } from '../../../../../context/OnboardingInstituionProvider'
 import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
 
 const steps = [
   { id: 1, label: 'Cadastro inicial' },

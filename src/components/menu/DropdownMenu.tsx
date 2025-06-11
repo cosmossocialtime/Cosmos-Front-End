@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import { FeedbackModal } from '../main-painel/institutions/FeedbackModal'
 import { useState } from 'react'
-import { Check } from 'phosphor-react'
-import * as Dialog from '@radix-ui/react-dialog'
 import { LogoutConfirmation } from '../logoutConfirmation'
 
 interface DropdownMenuProps {
