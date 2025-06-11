@@ -40,7 +40,7 @@ export default function MaskedInputField({
 
   const maskMap: Record<string, string> = {
     cnpj: '99.999.999/9999-99',
-    phone: '+99 (99) 99999-9999',
+    phone: '(99) 99999-9999',
   }
 
   const mask = maskMap[name] || ''

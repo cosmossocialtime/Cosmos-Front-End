@@ -108,14 +108,15 @@ export const createMultiSelectSchema = (min = 0, max: number | null = null) =>
 export const phoneSchema = z
   .string()
   .transform((value) => value.replace(/\D/g, ''))
-  .refine((value) => value.length === 13, {
-    message: 'O número deve ter exatamente 13 dígitos numéricos.',
+  .refine((value) => value.length === 11, {
+    message: 'O número deve ter exatamente 11 dígitos numéricos.',
   })
 
 // 🔹 Validação para CNPJ (Formato XX.XXX.XXX/XXXX-XX)
 export const cnpjSchema = z
   .string()
   .optional()
+  .nullable()
   .refine(
     (cnpj) => {
       if (!cnpj) return true // Se estiver vazio, é opcional

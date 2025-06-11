@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../../Button/ButtonSubmit'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import InputField from '../../Input/InputField'
 import MaskedInputField from '../../Input/MaskedInputField'
@@ -38,26 +38,14 @@ import { EditButton } from '../../Button/EditButton'
 import StarFour from '../../../assets/star-four.svg'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
+import { queryClient } from '../../../services/queryClient'
+import FileUpload from '../../file/FileUpload'
 
 interface AboutInstitutionMentorshipModalProps {
   closeModal: () => void
-  onSave: (socialOrganization: MentorshipSocialOrganizationProps) => void
   socialOrganization: MentorshipSocialOrganizationProps
   isFilled: boolean
-  isInformationSend: boolean
 }
-// Carregamento dinâmico do FileUpload com SSR desabilitado
-const FileUpload = dynamic(() => import('../../file/FileUpload'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Estatuto ou Contrato Social
-      </label>
-      <div className="h-[72px] rounded-lg border-2 border-dashed border-gray-300 bg-gray-50"></div>
-    </div>
-  ),
-})
 
 const steps = [
   { id: 1, label: 'Sobre a organização' },
@@ -92,10 +80,8 @@ interface stateProps extends cityProps {
 
 export const AboutInstitutionMentorshipModal = ({
   closeModal,
-  onSave,
   socialOrganization,
   isFilled,
-  isInformationSend,
 }: AboutInstitutionMentorshipModalProps) => {
   const [currentStep, setCurrentStep] = useState(1)
   const [isEditing, setIsEditing] = useState<boolean>(!isFilled)
@@ -113,6 +99,7 @@ export const AboutInstitutionMentorshipModal = ({
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -244,6 +231,16 @@ export const AboutInstitutionMentorshipModal = ({
     }
   }
 
+  const handleEstatutoChange = (value: boolean) => {
+    setSemEstatuto(value)
+
+    if (!value) {
+      setValue('estatuto', undefined, {
+        shouldValidate: true,
+      })
+    }
+  }
+
   const handleChange = (selected: MultiValue<Option>) => {
     setSelectedOptions(selected)
     setValue(
@@ -277,9 +274,8 @@ export const AboutInstitutionMentorshipModal = ({
     const nFuncionariosValido = values.nFuncionarios?.trim() !== ''
     const nBeneficiariosValido = values.nBeneficiarios?.trim() !== ''
     const estatutoValido =
-      values.estatuto !== undefined ||
       semEstatuto ||
-      socialOrganization?.estatutoFileLocation !== undefined ||
+      values.estatuto !== undefined ||
       socialOrganization?.estatutoFileLocation !== null
 
     const todosCamposPreenchidos =
@@ -307,55 +303,57 @@ export const AboutInstitutionMentorshipModal = ({
 
   useEffect(() => {
     if (socialOrganization !== null) {
-      axios
-        .get(
-          'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
-        )
-        .then(({ data: estados }: { data: stateProps[] }) => {
-          const states = estados.map((c) => {
-            return {
-              id: c.id,
-              value: c.sigla,
-              label: c.nome,
+      if (!socialOrganization.foraDoBrasil) {
+        axios
+          .get(
+            'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
+          )
+          .then(({ data: estados }: { data: stateProps[] }) => {
+            const states = estados.map((c) => {
+              return {
+                id: c.id,
+                value: c.sigla,
+                label: c.nome,
+              }
+            })
+            const estadoEncontrado = states.find(
+              (e) => e.value === String(socialOrganization?.state)
+            )
+            if (estadoEncontrado !== undefined) {
+              handleEstadoChange({
+                value: estadoEncontrado.value,
+                label: estadoEncontrado.label,
+              })
+            }
+            if (
+              socialOrganization.city !== null &&
+              socialOrganization.city !== undefined
+            ) {
+              axios
+                .get(
+                  `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`
+                )
+                .then(({ data: cidades }: { data: cityProps[] }) => {
+                  const cidadeEncontrado = cidades.find(
+                    (c) => c.id === Number(socialOrganization.city || 0)
+                  )
+                  if (cidadeEncontrado !== undefined) {
+                    handleCidadeChange({
+                      value: String(cidadeEncontrado.id),
+                      label: cidadeEncontrado.nome,
+                    })
+                  }
+                })
+                .catch(() => {
+                  console.error('Não foi possível obter a lista de cidades:')
+                  setCidades([])
+                })
             }
           })
-          const estadoEncontrado = states.find(
-            (e) => e.value === String(socialOrganization?.state)
-          )
-          if (estadoEncontrado !== undefined) {
-            handleEstadoChange({
-              value: estadoEncontrado.value,
-              label: estadoEncontrado.label,
-            })
-          }
-          if (
-            socialOrganization.city !== null &&
-            socialOrganization.city !== undefined
-          ) {
-            axios
-              .get(
-                `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado?.id}/municipios`
-              )
-              .then(({ data: cidades }: { data: cityProps[] }) => {
-                const cidadeEncontrado = cidades.find(
-                  (c) => c.id === Number(socialOrganization.city || 0)
-                )
-                if (cidadeEncontrado !== undefined) {
-                  handleCidadeChange({
-                    value: String(cidadeEncontrado.id),
-                    label: cidadeEncontrado.nome,
-                  })
-                }
-              })
-              .catch(() => {
-                console.error('Não foi possível obter a lista de cidades:')
-                setCidades([])
-              })
-          }
-        })
-        .catch(() => {
-          console.error('Não foi possível obter a lista de estados:')
-        })
+          .catch(() => {
+            console.error('Não foi possível obter a lista de estados:')
+          })
+      }
       setSemCnpj(socialOrganization.semCnpj || false)
       setSemEstatuto(socialOrganization.semEstatuto || false)
       setForaDoBrasil(socialOrganization.foraDoBrasil || false)
@@ -461,49 +459,6 @@ export const AboutInstitutionMentorshipModal = ({
     }
   }
 
-  const copyFile = async (
-    sourceKey: string,
-    destinationKey: string,
-    mime: string
-  ): Promise<number | null> => {
-    try {
-      // Requisição da cópia do arquivo
-      const res = await fetch('/api/copy-s3-file', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sourceKey: sourceKey,
-          destinationKey: destinationKey,
-        }),
-      })
-
-      if (!res.ok) throw new Error('Erro ao copiar arquivo do S3')
-
-      // Invoca Lambda para salvar metadados
-      const payload = {
-        bucketName: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
-        directoryPath: destinationKey,
-        mime: mime,
-      }
-
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('storage-create-lambda', payload)
-
-      if (response.statusCode === 201) {
-        const { storageId } = JSON.parse(response.body)
-        return Number(storageId)
-      } else {
-        toast.error('Erro ao salvar metadados no storage')
-        return null
-      }
-    } catch (err) {
-      toast.error('Erro ao salvar metadados no storage')
-      return null
-    }
-  }
-
   async function handleForm(data: formProps) {
     try {
       setIsLoading(true)
@@ -516,7 +471,7 @@ export const AboutInstitutionMentorshipModal = ({
 
       if (!semEstatuto) {
         if (data.estatuto) {
-          const key = `mentorship-social-organization/${
+          const key = `social-organization/${
             socialOrganization?.socialOrganizationId || 0
           }/statute/${data.estatuto.name}`
           storageId = await uploadFile(data.estatuto, key)
@@ -528,54 +483,57 @@ export const AboutInstitutionMentorshipModal = ({
             }),
           })
           downloadUrl = await res.json()
-        } else {
-          const key = socialOrganization?.directoryPathEstatuto || ''
-          const newKey = 'mentorship-' + key
-          storageId = await copyFile(
-            key,
-            newKey,
-            socialOrganization?.mimeEstatuto || ''
-          )
-          const res = await fetch('/api/get-download-url', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              key: newKey,
-            }),
-          })
-          downloadUrl = await res.json()
         }
       }
       const payload = {
-        id: socialOrganization.id,
-        name: data.nomeInstituicao,
-        causes: data.causes.selectedOptions,
-        cnpj: data.cnpj,
-        annualRevenue: Number(data.receitaAnual || 0),
-        creationDate: date,
-        state: selectedEstado?.value,
-        city: selectedCidade?.value,
-        collaborators:
-          data.nFuncionarios !== undefined
-            ? Number(data.nFuncionarios)
-            : undefined,
-        beneficiaries:
-          data.nBeneficiarios !== undefined
-            ? Number(data.nBeneficiarios)
-            : undefined,
-        semCnpj: semCnpj,
-        semEstatuto: semEstatuto,
-        foraDoBrasil: foraDoBrasil,
-        storageId: storageId ?? undefined,
-        estatutoFileLocation: downloadUrl?.downloadUrl ?? undefined,
-        history: data.history,
-        socialImpact: data.impact,
-        mainChallenges: data.challenges,
-        mentorshipId: socialOrganization.mentorshipId,
-        socialOrganizationId: socialOrganization.socialOrganizationId,
+        socialOrganization: {
+          id: socialOrganization.id || 0,
+          name: data.nomeInstituicao,
+          causes: data.causes.selectedOptions,
+          cnpj: data.cnpj ?? null,
+          annualRevenue: Number(data.receitaAnual || 0),
+          creationDate: date,
+          state: selectedEstado?.value,
+          city: selectedCidade?.value,
+          collaborators:
+            data.nFuncionarios !== undefined
+              ? Number(data.nFuncionarios)
+              : undefined,
+          beneficiaries:
+            data.nBeneficiarios !== undefined
+              ? Number(data.nBeneficiarios)
+              : undefined,
+          semCnpj: semCnpj,
+          semEstatuto: semEstatuto,
+          foraDoBrasil: foraDoBrasil,
+          storageId: storageId ?? undefined,
+          estatutoFileLocation: downloadUrl?.downloadUrl ?? undefined,
+          history: data.history,
+          socialImpact: data.impact,
+          mainChallenges: data.challenges,
+          completedOnboarding: socialOrganization.completedOnboarding,
+          mentorshipId: socialOrganization.mentorshipId,
+          socialOrganizationId: socialOrganization.socialOrganizationId,
+        },
       }
-      closeModal()
-      onSave(payload)
+
+      const response = await invokeLambda<
+        {
+          socialOrganization: MentorshipSocialOrganizationProps
+        },
+        { statusCode: number; body: string }
+      >('mentorship-social-organization-update-lambda', payload)
+      if (response.statusCode == 201) {
+        toast.success('Informações salvas com sucesso!')
+        queryClient.invalidateQueries([
+          'mentorshipSocialOrganization',
+          socialOrganization.socialOrganizationId || 0,
+          socialOrganization.mentorshipId,
+        ])
+        closeModal()
+      } else {
+        toast.error('Erro ao salvar informações!')
+      }
     } catch (error) {
       toast.error('Erro ao salvar informações!')
     } finally {
@@ -608,7 +566,7 @@ export const AboutInstitutionMentorshipModal = ({
                 <h1 className="ml-4 text-3xl font-semibold">
                   {socialOrganization.name}
                 </h1>
-                {!isInformationSend && (
+                {!socialOrganization.completedOnboarding && (
                   <div className="ml-6">
                     <EditButton
                       text="Editar"
@@ -892,20 +850,35 @@ export const AboutInstitutionMentorshipModal = ({
                         />
                       </div>
 
-                      <FileUpload
-                        label="Estatuto ou Contrato Social"
-                        onFileChange={(file) => {
-                          setValue('estatuto', file || undefined, {
-                            shouldValidate: true,
-                          })
+                      <Controller
+                        control={control}
+                        name="estatuto"
+                        rules={{
+                          validate: (file) => {
+                            if (!semEstatuto && !file)
+                              return 'Arquivo obrigatório'
+                            return true
+                          },
                         }}
-                        fileUrl={socialOrganization?.estatutoFileLocation}
+                        render={({
+                          field: { value, onChange },
+                          fieldState,
+                        }) => (
+                          <FileUpload
+                            label="Estatuto ou Contrato Social"
+                            file={value}
+                            onFileChange={onChange}
+                            disabled={semEstatuto}
+                            error={fieldState.error}
+                            fileUrl={socialOrganization?.estatutoFileLocation}
+                          />
+                        )}
                       />
                       <div className="mb-2 mt-[12px] flex items-center">
                         <CustomCheckbox
                           id="semEstatuto"
                           checked={semEstatuto}
-                          setChecked={(value) => setSemEstatuto(value)}
+                          setChecked={(value) => handleEstatutoChange(value)}
                           labelText="Não possui Estatuto ou Contrato Social"
                         />
                       </div>

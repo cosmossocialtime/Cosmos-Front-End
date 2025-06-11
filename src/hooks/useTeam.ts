@@ -30,6 +30,9 @@ export function useTeam(socialOrganizationId: number) {
         return null
       }
     },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
   })
 
   const {
@@ -47,6 +50,9 @@ export function useTeam(socialOrganizationId: number) {
       return JSON.parse(response.body)
     },
     enabled: !!socialOrganizationId,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
   })
 
   const { mutate: changePermission, isLoading: isChangingPermission } =

@@ -1,9 +1,11 @@
-import { useState, useRef } from 'react'
+// FileUpload.tsx
+import { useRef } from 'react'
 import { Trash, Upload } from 'phosphor-react'
 import { FieldError } from 'react-hook-form'
 
 interface FileUploadProps {
   label: string
+  file: File | null
   onFileChange: (file: File | null) => void
   disabled?: boolean
   error?: string | FieldError
@@ -12,25 +14,21 @@ interface FileUploadProps {
 
 const FileUpload: React.FC<FileUploadProps> = ({
   label,
+  file,
   onFileChange,
   disabled = false,
   error,
   fileUrl,
 }) => {
-  const [file, setFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0] || null
-    if (selectedFile) {
-      setFile(selectedFile)
-      onFileChange(selectedFile)
-    }
+    onFileChange(selectedFile)
   }
 
   const handleRemoveFile = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setFile(null)
     onFileChange(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -40,27 +38,17 @@ const FileUpload: React.FC<FileUploadProps> = ({
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     if (disabled) return
-
     const droppedFile = event.dataTransfer.files?.[0] || null
-    if (droppedFile) {
-      setFile(droppedFile)
-      onFileChange(droppedFile)
+    onFileChange(droppedFile)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
     }
-  }
-
-  // Renderização condicional para SSR
-  if (typeof window === 'undefined') {
-    return (
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-700">{label}</label>
-        <div className="h-[72px] rounded-lg border-2 border-dashed border-gray-300 bg-gray-50"></div>
-      </div>
-    )
   }
 
   return (
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium text-gray-700">{label}</label>
+
       {fileUrl && (
         <a
           href={fileUrl}
@@ -71,6 +59,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           Visualizar arquivo enviado
         </a>
       )}
+
       <div
         className={`flex items-center justify-center rounded-lg border-2 p-4 transition ${
           file ? 'border-blue-300 bg-blue-50' : 'border-dashed border-gray-300'
@@ -83,7 +72,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
         onDrop={handleDrop}
         onClick={() => !disabled && fileInputRef.current?.click()}
         role="button"
-        aria-label="Upload de arquivo"
         tabIndex={0}
       >
         {!file ? (
@@ -92,7 +80,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
             <span className="text-sm text-gray-500">
               Arraste um arquivo ou clique para selecionar
             </span>
-
             <input
               type="file"
               className="hidden"

@@ -37,7 +37,7 @@ export function PopoverEvents() {
 
           return (
             <Popover.Root key={event.startAt.toString()}>
-              <Popover.Trigger className="group">
+              <Popover.Trigger className="group" asChild>
                 <button
                   onClick={() => {
                     changeSelectedEvent(event)
