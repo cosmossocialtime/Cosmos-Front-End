@@ -1,6 +1,7 @@
 import { CaretDown, CaretUp, Check } from 'phosphor-react'
 import { UserProps } from '../../../../types/user'
 import { permissionsLabels } from '../../../../utils/roleId'
+import { useEffect, useRef } from 'react'
 
 type PermissionDropdownProps = {
   usuario: UserProps
@@ -20,6 +21,7 @@ export function PermissionDropdown({
   togglePermission,
   adminCount,
 }: PermissionDropdownProps) {
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const currentRole =
     usuario.socialOrganizations &&
     permissionsLabels.get(usuario.socialOrganizations[0].role?.role || '')
@@ -28,6 +30,25 @@ export function PermissionDropdown({
     currentRole === 'Administrador' &&
     adminCount === 1 &&
     usuario.id === user.id
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        toggleDropdown()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
 
   if (isOnlyAdmin) {
     return <span className="text-gray-500">{currentRole}</span>
@@ -42,7 +63,10 @@ export function PermissionDropdown({
         {currentRole} {isOpen ? <CaretUp /> : <CaretDown />}
       </button>
       {isOpen && (
-        <div className="absolute left-0 z-50 mt-2 w-[400px] rounded-md border bg-white shadow-lg">
+        <div
+          className="absolute left-0 z-50 mt-2 w-[400px] rounded-md border bg-white shadow-lg"
+          ref={dropdownRef}
+        >
           {['Administrador', 'Membro'].map((roleLabel) => {
             const roleValue =
               roleLabel === 'Administrador'

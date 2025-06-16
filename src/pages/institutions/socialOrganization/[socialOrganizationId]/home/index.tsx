@@ -111,7 +111,7 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-gray-200 text-gray-800">
       <DynamicHeader />
-      <main className="flex gap-6 p-6">
+      <main className="flex h-[calc(100vh-68px)] gap-6 p-6 ">
         <div className="flex w-4/6 flex-1 flex-col gap-6">
           {mentorships && mentorships.length !== 0 && (
             <CurrentMissionsInstitutionArea mentorships={mentorships} />
@@ -124,7 +124,10 @@ export default function Home() {
         </div>
         <aside className="w-[360px] space-y-6">
           <div className="flex w-[360px] flex-col gap-6 p-6">
-            <CurrentAchievementInstitution achievements={achievements} />
+            <CurrentAchievementInstitution
+              achievements={achievements}
+              socialOrganization={socialOrganization}
+            />
             <div
               className={`${
                 mentorships?.length === 0 ? 'h-[17rem]' : 'h-[36rem]'
@@ -143,7 +146,10 @@ export default function Home() {
                   de {achievements?.length}
                 </span>
               </div>
-              <AchievementsAreaInstitution achievements={achievements} />
+              <AchievementsAreaInstitution
+                achievements={achievements}
+                socialOrganization={socialOrganization}
+              />
             </div>
           </div>
         </aside>
