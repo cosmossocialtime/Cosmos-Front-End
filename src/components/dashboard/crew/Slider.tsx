@@ -40,7 +40,7 @@ export default function Slider() {
   const [mentorshipVolunteers, setMentorshipVolunteers] =
     useState<MentorshipProps[]>()
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-    loop: true,
+    initial: 0,
     slides: {
       perView: 3,
       spacing: 15,
@@ -80,12 +80,15 @@ export default function Slider() {
     )
   }
   return (
-    <main className="relative flex flex-1 flex-col items-center justify-center">
+    <main className="relative flex flex-1 flex-col">
       {!openModal && (
         <div className="absolute right-0 top-0 z-10 bg-gradient-to-l from-white lg:w-96" />
       )}
 
-      <div ref={sliderRef} className="keen-slider flex w-full  px-4 py-1">
+      <div
+        ref={sliderRef}
+        className="keen-slider flex w-full items-center justify-center px-4 py-1"
+      >
         {mentorshipVolunteers &&
           mentorshipVolunteers.map((volunteer) => {
             return (
@@ -95,9 +98,9 @@ export default function Slider() {
                 }}
                 key={volunteer.id}
               >
-                <div className="keen-slider__slide rounded border border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-24">
+                <div className="keen-slider__slide mx-auto max-h-[480px] max-w-[400px] rounded border border-gray-50 bg-gray-100 px-8 py-1 drop-shadow lg:py-24">
                   <Dialog.Trigger className="w-full">
-                    <div className="flex w-full justify-between">
+                    <div className="flex justify-between">
                       <div className="flex flex-col">
                         <h2 className="pb-2 text-left text-2xl font-semibold text-cian-500">
                           {volunteerRoleLabel.get(volunteer.roleName)}
@@ -136,10 +139,17 @@ export default function Slider() {
                     </div>
                     <div className="mt-2 flex max-h-48 max-w-[20rem] flex-col gap-3">
                       <p className="break-words text-left text-indigo-500 ">
-                        {volunteer.professionalPreviousExperiences}
+                        {volunteer.professionalPreviousExperiences.length > 50
+                          ? volunteer.professionalPreviousExperiences.substring(
+                              0,
+                              50
+                            ) + '...'
+                          : volunteer.professionalPreviousExperiences}
                       </p>
                       <p className="overflow-hidden overflow-ellipsis text-left text-indigo-500">
-                        {volunteer.mainCompetencies}
+                        {volunteer.mainCompetencies.length > 50
+                          ? volunteer.mainCompetencies.substring(0, 50) + '...'
+                          : volunteer.mainCompetencies}
                       </p>
                     </div>
                   </Dialog.Trigger>
@@ -171,27 +181,29 @@ export default function Slider() {
           })}
       </div>
       {loaded && instanceRef.current && (
-        <>
+        <div className="mb-8 ml-6 mt-6 flex gap-8">
           <CaretLeft
             size={24}
             onClick={(e: any) =>
               e.stopPropagation() || instanceRef.current?.prev()
             }
             className={`${
-              currentSlide === 0 && ''
-            } absolute left-10 top-1/2 z-40 h-12 w-12 -translate-y-1/2 cursor-pointer rounded-full bg-black/10 p-3 text-blue-800 transition-colors hover:bg-violet-400 hover:text-zinc-50`}
+              currentSlide === 0 ? 'arrow--disabled text-gray-300' : ''
+            } arrow arrow--left left-4 cursor-pointer text-blue-300`}
           />
           <CaretRight
             size={24}
             onClick={(e: any) =>
-              e.stopPropagation() || instanceRef?.current?.next()
+              e.stopPropagation() || instanceRef.current?.next()
             }
             className={`${
               currentSlide ===
-                instanceRef.current.track.details.slides.length - 1 && ''
-            } absolute right-10 top-1/2 z-40 h-12 w-12 -translate-y-1/2 cursor-pointer rounded-full bg-black/10 p-3 text-blue-800 transition-colors hover:bg-violet-400 hover:text-zinc-50`}
+              instanceRef.current.track.details.slides.length - 1
+                ? 'arrow--disabled text-gray-300'
+                : ''
+            } arrow arrow--right cursor-pointer text-blue-300`}
           />
-        </>
+        </div>
       )}
     </main>
   )

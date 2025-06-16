@@ -117,10 +117,15 @@ export default function SideBar() {
             showside ? '' : 'hidden'
           } mt-auto flex min-w-max flex-col gap-1 bg-blue-900 px-2 py-4 text-white`}
         >
-          <Link href="/">Precisa de ajuda?</Link>
-          <Link href="/" className="text-blue-400">
+          <span>Precisa de ajuda?</span>
+          <a
+            href="https://wa.me/554191473667?text=Oi%2C%20aterrissei%20aqui%20vindo%20da%20Cosmos.%20Consegue%20me%20ajudar%3F"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`text-blue-400`}
+          >
             Chat do Controle da Missão
-          </Link>
+          </a>
         </div>
       </aside>
       <button

@@ -41,6 +41,7 @@ export default function AboutYouForm() {
   const [currentStep, setCurrentStep] = useState(3)
   const [isDisabled, setIsDisabled] = useState(true)
   const [selectedOption, setSelectedOption] = useState<string>('')
+
   const {
     user,
     onboardingMember,
@@ -49,13 +50,10 @@ export default function AboutYouForm() {
     saveOnboardingMember,
     setOnboardingMember,
   } = useOnboardingInstitution()
+
   const searchParams = useSearchParams()
   const isMember = searchParams.get('member')
   const organizationId = searchParams.get('socialOrganizationId')
-
-  if (isMember !== null) {
-    setOnboardingMember(true)
-  }
 
   const {
     register,
@@ -68,6 +66,18 @@ export default function AboutYouForm() {
     resolver: zodResolver(schema),
     mode: 'onChange',
   })
+
+  async function getUser() {
+    const response = await invokeLambda<
+      Record<string, never>,
+      { statusCode: number; body: string }
+    >('user-select-lambda', {})
+    if (response.statusCode === 200) {
+      return JSON.parse(response.body)
+    } else {
+      throw new Error('Erro ao buscar informações')
+    }
+  }
 
   async function getSectors() {
     try {
@@ -86,6 +96,20 @@ export default function AboutYouForm() {
     queryKey: ['sectors'],
     queryFn: getSectors,
   })
+
+  const { data: usuario } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => getUser(),
+    enabled: isMember !== null,
+  })
+
+  useEffect(() => {
+    if (isMember !== null && usuario) {
+      setValue('fullName', usuario.fullName || '')
+      setValue('phone', usuario.phone || '')
+      setOnboardingMember(true)
+    }
+  }, [isMember, usuario, setValue, setOnboardingMember])
 
   useEffect(() => {
     const savedData = getValues()
@@ -111,14 +135,14 @@ export default function AboutYouForm() {
   ])
 
   useEffect(() => {
-    if (user !== null) {
+    if (!isMember && user !== null) {
       setValue('fullName', user.fullName || '')
       setValue('phone', user.phone || '')
       setSelectedOption(user.professionalSector || '')
       setValue('professionalSector', user.professionalSector || '')
       setValue('professionalRole', user.professionalRole || '')
     }
-  }, [user])
+  }, [user, isMember, setValue])
 
   const handleChange = (selected: Option | null) => {
     if (selected !== null) {
@@ -159,19 +183,18 @@ export default function AboutYouForm() {
       <StaticHeader />
       <main className="mt-[32px] flex w-full flex-col items-center px-4">
         <div className="mb-4 w-[650px]">
-          {onboardingMember ? (
-            <ProgressBar steps={steps} currentStep={currentStep} />
-          ) : (
-            <ProgressBar
-              steps={steps}
-              currentStep={currentStep}
-              onBack={() =>
-                Router.push(
-                  '/institutions/socialOrganization/register/aboutOrganization'
-                )
-              }
-            />
-          )}
+          <ProgressBar
+            steps={steps}
+            currentStep={currentStep}
+            onBack={
+              onboardingMember
+                ? undefined
+                : () =>
+                    Router.push(
+                      '/institutions/socialOrganization/register/aboutOrganization'
+                    )
+            }
+          />
         </div>
 
         <div className="w-[384px] p-6">

@@ -9,7 +9,7 @@ const TripulacaoPage = () => {
       <DynamicHeader />
       <div className="flex h-[calc(100vh-68px)]">
         <SideBar />
-        <div className="flex flex-1 flex-col overflow-hidden px-6 py-6">
+        <div className="flex flex-1 flex-col overflow-y-auto px-6 py-6">
           <Head>
             <title>Tripulação</title>
           </Head>

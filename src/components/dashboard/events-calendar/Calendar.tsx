@@ -152,7 +152,6 @@ export function Calendar() {
             <Popover.Content
               side="right"
               className="relative z-[2] m-4 w-[28rem] rounded-2xl bg-violet-500 px-6 pb-10 pt-14 text-white 2xl:w-[32rem]"
-              onPointerDownOutside={(e) => e.preventDefault()}
             >
               <PopoverEventForm />
             </Popover.Content>
@@ -238,7 +237,6 @@ export function Calendar() {
                   <Popover.Content
                     side="right"
                     className="relative z-[2] m-4 w-[28rem] rounded-2xl bg-violet-500 px-6 pb-10 pt-14 text-white 2xl:w-[32rem]"
-                    onPointerDownOutside={(e) => e.preventDefault()}
                   >
                     {renderPopoverContent()}
                   </Popover.Content>
