@@ -6,10 +6,13 @@ import { useQuery } from '@tanstack/react-query'
 import { invokeLambda } from '../../../../../../../lib/aws/invokeLambda'
 import { EventProps } from '../../../../../../../types/event'
 import DashboardLoadingInstitution from '../DashboardLoadingInstitution'
+import StarFour from '../../../../../../../assets/star-four.svg'
+import Image from 'next/image'
 
 export default function LogBook() {
   const route = useRouter()
   const { mentorshipId } = route.query
+  const { socialOrganizationId } = route.query
 
   async function getEvents() {
     try {
@@ -39,8 +42,6 @@ export default function LogBook() {
   })
 
   if (isLoading) return <DashboardLoadingInstitution />
-  if (isError) return <p>Erro ao carregar eventos.</p>
-  if (!events || events.length === 0) return <p>Nenhum evento encontrado.</p>
 
   return (
     <div className="min-h-screen overflow-y-auto bg-gray-200 text-gray-800">
@@ -48,11 +49,45 @@ export default function LogBook() {
       <div className="flex h-[calc(100vh-68px)] overflow-hidden">
         <SideBar />
         <div className="flex flex-1 flex-col overflow-hidden px-6 py-6">
-          <div className="flex flex-1 flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md">
-            <div className="overflow-y-auto px-8 py-6">
-              <ListOfEventsDay events={events} source="socialOrganization" />
+          {events && events.length > 0 ? (
+            <div className="flex flex-1 flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md">
+              <div className="overflow-y-auto px-8 py-6">
+                <ListOfEventsDay events={events} source="socialOrganization" />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-1 flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-200 text-center">
+              <div className="mb-12">
+                <Image
+                  src={StarFour}
+                  alt="Estrela de quatro pontas"
+                  className="h-20"
+                />
+              </div>
+              <h2 className="mb-2 text-xl font-medium text-gray-500">
+                Ainda não há diários de bordo disponíveis
+              </h2>
+              <p className="mx-auto mb-6 max-w-xl text-base text-gray-500">
+                Os diários de bordo aparecerão aqui após sua equipe marcar um
+                encontro com a tripulação.
+              </p>
+              <p className="mx-auto mb-12 max-w-xl text-base text-gray-500">
+                Você pode usar o Calendário de Eventos para marcar encontros com
+                a equipe ou esperar que a pessoa responsável marque os
+                encontros!
+              </p>
+              <button
+                className="h-[48px] w-[221px] rounded-md border border-solid border-gray-300 bg-white px-6 py-3 font-semibold text-blue-400 transition-colors hover:bg-blue-50"
+                onClick={() =>
+                  route.push(
+                    `/institutions/socialOrganization/${socialOrganizationId}/dashboard/${mentorshipId}/events-calendar`
+                  )
+                }
+              >
+                Marcar um encontro
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

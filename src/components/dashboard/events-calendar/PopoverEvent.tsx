@@ -44,10 +44,37 @@ export function PopoverEvent() {
     dayjs(event.startAt).isSame(dayjs(selectedDay), 'day')
   )
 
+  const isRecurring = !!selectedEvent?.recurrenceGroupId
+
   async function deleteEvent() {
     try {
       const payload = {
         eventId: selectedEvent?.id || 0,
+      }
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('mentorship-event-delete-lambda', payload)
+
+      if (response.statusCode === 200) {
+        toast.success('Evento excluído com sucesso')
+        changePopover(popovers.Event)
+        selectDay(null)
+        getEvents()
+      } else {
+        toast.error('Erro ao excluir o evento!')
+      }
+    } catch (error) {
+      toast.error('Erro ao excluir o evento!')
+      throw error
+    }
+  }
+
+  async function deleteEventRecurrency() {
+    try {
+      const payload = {
+        eventId: selectedEvent?.id || 0,
+        recurrenceGroupId: selectedEvent?.recurrenceGroupId || '',
       }
       const response = await invokeLambda<
         typeof payload,
@@ -104,10 +131,20 @@ export function PopoverEvent() {
                   <Trash size={24} />
                   <span>Excluir</span>
                 </Dialog.Trigger>
-                <DeleteConfirmation
-                  message="Tem certeza de que deseja excluir o evento?"
-                  deleteFunc={deleteEvent}
-                />
+                {isRecurring ? (
+                  <DeleteConfirmation
+                    message="Tem certeza de que deseja excluir o evento?"
+                    deleteFunc={deleteEvent}
+                    deleteRecFunc={deleteEventRecurrency}
+                    isRecurring={isRecurring}
+                  />
+                ) : (
+                  <DeleteConfirmation
+                    message="Tem certeza de que deseja excluir o evento?"
+                    deleteFunc={deleteEvent}
+                    isRecurring={isRecurring}
+                  />
+                )}
               </Dialog.Root>
             </div>
           </Popover.Content>

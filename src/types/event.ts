@@ -7,6 +7,8 @@ export type EventProps = {
   endAt: Date
   createdAt: Date
   updatedAt: Date
+  recurrenceType: string | null
+  recurrenceGroupId: string | null
   attendees: {
     accepted: boolean
     answeredAt: Date
