@@ -53,6 +53,7 @@ type formProps = z.infer<typeof schema>
 export function PopoverEventForm() {
   const [onLinkMeet, setOnLinkMeet] = useState(false)
   const [onRepeatEvent, setOnRepeatEvent] = useState(false)
+  const [updateRecurrency, setUpdateRecurrency] = useState(false)
 
   const {
     changePopover,
@@ -71,6 +72,8 @@ export function PopoverEventForm() {
   const [selectedRecurrence, setSelectedRecurrence] = useState<Option | null>(
     null
   )
+  const isRecurring = !!selectedEvent?.recurrenceGroupId
+  const isEditing = !!selectedEvent?.id
 
   const options: Option[] = [
     { value: 'weekly', label: 'Semanal' },
@@ -98,7 +101,11 @@ export function PopoverEventForm() {
           }),
         startAt: dayjs(startHour).format('YYYY-MM-DD HH:mm'),
         endAt: dayjs(endHour).format('YYYY-MM-DD HH:mm'),
-        recurrenceType: selectedRecurrence?.value,
+        recurrenceGroupId: selectedEvent?.recurrenceGroupId,
+        updateRecurrenceEvents: updateRecurrency ? 1 : 0,
+        recurrenceType: isEditing
+          ? selectedEvent?.recurrenceType
+          : selectedRecurrence?.value,
         repeatUntil: dayjs(data.repeatUntil).format('YYYY-MM-DD'),
       }
 
@@ -193,53 +200,69 @@ export function PopoverEventForm() {
             )}
           />
         </div>
-
-        <div className="mt-2 flex items-center gap-2">
-          <button
-            type="button"
-            data-meet={onRepeatEvent}
-            className="group relative flex h-6 w-12 items-center rounded-full border border-solid border-gray-300 data-[meet=true]:border-blue-500 data-[meet=true]:bg-blue-500"
-            onClick={() => setOnRepeatEvent(!onRepeatEvent)}
-          >
-            <div className=" absolute left-0 m-1 h-4 w-4 rounded-full bg-gray-500 transition-all group-data-[meet=true]:left-6 group-data-[meet=true]:bg-white" />
-          </button>
-          <span>Repetir agenda?</span>
-        </div>
-        {onRepeatEvent && (
+        {!isEditing && (
           <>
-            <div>
-              <SingleSelectComboBoxSecondary
-                instanceId="recurrence"
-                options={options}
-                label="Frequência"
-                onChange={(option) => setSelectedRecurrence(option)}
-                value={selectedRecurrence}
-              />
+            <div className="mt-2 flex items-center gap-2">
+              <button
+                type="button"
+                data-meet={onRepeatEvent}
+                className="group relative flex h-6 w-12 items-center rounded-full border border-solid border-gray-300 data-[meet=true]:border-blue-500 data-[meet=true]:bg-blue-500"
+                onClick={() => setOnRepeatEvent(!onRepeatEvent)}
+              >
+                <div className=" absolute left-0 m-1 h-4 w-4 rounded-full bg-gray-500 transition-all group-data-[meet=true]:left-6 group-data-[meet=true]:bg-white" />
+              </button>
+              <span>Repetir agenda?</span>
             </div>
-            <div className="mb-2">
-              <label htmlFor="repeatUntil" className="font-semibold">
-                Repetir até
-              </label>
-              <div className="group flex items-center gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 focus-within:border-white focus:border-white">
-                <Calendar size={24} />
-                <Controller
-                  name="repeatUntil"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      required
-                      className="outline-none"
-                      selected={field.value}
-                      onChange={(option) => field.onChange(option)}
-                      dateFormat={'dd/MM/yyyy'}
+            {onRepeatEvent && (
+              <>
+                <div>
+                  <SingleSelectComboBoxSecondary
+                    instanceId="recurrence"
+                    options={options}
+                    label="Frequência"
+                    onChange={(option) => setSelectedRecurrence(option)}
+                    value={selectedRecurrence}
+                  />
+                </div>
+                <div className="mb-2">
+                  <label htmlFor="repeatUntil" className="font-semibold">
+                    Repetir até
+                  </label>
+                  <div className="group flex items-center gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 focus-within:border-white focus:border-white">
+                    <Calendar size={24} />
+                    <Controller
+                      name="repeatUntil"
+                      control={control}
+                      render={({ field }) => (
+                        <DatePicker
+                          required
+                          className="outline-none"
+                          selected={field.value}
+                          onChange={(option) => field.onChange(option)}
+                          dateFormat={'dd/MM/yyyy'}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-            </div>
+                  </div>
+                </div>
+              </>
+            )}
           </>
         )}
 
+        {isRecurring && (
+          <div className="mt-2 flex items-center gap-2">
+            <button
+              type="button"
+              data-meet={updateRecurrency}
+              className="group relative flex h-6 w-12 items-center rounded-full border border-solid border-gray-300 data-[meet=true]:border-blue-500 data-[meet=true]:bg-blue-500"
+              onClick={() => setUpdateRecurrency(!updateRecurrency)}
+            >
+              <div className=" absolute left-0 m-1 h-4 w-4 rounded-full bg-gray-500 transition-all group-data-[meet=true]:left-6 group-data-[meet=true]:bg-white" />
+            </button>
+            <span>Atualizar eventos futuros da série?</span>
+          </div>
+        )}
         <Controller
           name="attendees"
           control={control}

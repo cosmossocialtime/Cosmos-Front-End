@@ -1,11 +1,11 @@
-import { Upload } from 'phosphor-react'
+import { DownloadSimple } from 'phosphor-react'
 
 interface ButtonProps {
   text: string
   disabled?: boolean
   isLoading?: boolean
   printImage?: string
-  onClick?: () => void
+  onClick: () => void
 }
 
 export function DownloadButton({
@@ -14,17 +14,29 @@ export function DownloadButton({
   printImage,
   onClick,
 }: ButtonProps) {
+  const handleDownload = async () => {
+    if (!printImage) {
+      await onClick()
+    }
+
+    const link = document.createElement('a')
+    link.href = printImage || ''
+    link.download = 'organizationImage.jpg'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
-    <a
-      className={`flex h-12 items-center justify-center gap-2 rounded-md border border-solid border-white px-4 text-sm font-semibold text-white transition hover:bg-white hover:text-black ${
-        disabled ? 'disabled cursor-not-allowed opacity-50' : ''
+    <button
+      className={`flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#0A84FF] px-4 text-base font-semibold text-white transition hover:bg-[#006FE0] ${
+        disabled ? 'cursor-not-allowed opacity-50' : ''
       }`}
-      href={printImage}
-      download
-      onClick={onClick}
+      onClick={handleDownload}
+      disabled={disabled}
     >
-      <Upload size={16} weight="bold" />
+      <DownloadSimple size={18} weight="bold" />
       {text}
-    </a>
+    </button>
   )
 }

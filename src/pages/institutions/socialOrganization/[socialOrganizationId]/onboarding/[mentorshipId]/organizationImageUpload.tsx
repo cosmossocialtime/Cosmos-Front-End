@@ -4,7 +4,6 @@ import Router, { useRouter } from 'next/router'
 import { Button } from '../../../../../../components/Button/ButtonSubmit'
 import { useDashboard } from '../../../../../../hooks/useDashboard'
 import Image from 'next/image'
-import { ButtonSecondary } from '../../../../../../components/Button/ButtonSubmitSecondary'
 import { DownloadButton } from '../../../../../../components/Button/DownloadButton'
 import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
@@ -107,23 +106,35 @@ export default function OrganizationImageUpload() {
   }
 
   async function takeScreenshot() {
-    if (typeof window === 'undefined') return // garante execução só no client
+    if (typeof window === 'undefined') return
 
-    const element = document.querySelector('#fullPage') as HTMLElement | null
-    if (!element) {
-      console.warn('Elemento #fullPage não encontrado.')
+    const originalElement = document.querySelector(
+      '#screenshotArea'
+    ) as HTMLElement | null
+    if (!originalElement) {
+      toast.error('Não foi possível encontrar a área de captura.')
       return
     }
 
-    // Esconde temporariamente os elementos com a classe
-    const elementsToHide = element.querySelectorAll('.hide-during-print')
-    elementsToHide.forEach((el) => {
-      ;(el as HTMLElement).style.visibility = 'hidden'
+    // Clona a div de captura
+    const clone = originalElement.cloneNode(true) as HTMLElement
+    clone.id = 'printClone'
+    clone.classList.add('print-layout')
+
+    // Oculta elementos desnecessários no clone
+    clone.querySelectorAll('.hide-during-print').forEach((el) => {
+      ;(el as HTMLElement).style.display = 'none'
     })
 
+    // Posiciona fora da tela para não afetar o layout
+    clone.style.position = 'fixed'
+    clone.style.top = '-10000px'
+    clone.style.left = '-10000px'
+
+    document.body.appendChild(clone)
+
     try {
-      const canvas = await html2canvas(element, {
-        scrollY: -window.scrollY,
+      const canvas = await html2canvas(clone, {
         useCORS: true,
         scale: 2,
       })
@@ -134,10 +145,7 @@ export default function OrganizationImageUpload() {
       console.error('Erro ao gerar imagem:', error)
       toast.error('Não foi possível gerar a imagem.')
     } finally {
-      // Restaura a visibilidade mesmo se der erro
-      elementsToHide.forEach((el) => {
-        ;(el as HTMLElement).style.visibility = 'visible'
-      })
+      document.body.removeChild(clone)
     }
   }
 
@@ -145,21 +153,26 @@ export default function OrganizationImageUpload() {
     <div className="flex h-screen w-full flex-col overflow-hidden bg-white">
       <DynamicHeader />
       <div
-        id="fullPage"
+        id="screenshotArea"
         className="relative flex flex-1 flex-col bg-bgFuturisticPedestal bg-cover bg-center bg-no-repeat text-white"
       >
-        <header className="hide-during-print absolute left-0 right-0 top-0 z-10 flex h-20 items-center justify-between px-10 backdrop-blur-xl">
-          <ArrowLeft
-            className="hide-during-print mt-2 cursor-pointer text-white"
-            onClick={() =>
-              Router.push(
-                `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationUploadImageAdvisor`
-              )
-            }
-            size={24}
-          />
-          <div className="hide-during-print flex gap-4">
-            <div className="px-4 py-2">
+        <header className="hide-during-print absolute left-0 right-0 top-0 z-10 backdrop-blur-xl">
+          <div className="hide-during-print flex h-20 flex-col items-center justify-between py-4">
+            <div className="hide-during-print absolute left-10 z-10 mt-2 items-center">
+              <ArrowLeft
+                className="hide-during-print mt-2 cursor-pointer text-white"
+                onClick={() =>
+                  Router.push(
+                    `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationUploadImageAdvisor`
+                  )
+                }
+                size={24}
+              />
+            </div>
+            <div className="hide-during-print mt-4 flex items-center text-center text-base text-white">
+              Baixe a imagem da sua conquista e compartilhe nas redes sociais
+            </div>
+            <div className="hide-during-print absolute right-10 w-[240px]">
               <DownloadButton
                 text="Baixar imagem"
                 printImage={printImage}
@@ -168,16 +181,6 @@ export default function OrganizationImageUpload() {
                   socialOrganization?.logo || socialOrganization?.logo !== ''
                     ? false
                     : true
-                }
-              />
-            </div>
-            <div className="hide-during-print px-4 py-2">
-              <ButtonSecondary
-                text="Compartilhar imagem"
-                onClick={() =>
-                  Router.push(
-                    `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationUploadImageAdvisor`
-                  )
                 }
               />
             </div>

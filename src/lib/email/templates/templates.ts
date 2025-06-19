@@ -861,3 +861,115 @@ export function inviteMemberExistingUserTemplate(
   `
   return { subject, html }
 }
+
+export function confirmChangeEmailInstitutionTemplate(
+  socialOrganizationName: string,
+  socialOrganizationId: number,
+  requestMemberName: string,
+  name: string
+) {
+  const subject = `Confirme a troca de e-mail na sua conta Cosmos 🚀`,
+    html = `<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Boas-vindas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css"
+    />
+  </head>
+  <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f9f9f9;">
+  <style>
+    body {
+        font-family: 'Inter';
+    }
+</style>
+    <table align="center" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+      <!-- Header -->
+      <tr>
+        <td align="center">
+          <img src="https://cosmos-social-ong-volunteer-bucket.s3.us-east-1.amazonaws.com/cosmos-images/mail_header.png"
+     alt="Header Cosmos"
+     width="600"
+     style="display: block; width: 100%; max-width: 600px; height: auto;" />
+        </td>
+      </tr>
+
+      <!-- Body -->
+      <tr>
+        <td style="padding: 40px 40px 20px 40px; color: #1F103F;">
+          <h2 style="margin-top: 0;">Olá ${name},</h2>
+          <p style="font-size: 16px; line-height: 1.6;">
+            Recebemos uma solicitação para atualizar o e-mail vinculado à sua conta na Cosmos. Para que essa alteração seja concluída com segurança, pedimos que você confirme a troca clicando no botão abaixo:
+
+          </p>
+
+          <!-- Botão -->
+          <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 24px 0;">
+            <tr>
+              <td align="center" bgcolor="#7C3AED" style="border-radius: 8px;">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}"
+                   target="_blank"
+                   style="display: inline-block;
+                          padding: 14px 32px;
+                          font-size: 16px;
+                          font-weight: bold;
+                          color: #ffffff;
+                          text-decoration: none;
+                          border-radius: 8px;
+                          background-color: #7C3AED;">
+                  Confirmar Troca de E-mail
+                </a>
+              </td>
+            </tr>
+          </table>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            Caso o botão não funcione, copie e cole o link a seguir diretamente no seu navegador:<br />
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}</a>
+          </p>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            Assim que a confirmação for feita, sua conta será atualizada com o novo e-mail, e você poderá continuar explorando e contribuindo com a nossa missão de impacto social sem interrupções.
+          </p>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            Se você não solicitou essa alteração ou tiver qualquer dúvida, entre em contato com a gente. Estamos por aqui para ajudar!
+          </p>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            Saudações do Controle da Missão,<br />
+			Equipe Cosmos 🌌
+          </p>
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td align="center" style="padding: 24px;">
+          <a href="https://www.linkedin.com/company/cosmos-social" style="margin: 0 8px; text-decoration:none; font-size:24px; display: inline-block; color:#42A5F5;"><i class="ph ph-linkedin-logo"></i></a>
+          <a href="https://instagram.com/social.cosmos" style="margin: 0 8px; text-decoration:none; font-size:24px; display: inline-block; color:#42A5F5;"><i class="ph ph-instagram-logo"></i></a>
+          <a href="https://www.cosmossocial.com.br" style="margin: 0 8px; text-decoration:none; font-size:24px; display: inline-block; color:#42A5F5;"><i class="ph ph-globe-simple"></i></a>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" bgcolor="#1F103F" style="padding: 24px;">
+          <p style="margin-top: 16px; font-size: 10px; color: #ccc;">
+            © 2025 Cosmos Social. Todos os direitos reservados.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+  `
+  return { subject, html }
+}

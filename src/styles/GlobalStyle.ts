@@ -141,4 +141,16 @@ export const GlobalStyle = createGlobalStyle`
     
 .hide-during-print {
 }
+
+#printClone.print-layout {
+  width: 1080px !important;
+  height: 1080px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 `
