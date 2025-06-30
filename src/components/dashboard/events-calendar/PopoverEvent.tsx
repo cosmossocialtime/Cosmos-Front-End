@@ -25,6 +25,7 @@ export function PopoverEvent() {
     selectedEvent,
     getEvents,
     selectDay,
+    changeSelectedEvent,
   } = useCalendar()
 
   if (!selectedEvent) {
@@ -45,9 +46,34 @@ export function PopoverEvent() {
   )
 
   const isRecurring = !!selectedEvent?.recurrenceGroupId
+  const isMeetEvent = !!selectedEvent?.eventId
 
   async function deleteEvent() {
     try {
+      if (isMeetEvent) {
+        const googlePayload: any = {
+          eventId: selectedEvent?.eventId,
+          updateRecurrenceEvents: 0,
+          occurrenceDateTime: dayjs(
+            dayjs(selectedEvent?.startAt)
+          ).toISOString(),
+        }
+        try {
+          const googleRes = await invokeLambda<
+            typeof googlePayload,
+            { statusCode: number; body: string }
+          >('mentorship-event-google-calendar-delete-lambda', googlePayload)
+
+          if (googleRes.statusCode !== 200) {
+            toast.error('Erro ao remover no Google Calendar')
+            return
+          }
+        } catch (error) {
+          console.error(error)
+          toast.error('Erro ao remover evento no Google Calendar')
+          return
+        }
+      }
       const payload = {
         eventId: selectedEvent?.id || 0,
       }
@@ -60,6 +86,7 @@ export function PopoverEvent() {
         toast.success('Evento excluído com sucesso')
         changePopover(popovers.Event)
         selectDay(null)
+        changeSelectedEvent(null)
         getEvents()
       } else {
         toast.error('Erro ao excluir o evento!')
@@ -72,6 +99,30 @@ export function PopoverEvent() {
 
   async function deleteEventRecurrency() {
     try {
+      if (isMeetEvent) {
+        const googlePayload: any = {
+          eventId: selectedEvent?.eventId,
+          updateRecurrenceEvents: 1,
+          occurrenceDateTime: dayjs(
+            dayjs(selectedEvent?.startAt)
+          ).toISOString(),
+        }
+        try {
+          const googleRes = await invokeLambda<
+            typeof googlePayload,
+            { statusCode: number; body: string }
+          >('mentorship-event-google-calendar-delete-lambda', googlePayload)
+
+          if (googleRes.statusCode !== 200) {
+            toast.error('Erro ao remover no Google Calendar')
+            return
+          }
+        } catch (error) {
+          console.error(error)
+          toast.error('Erro ao remover evento no Google Calendar')
+          return
+        }
+      }
       const payload = {
         eventId: selectedEvent?.id || 0,
         recurrenceGroupId: selectedEvent?.recurrenceGroupId || '',
@@ -85,6 +136,7 @@ export function PopoverEvent() {
         toast.success('Evento excluído com sucesso')
         changePopover(popovers.Event)
         selectDay(null)
+        changeSelectedEvent(null)
         getEvents()
       } else {
         toast.error('Erro ao excluir o evento!')

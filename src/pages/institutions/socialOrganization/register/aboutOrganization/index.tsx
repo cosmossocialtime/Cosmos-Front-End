@@ -49,7 +49,7 @@ export default function AboutOrganizationForm() {
     setError,
     clearErrors,
     trigger,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<formProps>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -154,7 +154,7 @@ export default function AboutOrganizationForm() {
 
             <Button
               text={isLoading ? 'Carregando...' : 'Continuar'}
-              disabled={isDisabled || isLoading}
+              disabled={isDisabled || isLoading || isSubmitting}
               type="submit"
               isLoading={isLoading}
             />

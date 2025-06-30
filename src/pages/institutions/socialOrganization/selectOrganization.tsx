@@ -80,7 +80,7 @@ export default function SelectOrganizationPage() {
           </p>
         </div>
         <section className="mt-10 flex flex-col items-center justify-center md:min-h-[500px]">
-          <div className="relative w-full max-w-5xl overflow-hidden px-[40px]">
+          <div className="relative w-full max-w-6xl overflow-hidden px-[40px]">
             {loaded && instanceRef.current && (
               <>
                 {user && user.socialOrganizations?.length > 3 && (
@@ -163,6 +163,7 @@ export default function SelectOrganizationPage() {
                     </div>
                   )
                 )}
+              <div className="keen-slider__slide pointer-events-none w-[20px] opacity-0" />
             </div>
           </div>
         </section>

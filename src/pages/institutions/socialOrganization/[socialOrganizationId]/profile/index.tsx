@@ -32,6 +32,7 @@ import { ChangePasswordInstitutionModal } from '../../../../../components/main-p
 import formatPhone from '../../../../../utils/formatPhone'
 import { useProfile } from '../../../../../hooks/useProfile'
 import { useHeader } from '../../../../../context/HeaderContext'
+import { ConfirmPasswordEmailChange } from '../../../../../components/instituition/profile/confirmPasswordEmailChange'
 
 const schema = z.object({
   fullName: nameSchema,
@@ -60,9 +61,13 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
   const [selectedOption, setSelectedOption] = useState<string>('')
+  const [selectedEmail, setSelectedEmail] = useState<string>('')
   const [isModalChangePasswordOpen, setIsModalChangePasswordOpen] =
     useState<boolean>(false)
   const closeModalChangePassword = () => setIsModalChangePasswordOpen(false)
+  const [isModalChangeEmailOpen, setIsModalChangeEmailOpen] =
+    useState<boolean>(false)
+  const closeModalChangeEmail = () => setIsModalChangeEmailOpen(false)
   const { user, isLoadingUser, updateUser, updateUserImage } =
     useProfile(organizationId)
 
@@ -107,6 +112,7 @@ export default function Profile() {
 
   useEffect(() => {
     setIsDisabled(!isValid)
+    setSelectedEmail(watchedFields[5])
   }, [watchedFields, isValid])
 
   useEffect(() => {
@@ -136,18 +142,22 @@ export default function Profile() {
   }
 
   async function handleForm(data: formProps) {
-    setIsLoading(true)
-    updateUser({
-      fullname: data.fullName,
-      email: data.email,
-      phone: data.phone,
-      professionalRole: data.professionalRole,
-      professionalSector: data.professionalSector,
-      socialOrganizationId: organizationId,
-    })
-    setUserName(data.fullName)
-    setEnableForm(false)
-    setIsLoading(false)
+    if (user.email === data.email) {
+      setIsLoading(true)
+      updateUser({
+        fullname: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        professionalRole: data.professionalRole,
+        professionalSector: data.professionalSector,
+        socialOrganizationId: organizationId,
+      })
+      setUserName(data.fullName)
+      setEnableForm(false)
+      setIsLoading(false)
+    } else {
+      setIsModalChangeEmailOpen(true)
+    }
   }
 
   if (isLoadingUser || !user) {
@@ -410,6 +420,12 @@ export default function Profile() {
                           closeModal={closeModalChangePassword}
                         />
                       )}
+                      {isModalChangeEmailOpen && (
+                        <ConfirmPasswordEmailChange
+                          closeModal={closeModalChangeEmail}
+                          email={selectedEmail}
+                        />
+                      )}
                       <div className="max-w-[320px] text-left">
                         <InputChangePassword
                           id="password"
@@ -440,7 +456,7 @@ export default function Profile() {
                       />
                     </div>
                   </div>
-                  <div className="mt-10 grid max-w-2xl grid-cols-1 gap-6 px-4 text-left sm:grid-cols-2">
+                  <div className="mt-10 grid max-w-3xl grid-cols-1 gap-6 px-4 text-left sm:grid-cols-2">
                     <div className="text-left">
                       <p className="text-sm text-gray-600">E-mail</p>
                       <p className="text-m text-gray-600">{user.email}</p>

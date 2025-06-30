@@ -2,7 +2,7 @@ export default function formatPhone(phoneNumber: string) {
   const { extractDigits, getRemainingDigitsCount } =
     digitsExtractor(phoneNumber)
 
-  return `+${extractDigits(2)} (${extractDigits(2)}) ${
+  return `(${extractDigits(2)}) ${
     getRemainingDigitsCount() === 8
       ? [extractDigits(4), extractDigits(4)].join('-')
       : getRemainingDigitsCount() === 9

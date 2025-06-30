@@ -1,4 +1,15 @@
-import { createContext, useContext, useState, ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react'
+import {
+  clearFormData,
+  getFormData,
+  saveFormData,
+} from '../../utils/localStorage'
 
 interface Route {
   label: string
@@ -25,6 +36,8 @@ interface HeaderContextType {
 
 const HeaderContext = createContext<HeaderContextType>({} as HeaderContextType)
 
+const LOCAL_STORAGE_KEY = 'cosmos.header'
+
 export function HeaderProvider({ children }: { children: ReactNode }) {
   const [showMenu, setShowMenu] = useState(false)
   const [showOrganization, setShowOrganization] = useState(false)
@@ -35,13 +48,61 @@ export function HeaderProvider({ children }: { children: ReactNode }) {
   const [socialOrganizationId, setSocialOrganizationId] = useState<
     number | null
   >(null)
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => {
+    try {
+      const saved = getFormData(LOCAL_STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        setShowMenu(parsed.showMenu ?? false)
+        setShowOrganization(parsed.showOrganization ?? false)
+        setRoutes(parsed.routes ?? [])
+        setUserName(parsed.userName ?? null)
+        setProfilePicture(parsed.profilePicture ?? null)
+        setOrganizationName(parsed.organizationName ?? null)
+        setSocialOrganizationId(parsed.socialOrganizationId ?? null)
+      }
+    } catch (err) {
+      console.warn('Erro ao reidratar header:', err)
+    } finally {
+      setIsHydrated(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isHydrated) return
+
+    const stateToPersist = {
+      showMenu,
+      showOrganization,
+      routes,
+      userName,
+      profilePicture,
+      organizationName,
+      socialOrganizationId,
+    }
+    saveFormData(LOCAL_STORAGE_KEY, JSON.stringify(stateToPersist))
+  }, [
+    isHydrated,
+    showMenu,
+    showOrganization,
+    routes,
+    userName,
+    profilePicture,
+    organizationName,
+    socialOrganizationId,
+  ])
 
   const resetHeader = () => {
     setShowMenu(false)
     setShowOrganization(false)
     setRoutes([])
     setUserName(null)
+    setProfilePicture(null)
     setOrganizationName(null)
+    setSocialOrganizationId(null)
+    clearFormData(LOCAL_STORAGE_KEY)
   }
 
   return (

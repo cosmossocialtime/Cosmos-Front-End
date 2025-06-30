@@ -863,10 +863,9 @@ export function inviteMemberExistingUserTemplate(
 }
 
 export function confirmChangeEmailInstitutionTemplate(
-  socialOrganizationName: string,
-  socialOrganizationId: number,
-  requestMemberName: string,
-  name: string
+  confirmationCode: string,
+  name: string,
+  socialOrganizationId: string
 ) {
   const subject = `Confirme a troca de e-mail na sua conta Cosmos 🚀`,
     html = `<!DOCTYPE html>
@@ -916,7 +915,7 @@ export function confirmChangeEmailInstitutionTemplate(
           <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 24px 0;">
             <tr>
               <td align="center" bgcolor="#7C3AED" style="border-radius: 8px;">
-                <a href="${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}"
+                <a href="${process.env.NEXT_PUBLIC_APP_URL}/institutions/socialOrganization/${socialOrganizationId}/profile/${confirmationCode}"
                    target="_blank"
                    style="display: inline-block;
                           padding: 14px 32px;
@@ -934,7 +933,7 @@ export function confirmChangeEmailInstitutionTemplate(
 
           <p style="font-size: 16px; line-height: 1.6;">
             Caso o botão não funcione, copie e cole o link a seguir diretamente no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/user/login?socialOrganizationId=${socialOrganizationId}</a>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL}/institutions/socialOrganization/${socialOrganizationId}/profile/${confirmationCode}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/institutions/socialOrganization/${socialOrganizationId}/profile/${confirmationCode}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">

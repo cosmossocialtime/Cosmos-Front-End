@@ -12,43 +12,75 @@ import { popovers, useCalendar } from '../../../context/CalendarProvider'
 import dayjs from 'dayjs'
 
 import { InputTime } from './InputTime'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import MeetIcon from '../../../assets/meet-icon.svg'
 import Image from 'next/image'
 import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import SingleSelectComboBoxSecondary from '../../combobox/SingleSelectComboBoxSecondary'
 import { Option } from '../../../types/MultiselectCombobox'
+import { getRRuleByDate } from '../../../utils/getRRuleByDate'
+import { ButtonTertiary } from '../../Button/ButtonSubmitTertiary'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-const schema = z
-  .object({
-    title: z.string().nonempty(),
-    description: z.string(),
-    link: z.string().nonempty(),
-    startAt: z.string().nonempty(),
-    endAt: z.string().nonempty(),
-    eventAt: z.date(),
-    repeatUntil: z.date().optional(),
-    attendees: z.array(z.number()),
-    recurrence: z.enum(['weekly', 'biweekly']).optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.repeatUntil) {
-        const start = dayjs(data.eventAt, 'MM/DD/YYYY')
-        const end = dayjs(data.repeatUntil, 'MM/DD/YYYY')
-        return end.isAfter(start, 'day')
+const createSchema = (onGoogleMeet: boolean, isRecurrence: boolean) =>
+  z
+    .object({
+      title: z.string().nonempty({ message: 'Campo título é obrigatório.' }),
+      description: z.string().optional(),
+      link: z.string().optional(),
+      startAt: z
+        .string()
+        .nonempty({ message: 'Campo horário de ínicio é obrigatório.' }),
+      endAt: z
+        .string()
+        .nonempty({ message: 'Campo horário de término é obrigatório.' }),
+      eventAt: z.date({ message: 'Data do evento é obrigatória.' }),
+      repeatUntil: z.date().optional(),
+      attendees: z
+        .array(z.number())
+        .min(1, { message: 'Selecione pelo menos um participante.' })
+        .default([]),
+      recurrence: z.string().optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (!onGoogleMeet && (!data.link || data.link.trim() === '')) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            'Campo link é obrigatório quando o Google Meet não for usado.',
+          path: ['link'],
+        })
       }
-      return true
-    },
-    {
-      message:
-        'A data final da recorrência deve ser posterior à data do evento.',
-      path: ['repeatUntil'],
-    }
-  )
 
-type formProps = z.infer<typeof schema>
+      if (isRecurrence) {
+        if (!data.recurrence) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Campo Frequência é obrigatório em eventos recorrentes.',
+            path: ['recurrence'],
+          })
+        }
+        if (!data.repeatUntil) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Campo Repetir até é obrigatório em eventos recorrentes.',
+            path: ['repeatUntil'],
+          })
+        } else {
+          const start = dayjs(data.eventAt)
+          const end = dayjs(data.repeatUntil)
+          if (!end.isAfter(start, 'day')) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message:
+                'A data final da recorrência deve ser posterior à data do evento.',
+              path: ['repeatUntil'],
+            })
+          }
+        }
+      }
+    })
 
 export function PopoverEventForm() {
   const [onLinkMeet, setOnLinkMeet] = useState(false)
@@ -60,11 +92,29 @@ export function PopoverEventForm() {
     currentMentorship,
     getEvents,
     selectDay,
+    changeSelectedEvent,
     selectedDay,
     selectedEvent,
+    users,
+    ownerUser,
   } = useCalendar()
 
-  const { control, handleSubmit, register } = useForm<formProps>()
+  const schema = useMemo(
+    () => createSchema(onLinkMeet, onRepeatEvent),
+    [onLinkMeet, onRepeatEvent]
+  )
+
+  const {
+    control,
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<ReturnType<typeof createSchema>>>({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  })
+
   const attendeesId = selectedEvent?.attendees.map(
     (attendee) => attendee.userId
   )
@@ -80,11 +130,93 @@ export function PopoverEventForm() {
     { value: 'biweekly', label: 'Quinzenal' },
   ]
 
-  async function submitForm(data: formProps) {
+  useEffect(() => {
+    setOnLinkMeet(!!selectedEvent?.eventId)
+  }, [])
+
+  async function submitForm(data: z.infer<ReturnType<typeof createSchema>>) {
     try {
       const dayEvent = dayjs(data.eventAt).format('MM/DD/YYYY')
       const startHour = dayjs(`${dayEvent} ${data.startAt}`)
       const endHour = dayjs(`${dayEvent} ${data.endAt}`)
+
+      let eventId: string | null = null
+      let originalEventId: string | null = null
+      let firstEvent = 0
+
+      if (onLinkMeet) {
+        const attendeesEmails = data.attendees
+          .map((id) => {
+            const user = users.find((a) => a.userId === id)
+            return user?.email
+          })
+          .filter(Boolean)
+
+        attendeesEmails.push(ownerUser.email)
+        const startDateTime = dayjs(
+          `${dayjs(data.eventAt).format('YYYY-MM-DD')}T${data.startAt}`
+        ).toISOString()
+        const endDateTime = dayjs(
+          `${dayjs(data.eventAt).format('YYYY-MM-DD')}T${data.endAt}`
+        ).toISOString()
+
+        const googlePayload: any = {
+          eventId: selectedEvent?.eventId,
+          summary: data.title,
+          description: data.description,
+          startDateTime,
+          endDateTime,
+          attendeesEmails,
+        }
+
+        let functionUrl = ''
+        if (onRepeatEvent || isRecurring) {
+          const rrule = getRRuleByDate(
+            data.eventAt,
+            selectedRecurrence?.value || '',
+            onRepeatEvent
+              ? data.repeatUntil || new Date()
+              : selectedEvent?.repeatUntil || new Date()
+          )
+          googlePayload.rrule = rrule
+          googlePayload.updateRecurrenceEvents = updateRecurrency ? 1 : 0
+          if (isEditing) {
+            googlePayload.oldRRuleUntil = getRRuleByDate(
+              selectedEvent?.startAt,
+              selectedEvent?.recurrenceType || '',
+              dayjs(selectedEvent?.startAt).subtract(1, 'day').toDate()
+            )
+            googlePayload.originalEventId = selectedEvent?.originalEventId
+            googlePayload.originalInstanceStartDateTime = dayjs(
+              dayjs(selectedEvent?.startAt)
+            ).toISOString()
+          }
+          functionUrl =
+            'mentorship-event-google-calendar-recurring-upsert-lambda'
+        } else {
+          functionUrl = 'mentorship-event-google-calendar-upsert-lambda'
+        }
+        try {
+          const googleRes = await invokeLambda<
+            typeof googlePayload,
+            { statusCode: number; body: string }
+          >(functionUrl, googlePayload)
+
+          if (googleRes.statusCode !== 200) {
+            toast.error('Erro ao criar evento no Google Calendar')
+            return
+          }
+          const googleData = JSON.parse(googleRes.body)
+          data.link = googleData.hangoutLink
+          eventId = googleData.eventId
+          originalEventId = googleData.originalEventId
+          firstEvent = googleData.firstEvent
+        } catch (error) {
+          console.error(error)
+          toast.error('Erro ao criar evento no Google Calendar')
+          return
+        }
+      }
 
       const payload = {
         id: selectedEvent?.id,
@@ -102,11 +234,18 @@ export function PopoverEventForm() {
         startAt: dayjs(startHour).format('YYYY-MM-DD HH:mm'),
         endAt: dayjs(endHour).format('YYYY-MM-DD HH:mm'),
         recurrenceGroupId: selectedEvent?.recurrenceGroupId,
+        eventId: eventId,
+        originalEventId: originalEventId,
+        firstEvent: firstEvent,
         updateRecurrenceEvents: updateRecurrency ? 1 : 0,
         recurrenceType: isEditing
           ? selectedEvent?.recurrenceType
           : selectedRecurrence?.value,
-        repeatUntil: dayjs(data.repeatUntil).format('YYYY-MM-DD'),
+        repeatUntil: onRepeatEvent
+          ? dayjs(data.repeatUntil).format('YYYY-MM-DD')
+          : isRecurring
+          ? dayjs(selectedEvent?.repeatUntil).format('YYYY-MM-DD')
+          : null,
       }
 
       const response = await invokeLambda<
@@ -118,6 +257,7 @@ export function PopoverEventForm() {
         toast.success('Evento salvo')
         changePopover(popovers.Event)
         selectDay(null)
+        changeSelectedEvent(null)
         getEvents()
       } else {
         toast.error('Erro ao salvar as informações!')
@@ -133,36 +273,52 @@ export function PopoverEventForm() {
       <Popover.Close className="absolute right-4 top-4">
         <X size={24} />
       </Popover.Close>
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit(submitForm)}>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={handleSubmit(submitForm)}
+        noValidate
+      >
         <label htmlFor="title" className="absolute h-0 w-0 opacity-0">
           Adicionar Título
         </label>
-        <input
-          id="title"
-          type="text"
-          defaultValue={selectedEvent?.title}
-          placeholder="Adicionar título"
-          required
-          maxLength={60}
-          className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 outline-none placeholder:text-white placeholder:text-white/40 focus:border-white"
-          {...register('title')}
-        />
-        <div className="group flex items-center gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 focus-within:border-white focus:border-white">
-          <Calendar size={24} />
-          <Controller
-            name="eventAt"
-            control={control}
-            defaultValue={day}
-            render={({ field }) => (
-              <DatePicker
-                required
-                className="outline-none"
-                selected={field.value}
-                onChange={(option) => field.onChange(option)}
-                dateFormat={'dd/MM/yyyy'}
-              />
-            )}
+        <div>
+          <input
+            id="title"
+            type="text"
+            defaultValue={selectedEvent?.title}
+            placeholder="Adicionar título"
+            required
+            maxLength={60}
+            className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 outline-none placeholder:text-white placeholder:text-white/40 focus:border-white"
+            {...register('title')}
           />
+          {errors.title && (
+            <p className="mt-1 text-sm text-red-400">{errors.title.message}</p>
+          )}
+        </div>
+        <div>
+          <div className="group flex items-center gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 focus-within:border-white focus:border-white">
+            <Calendar size={24} />
+            <Controller
+              name="eventAt"
+              control={control}
+              defaultValue={day}
+              render={({ field }) => (
+                <DatePicker
+                  required
+                  className="outline-none"
+                  selected={field.value}
+                  onChange={(option) => field.onChange(option)}
+                  dateFormat={'dd/MM/yyyy'}
+                />
+              )}
+            />
+          </div>
+          {errors.eventAt && (
+            <p className="mt-1 text-sm text-red-400">
+              {errors.eventAt.message}
+            </p>
+          )}
         </div>
 
         <div className="flex w-full items-center gap-3">
@@ -199,6 +355,14 @@ export function PopoverEventForm() {
               <InputTime time={field.value} changeTime={field.onChange} />
             )}
           />
+          {errors.startAt && (
+            <p className="mt-1 text-sm text-red-400">
+              {errors.startAt.message}
+            </p>
+          )}
+          {errors.endAt && (
+            <p className="mt-1 text-sm text-red-400">{errors.endAt.message}</p>
+          )}
         </div>
         {!isEditing && (
           <>
@@ -220,30 +384,45 @@ export function PopoverEventForm() {
                     instanceId="recurrence"
                     options={options}
                     label="Frequência"
-                    onChange={(option) => setSelectedRecurrence(option)}
+                    onChange={(option) => {
+                      setSelectedRecurrence(option)
+                      setValue('recurrence', option?.value)
+                    }}
                     value={selectedRecurrence}
                   />
+                  {errors.recurrence && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {errors.recurrence.message}
+                    </p>
+                  )}
                 </div>
-                <div className="mb-2">
-                  <label htmlFor="repeatUntil" className="font-semibold">
-                    Repetir até
-                  </label>
-                  <div className="group flex items-center gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 focus-within:border-white focus:border-white">
-                    <Calendar size={24} />
-                    <Controller
-                      name="repeatUntil"
-                      control={control}
-                      render={({ field }) => (
-                        <DatePicker
-                          required
-                          className="outline-none"
-                          selected={field.value}
-                          onChange={(option) => field.onChange(option)}
-                          dateFormat={'dd/MM/yyyy'}
-                        />
-                      )}
-                    />
+                <div>
+                  <div className="mb-2">
+                    <label htmlFor="repeatUntil" className="font-semibold">
+                      Repetir até
+                    </label>
+                    <div className="group flex items-center gap-3 rounded-lg border border-solid border-white/40 bg-violet-600/50 px-2 py-1 focus-within:border-white focus:border-white">
+                      <Calendar size={24} />
+                      <Controller
+                        name="repeatUntil"
+                        control={control}
+                        render={({ field }) => (
+                          <DatePicker
+                            required
+                            className="outline-none"
+                            selected={field.value}
+                            onChange={(option) => field.onChange(option)}
+                            dateFormat={'dd/MM/yyyy'}
+                          />
+                        )}
+                      />
+                    </div>
                   </div>
+                  {errors.repeatUntil && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {errors.repeatUntil.message}
+                    </p>
+                  )}
                 </div>
               </>
             )}
@@ -263,17 +442,24 @@ export function PopoverEventForm() {
             <span>Atualizar eventos futuros da série?</span>
           </div>
         )}
-        <Controller
-          name="attendees"
-          control={control}
-          defaultValue={attendeesId}
-          render={({ field }) => (
-            <InputAttendees
-              attendeesId={field.value}
-              changeAttendeesId={(attendees) => field.onChange(attendees)}
-            />
+        <div>
+          <Controller
+            name="attendees"
+            control={control}
+            defaultValue={attendeesId}
+            render={({ field }) => (
+              <InputAttendees
+                attendeesId={field.value}
+                changeAttendeesId={(attendees) => field.onChange(attendees)}
+              />
+            )}
+          />
+          {errors.attendees && (
+            <p className="mt-1 text-sm text-red-400">
+              {errors.attendees.message}
+            </p>
           )}
-        />
+        </div>
         <textarea
           placeholder="Adicionar uma descrição"
           defaultValue={selectedEvent?.description}
@@ -285,17 +471,22 @@ export function PopoverEventForm() {
           Link da reunião
         </label>
         <div>
-          <input
-            type="url"
-            id="url"
-            defaultValue={selectedEvent?.link}
-            placeholder="Adicionar link para videochamada"
-            className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-4 py-2 outline-none placeholder:text-white/40 focus:border-white"
-            required
-            disabled={onLinkMeet}
-            pattern="https?://.*"
-            {...register('link')}
-          />
+          <div>
+            <input
+              type="url"
+              id="url"
+              defaultValue={selectedEvent?.link}
+              placeholder="Adicionar link para videochamada"
+              className="w-full rounded-lg border border-solid border-white/40 bg-violet-600/50 px-4 py-2 outline-none placeholder:text-white/40 focus:border-white"
+              required
+              disabled={onLinkMeet}
+              pattern="https?://.*"
+              {...register('link')}
+            />
+            {errors.link && (
+              <p className="mt-1 text-sm text-red-400">{errors.link.message}</p>
+            )}
+          </div>
           <div className="mt-2 flex items-center gap-2">
             <button
               type="button"
@@ -310,9 +501,7 @@ export function PopoverEventForm() {
           </div>
         </div>
 
-        <button className="mx-auto mt-4 max-w-max rounded-lg border border-solid border-white bg-white px-20 py-2 font-semibold text-violet-500 transition-all hover:bg-violet-600 hover:text-white">
-          Salvar
-        </button>
+        <ButtonTertiary disabled={isSubmitting} text="Salvar" type="submit" />
       </form>
     </>
   )

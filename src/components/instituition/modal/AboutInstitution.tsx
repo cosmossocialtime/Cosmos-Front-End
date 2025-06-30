@@ -20,7 +20,6 @@ import { z } from 'zod'
 import MaskedDateField from '../../Input/MaskedDateField'
 import { CustomCheckbox } from '../../Button/CustomCheckbox'
 import SingleSelectComboBox from '../../combobox/SingleSelectComboBox'
-import dynamic from 'next/dynamic'
 import MultiSelectComboBox from '../../combobox/MultiSelectComboBox'
 import { Option } from '../../../types/MultiselectCombobox'
 import { MultiValue } from 'react-select'
@@ -107,7 +106,7 @@ export const AboutInstitutionModal = ({
     clearErrors,
     watch,
     trigger,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<formProps>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -920,7 +919,7 @@ export const AboutInstitutionModal = ({
                         <div className="max-w-[240px]">
                           <Button
                             text="Continuar"
-                            disabled={isButtonDisabled}
+                            disabled={isButtonDisabled || isSubmitting}
                             type="submit"
                           />
                         </div>
