@@ -92,7 +92,7 @@ export default function AboutInstitution() {
     clearErrors,
     watch,
     trigger,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<formProps>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -632,7 +632,7 @@ export default function AboutInstitution() {
             </div>
             <Button
               text="Continuar"
-              disabled={isButtonDisabled || isLoading}
+              disabled={isButtonDisabled || isLoading || isSubmitting}
               type="submit"
             />
           </form>

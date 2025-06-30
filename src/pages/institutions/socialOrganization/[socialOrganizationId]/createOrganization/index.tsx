@@ -2,10 +2,7 @@ import { ArrowLeft } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import {
-  createMultiSelectSchema,
-  nameSchema,
-} from '../../../../../utils/ValidationSchemas'
+import { createMultiSelectSchema } from '../../../../../utils/ValidationSchemas'
 import InputField from '../../../../../components/Input/InputField'
 import MultiSelectComboBox from '../../../../../components/combobox/MultiSelectComboBox'
 import SingleSelectComboBox from '../../../../../components/combobox/SingleSelectComboBox'
@@ -63,7 +60,7 @@ export default function CreateOrganization() {
     clearErrors,
     trigger,
     getValues,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<formProps>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -283,8 +280,8 @@ export default function CreateOrganization() {
 
             <div className="max-w-[240px]">
               <Button
-                text={isLoading ? 'Carregando...' : 'Criar organização'}
-                disabled={isDisabled || isLoading}
+                text={isSubmitting ? 'Carregando...' : 'Criar organização'}
+                disabled={isDisabled || isLoading || isSubmitting}
                 type="submit"
                 isLoading={isLoading}
               />

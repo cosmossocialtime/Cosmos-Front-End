@@ -9,6 +9,9 @@ export type EventProps = {
   updatedAt: Date
   recurrenceType: string | null
   recurrenceGroupId: string | null
+  repeatUntil: Date | null
+  eventId: string | null
+  originalEventId: string | null
   attendees: {
     accepted: boolean
     answeredAt: Date
@@ -17,6 +20,7 @@ export type EventProps = {
     id: number
     invitedAt?: Date
     userId: number
+    email: string
   }[]
   logbook: {
     meetingAccomplishments: string

@@ -85,7 +85,7 @@ export default function ChangeOrganizationPage() {
           </p>
         </div>
         <section className="mt-20 flex h-[50%] flex-col items-center justify-center">
-          <div className="relative w-full max-w-5xl overflow-hidden px-[40px]">
+          <div className="relative w-full max-w-6xl overflow-hidden px-[40px]">
             {loaded && instanceRef.current && (
               <>
                 {user && user.socialOrganizations?.length > 3 && (
@@ -121,6 +121,26 @@ export default function ChangeOrganizationPage() {
                   : 'flex-wrap justify-center gap-12'
               }`}
             >
+              <div
+                key="999"
+                className={`${
+                  user?.socialOrganizations?.length > 3
+                    ? 'keen-slider__slide'
+                    : ''
+                } flex items-center justify-center`}
+              >
+                <div className="flex h-[266px] w-[218px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-gray-400 p-5 text-center shadow-md">
+                  <Link
+                    href={`/institutions/socialOrganization/${organizationId}/createOrganization`}
+                    className="text-purple-500"
+                  >
+                    <div className="mb-2 text-4xl">+</div>
+                    <h4 className="text-m font-semibold">
+                      Criar nova instituição
+                    </h4>
+                  </Link>
+                </div>
+              </div>
               {user &&
                 user.socialOrganizations?.map(
                   (userSocialOrganization: UserSocialOrganizationProps) => (
@@ -175,26 +195,8 @@ export default function ChangeOrganizationPage() {
                     </div>
                   )
                 )}
-              <div
-                key="999"
-                className={`${
-                  user?.socialOrganizations?.length > 3
-                    ? 'keen-slider__slide'
-                    : ''
-                } flex items-center justify-center`}
-              >
-                <div className="flex h-[266px] w-[218px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-gray-400 p-5 text-center shadow-md">
-                  <Link
-                    href={`/institutions/socialOrganization/${organizationId}/createOrganization`}
-                    className="text-purple-500"
-                  >
-                    <div className="mb-2 text-4xl">+</div>
-                    <h4 className="text-m font-semibold">
-                      Criar nova instituição
-                    </h4>
-                  </Link>
-                </div>
-              </div>
+
+              <div className="keen-slider__slide pointer-events-none w-[20px] opacity-0" />
             </div>
           </div>
         </section>

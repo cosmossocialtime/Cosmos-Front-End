@@ -107,7 +107,7 @@ export const AboutInstitutionMentorshipModal = ({
     clearErrors,
     watch,
     trigger,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<formProps>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -920,7 +920,7 @@ export const AboutInstitutionMentorshipModal = ({
                         <div className="max-w-[240px]">
                           <Button
                             text="Continuar"
-                            disabled={isButtonDisabled}
+                            disabled={isButtonDisabled || isSubmitting}
                             type="submit"
                           />
                         </div>
