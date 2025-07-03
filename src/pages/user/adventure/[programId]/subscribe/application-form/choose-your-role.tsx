@@ -7,9 +7,9 @@ import Image, { StaticImageData } from 'next/image'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
-import { api } from '../../../../../../services/api'
 import { toast } from 'react-toastify'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 
 type crew = {
   id: number
@@ -49,16 +49,18 @@ export default function ChooseYourRole() {
       const thirdOption = numbersIds.find(
         (number) => !rolesSelected.includes(number)
       )
-
-      api
-        .patch('/volunteer/prefferedRoles', {
-          applicationId: program?.volunteerApplicationId,
-          firstRole: firstOption,
-          secondRole: secondOption,
-          thirdRole: thirdOption,
-        })
+      const payload = {
+        applicationId: program?.volunteerApplicationId,
+        firstRole: firstOption,
+        secondRole: secondOption,
+        thirdRole: thirdOption,
+      }
+      invokeLambda<typeof payload, { statusCode: number; body: string }>(
+        'volunteer-applicant-update-lambda',
+        payload
+      )
         .then((response) => {
-          if (response.status === 200) {
+          if (response.statusCode === 201) {
             Router.push(
               `/user/adventure/${programId}/subscribe/application-form/confirmation`
             )

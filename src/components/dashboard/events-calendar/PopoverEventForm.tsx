@@ -109,6 +109,7 @@ export function PopoverEventForm() {
     handleSubmit,
     register,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<z.infer<ReturnType<typeof createSchema>>>({
     resolver: zodResolver(schema),
@@ -492,7 +493,13 @@ export function PopoverEventForm() {
               type="button"
               data-meet={onLinkMeet}
               className="group relative flex h-6 w-12 items-center rounded-full border border-solid border-gray-300 data-[meet=true]:border-blue-500 data-[meet=true]:bg-blue-500"
-              onClick={() => setOnLinkMeet(!onLinkMeet)}
+              onClick={() => {
+                setOnLinkMeet((prev) => {
+                  const updated = !prev
+                  if (updated) clearErrors('link')
+                  return updated
+                })
+              }}
             >
               <div className=" absolute left-0 m-1 h-4 w-4 rounded-full bg-gray-500 transition-all group-data-[meet=true]:left-6 group-data-[meet=true]:bg-white" />
             </button>

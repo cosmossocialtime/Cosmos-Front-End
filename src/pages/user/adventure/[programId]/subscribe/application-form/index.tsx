@@ -1,5 +1,4 @@
 import { Header } from '../../../../../../components/adventure/Header'
-import { api } from '../../../../../../services/api'
 import Link from 'next/link'
 import { Button } from '../../../../../../components/Button'
 import { Input } from '../../../../../../components/Input'
@@ -8,6 +7,7 @@ import { z } from 'zod'
 import { toast } from 'react-toastify'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
 import Router from 'next/router'
+import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 
 const schema = z.object({
   professionalExperience: z.string(),
@@ -45,7 +45,7 @@ export default function ApplicationForm() {
 
   const { control, handleSubmit, register } = useForm<formProps>()
 
-  function submitForm({
+  async function submitForm({
     professionalExperience,
     professionalSector,
     professionalRole,
@@ -58,28 +58,35 @@ export default function ApplicationForm() {
     const avaiableId = timesAvaiable.findIndex(
       (option) => option === availableTime
     )
-    api
-      .patch('user/volunteering', {
-        professionalExperience: professionalExperienceId,
-        professionalSector,
-        professionalRole,
-        availableTime: avaiableId,
-        linkedinUrl,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/about-you-1`
-          )
-        }
-      })
-      .catch((error) => {
-        console.error(error)
+    const payload = {
+      professionalExperience: professionalExperienceId,
+      professionalSector: professionalSector,
+      professionalRole: professionalRole,
+      availableTime: avaiableId,
+      linkedinUrl: linkedinUrl,
+    }
+    try {
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-volunteering-update-lambda', payload)
+      if (response.statusCode === 201) {
+        Router.push(
+          `/user/adventure/${programId}/subscribe/application-form/about-you-1`
+        )
+      } else {
         toast.error(
           'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
-      })
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error(
+        'Não foi possível enviar os dados. Tente novamente mais tarde!'
+      )
+    }
   }
+
   if (!program || !user) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-zinc-900 text-zinc-50">

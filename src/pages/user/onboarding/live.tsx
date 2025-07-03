@@ -8,11 +8,11 @@ import Image from 'next/image'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import { api } from '../../../services/api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 interface cityProps {
   id: number
@@ -51,21 +51,28 @@ export default function EstadoCidade() {
     fetchCidadesPorEstado()
   }, [stateSubmit, statesOfBrazil])
 
-  function handleSubmitStateAndCity() {
-    if (stateSubmit === '' || citySubmit === '') {
+  async function handleSubmitStateAndCity() {
+    if (!outOfBrazil && (stateSubmit === '' || citySubmit === '')) {
       return toast.error('Selecione o local onde você vive atualmente')
     }
+    const payload = {
+      state: stateSubmit,
+      city: citySubmit,
+      country: outOfBrazil ? 0 : 1,
+    }
     try {
-      api
-        .patch('/user/onboarding', {
-          state: stateSubmit,
-          city: citySubmit,
-        })
-        .then((response) => {
-          if (response.status === 200) Router.push('/user/onboarding/endpoint')
-        })
-    } catch (error: any) {
-      if (error.response.status === 401) return toast.error('Sem autorização')
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-update-lambda', payload)
+      if (response.statusCode === 201) {
+        Router.push('/user/onboarding/endpoint')
+      } else {
+        toast.error('Erro ao atualizar informações do usuário')
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Erro ao atualizar informações do usuário')
     }
   }
   return (

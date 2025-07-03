@@ -8,9 +8,6 @@ export function useOnboarding() {
   const { dashboard } = useDashboard(null)
   const { mentorshipId } = router.query
 
-  // const program =
-  //   dashboard?.programs.find((program) => String(program.id) === programId) ||
-  //   null
   const user = dashboard?.user
   const company = dashboard?.company
   const currentMentorship = dashboard?.currentMentorships.find(

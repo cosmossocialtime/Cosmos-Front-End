@@ -10,6 +10,7 @@ import html2canvas from 'html2canvas'
 import LogoCosmos from '../../../../../../public/images/cosmos-logo-white.png'
 import { Loading } from '../../../../../components/Loading'
 import { useOnboarding } from '../../../../../hooks/useOnboarding'
+import { volunteerRoleLabel } from '../../../../../utils/roleId'
 
 export default function GenerateBanner() {
   const { user, currentMentorship, company, rootRoute } = useOnboarding()
@@ -101,8 +102,8 @@ export default function GenerateBanner() {
           </h1>
 
           <p className="mx-3 text-gray-100">
-            {currentMentorship.role} em uma jornada para mentorar a organização
-            social {currentMentorship.socialOrganization}
+            {volunteerRoleLabel.get(currentMentorship.role)} em uma jornada para
+            mentorar a organização social {currentMentorship.socialOrganization}
           </p>
         </div>
 

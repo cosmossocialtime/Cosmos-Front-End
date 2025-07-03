@@ -54,12 +54,16 @@ export const FeedbackModal = ({ closeModal }: FeedbackModalProps) => {
         { statusCode: number; body: string }
       >('user-feedback-create-lambda', payload)
       if (response.statusCode == 201) {
-        toast.success('Feedback enviado com sucesso')
+        toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
       } else {
-        toast.error('Erro ao enviar feedback')
+        toast.error(
+          'Não foi possível enviar seu feedback, tente novamente mais tarde.'
+        )
       }
     } catch (error) {
-      toast.error('Erro ao enviar feedback')
+      toast.error(
+        'Não foi possível enviar seu feedback, tente novamente mais tarde.'
+      )
     } finally {
       closeModal()
     }

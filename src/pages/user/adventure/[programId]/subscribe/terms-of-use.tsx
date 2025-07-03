@@ -4,14 +4,16 @@ import { Input } from '../../../../../components/Input'
 import Link from 'next/link'
 import { Button } from '../../../../../components/Button'
 import Router from 'next/router'
-import { api } from '../../../../../services/api'
 import { Loading } from '../../../../../components/Loading'
 import { toast } from 'react-toastify'
 import { useSubscribe } from '../../../../../hooks/useSubscribe'
+import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function TermsOfUse() {
   const { program, programId } = useSubscribe()
   const [isAcceptTerms, setIsAcceptTerms] = useState(false)
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     setIsAcceptTerms(Boolean(program?.volunteerApplicationId))
@@ -31,14 +33,18 @@ export default function TermsOfUse() {
       return
     }
 
-    api
-      .post('/volunteer/apply', {
-        agreed: isAcceptTerms,
-        agreedAt: new Date(),
-        programId: Number(programId),
-      })
+    const payload = {
+      agreed: isAcceptTerms,
+      agreedAt: new Date(),
+      programId: Number(programId),
+    }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'volunteer-program-apply-lambda',
+      payload
+    )
       .then((response) => {
-        if (response.status === 201) {
+        if (response.statusCode === 201) {
+          queryClient.invalidateQueries(['dashboard', null])
           Router.push(`/user/adventure/${programId}/subscribe/application-form`)
         }
       })

@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { Input } from '../../../../../../components/Input'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '../../../../../../services/api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 import { Button } from '../../../../../../components/Button'
@@ -9,6 +8,7 @@ import { Header } from '../../../../../../components/adventure/Header'
 import { Loading } from '../../../../../../components/Loading'
 import Link from 'next/link'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 
 const schema = z.object({
   reasonToJoin: z
@@ -25,25 +25,31 @@ export default function AboutYou2() {
 
   const { handleSubmit, control } = useForm<formProps>()
 
-  function submitForm({ reasonToJoin, previousMentorship }: formProps) {
-    api
-      .patch('/user/volunteering', {
-        reasonToJoin,
-        previousMentorship,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/mission-role`
-          )
-        }
-      })
-      .catch((error) => {
-        console.error(error)
+  async function submitForm({ reasonToJoin, previousMentorship }: formProps) {
+    const payload = {
+      reasonToJoin: reasonToJoin,
+      previousMentorship: previousMentorship,
+    }
+    try {
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-volunteering-update-lambda', payload)
+      if (response.statusCode === 201) {
+        Router.push(
+          `/user/adventure/${programId}/subscribe/application-form/mission-role`
+        )
+      } else {
         toast.error(
           'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
-      })
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error(
+        'Não foi possível enviar os dados. Tente novamente mais tarde!'
+      )
+    }
   }
 
   if (!user) {

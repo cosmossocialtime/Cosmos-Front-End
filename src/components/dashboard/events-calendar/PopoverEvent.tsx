@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 import { popovers, useCalendar } from '../../../context/CalendarProvider'
 import { DeleteConfirmation } from '../../DeleteConfirmation'
 import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import Link from 'next/link'
 
 export function PopoverEvent() {
   const {
@@ -232,7 +233,9 @@ export function PopoverEvent() {
 
         <p className="font-semibold">{description}</p>
         <span className="flex items-center gap-3 font-semibold">
-          {link}
+          <Link href={link} rel="noopener noreferrer" target="_blank">
+            {link}
+          </Link>
           <Copy
             size={24}
             onClick={() => {

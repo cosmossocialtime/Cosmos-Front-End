@@ -1,17 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import Router from 'next/router'
-import useFetch from '../../../hooks/useFetch'
-
-interface UserProps {
-  user: {
-    completedOnboarding: boolean
-  }
-}
+import { useDashboard } from '../../../hooks/useDashboard'
 
 export default function Iniciar() {
-  const { data } = useFetch<UserProps>('http://localhost:8080/api/dashboard')
-  const completedOboarding = data?.user.completedOnboarding
-  if (completedOboarding) {
+  const { dashboard } = useDashboard(null)
+  const completedOnboarding = dashboard?.user.completedOnboarding
+  if (completedOnboarding) {
     Router.push('/user/painel')
   }
 

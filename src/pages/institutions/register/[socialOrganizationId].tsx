@@ -16,6 +16,7 @@ import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { saveFormData } from '../../../utils/localStorage'
 import { signupInstitutionConfirmationTemplate } from '../../../lib/email/templates/templates'
 import { sendEmail } from '../../../lib/aws/sesSendMail'
+import { LambdaError } from '../../../lib/aws/lambdaError'
 
 const schema = z.object({
   email: emailSchema,
@@ -79,19 +80,20 @@ export default function RegisterInstituitionMember() {
             toast.error('Não foi possivel enviar email de confirmação de conta')
           })
       }
+    } catch (error) {
+      if (error instanceof LambdaError) {
+        if (error.statusCode === 400) {
+          return toast.error(
+            'Não foi possivel criar sua conta, pois este email já existe'
+          )
+        }
 
-      if (response.statusCode === 400) {
-        return toast.error(
-          'Não foi possivel criar sua conta, pois este email já existe'
-        )
+        if (error.statusCode === 404 || error.statusCode === 500) {
+          return toast.error(
+            'Não foi possivel criar sua conta, por favor tente novamente'
+          )
+        }
       }
-
-      if (response.statusCode === 404 || response.statusCode === 500) {
-        return toast.error(
-          'Não foi possivel criar sua conta, por favor tente novamente'
-        )
-      }
-    } catch (error: any) {
       return toast.error(
         'Não foi possivel criar sua conta, por favor tente novamente'
       )

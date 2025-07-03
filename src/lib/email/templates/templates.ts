@@ -469,7 +469,9 @@ export function forgotPasswordTemplate(
       <!-- Body -->
       <tr>
         <td style="padding: 40px 40px 20px 40px; color: #1F103F;">
-          <h2 style="margin-top: 0;">Olá ${name}!</h2>
+          <h2 style="margin-top: 0;">Olá${
+            name && name !== null ? ' ' + name : ''
+          }!</h2>
           <p style="font-size: 16px; line-height: 1.6;">
             Recebemos uma solicitação para redefinir a senha da sua conta na Cosmos. Caso tenha sido você, basta clicar no botão abaixo para criar uma nova senha:
           </p>
@@ -496,7 +498,11 @@ export function forgotPasswordTemplate(
 
           <p style="font-size: 16px; line-height: 1.6;">
             Se o botão não funcionar, copie e cole o link a seguir no seu navegador:<br />
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}" style="color: #7C3AED;">${process.env.NEXT_PUBLIC_APP_URL}/reset/${code}</a>
+            <a href="${
+              process.env.NEXT_PUBLIC_APP_URL
+            }/reset/${code}" style="color: #7C3AED;">${
+      process.env.NEXT_PUBLIC_APP_URL
+    }/reset/${code}</a>
           </p>
 
           <p style="font-size: 16px; line-height: 1.6;">

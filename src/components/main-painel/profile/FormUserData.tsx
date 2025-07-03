@@ -3,29 +3,26 @@ import { useState } from 'react'
 import { UserProps } from '../../../types/user'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import { api } from '../../../services/api'
 import { LocationInput } from './LocationInput'
 import { PasswordInput } from './PasswordInput'
 import { toast } from 'react-toastify'
 import { Input } from '../../Input'
 import { Button } from '../../Button'
 import { useForm } from 'react-hook-form'
+import { useProfile } from '../../../hooks/useProfile'
 
 interface FormUserDataProps {
   userData: UserProps
-  updateUserData: (newUser: UserProps) => void
 }
 dayjs.extend(utc)
 
-export default function FormUserData({
-  userData,
-  updateUserData,
-}: FormUserDataProps) {
+export default function FormUserData({ userData }: FormUserDataProps) {
   const { register } = useForm()
   const gendersOpt = ['Masculino', 'Feminino', 'Outro']
   const [otherGender, setOtherGender] = useState('')
   const [enableForm, setEnableForm] = useState(false)
   const [newUserData, setNewUserData] = useState(userData)
+  const { updateUser } = useProfile()
 
   function cancelChanges() {
     setNewUserData(userData)
@@ -36,7 +33,7 @@ export default function FormUserData({
     setNewUserData({ ...newUserData, country, state, city })
   }
 
-  function sendNewInfo() {
+  async function sendNewInfo() {
     const gender =
       newUserData.gender === 'Outro' ? otherGender : newUserData.gender
 
@@ -52,28 +49,9 @@ export default function FormUserData({
       toast.error('Por favor, preencha todos os campos!')
       return
     }
-
-    api
-      .put('/user', {
-        fullName: newUserData.fullName,
-        byname: newUserData.byname,
-        birthdate: newUserData.birthdate,
-        gender,
-        country: newUserData.country,
-        state: newUserData.state,
-        city: newUserData.city,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          updateUserData(newUserData)
-          setEnableForm(false)
-          setNewUserData({ ...newUserData, gender })
-          toast.success('Dados atualizados com sucesso!')
-        }
-      })
-      .catch((error: any) => {
-        if (error.response.status === 400) return toast.error('Sem Autorização')
-      })
+    newUserData.gender = gender
+    updateUser(newUserData)
+    setEnableForm(false)
   }
 
   return (

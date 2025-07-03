@@ -15,13 +15,15 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
   const stepWidth = 100 / stepsLength
   const barGrayWidth = 100 - stepWidth
 
-  const completedSteps = currentMentorship.steps.filter(
-    (step) => step.active === true
+  const completedSteps = currentMentorship.steps.filter((step) =>
+    dayjs(step.endDate).isBefore(dayjs())
   )
   const completedStepsLength = completedSteps.length
 
   const currentStep = currentMentorship.steps.find(
-    (step) => step.active === false
+    (step) =>
+      dayjs(step.startDate).isBefore(dayjs()) &&
+      dayjs(step.endDate).isAfter(dayjs())
   )
 
   const marginBar = stepWidth / 2
@@ -29,19 +31,22 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
 
   function setMessage(step: StepProps) {
     const now = dayjs()
-    const { active } = step
     const startDate = dayjs(step.startDate)
 
-    if (active) {
+    if (dayjs(step.endDate).isBefore(dayjs())) {
       return 'Ver instruções'
     }
-    if (step === currentStep && startDate.isBefore(now)) {
+    if (
+      step === currentStep &&
+      startDate.isBefore(now) &&
+      dayjs(step.endDate).isAfter(dayjs())
+    ) {
       return 'Etapa atual'
     }
     if (startDate == null) {
       return 'Data de disponibilidade não definida'
     }
-    if (startDate.isBefore(now)) {
+    if (startDate.isBefore(now) && dayjs(step.endDate).isAfter(dayjs())) {
       return 'Já disponível'
     }
     if (startDate.isAfter(now)) {

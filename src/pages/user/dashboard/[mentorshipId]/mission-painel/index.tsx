@@ -29,8 +29,8 @@ export default function MissionPainel() {
 
   function openPopUp(step: StepProps) {
     const now = dayjs()
-    if (step.step === 'Introdução') {
-      Router.push('/user/adventure/1/onboarding')
+    if (step.step === 'introduction') {
+      Router.push(`/user/adventure/onboarding/${mentorshipId}`)
     }
     if (dayjs(step.startDate).isAfter(now)) {
       toast.error(

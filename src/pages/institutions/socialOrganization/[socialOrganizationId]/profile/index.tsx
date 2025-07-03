@@ -30,7 +30,7 @@ import { Option } from '../../../../../types/MultiselectCombobox'
 import { InputChangePassword } from '../../../../../components/Input/InputChangePassword'
 import { ChangePasswordInstitutionModal } from '../../../../../components/main-painel/profile/ChangePasswordInstitutionModal'
 import formatPhone from '../../../../../utils/formatPhone'
-import { useProfile } from '../../../../../hooks/useProfile'
+import { useProfileInstitution } from '../../../../../hooks/useProfileInstitution'
 import { useHeader } from '../../../../../context/HeaderContext'
 import { ConfirmPasswordEmailChange } from '../../../../../components/instituition/profile/confirmPasswordEmailChange'
 
@@ -69,7 +69,7 @@ export default function Profile() {
     useState<boolean>(false)
   const closeModalChangeEmail = () => setIsModalChangeEmailOpen(false)
   const { user, isLoadingUser, updateUser, updateUserImage } =
-    useProfile(organizationId)
+    useProfileInstitution(organizationId)
 
   const {
     register,
