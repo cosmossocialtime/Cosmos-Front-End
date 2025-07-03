@@ -1,7 +1,6 @@
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { createContext, useEffect, useState } from 'react'
 import { IAuthProvider, IContext, SignInData, UserLogged } from './types'
-import { api } from '../../services/api'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import Router from 'next/router'
 import jwtDecode from 'jwt-decode'
@@ -52,8 +51,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
               role: decoded.role,
               socialOrganizations: decoded.socialOrganizations,
             })
-
-            api.defaults.headers.Authorization = `Bearer ${token}`
           }
         } catch (error) {
           signOut()
@@ -94,8 +91,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     setCookie(undefined, 'cosmos.refreshToken', res.refreshToken, {
       path: '/',
     })
-
-    api.defaults.headers.Authorization = `Bearer ${res.accessToken}`
 
     setUser({
       id: decoded.id,

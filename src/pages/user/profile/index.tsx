@@ -1,9 +1,7 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import defaultBannerPerfil from '../../../assets/default-banner-perfil.png'
 
-import { api } from '../../../services/api'
-import { UserProps } from '../../../types/user'
 import { Camera, Pencil } from 'phosphor-react'
 
 import Header from '../../../components/header/Header'
@@ -12,43 +10,74 @@ import FormUserData from '../../../components/main-painel/profile/FormUserData'
 import SettingCropArea from '../../../components/Crop/SettingCropArea'
 import { DialogCrop } from '../../../components/Crop/DialogCrop'
 import { Loading } from '../../../components/Loading'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { useProfile } from '../../../hooks/useProfile'
+import { toast } from 'react-toastify'
 
 export default function Perfil() {
-  const [user, setUser] = useState<UserProps | null>(null)
+  const { user, isLoadingUser, updateUserImage } = useProfile()
   const [selectedImgSrc, setSelectedImgSrc] = useState('')
   const [cropType, setCroptType] = useState<'profile' | 'banner'>('profile')
   const [onDialog, setOnDialog] = useState(false)
-
-  useEffect(() => {
-    api
-      .get('/user')
-      .then((response) => {
-        setUser(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
 
   if (!user) {
     return <Loading />
   }
 
-  async function updateImgServer(base64Image: string, route: string) {
+  async function updateImgServer(
+    base64Image: string,
+    key: string,
+    fileName: string
+  ) {
     const blob = await fetch(base64Image).then((response) => response.blob())
+    try {
+      // Requisição da Presigned URL para upload do arquivo
+      const res = await fetch('/api/get-presigned-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: fileName,
+          fileType: blob.type,
+          key,
+        }),
+      })
 
-    const formData = new FormData()
-    formData.append('file', blob, 'image.jpg')
+      if (!res.ok) throw new Error('Erro ao obter Presigned URL')
 
-    api.patch(route, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-  }
+      const { uploadUrl } = await res.json()
 
-  function updateUserData(newUser: UserProps) {
-    setUser(newUser)
+      // Upload para S3
+      const upload = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': blob.type },
+        body: blob,
+      })
+
+      if (!upload.ok) throw new Error('Erro ao enviar o arquivo para o S3')
+
+      // Invoca Lambda para salvar metadados
+      const payload = {
+        bucketName: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
+        directoryPath: key,
+        mime: blob.type,
+      }
+
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('storage-create-lambda', payload)
+
+      if (response.statusCode === 201) {
+        const { storageId } = JSON.parse(response.body)
+        return Number(storageId)
+      } else {
+        toast.error('Erro ao salvar metadados no storage')
+        return null
+      }
+    } catch (err) {
+      toast.error('Erro ao salvar metadados no storage')
+      return null
+    }
   }
 
   function updateProfileSrc(source: string) {
@@ -62,24 +91,26 @@ export default function Perfil() {
     setOnDialog(true)
   }
 
-  function handleProfileImg(image: string) {
-    if (user) {
-      setUser({ ...user, profilePicture: image })
-    }
-
-    updateImgServer(image, '/user/picture/profile')
-
+  async function handleProfileImg(image: string) {
+    const storageId = await updateImgServer(
+      image,
+      `user/${user.id || 0}/profile.jpg`,
+      'profile.jpg'
+    )
+    updateUserImage({ storageId: storageId || 0, imageType: 'profile' })
     setOnDialog(false)
   }
-  function handleBannerImg(image: string) {
-    if (user) {
-      setUser({ ...user, banner: image })
-    }
 
-    updateImgServer(image, '/user/picture/banner')
-
+  async function handleBannerImg(image: string) {
+    const storageId = await updateImgServer(
+      image,
+      `user/${user.id || 0}/banner.jpg`,
+      'banner.jpg'
+    )
+    updateUserImage({ storageId: storageId || 0, imageType: 'banner' })
     setOnDialog(false)
   }
+
   return (
     <div className="flex h-screen flex-col">
       <Header />
@@ -147,7 +178,7 @@ export default function Perfil() {
         </div>
       </div>
 
-      <FormUserData userData={user} updateUserData={updateUserData} />
+      <FormUserData userData={user} />
     </div>
   )
 }

@@ -2,19 +2,29 @@ import Link from 'next/link'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import { Button } from '../../../components/Button'
-import { api } from '../../../services/api'
 import Router from 'next/router'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { toast } from 'react-toastify'
 
 export default function Decolar() {
-  function handleSubmitCompletedOnboarding() {
-    api
-      .patch('/user/onboarding', {
-        completed: true,
-      })
-      .finally(() => {
+  async function handleSubmitCompletedOnboarding() {
+    const payload = { completed: true }
+    try {
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-update-lambda', payload)
+      if (response.statusCode === 201) {
         Router.push('/user/painel')
-      })
+      } else {
+        toast.error('Erro ao atualizar informações do usuário')
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Erro ao atualizar informações do usuário')
+    }
   }
+
   return (
     <>
       <Link href={'/user/onboarding/live'}>

@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { invokeLambda } from '../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
-import { UserProps } from '../types/user'
+import { UserSocialOrganizationProps } from '../types/userSocialOrganization'
 
-export function useProfile() {
+export function useProfileInstitution(socialOrganizationId: number) {
   const queryClient = useQueryClient()
 
   const {
@@ -11,7 +11,7 @@ export function useProfile() {
     isLoading: isLoadingUser,
     error: errorUser,
   } = useQuery({
-    queryKey: ['user'],
+    queryKey: ['user', socialOrganizationId],
     queryFn: async () => {
       const response = await invokeLambda<
         Record<string, never>,
@@ -19,6 +19,13 @@ export function useProfile() {
       >('user-select-lambda', {})
       if (response.statusCode === 200) {
         const parsed = JSON.parse(response.body)
+        const userSocialOrganizations =
+          parsed.socialOrganizations &&
+          parsed.socialOrganizations.filter(
+            (so: UserSocialOrganizationProps) =>
+              so.socialOrganizationId === socialOrganizationId
+          )
+        parsed.socialOrganizations = userSocialOrganizations
         return parsed
       } else {
         return null
@@ -27,15 +34,28 @@ export function useProfile() {
   })
 
   const { mutate: updateUser, isLoading: isUpdatingUser } = useMutation({
-    mutationFn: async (newUserData: UserProps) => {
+    mutationFn: async ({
+      fullname,
+      email,
+      phone,
+      professionalRole,
+      professionalSector,
+      socialOrganizationId,
+    }: {
+      fullname: string
+      email: string
+      phone: string
+      professionalRole: string
+      professionalSector: string
+      socialOrganizationId: number
+    }) => {
       const payload = {
-        fullName: newUserData.fullName,
-        byname: newUserData.byname,
-        birthdate: newUserData.birthdate,
-        gender: newUserData.gender,
-        country: newUserData.country,
-        state: newUserData.state,
-        city: newUserData.city,
+        fullname,
+        email,
+        phone,
+        professionalRole,
+        professionalSector,
+        socialOrganizationId,
       }
       const response = await invokeLambda<
         typeof payload,
@@ -44,11 +64,11 @@ export function useProfile() {
       return JSON.parse(response.body)
     },
     onSuccess: () => {
-      toast.success('Dados atualizados com sucesso!')
-      queryClient.invalidateQueries(['user'])
+      toast.success('Alterações salvas com sucesso')
+      queryClient.invalidateQueries(['user', socialOrganizationId])
     },
     onError: () => {
-      toast.error('Erro ao atualizar informações do usuário')
+      toast.error('Erro ao salvar alterações')
     },
   })
 
@@ -64,7 +84,6 @@ export function useProfile() {
         const payload = {
           storageId,
           imageType,
-          origin: 'volunteer',
         }
         const response = await invokeLambda<
           typeof payload,
@@ -74,7 +93,7 @@ export function useProfile() {
       },
       onSuccess: () => {
         toast.success('Alterações salvas com sucesso')
-        queryClient.invalidateQueries(['user'])
+        queryClient.invalidateQueries(['user', socialOrganizationId])
       },
       onError: () => {
         toast.error('Erro ao salvar alterações')

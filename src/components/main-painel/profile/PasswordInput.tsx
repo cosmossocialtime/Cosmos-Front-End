@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form'
 import { useRef, useState } from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { api } from '../../../services/api'
 import { toast } from 'react-toastify'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { LambdaError } from '../../../lib/aws/lambdaError'
 
 interface PasswordInputProps {
   enableForm: boolean
@@ -55,24 +56,34 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
     newPassword,
     passwordConfirm,
   }: formProps) {
-    await api
-      .put('/user/password', {
-        currentPassword,
-        newPassword,
-        passwordConfirm,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success('Senha atualizada com sucesso')
-          changePasswordRef.current?.reset()
+    try {
+      const payload = {
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        passwordConfirm: passwordConfirm,
+      }
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-password-update-lambda', payload)
+      if (response.statusCode == 201) {
+        toast.success('Senha atualizada com sucesso')
+      } else {
+        toast.error('Erro ao alterar senha')
+      }
+    } catch (error) {
+      console.error(error)
+      if (error instanceof LambdaError) {
+        if (error.statusCode === 400) {
+          toast.error(
+            'A nova senha e a confirmação estão diferentes! Tente novamente.'
+          )
         }
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
+        if (error.statusCode === 401) {
           toast.error('A senha atual está incorreta! Tente novamente.')
         }
-        console.error(error)
-      })
+      }
+    }
   }
 
   return (

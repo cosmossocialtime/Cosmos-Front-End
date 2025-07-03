@@ -5,9 +5,16 @@ import SideBar from '../sideBar'
 import ModalSatelite from '../../../../../components/dashboard/satellite-images/modalSatelite'
 import { DatasPlanets } from '../../../../../data/datasPlanets'
 import ModalInstitute from '../../../../../components/dashboard/satellite-images/modalInstitute'
-import useFetch from '../../../../../hooks/useFetch'
-import { useEffect, useState } from 'react'
-import { api } from '../../../../../services/api'
+import { useEffect, useMemo, useState } from 'react'
+import { useDashboard } from '../../../../../hooks/useDashboard'
+import { MentorshipProps } from '../../../../../types/mentorship'
+import { SectorProps } from '../../../../../types/sector'
+import { useRouter } from 'next/router'
+import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
+import dayjs from 'dayjs'
+import { Option } from '../../../../../types/MultiselectCombobox'
+import axios from 'axios'
+import { SocialOrganizationProps } from '../../../../../types/socialOrganization'
 
 interface User {
   user: {
@@ -28,29 +35,103 @@ interface SateliteInfo {
   causes?: [string]
   state?: string
 }
-interface SectorProps {
-  id: string
-  ranking?: number
-  currentlyWorking?: string
-  effectiveness?: string
+interface cityProps {
+  id: number
+  nome: string
+}
+interface stateProps extends cityProps {
+  sigla: string
 }
 
 const SatelitesPage = () => {
   const [company, setCompany] = useState<SateliteInfo>()
   const [sectors, setSectors] = useState<SectorProps[]>([])
-  const { data } = useFetch<User>('http://localhost:8080/api/dashboard')
-  const socialOrganizationId = data?.user.companyId
+  const { dashboard } = useDashboard(null)
+  const router = useRouter()
+  const mentorshipId = useMemo(
+    () => String(router.query.mentorshipId || ''),
+    [router.query.mentorshipId]
+  )
+
+  async function findCity(
+    socialOrganization: SocialOrganizationProps
+  ): Promise<string | undefined> {
+    try {
+      const { data: estados } = await axios.get<stateProps[]>(
+        'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
+      )
+
+      const estadoEncontrado = estados.find(
+        (e) => e.sigla === String(socialOrganization.state)
+      )
+
+      if (!estadoEncontrado || !socialOrganization.city) return
+
+      const { data: cidades } = await axios.get<cityProps[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoEncontrado.id}/municipios`
+      )
+
+      const cidadeEncontrado = cidades.find(
+        (c) => c.id === Number(socialOrganization.city)
+      )
+
+      return cidadeEncontrado?.nome
+    } catch (err) {
+      console.error('Erro ao buscar cidade:', err)
+      return
+    }
+  }
 
   useEffect(() => {
-    if (socialOrganizationId) {
-      api
-        .get(`/socialOrganization/${socialOrganizationId}/satellite`)
-        .then((response) => {
-          setCompany(response.data)
-          setSectors(response.data.sectors)
-        })
+    async function loadData() {
+      if (!mentorshipId || !dashboard) return
+
+      const currentMentorship = dashboard.currentMentorships.find(
+        (mentorship: MentorshipProps) =>
+          String(mentorship.mentorshipId) === mentorshipId
+      )
+
+      if (!currentMentorship) return
+
+      const payload = {
+        socialOrganizationId: currentMentorship.socialOrganizationId,
+      }
+
+      try {
+        const response = await invokeLambda<
+          typeof payload,
+          { statusCode: number; body: string }
+        >('social-organization-select-lambda', payload)
+
+        if (response.statusCode === 200) {
+          const parsed = JSON.parse(response.body).socialOrganization
+          const cidade = await findCity(parsed)
+
+          setCompany({
+            name: parsed.name,
+            creationDate: parsed.creationDate
+              ? dayjs(parsed.creationDate).format('DD/MM/YYYY')
+              : undefined,
+            totalCollaborators: parsed.collaborators,
+            beneficiaries: parsed.beneficiaries,
+            annualRevenue: parsed.annualRevenue,
+            city: cidade,
+            mainChallenges: parsed.mainChallenges,
+            socialImpact: parsed.socialImpact,
+            history: parsed.history,
+            causes: parsed.causes && parsed.causes.map((c: Option) => c.label),
+            state: parsed.state,
+          })
+
+          setSectors(parsed.sectors)
+        }
+      } catch (err) {
+        console.error('Erro ao buscar dados da organização:', err)
+      }
     }
-  }, [socialOrganizationId])
+
+    loadData()
+  }, [mentorshipId, dashboard])
 
   return (
     <div className="flex overflow-x-hidden">
@@ -65,7 +146,7 @@ const SatelitesPage = () => {
           {sectors &&
             sectors.map((sector) => {
               const planets = DatasPlanets.find(
-                (planet) => planet.id === Number(sector.id)
+                (planet) => planet.id === Number(sector.sectorId)
               )
 
               return (

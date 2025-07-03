@@ -6,19 +6,39 @@ import PerfilArea from '../../../components/main-painel/painel/PerfilArea'
 import AchievementsArea from '../../../components/main-painel/painel/AchievementsArea'
 import { Loading } from '../../../components/Loading'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '../../../services/api'
-import { DashboardProps } from '../../../types/dashboard'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { AchievementProps } from '../../../types/achievement'
 
 export default function Painel() {
-  async function getDashboard() {
-    const response = await api.get<DashboardProps>('/dashboard')
+  const [hasShownError, setHasShownError] = useState(false)
 
-    return response.data
+  async function getDashboard() {
+    const response = await invokeLambda<
+      Record<string, never>,
+      { statusCode: number; body: string }
+    >('dashboard-select-lambda', {})
+    if (response.statusCode === 200) {
+      return JSON.parse(response.body)
+    } else {
+      throw new Error('Erro ao buscar informações')
+    }
   }
 
-  const { data: dashboard } = useQuery({
+  const { data: dashboard, error } = useQuery({
     queryKey: ['dashboard'],
-    queryFn: getDashboard,
+    queryFn: () => getDashboard(),
+    onError: () => {
+      if (!hasShownError) {
+        toast.error('Erro ao buscar informações!')
+        setHasShownError(true)
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
   })
 
   if (!dashboard) {
@@ -64,8 +84,9 @@ export default function Painel() {
               <span className="text-sm text-gray-500">
                 <strong className="text-gray-200">
                   {
-                    achievements?.filter((achievement) => achievement.completed)
-                      .length
+                    achievements?.filter(
+                      (achievement: AchievementProps) => achievement.completed
+                    ).length
                   }
                 </strong>{' '}
                 de 8

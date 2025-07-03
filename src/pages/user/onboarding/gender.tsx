@@ -10,7 +10,7 @@ import { parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
-import { api } from '../../../services/api'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 const schemaGender = z.object({
   gender: z.string().nonempty('Por favor selecione o seu gênero'),
@@ -24,15 +24,26 @@ export default function Genero() {
 
   const { handleSubmit } = useForm<GenderForm>()
 
-  function submitFormGender() {
+  async function submitFormGender() {
     if (gender === '') {
       toast.error('Digite um gênero válido')
     }
     if (gender) {
-      api.patch('/user/onboarding', {
-        gender,
-      })
-      Router.push('/user/onboarding/company-code')
+      const payload = { gender: gender }
+      try {
+        const response = await invokeLambda<
+          typeof payload,
+          { statusCode: number; body: string }
+        >('user-update-lambda', payload)
+        if (response.statusCode === 201) {
+          Router.push('/user/onboarding/company-code')
+        } else {
+          toast.error('Erro ao atualizar informações do usuário')
+        }
+      } catch (error) {
+        console.error(error)
+        toast.error('Erro ao atualizar informações do usuário')
+      }
     }
   }
 

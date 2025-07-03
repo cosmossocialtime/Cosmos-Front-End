@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DynamicHeader from '../../../components/header/DynamicHeader'
 import { useRouter } from 'next/router'
 import { useKeenSlider } from 'keen-slider/react'
@@ -8,9 +8,11 @@ import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 import { UserSocialOrganizationProps } from '../../../types/userSocialOrganization'
 import { Loading } from '../../../components/Loading'
+import { useHeader } from '../../../context/HeaderContext'
 
 export default function SelectOrganizationPage() {
   const router = useRouter()
+  const { setSocialOrganizationId } = useHeader()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [loaded, setLoaded] = useState(false)
   const [hasShownError, setHasShownError] = useState(false)
@@ -62,6 +64,12 @@ export default function SelectOrganizationPage() {
     refetchOnMount: true,
     staleTime: 0,
   })
+
+  useEffect(() => {
+    if (!user) return
+    const sorted = user.socialOrganizations.sort()
+    setSocialOrganizationId(sorted[0].socialOrganizationId)
+  }, [user])
 
   if (!user) {
     return <Loading />

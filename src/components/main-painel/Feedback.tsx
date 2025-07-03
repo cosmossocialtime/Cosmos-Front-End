@@ -1,8 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 import { useState } from 'react'
-import { api } from '../../services/api'
 import { toast } from 'react-toastify'
+import { invokeLambda } from '../../lib/aws/invokeLambda'
 
 interface FeedbackProps {
   closeFeedback: () => void
@@ -18,23 +18,29 @@ export function Feedback({ closeFeedback }: FeedbackProps) {
       return
     }
     setIsSubmitting(true)
-    await api
-      .post('/user/feedback', {
+    try {
+      const payload = {
         feedback: feedbackContent,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          setFeedbackContent('')
-          toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
-          closeFeedback()
-        }
-      })
-      .catch((error) => {
+      }
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-feedback-create-lambda', payload)
+      if (response.statusCode == 201) {
+        toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
+        closeFeedback()
+      } else {
         toast.error(
           'Não foi possível enviar seu feedback, tente novamente mais tarde.'
         )
-      })
-    setIsSubmitting(false)
+      }
+    } catch (error) {
+      toast.error(
+        'Não foi possível enviar seu feedback, tente novamente mais tarde.'
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

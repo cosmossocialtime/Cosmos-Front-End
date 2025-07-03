@@ -3,11 +3,11 @@ import { Input } from '../../../../../../components/Input'
 import { Header } from '../../../../../../components/adventure/Header'
 import { toast } from 'react-toastify'
 import { Button } from '../../../../../../components/Button'
-import { api } from '../../../../../../services/api'
 import Router from 'next/router'
 import Link from 'next/link'
 import { KnowledgeProps } from '../../../../../../types/knowledge'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 
 export default function Confirmation() {
   const { program, programId } = useSubscribe()
@@ -16,10 +16,13 @@ export default function Confirmation() {
   const [knowledgeAreas, setKnowledgeAreas] = useState<KnowledgeProps[]>([])
 
   useEffect(() => {
-    api
-      .get('/enum/sectors')
+    const payload = { origin: 'volunteer' }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'sector-select-lambda',
+      payload
+    )
       .then((response) => {
-        setKnowledgeAreas(response.data)
+        setKnowledgeAreas(JSON.parse(response.body))
       })
       .catch((error) => {
         console.error(error)
@@ -41,35 +44,48 @@ export default function Confirmation() {
 
     setSelectedAreas((prevSelectedAreas) => [...prevSelectedAreas, areaId])
   }
-  function sendData() {
+
+  async function sendData() {
     if (selectedAreas.length === 0) {
       toast.error('Selecione ao menos 1 área!')
       return
     }
-    api
-      .patch(`/user/volunteering/`, {
-        sectorIds: selectedAreas,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          completeRegistration()
-        }
-      })
-      .catch((error) => {
-        console.error(error)
+    const payload = { sectorIds: selectedAreas }
+    try {
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-volunteering-update-lambda', payload)
+      if (response.statusCode === 201) {
+        completeRegistration()
+      } else {
         toast.error(
           'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
-      })
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error(
+        'Não foi possível enviar os dados. Tente novamente mais tarde!'
+      )
+    }
   }
 
   function completeRegistration() {
-    api
-      .patch(`volunteer/completed/${program?.volunteerApplicationId}`)
+    const payload = {
+      applicationId: program?.volunteerApplicationId,
+      completedApplication: true,
+    }
+    invokeLambda<typeof payload, { statusCode: number; body: string }>(
+      'volunteer-applicant-update-lambda',
+      payload
+    )
       .then((response) => {
-        Router.push(
-          `/user/adventure/${programId}/subscribe/application-form/thanks`
-        )
+        if (response.statusCode === 201) {
+          Router.push(
+            `/user/adventure/${programId}/subscribe/application-form/thanks`
+          )
+        }
       })
       .catch((error) => {
         console.error(error)

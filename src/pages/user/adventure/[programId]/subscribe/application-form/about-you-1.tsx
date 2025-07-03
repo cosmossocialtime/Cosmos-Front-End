@@ -2,13 +2,13 @@ import { Button } from '../../../../../../components/Button'
 import { Input } from '../../../../../../components/Input'
 import { Header } from '../../../../../../components/adventure/Header'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '../../../../../../services/api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 import { Loading } from '../../../../../../components/Loading'
 import Link from 'next/link'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
+import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 
 const schema = z.object({
   professionalPreviousExperiences: z.string(),
@@ -22,28 +22,34 @@ export default function AboutYou1() {
 
   const { handleSubmit, control } = useForm<formProps>()
 
-  function submitForm({
+  async function submitForm({
     professionalPreviousExperiences,
     mainCompetencies,
   }: formProps) {
-    api
-      .patch('user/volunteering', {
-        professionalPreviousExperiences,
-        mainCompetencies,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          Router.push(
-            `/user/adventure/${programId}/subscribe/application-form/about-you-2`
-          )
-        }
-      })
-      .catch((error) => {
-        console.error(error)
+    const payload = {
+      professionalPreviousExperiences: professionalPreviousExperiences,
+      mainCompetencies: mainCompetencies,
+    }
+    try {
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-volunteering-update-lambda', payload)
+      if (response.statusCode === 201) {
+        Router.push(
+          `/user/adventure/${programId}/subscribe/application-form/about-you-2`
+        )
+      } else {
         toast.error(
           'Não foi possível enviar os dados. Tente novamente mais tarde!'
         )
-      })
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error(
+        'Não foi possível enviar os dados. Tente novamente mais tarde!'
+      )
+    }
   }
 
   if (!user) {

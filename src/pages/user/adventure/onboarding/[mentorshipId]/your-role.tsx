@@ -4,11 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useOnboarding } from '../../../../../hooks/useOnboarding'
 import FormatText from '../../../../../utils/FormatText'
+import { volunteerRoleLabel } from '../../../../../utils/roleId'
 
 export default function YourRole() {
   const { rootRoute, currentMentorship } = useOnboarding()
 
-  const role = currentMentorship?.role
+  const role = volunteerRoleLabel.get(currentMentorship?.role)
 
   const roleMessages = [
     {

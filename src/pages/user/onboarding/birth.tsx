@@ -5,13 +5,13 @@ import { useState } from 'react'
 import dayjs from 'dayjs'
 
 import { useForm } from 'react-hook-form'
-import { api } from '../../../services/api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState('20')
@@ -31,20 +31,24 @@ export default function Nascimento() {
     return dayjs().month(Number(month)).format('MM')
   }
 
-  function submitBirth() {
-    if (yearValue && dayValue) {
+  async function submitBirth() {
+    if (yearValue && dayValue && monthValue) {
+      const payload = {
+        birthdate: `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`,
+      }
       try {
-        api
-          .patch('/user/onboarding', {
-            birthdate: `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`,
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              Router.push('/user/onboarding/live')
-            }
-          })
-      } catch (error: any) {
-        if (error.response.status === 400) return toast.error('Sem autorização')
+        const response = await invokeLambda<
+          typeof payload,
+          { statusCode: number; body: string }
+        >('user-update-lambda', payload)
+        if (response.statusCode === 201) {
+          Router.push('/user/onboarding/live')
+        } else {
+          toast.error('Erro ao atualizar informações do usuário')
+        }
+      } catch (error) {
+        console.error(error)
+        toast.error('Erro ao atualizar informações do usuário')
       }
     }
   }

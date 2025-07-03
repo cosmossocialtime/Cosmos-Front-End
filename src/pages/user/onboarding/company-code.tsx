@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { api } from '../../../services/api'
 import { ToastContainer, toast } from 'react-toastify'
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
@@ -10,6 +9,7 @@ import Image from 'next/image'
 import debounce from 'lodash.debounce'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
+import { invokeLambda } from '../../../lib/aws/invokeLambda'
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty('O código da empresa é obrigatorio'),
@@ -29,42 +29,51 @@ export default function CompanyCode() {
     debounceRequest(newValue)
   }
 
-  const debounceRequest = debounce((value: string) => {
+  const debounceRequest = debounce(async (value: string) => {
     if (value.length === 6) {
-      api
-        .get(`company/code/${value}`)
-        .then((response) => {
-          setImageCompany(response.data.logo)
-        })
-        .catch((error) => {
-          if (error.response.status === 404) {
-            return toast.error('Tente novamente')
-          }
-        })
+      const payload = { code: value }
+      try {
+        const response = await invokeLambda<
+          typeof payload,
+          { statusCode: number; body: string }
+        >('company-code-select-lambda', payload)
+        if (response.statusCode === 200) {
+          const parsed = JSON.parse(response.body)
+          setImageCompany(parsed.company.logo)
+        } else {
+          return toast.error('Tente novamente')
+        }
+      } catch (error) {
+        console.error(error)
+        return toast.error('Tente novamente')
+      }
     }
     if (value.length !== 6) {
       setImageCompany('')
     }
   }, 300)
 
-  function submitForm() {
+  async function submitForm() {
     if (!code) {
       return toast.error('Por gentileza digite um código válido')
     }
-    api
-      .patch('/user/onboarding', {
-        companyCode: code,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          router.push('/user/onboarding/birth')
-        }
-      })
-      .catch((error) => {
-        if (error.response.status)
-          return toast.error('Por gentileza digite um código válido')
-      })
+    const payload = { companyCode: code }
+    try {
+      const response = await invokeLambda<
+        typeof payload,
+        { statusCode: number; body: string }
+      >('user-update-lambda', payload)
+      if (response.statusCode === 201) {
+        router.push('/user/onboarding/birth')
+      } else {
+        toast.error('Por gentileza digite um código válido')
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Por gentileza digite um código válido')
+    }
   }
+
   return (
     <div className="relative">
       <Link href={'/user/onboarding/gender'}>

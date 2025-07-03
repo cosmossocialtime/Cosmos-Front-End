@@ -9,12 +9,12 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Check, Eye, EyeClosed, Question } from 'phosphor-react'
 import Link from 'next/link'
-import { setCookie } from 'nookies'
 import Router from 'next/router'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { sendEmail } from '../../lib/aws/sesSendMail'
 import { signupConfirmationTemplate } from '../../lib/email/templates/templates'
 import { saveFormData } from '../../utils/localStorage'
+import { LambdaError } from '../../lib/aws/lambdaError'
 
 const schema = z
   .object({
@@ -78,42 +78,45 @@ export default function Cadastrar() {
       passwordConfirmation: data.confirmPassword,
       userType: 'volunteer',
     }
+    try {
+      const response = await invokeLambda<
+        {
+          email: string
+          password: string
+        },
+        { statusCode: number; body: string }
+      >('user-create-lambda', payload)
 
-    const response = await invokeLambda<
-      {
-        email: string
-        password: string
-      },
-      { statusCode: number; body: string }
-    >('user-create-lambda', payload)
+      if (response.statusCode === 201) {
+        saveFormData('cosmos.user', data.email)
+        const parsed = JSON.parse(response.body)
+        const { subject, html } = signupConfirmationTemplate(
+          parsed.name,
+          parsed.confirmationCode
+        )
+        sendEmail([data.email], subject, html)
+          .then(() => {
+            toast.success('Criado com sucesso!')
+            Router.push('/user/completed-registration')
+          })
+          .catch(() => {
+            toast.error('Não foi possivel enviar email de confirmação de conta')
+          })
+      }
+    } catch (error) {
+      if (error instanceof LambdaError) {
+        if (error.statusCode === 400) {
+          return toast.error(
+            'Não foi possivel criar sua conta, pois este email já existe'
+          )
+        }
 
-    if (response.statusCode === 201) {
-      saveFormData('cosmos.user', data.email)
-      const parsed = JSON.parse(response.body)
-      const { subject, html } = signupConfirmationTemplate(
-        parsed.name,
-        parsed.confirmationCode
-      )
-      sendEmail([data.email], subject, html)
-        .then(() => {
-          toast.success('Criado com sucesso!')
-          Router.push('/user/completed-registration')
-        })
-        .catch(() => {
-          toast.error('Não foi possivel enviar email de confirmação de conta')
-        })
-    }
-
-    if (response.statusCode === 400) {
-      return toast.error(
-        'Não foi possivel criar sua conta, pois este email já existe'
-      )
-    }
-
-    if (response.statusCode === 404 || response.statusCode === 500) {
-      return toast.error(
-        'Não foi possivel criar sua conta, por favor tente novamente'
-      )
+        if (error.statusCode === 404 || error.statusCode === 500) {
+          return toast.error(
+            'Não foi possivel criar sua conta, por favor tente novamente'
+          )
+        }
+      }
     }
   }
 
