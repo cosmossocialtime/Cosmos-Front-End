@@ -6,10 +6,7 @@ import { getFormData } from '../../../../../utils/localStorage'
 import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import DynamicHeader from '../../../../../components/header/DynamicHeader'
-import {
-  confirmChangeEmailInstitutionTemplate,
-  resendConfirmationTemplate,
-} from '../../../../../lib/email/templates/templates'
+import { confirmChangeEmailInstitutionTemplate } from '../../../../../lib/email/templates/templates'
 import { sendEmail } from '../../../../../lib/aws/sesSendMail'
 import { useRouter } from 'next/router'
 

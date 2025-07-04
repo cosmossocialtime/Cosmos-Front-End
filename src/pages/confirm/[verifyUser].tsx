@@ -3,6 +3,7 @@ import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { getFormData } from '../../utils/localStorage'
+import { LambdaError } from '../../lib/aws/lambdaError'
 
 export default function VerifyUser() {
   const router = useRouter()
@@ -40,17 +41,19 @@ export default function VerifyUser() {
 
         if (response.statusCode === 200) {
           toast.success('Usuário validado com sucesso!')
-        } else if (response.statusCode === 401) {
-          toast.error('Código de confirmação inválido!')
-        } else if (response.statusCode === 404) {
-          toast.error('Usuário já foi verificado!')
-        } else {
-          toast.error('Erro ao validar usuário.')
+          router.push('/user/login')
         }
-
-        router.push('/user/login')
       } catch (error) {
-        toast.error('Erro inesperado ao validar usuário.')
+        if (error instanceof LambdaError) {
+          if (error.statusCode === 401) {
+            return toast.error('Código de confirmação inválido!')
+          } else if (error.statusCode === 404) {
+            return toast.error('Usuário já foi verificado!')
+          } else {
+            return toast.error('Erro ao validar usuário.')
+          }
+        }
+        return toast.error('Erro inesperado ao validar usuário.')
       }
     }
 

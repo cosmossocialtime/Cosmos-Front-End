@@ -43,7 +43,11 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
           const isExpired = decoded.exp * 1000 < Date.now()
 
           if (isExpired) {
-            router.push(`/user/login?redirect=${encodeURIComponent(fullPath)}`)
+            if (!isPublicRoute) {
+              router.push(
+                `/user/login?redirect=${encodeURIComponent(fullPath)}`
+              )
+            }
           } else {
             setUser({
               id: decoded.id,

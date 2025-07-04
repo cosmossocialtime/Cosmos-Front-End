@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import CheckIcon from '../../../public/images/CheckCircle.svg'
 import Router from 'next/router'
 import { getFormData } from '../../utils/localStorage'
+import Link from 'next/link'
 
 export default function CompletedResetPassword() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -36,7 +37,9 @@ export default function CompletedResetPassword() {
   return (
     <div className="flex h-screen w-full flex-col justify-between">
       <header className="p-10">
-        <Image src={logo} width={190} height={190} alt="Logo cosmos" />
+        <Link href="/user/login">
+          <Image src={logo} width={190} height={190} alt="Logo cosmos" />
+        </Link>
       </header>
       <main className="flex flex-col  items-center justify-center gap-6">
         <Image src={CheckIcon} height={40} width={40} alt="check icon" />
