@@ -38,23 +38,29 @@ export default function CurrentAchievementInstitution({
         />
       )}
       <div className="flex flex-col items-start gap-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <div className="relative h-[72px] w-[51px] rounded-full">
-          <Image
-            src={
-              achievement !== undefined && achievement.completed
-                ? Medal
-                : SilverMedal
-            }
-            alt="Medalha Incompleta"
-            className="w-[51px]"
-          />
-          <Image
-            src={currentAchievement.image}
-            alt="Medalha atual"
-            className="absolute left-0 top-0 rounded-full border-4 border-solid border-transparent"
-          />
+        <div className="flex items-start gap-2">
+          <div className="relative h-[72px] w-[51px]">
+            <Image
+              src={
+                achievement !== undefined && achievement.completed
+                  ? Medal
+                  : SilverMedal
+              }
+              alt="Medalha Incompleta"
+              className="w-[51px]"
+            />
+            <Image
+              src={currentAchievement.image}
+              alt="Medalha atual"
+              className="absolute left-0 top-0 rounded-full border-4 border-solid border-transparent"
+            />
+          </div>
+          <p className="mt-1 pl-2 text-2xl font-semibold text-gray-800">
+            {currentAchievement.title}
+          </p>
         </div>
 
+        {/* Descrição e link */}
         <div>
           <p
             className={`${
@@ -66,6 +72,7 @@ export default function CurrentAchievementInstitution({
             {currentAchievement.description}
           </p>
           <p className="text-base text-gray-500">e conquiste uma medalha!</p>
+
           {currentAchievement.hasCompleteLink && (
             <Link
               href={currentAchievement.completeLink.replace(
@@ -77,6 +84,7 @@ export default function CurrentAchievementInstitution({
               Completar
             </Link>
           )}
+
           {currentAchievement.openModal && (
             <button
               className="mt-2 block text-base font-semibold text-blue-400"

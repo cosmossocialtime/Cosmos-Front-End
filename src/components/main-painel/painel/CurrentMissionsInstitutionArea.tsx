@@ -30,36 +30,50 @@ export default function CurrentMissionsInstitutionArea({
   })
 
   return (
-    <div className="relative mb-8 mt-4 flex min-h-[16rem] flex-col rounded-lg bg-gray-200 pr-4">
-      <span className="absolute text-xl text-gray-600">Missões atuais</span>
+    <div className="relative mt-4 flex flex-col rounded-lg ">
+      <h2 className="mb-8 px-2 text-lg text-gray-600 md:px-0">
+        Missões atuais
+      </h2>
 
       {mentorships.length === 0 ? (
-        <div className="relativeflex h-50 mt-2 items-center justify-center overflow-hidden rounded-lg bg-currentMission bg-cover bg-no-repeat">
-          <h1 className="z-10 px-4 text-center text-xl font-semibold text-gray-200">
-            Atualmente você não está participando de nenhuma missão. <br />{' '}
+        <div className="flex h-64 items-center justify-center rounded-lg bg-currentMission bg-cover bg-no-repeat px-6 text-center">
+          <p className="text-xl font-semibold text-gray-200">
+            Atualmente você não está participando de nenhuma missão. <br />
             Acesse as opções abaixo e inscreva-se em uma nova aventura!
-          </h1>
+          </p>
         </div>
       ) : (
-        <div ref={sliderRef} className="keen-slider mt-2 w-full rounded-lg">
-          {mentorships.map((mentorship, key) => {
-            return (
+        <>
+          <div className="absolute right-12 top-0 z-10 hidden translate-y-[20px] md:block">
+            <Image
+              src={AstronautaImg}
+              alt="Astronauta"
+              className="h-[340px] w-auto object-contain"
+            />
+          </div>
+          <div
+            ref={sliderRef}
+            className="keen-slider relative w-full overflow-visible rounded-lg"
+          >
+            {mentorships.map((mentorship, key) => (
               <div
                 key={mentorship.mentorshipId}
-                className={`mt-4 ${
-                  'number-slide' + (key + 1)
-                } keen-slider__slide relative flex flex-1 justify-between`}
+                className="keen-slider__slide relative h-[300px] overflow-visible rounded-lg [&_.keen-slider__slide]:overflow-visible"
               >
-                <div className="absolute bottom-0 h-80 w-full overflow-hidden rounded-lg bg-currentMissionInstitution bg-cover bg-no-repeat" />
-                <div className="z-10 ml-10 flex h-80 flex-col">
-                  <h2 className="mb-3 mt-20 text-2xl font-semibold text-blue-300">
-                    {mentorship.name}
-                  </h2>
-                  <p className="mb-6 text-sm text-gray-300">
-                    Sua nave está pronta para o embarque
-                  </p>
+                <div className="absolute inset-0 rounded-lg bg-currentMissionInstitution bg-cover bg-no-repeat" />
+
+                <div className="relative z-20 flex h-full flex-col justify-between py-8 pl-12 md:w-1/2">
+                  <div>
+                    <h2 className="text-2xl font-semibold text-blue-300">
+                      {mentorship.name}
+                    </h2>
+                    <p className="mt-1 text-sm text-gray-300">
+                      Sua nave está pronta para o embarque
+                    </p>
+                  </div>
+
                   <Link
-                    className="block rounded-lg bg-violet-400 px-24 py-4 text-lg font-semibold text-white transition-colors hover:bg-violet-600"
+                    className="mb-6 mt-6 w-[240px] rounded-lg bg-violet-400 py-3 text-center text-base font-semibold text-white transition hover:bg-violet-600"
                     href={
                       mentorship.completedOnboarding
                         ? `/institutions/socialOrganization/${mentorship.socialOrganizationId}/dashboard/${mentorship.mentorshipId}/mission-painel`
@@ -69,15 +83,10 @@ export default function CurrentMissionsInstitutionArea({
                     Vamos lá!
                   </Link>
                 </div>
-                <Image
-                  src={AstronautaImg}
-                  alt="Foto de um astronauta"
-                  className="z-10 mr-16 h-[350px] w-[347px]"
-                />
               </div>
-            )
-          })}
-        </div>
+            ))}
+          </div>
+        </>
       )}
 
       {loaded && instanceRef.current && (
@@ -87,21 +96,21 @@ export default function CurrentMissionsInstitutionArea({
             onClick={(e: any) =>
               e.stopPropagation() || instanceRef.current?.prev()
             }
-            className={`${
-              currentSlide === 0 ? 'arrow--disabled hidden' : ''
-            } arrow arrow--left absolute right-12 top-6 cursor-pointer text-blue-300`}
+            className={`absolute left-4 top-1/2 -translate-y-1/2 transform cursor-pointer text-blue-300 ${
+              currentSlide === 0 ? 'hidden' : ''
+            }`}
           />
           <CaretRight
             size={24}
             onClick={(e: any) =>
               e.stopPropagation() || instanceRef.current?.next()
             }
-            className={`${
+            className={`absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer text-blue-300 ${
               currentSlide ===
               instanceRef.current.track.details.slides.length - 1
-                ? 'arrow--disabled hidden'
+                ? 'hidden'
                 : ''
-            } arrow arrow--right absolute right-4 top-6 cursor-pointer text-blue-300`}
+            }`}
           />
         </>
       )}

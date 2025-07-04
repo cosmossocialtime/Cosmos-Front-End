@@ -5,10 +5,12 @@ import { useRouter } from 'next/router'
 import { Check, List } from 'phosphor-react'
 import { Feedback } from './Feedback'
 import { useState } from 'react'
+import { Logout } from './Logout'
 
 export default function Menu() {
   const { pathname } = useRouter()
   const [onFeedback, setOnFeedback] = useState(false)
+  const [isModalLogoutOpen, setIsModalLogoutOpen] = useState<boolean>(false)
 
   const pagesRoutes = [
     {
@@ -20,6 +22,10 @@ export default function Menu() {
       route: '/user/profile',
     },
   ]
+
+  const closeModalLogout = () => {
+    setIsModalLogoutOpen(false)
+  }
 
   //   const optionsRoutes = [
   //     {
@@ -92,6 +98,7 @@ export default function Menu() {
               <DropDownMenu.RadioItem
                 className="relative flex cursor-pointer items-center outline-none transition hover:text-blue-400 data-[state=checked]:font-semibold data-[state=checked]:text-blue-400"
                 value={'Sair'}
+                onClick={() => setIsModalLogoutOpen(true)}
               >
                 Sair
               </DropDownMenu.RadioItem>
@@ -103,6 +110,11 @@ export default function Menu() {
       <Dialog.Root open={onFeedback} onOpenChange={setOnFeedback}>
         <Dialog.Trigger></Dialog.Trigger>
         <Feedback closeFeedback={() => setOnFeedback(false)} />
+      </Dialog.Root>
+
+      <Dialog.Root open={isModalLogoutOpen} onOpenChange={setIsModalLogoutOpen}>
+        <Dialog.Trigger></Dialog.Trigger>
+        <Logout closeLogout={() => setIsModalLogoutOpen(false)} />
       </Dialog.Root>
     </div>
   )

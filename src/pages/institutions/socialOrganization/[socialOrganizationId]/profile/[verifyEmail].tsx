@@ -3,6 +3,7 @@ import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { getFormData } from '../../../../../utils/localStorage'
+import { LambdaError } from '../../../../../lib/aws/lambdaError'
 
 export default function VerifyEmail() {
   const router = useRouter()
@@ -40,17 +41,19 @@ export default function VerifyEmail() {
 
         if (response.statusCode === 200) {
           toast.success('E-mail validado com sucesso!')
-        } else if (response.statusCode === 401 || response.statusCode === 400) {
-          toast.error('Código de confirmação inválido!')
-        } else {
-          toast.error('Erro ao validar e-mail.')
+          router.push(
+            `/institutions/socialOrganization/${socialOrganizationId}/profile`
+          )
         }
-
-        router.push(
-          `/institutions/socialOrganization/${socialOrganizationId}/profile`
-        )
       } catch (error) {
-        toast.error('Erro inesperado ao validar e-mail.')
+        if (error instanceof LambdaError) {
+          if (error.statusCode === 401 || error.statusCode === 400) {
+            return toast.error('Código de confirmação inválido!')
+          } else {
+            return toast.error('Erro ao validar e-mail.')
+          }
+        }
+        return toast.error('Erro inesperado ao validar e-mail.')
       }
     }
 

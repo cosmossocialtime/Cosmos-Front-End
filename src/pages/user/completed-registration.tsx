@@ -7,6 +7,7 @@ import { getFormData } from '../../utils/localStorage'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { resendInstitutionConfirmationTemplate } from '../../lib/email/templates/templates'
 import { sendEmail } from '../../lib/aws/sesSendMail'
+import Link from 'next/link'
 
 export default function CompletedRegistration() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -72,7 +73,9 @@ export default function CompletedRegistration() {
   return (
     <div className="flex h-screen w-full flex-col justify-between">
       <header className="p-10">
-        <Image src={logo} width={190} height={190} alt="Logo cosmos" />
+        <Link href="/user/login">
+          <Image src={logo} width={190} height={190} alt="Logo cosmos" />
+        </Link>
       </header>
       <main className="flex flex-col  items-center justify-center gap-6">
         <h1 className="text-3xl">Você finalizou seu cadastro!</h1>

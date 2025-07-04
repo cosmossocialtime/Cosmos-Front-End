@@ -10,6 +10,7 @@ import Main from '../../components/Main'
 import * as HoverCard from '@radix-ui/react-hover-card'
 import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { getFormData } from '../../utils/localStorage'
+import { LambdaError } from '../../lib/aws/lambdaError'
 
 const schema = z
   .object({
@@ -76,15 +77,17 @@ export default function ResetPassword() {
         toast.success('Senha alterada com sucesso')
         Router.push('/user/login')
       }
-      if (response.statusCode == 401) {
-        toast.error('Token inválido')
-      }
-      if (response.statusCode === 400) {
-        return toast.error(
-          'Não foi possivel processar sua requisição, tente novamente'
-        )
-      }
     } catch (error) {
+      if (error instanceof LambdaError) {
+        if (error.statusCode == 401) {
+          return toast.error('Token inválido')
+        }
+        if (error.statusCode === 400) {
+          return toast.error(
+            'Não foi possivel processar sua requisição, tente novamente'
+          )
+        }
+      }
       return toast.error(
         'Não foi possivel recuperar sua senha, por favor tente novamente mais tarde'
       )
