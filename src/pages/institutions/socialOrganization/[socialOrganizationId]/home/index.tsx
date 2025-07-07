@@ -122,17 +122,13 @@ export default function Home() {
             socialOrganization={socialOrganization}
           />
         </div>
-        <aside className="w-[360px] space-y-6">
-          <div className="flex w-[360px] flex-col gap-6 p-6">
+        <aside className="flex w-[360px] flex-col space-y-6">
+          <div className="flex flex-1 flex-col gap-6 p-6">
             <CurrentAchievementInstitution
               achievements={achievements}
               socialOrganization={socialOrganization}
             />
-            <div
-              className={`${
-                mentorships?.length === 0 ? 'h-[17rem]' : 'h-[36rem]'
-              } relative flex flex-col rounded-lg bg-gray-200 p-6`}
-            >
+            <div className="flex h-full max-h-[calc(100vh-408px)] flex-col rounded-lg bg-gray-200 p-6">
               <div className="mb-2 flex items-center justify-between text-sm text-gray-600">
                 <span className="text-gray-700">Minhas conquistas:</span>
                 <span className="text-sm text-gray-700">
@@ -146,10 +142,12 @@ export default function Home() {
                   de {achievements?.length}
                 </span>
               </div>
-              <AchievementsAreaInstitution
-                achievements={achievements}
-                socialOrganization={socialOrganization}
-              />
+              <div className="flex-1 overflow-y-auto pr-2">
+                <AchievementsAreaInstitution
+                  achievements={achievements}
+                  socialOrganization={socialOrganization}
+                />
+              </div>
             </div>
           </div>
         </aside>
