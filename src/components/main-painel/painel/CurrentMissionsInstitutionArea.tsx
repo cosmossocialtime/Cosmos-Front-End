@@ -89,29 +89,40 @@ export default function CurrentMissionsInstitutionArea({
         </>
       )}
 
-      {loaded && instanceRef.current && (
+      {loaded && instanceRef.current && mentorships.length > 1 && (
         <>
-          <CaretLeft
-            size={24}
-            onClick={(e: any) =>
-              e.stopPropagation() || instanceRef.current?.prev()
-            }
-            className={`absolute left-4 top-1/2 -translate-y-1/2 transform cursor-pointer text-blue-300 ${
-              currentSlide === 0 ? 'hidden' : ''
-            }`}
-          />
-          <CaretRight
-            size={24}
-            onClick={(e: any) =>
-              e.stopPropagation() || instanceRef.current?.next()
-            }
-            className={`absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer text-blue-300 ${
-              currentSlide ===
-              instanceRef.current.track.details.slides.length - 1
-                ? 'hidden'
-                : ''
-            }`}
-          />
+          <div className="absolute right-0 top-0 z-20 flex items-center gap-2 px-3 py-1 text-sm text-gray-700">
+            <CaretLeft
+              size={24}
+              onClick={(e: any) =>
+                e.stopPropagation() || instanceRef.current?.prev()
+              }
+              className={`cursor-pointer text-blue-400 ${
+                currentSlide === 0 ? 'cursor-default opacity-30' : ''
+              }`}
+            />
+
+            <span className="text-sm font-semibold text-blue-400">
+              {currentSlide + 1}
+            </span>
+            <span className="text-sm text-gray-300">
+              {' '}
+              de {instanceRef.current.track.details.slides.length}
+            </span>
+
+            <CaretRight
+              size={24}
+              onClick={(e: any) =>
+                e.stopPropagation() || instanceRef.current?.next()
+              }
+              className={`cursor-pointer text-blue-400 ${
+                currentSlide ===
+                instanceRef.current.track.details.slides.length - 1
+                  ? 'cursor-default opacity-30'
+                  : ''
+              }`}
+            />
+          </div>
         </>
       )}
     </div>
