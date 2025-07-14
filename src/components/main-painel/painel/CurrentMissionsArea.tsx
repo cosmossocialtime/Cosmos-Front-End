@@ -55,7 +55,11 @@ export default function CurrentMissionsArea({
                   <h2 className="mb-3 text-2xl font-semibold text-gray-200">
                     {mentorship.name}
                   </h2>
-                  <p className="mb-6 text-gray-200">{mentorship.description}</p>
+                  <p className="mb-6 text-gray-200">
+                    {mentorship.description.length > 100
+                      ? mentorship.description.substring(0, 100) + '...'
+                      : mentorship.description}
+                  </p>
                   <Link
                     className="block max-w-max rounded-lg bg-violet-400 px-24 py-4 text-lg font-semibold text-white transition-colors hover:bg-violet-600"
                     href={

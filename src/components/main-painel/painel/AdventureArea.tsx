@@ -33,7 +33,9 @@ export default function AdventureArea({ programs }: AdventureAreaProps) {
                     {program.name}
                   </h2>
                   <span className="text-sm text-gray-300">
-                    {program.description}
+                    {program.description.length > 100
+                      ? program.description.substring(0, 100) + '...'
+                      : program.description}
                   </span>
                 </div>
 
