@@ -18,7 +18,7 @@ import {
 } from '../../../utils/ValidationSchemas'
 import { z } from 'zod'
 import MaskedDateField from '../../Input/MaskedDateField'
-import { CustomCheckbox } from '../../Button/CustomCheckbox'
+import { CustomCheckbox } from '../../Input/CustomCheckbox'
 import SingleSelectComboBox from '../../combobox/SingleSelectComboBox'
 import dynamic from 'next/dynamic'
 import MultiSelectComboBox from '../../combobox/MultiSelectComboBox'

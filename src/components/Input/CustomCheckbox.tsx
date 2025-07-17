@@ -44,7 +44,7 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
       </Checkbox.Root>
       <label
         id="checkbox-label"
-        htmlFor="checkbox"
+        htmlFor={id}
         className="font-inter mt-2 text-[16px] font-normal leading-[20px] text-[#1B2031]"
       >
         {labelText}
