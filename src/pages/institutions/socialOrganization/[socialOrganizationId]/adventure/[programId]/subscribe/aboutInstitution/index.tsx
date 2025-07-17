@@ -17,7 +17,7 @@ import {
 } from '../../../../../../../../utils/ValidationSchemas'
 import { z } from 'zod'
 import MaskedDateField from '../../../../../../../../components/Input/MaskedDateField'
-import { CustomCheckbox } from '../../../../../../../../components/Button/CustomCheckbox'
+import { CustomCheckbox } from '../../../../../../../../components/Input/CustomCheckbox'
 import SingleSelectComboBox from '../../../../../../../../components/combobox/SingleSelectComboBox'
 import MultiSelectComboBox from '../../../../../../../../components/combobox/MultiSelectComboBox'
 import { Option } from '../../../../../../../../types/MultiselectCombobox'

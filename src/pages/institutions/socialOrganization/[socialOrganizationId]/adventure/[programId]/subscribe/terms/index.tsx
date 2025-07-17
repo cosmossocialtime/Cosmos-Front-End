@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../../../../../../../../components/Button/ButtonSubmit'
-import { CustomCheckbox } from '../../../../../../../../components/Button/CustomCheckbox'
+import { CustomCheckbox } from '../../../../../../../../components/Input/CustomCheckbox'
 import { TermsText } from '../../../../../../../../components/TitlesAndLinks/TermsText'
 import ProgressBar from '../../../../../../../../components/menu/ProgressBar'
 import Layout from '../../../../../../../../components/Layout'

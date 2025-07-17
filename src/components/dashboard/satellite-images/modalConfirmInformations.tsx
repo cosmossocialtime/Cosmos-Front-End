@@ -1,7 +1,7 @@
 import { X, Warning } from 'phosphor-react'
 import { useState } from 'react'
 import { SocialOrganizationProps } from '../../../types/socialOrganization'
-import { CustomCheckbox } from '../../Button/CustomCheckbox'
+import { CustomCheckbox } from '../../Input/CustomCheckbox'
 import { Button } from '../../Button/ButtonSubmit'
 import { ButtonSecondary } from '../../Button/ButtonSubmitSecondary'
 
