@@ -4,16 +4,14 @@ import Router, { useRouter } from 'next/router'
 import { Button } from '../../../../../../components/Button/ButtonSubmit'
 import { useDashboard } from '../../../../../../hooks/useDashboard'
 import Image from 'next/image'
-import { DownloadButton } from '../../../../../../components/Button/DownloadButton'
 import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 import UploadImage from '../../../../../../components/Crop/UploadImage'
 import { DialogCrop } from '../../../../../../components/Crop/DialogCrop'
 import SettingCropArea from '../../../../../../components/Crop/SettingCropArea'
-import html2canvas from 'html2canvas'
 import { MentorshipProps } from '../../../../../../types/mentorship'
-import { ProgramProps } from '../../../../../../types/program'
+import { ScreenshotWrapper } from '../../../../../../components/main-painel/institutions/ScreenshotWrapper'
 
 export default function OrganizationImageUpload() {
   const router = useRouter()
@@ -26,13 +24,9 @@ export default function OrganizationImageUpload() {
   const mentorship = dashboard?.currentMentorships.find(
     (m: MentorshipProps) => m.mentorshipId === mentorId
   )
-  const program = dashboard?.programs.find(
-    (p: ProgramProps) => p.id === mentorship?.programId
-  )
 
   const [selectedImg, setSelectedImg] = useState('')
   const [onDialog, setOnDialog] = useState(false)
-  const [printImage, setPrintImage] = useState('')
 
   function receiveImg(source: string) {
     setSelectedImg(source)
@@ -105,62 +99,15 @@ export default function OrganizationImageUpload() {
     }
   }
 
-  async function takeScreenshot() {
-    if (typeof window === 'undefined') return
-
-    const originalElement = document.querySelector(
-      '#screenshotArea'
-    ) as HTMLElement | null
-    if (!originalElement) {
-      toast.error('Não foi possível encontrar a área de captura.')
-      return
-    }
-
-    // Clona a div de captura
-    const clone = originalElement.cloneNode(true) as HTMLElement
-    clone.id = 'printClone'
-    clone.classList.add('print-layout')
-
-    // Oculta elementos desnecessários no clone
-    clone.querySelectorAll('.hide-during-print').forEach((el) => {
-      ;(el as HTMLElement).style.display = 'none'
-    })
-
-    // Posiciona fora da tela para não afetar o layout
-    clone.style.position = 'fixed'
-    clone.style.top = '-10000px'
-    clone.style.left = '-10000px'
-
-    document.body.appendChild(clone)
-
-    try {
-      const canvas = await html2canvas(clone, {
-        useCORS: true,
-        scale: 2,
-      })
-
-      const base64Image = canvas.toDataURL('image/jpeg', 1.0)
-      setPrintImage(base64Image)
-    } catch (error) {
-      console.error('Erro ao gerar imagem:', error)
-      toast.error('Não foi possível gerar a imagem.')
-    } finally {
-      document.body.removeChild(clone)
-    }
-  }
-
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-white">
       <DynamicHeader />
-      <div
-        id="screenshotArea"
-        className="relative flex flex-1 flex-col bg-bgFuturisticPedestal bg-cover bg-center bg-no-repeat text-white"
-      >
-        <header className="hide-during-print absolute left-0 right-0 top-0 z-10 backdrop-blur-xl">
-          <div className="hide-during-print flex h-20 flex-col items-center justify-between py-4">
-            <div className="hide-during-print absolute left-10 z-10 mt-2 items-center">
+      <div className="relative flex flex-1 flex-col bg-bgFuturisticPedestal bg-cover bg-center bg-no-repeat text-white">
+        <header className="absolute left-0 right-0 top-0 z-10 backdrop-blur-xl">
+          <div className="flex h-20 flex-col items-center justify-between py-4">
+            <div className="absolute left-10 z-10 mt-2 items-center">
               <ArrowLeft
-                className="hide-during-print mt-2 cursor-pointer text-white"
+                className="mt-2 cursor-pointer text-white"
                 onClick={() =>
                   Router.push(
                     `/institutions/socialOrganization/${organizationId}/onboarding/${mentorId}/organizationUploadImageAdvisor`
@@ -169,19 +116,15 @@ export default function OrganizationImageUpload() {
                 size={24}
               />
             </div>
-            <div className="hide-during-print mt-4 flex items-center text-center text-base text-white">
+            <div className="mt-4 flex items-center text-center text-base text-white">
               Baixe a imagem da sua conquista e compartilhe nas redes sociais
             </div>
-            <div className="hide-during-print absolute right-10 w-[240px]">
-              <DownloadButton
-                text="Baixar imagem"
-                printImage={printImage}
-                onClick={takeScreenshot}
-                disabled={
-                  socialOrganization?.logo || socialOrganization?.logo !== ''
-                    ? false
-                    : true
-                }
+            <div className="absolute right-10 w-[240px]">
+              <ScreenshotWrapper
+                organizationName={socialOrganization?.name || ''}
+                mentorshipName={mentorship?.name || ''}
+                logoUrl={socialOrganization?.logo}
+                mentorshipLogoUrl={mentorship?.logo || ''}
               />
             </div>
           </div>
@@ -189,64 +132,75 @@ export default function OrganizationImageUpload() {
 
         <div className="flex flex-1 flex-col items-center justify-center px-4 md:px-8">
           <main className="flex flex-col items-center">
-            <div className="flex w-full max-w-4xl flex-col items-center gap-10 rounded-xl border border-white/20 p-8 backdrop-blur-2xl md:flex-row">
-              <div className="card flex h-48 w-48 items-center justify-center rounded-md bg-white">
-                <UploadImage updateImgSrc={receiveImg}>
-                  {socialOrganization?.logo !== null ? (
-                    <div className="group relative h-[197px] w-[197px]">
-                      <Image
-                        className="h-full w-full rounded-[10px] object-cover"
-                        alt="Logo da organização"
-                        src={socialOrganization?.logo}
-                        width={197}
-                        height={197}
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center rounded-[10px] bg-black opacity-0 transition-opacity group-hover:opacity-30">
-                        <Camera size={56} className="text-white" />
+            <div className="gradient-border-card flex w-full flex-col items-center rounded-xl md:flex-row">
+              <div className="logo-container">
+                <div className="logo-white-background"></div>
+                <div className="logo-gradient-border"></div>
+                <div className="logo-content">
+                  <UploadImage updateImgSrc={receiveImg}>
+                    {socialOrganization?.logo !== null ? (
+                      <div className="group relative h-[194.43px] w-[194.43px] rounded-md">
+                        <Image
+                          className="rounded-md"
+                          alt="Logo da organização"
+                          src={socialOrganization?.logo}
+                          width={194.43}
+                          height={194.43}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center rounded-[10px] bg-black opacity-0 transition-opacity group-hover:opacity-30">
+                          <Camera size={56} className="text-white" />
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="m-5 flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-gray-400 bg-gray-200">
-                      <UploadSimple size={32} className="text-gray-600" />
-                      <span className="text-center text-sm text-gray-600">
-                        Insira a logo da organização aqui
-                      </span>
-                    </div>
-                  )}
-                </UploadImage>
-                <DialogCrop onDialog={onDialog} setOnDialog={setOnDialog}>
-                  <SettingCropArea
-                    selectedImgSrc={selectedImg}
-                    handleImg={handleImg}
-                    aspectRatio={1 / 1}
-                    cropShape={'rect'}
-                  />
-                </DialogCrop>
+                    ) : (
+                      <div className="m-5 flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-gray-400 bg-gray-200">
+                        <UploadSimple size={32} className="text-gray-600" />
+                        <span className="text-center text-sm text-gray-600">
+                          Insira a logo da organização aqui
+                        </span>
+                      </div>
+                    )}
+                  </UploadImage>
+                  <DialogCrop onDialog={onDialog} setOnDialog={setOnDialog}>
+                    <SettingCropArea
+                      selectedImgSrc={selectedImg}
+                      handleImg={handleImg}
+                      aspectRatio={1 / 1}
+                      cropShape={'rect'}
+                    />
+                  </DialogCrop>
+                </div>
               </div>
 
-              <div className="text-left">
-                <h2 className="mb-2 text-2xl font-semibold">
+              <div className="ml-4 h-[176px] w-[235px] text-left">
+                <h2 className="text-3xl font-semibold text-white">
                   {socialOrganization?.name}
                 </h2>
-                <p className="text-white/80">
-                  Uma das organizações selecionadas para o programa <br />
-                  <span className="font-semibold">{program?.name}</span>.
-                </p>
+                <br />
+                <span className="text-base text-white">
+                  Uma das organizações
+                  <br />
+                  selecionadas para o programa
+                  <br />
+                  <span className="text-base font-semibold text-white">
+                    {mentorship?.name}
+                  </span>
+                  .
+                </span>
               </div>
             </div>
 
-            <div className="mt-8 flex items-end gap-6">
-              {program?.companyLogo && (
+            <div className="mt-10 flex h-[54px] w-[291px] items-end gap-6">
+              {mentorship?.logo && (
                 <Image
-                  width={140}
-                  height={20}
-                  src={program?.companyLogo || ''}
-                  alt={`Logo ${program?.companyName}`}
+                  width={122}
+                  height={54}
+                  src={mentorship?.logo || ''}
+                  alt={`Logo ${mentorship?.companyName}`}
                 />
               )}
               <Image
-                width={140}
-                height={20}
+                width={138}
+                height={28}
                 src="/images/logoCosmosBranco.svg"
                 alt="Logo Cosmos"
               />
@@ -254,8 +208,8 @@ export default function OrganizationImageUpload() {
           </main>
         </div>
 
-        <footer className="hide-during-print absolute bottom-0 left-0 right-0 z-10 mb-4 px-4 pb-6 md:px-8">
-          <div className="hide-during-print mx-auto w-full max-w-xs">
+        <footer className="absolute bottom-0 left-0 right-0 z-10 mb-4 px-4 pb-6 md:px-8">
+          <div className="mx-auto w-full max-w-xs">
             <Button
               text="Continuar"
               onClick={() =>

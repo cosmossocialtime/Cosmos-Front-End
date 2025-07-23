@@ -19,8 +19,14 @@ export function ConfirmInformationsModal({
   const [isChecked, setIsChecked] = useState(false)
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/50">
-      <div className="relative w-full max-w-xl rounded-xl bg-white p-6 shadow-lg">
+    <div
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/50"
+      onClick={onCancel}
+    >
+      <div
+        className="relative w-full max-w-xl rounded-xl bg-white p-6 shadow-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Botão de fechar */}
         <button
           className="absolute right-6 top-6 text-gray-400 hover:text-gray-800"
