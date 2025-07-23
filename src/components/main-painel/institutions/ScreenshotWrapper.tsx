@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import html2canvas from 'html2canvas'
 import { ScreenshotCard } from './ScreenshotCard'
-import { DownloadButton } from '../../Button/DownloadButton'
+import { DownloadSimple } from 'phosphor-react'
 
 interface ScreenshotWrapperProps {
   organizationName: string
@@ -17,7 +17,6 @@ export function ScreenshotWrapper({
   mentorshipLogoUrl,
 }: ScreenshotWrapperProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [printImage, setPrintImage] = useState('')
 
   const handleScreenshot = async () => {
     if (!ref.current) return
@@ -29,7 +28,12 @@ export function ScreenshotWrapper({
       scale: 1.5,
     }).then((canvas) => {
       const dataUrl = canvas.toDataURL('image/jpeg', 1.0)
-      setPrintImage(dataUrl)
+      const link = document.createElement('a')
+      link.href = dataUrl || ''
+      link.download = 'Post de divulgação ' + organizationName + ' e Cosmos.jpg'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     })
   }
 
@@ -43,14 +47,16 @@ export function ScreenshotWrapper({
           mentorshipLogoUrl={mentorshipLogoUrl}
         />
       </div>
-
-      <DownloadButton
-        text="Baixar imagem"
-        printImage={printImage}
-        organizationName={organizationName}
+      <button
+        className={`flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#0A84FF] px-4 text-base font-semibold text-white transition hover:bg-[#006FE0] ${
+          logoUrl || logoUrl !== '' ? '' : 'cursor-not-allowed opacity-50'
+        }`}
         onClick={handleScreenshot}
         disabled={logoUrl || logoUrl !== '' ? false : true}
-      />
+      >
+        <DownloadSimple size={18} weight="bold" />
+        Baixar imagem
+      </button>
     </div>
   )
 }
