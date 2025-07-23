@@ -87,6 +87,8 @@ module.exports = {
           'url(/images/bg-welcome-adventure-institution.png)',
         bgSpaceInstitution: 'url(/images/bg-space-institution.png)',
         bgFuturisticPedestal: 'url(/images/bg-futuristic-pedestal.png)',
+        bgFuturisticPedestalPrint:
+          'url(/images/bg-futuristic-pedestal-print.png)',
         bgFrenteNave: 'url(/images/bg-frente-nave.png)',
       },
     },

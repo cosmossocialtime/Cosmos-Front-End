@@ -294,7 +294,7 @@ export function PopoverEventForm() {
             {...register('title')}
           />
           {errors.title && (
-            <p className="mt-1 text-sm text-red-400">{errors.title.message}</p>
+            <p className="mt-1 text-sm text-white">{errors.title.message}</p>
           )}
         </div>
         <div>
@@ -316,9 +316,7 @@ export function PopoverEventForm() {
             />
           </div>
           {errors.eventAt && (
-            <p className="mt-1 text-sm text-red-400">
-              {errors.eventAt.message}
-            </p>
+            <p className="mt-1 text-sm text-white">{errors.eventAt.message}</p>
           )}
         </div>
 
@@ -357,12 +355,10 @@ export function PopoverEventForm() {
             )}
           />
           {errors.startAt && (
-            <p className="mt-1 text-sm text-red-400">
-              {errors.startAt.message}
-            </p>
+            <p className="mt-1 text-sm text-white">{errors.startAt.message}</p>
           )}
           {errors.endAt && (
-            <p className="mt-1 text-sm text-red-400">{errors.endAt.message}</p>
+            <p className="mt-1 text-sm text-white">{errors.endAt.message}</p>
           )}
         </div>
         {!isEditing && (
@@ -392,7 +388,7 @@ export function PopoverEventForm() {
                     value={selectedRecurrence}
                   />
                   {errors.recurrence && (
-                    <p className="mt-1 text-sm text-red-400">
+                    <p className="mt-1 text-sm text-white">
                       {errors.recurrence.message}
                     </p>
                   )}
@@ -420,7 +416,7 @@ export function PopoverEventForm() {
                     </div>
                   </div>
                   {errors.repeatUntil && (
-                    <p className="mt-1 text-sm text-red-400">
+                    <p className="mt-1 text-sm text-white">
                       {errors.repeatUntil.message}
                     </p>
                   )}
@@ -456,7 +452,7 @@ export function PopoverEventForm() {
             )}
           />
           {errors.attendees && (
-            <p className="mt-1 text-sm text-red-400">
+            <p className="mt-1 text-sm text-white">
               {errors.attendees.message}
             </p>
           )}
@@ -485,7 +481,7 @@ export function PopoverEventForm() {
               {...register('link')}
             />
             {errors.link && (
-              <p className="mt-1 text-sm text-red-400">{errors.link.message}</p>
+              <p className="mt-1 text-sm text-white">{errors.link.message}</p>
             )}
           </div>
           <div className="mt-2 flex items-center gap-2">

@@ -6,7 +6,6 @@ import { useHeader } from '../../../../../../context/HeaderContext'
 import { useEffect } from 'react'
 import { useDashboard } from '../../../../../../hooks/useDashboard'
 import { MentorshipProps } from '../../../../../../types/mentorship'
-import { ProgramProps } from '../../../../../../types/program'
 
 export default function Welcome() {
   const router = useRouter()
@@ -16,9 +15,6 @@ export default function Welcome() {
   const { dashboard } = useDashboard(organizationId)
   const mentorship = dashboard?.currentMentorships.find(
     (m: MentorshipProps) => m.mentorshipId === mentorId
-  )
-  const program = dashboard?.programs.find(
-    (p: ProgramProps) => p.id === mentorship?.programId
   )
 
   const { setShowMenu, setShowOrganization } = useHeader()
@@ -52,7 +48,7 @@ export default function Welcome() {
             <p className="mb-8 text-xl text-gray-300">Olá, Cosmonauta!</p>
             <h1 className="mb-4 text-4xl">
               Boas-vindas ao programa <br />
-              <span className="mb-8 text-3xl">{program?.name}</span>
+              <span className="mb-8 text-3xl">{mentorship?.name}</span>
             </h1>
             <p className="mb-10 text-xl text-gray-300">
               Prepare-se para uma aventura!

@@ -70,14 +70,14 @@ export default function AdventureAreaInstitution({
             programsSubscribed.map((program, key) => (
               <>
                 <Link
-                  key={key}
+                  key={'link_' + key}
                   href={`/institutions/socialOrganization/${
                     socialOrganization.id || 0
                   }/adventure/${program.id}/subscribe`}
                   onClick={() => selectProgram(program)}
                 >
                   <div
-                    key={key}
+                    key={'div_' + key}
                     className="mb-4 mt-4 flex items-center justify-between rounded-lg bg-white p-4 shadow"
                   >
                     <div>
@@ -114,14 +114,14 @@ export default function AdventureAreaInstitution({
             programsUnsubscribed.map((program, key) => (
               <>
                 <Link
-                  key={key}
+                  key={'link_unsub_' + key}
                   href={`/institutions/socialOrganization/${
                     socialOrganization.id || 0
                   }/adventure/${program.id}/subscribe`}
                   onClick={() => selectProgram(program)}
                 >
                   <div
-                    key={key}
+                    key={'div_unsub_' + key}
                     className="mb-4 mt-4 flex items-center justify-between rounded-lg bg-white p-4 shadow"
                   >
                     <div>

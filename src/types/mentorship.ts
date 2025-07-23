@@ -6,6 +6,7 @@ export type MentorshipProps = {
   endDate: Date
   logo: string | null
   mentorshipId: number
+  companyName: string
   name: string
   programId: number
   socialOrganizationId: number

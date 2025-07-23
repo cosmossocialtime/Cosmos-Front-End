@@ -138,19 +138,110 @@ export const GlobalStyle = createGlobalStyle`
     mask-composite: exclude;
     pointer-events: none;
   }
-    
-.hide-during-print {
+
+.gradient-border-card {
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 24px;
+  column-gap: 10px;
+  width: 497.43px;
+  height: 245.43px;
+  border-radius: 14.6506px;
+  isolation: isolate; /* Cria um novo contexto de empilhamento */
 }
 
-#printClone.print-layout {
-  width: 1080px !important;
-  height: 1080px !important;
+.gradient-border-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14.6506px;
+  padding: 1.5px;
+  background: linear-gradient(
+    173.19deg,
+    rgba(12, 96, 169, 0.8) 4.21%,
+    rgba(5, 41, 72, 0.4) 49.42%,
+    rgba(17, 53, 113, 0.8) 93.71%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.gradient-border-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14.6506px;
+  background: linear-gradient(
+    173.19deg,
+    rgba(12, 96, 169, 0.5395) 4.21%,
+    rgba(5, 41, 72, 0.221) 49.42%,
+    rgba(17, 53, 113, 0.585) 93.71%
+  );
+  backdrop-filter: blur(11.1624px);
+  z-index: -2;
+}
+
+/* Container principal */
+.logo-container {
+  position: relative;
+  width: 197.43px;
+  height: 197.43px;
+}
+
+/* Quadrado com fundo branco e sombra (camada inferior) */
+.logo-white-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #FDFDFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  z-index: 1;
+}
+
+/* Quadrado com borda gradiente (camada superior) */
+.logo-gradient-border {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  z-index: 2;
+  
+  /* Borda gradiente usando pseudo-elemento */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #45a9faff, #1b04ecff);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* Conteúdo da logo (centralizado) */
+.logo-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  z-index: 3;
+  padding: 20px; /* Espaço interno para a logo */
 }
 `

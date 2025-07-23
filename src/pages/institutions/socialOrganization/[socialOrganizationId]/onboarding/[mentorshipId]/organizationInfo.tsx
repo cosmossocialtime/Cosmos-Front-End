@@ -6,7 +6,6 @@ import Router, { useRouter } from 'next/router'
 import { Button } from '../../../../../../components/Button/ButtonSubmit'
 import { useState } from 'react'
 import InstitutionInfoModal from '../../../../../../components/instituition/modal/InstitutionInfo'
-import Link from 'next/link'
 import { useDashboard } from '../../../../../../hooks/useDashboard'
 
 export default function OrganizationInfo() {
@@ -20,7 +19,6 @@ export default function OrganizationInfo() {
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden">
-      {/* Header fixo */}
       <DynamicHeader />
 
       {isModalOpen && (
@@ -30,7 +28,6 @@ export default function OrganizationInfo() {
         />
       )}
 
-      {/* Conteúdo com fundo */}
       <div className="relative flex flex-1 flex-col items-center justify-center bg-bgSpaceInstitution bg-cover bg-center px-6 py-10 text-white">
         <div className="absolute left-10 top-8 z-10">
           <ArrowLeft
@@ -44,9 +41,7 @@ export default function OrganizationInfo() {
           />
         </div>
 
-        {/* Conteúdo central */}
         <div className="max-w-8xl flex w-full flex-col items-center justify-center gap-10 md:flex-row md:gap-20">
-          {/* Texto à esquerda */}
           <div className="max-w-3xl p-14 text-center backdrop-blur-xl md:text-left">
             <h1 className="mb-6 text-3xl font-semibold leading-tight md:text-4xl">
               Na Cosmos, cada organização social é uma Estrela que gera um
@@ -66,7 +61,6 @@ export default function OrganizationInfo() {
             </p>
           </div>
 
-          {/* Card da estrela à direita */}
           <button onClick={() => setIsModalOpen(true)}>
             <div className="gradient-border group flex cursor-pointer flex-col items-center p-12 backdrop-blur-xl">
               <div className="flex h-60 w-60 items-center justify-center transition-transform hover:scale-110">

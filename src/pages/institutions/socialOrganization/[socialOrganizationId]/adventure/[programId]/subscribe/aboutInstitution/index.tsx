@@ -134,6 +134,7 @@ export default function AboutInstitution() {
 
   const handleEstadoChange = (selected: Option | null) => {
     setSelectedEstado(selected)
+    setSelectedCidade(null)
     setValue('estado', selected?.value || '', { shouldValidate: true })
 
     if (selected) {

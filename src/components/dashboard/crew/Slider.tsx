@@ -89,6 +89,12 @@ export default function Slider() {
         ref={sliderRef}
         className="keen-slider flex w-full items-center justify-center px-4 py-1"
       >
+        <div
+          key="999"
+          className={`${
+            mentorshipVolunteers?.length > 3 ? 'keen-slider__slide' : ''
+          } flex items-center justify-center`}
+        ></div>
         {mentorshipVolunteers &&
           mentorshipVolunteers.map((volunteer) => {
             return (

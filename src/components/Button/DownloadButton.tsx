@@ -5,6 +5,7 @@ interface ButtonProps {
   disabled?: boolean
   isLoading?: boolean
   printImage?: string
+  organizationName?: string
   onClick: () => void
 }
 
@@ -12,6 +13,7 @@ export function DownloadButton({
   text,
   disabled,
   printImage,
+  organizationName,
   onClick,
 }: ButtonProps) {
   const handleDownload = async () => {
@@ -21,7 +23,7 @@ export function DownloadButton({
 
     const link = document.createElement('a')
     link.href = printImage || ''
-    link.download = 'organizationImage.jpg'
+    link.download = 'Post de divulgação ' + organizationName + ' e Cosmos.jpg'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
