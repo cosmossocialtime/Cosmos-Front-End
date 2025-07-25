@@ -82,12 +82,14 @@ export default function Menu() {
               className="flex flex-col gap-6"
               value={pathname}
             >
-              <DropDownMenu.RadioItem
-                className="relative flex cursor-pointer items-center outline-none transition hover:text-blue-400 data-[state=checked]:font-semibold data-[state=checked]:text-blue-400"
-                value={'Precisando de Ajuda?'}
+              <a
+                href="https://wa.me/554191473667?text=Oi%2C%20aterrissei%20aqui%20vindo%20da%20Cosmos.%20Consegue%20me%20ajudar%3F"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`hover:text-blue-400 data-[state=checked]:font-semibold data-[state=checked]:text-blue-400`}
               >
                 Precisando de Ajuda?
-              </DropDownMenu.RadioItem>
+              </a>
               <DropDownMenu.RadioItem
                 className="relative flex cursor-pointer items-center outline-none transition hover:text-blue-400 data-[state=checked]:font-semibold data-[state=checked]:text-blue-400"
                 value={'Feedback'}

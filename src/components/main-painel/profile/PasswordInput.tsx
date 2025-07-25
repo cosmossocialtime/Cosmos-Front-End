@@ -44,6 +44,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false)
+  const [open, setOpen] = useState(false)
   const changePasswordRef = useRef<HTMLFormElement>(null)
   const {
     register,
@@ -83,6 +84,8 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
           toast.error('A senha atual está incorreta! Tente novamente.')
         }
       }
+    } finally {
+      setOpen(!enableForm)
     }
   }
 
@@ -96,7 +99,7 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
         <Lock size={24} />
         <span>••••••••</span>
       </div>
-      <Dialog.Root>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Trigger disabled={!enableForm}>
           <span
             className={`${

@@ -39,9 +39,9 @@ export default function ModalSatelite({
   return (
     <>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[2] bg-black/70" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
 
-        <Dialog.Content className="scrollbar-thin scrollbar-w-1 scrollbar-h-1/2 scrollbar-thumb-blue-300 scrollbar-track-[#8779B5]/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full fixed left-1/2 top-1/2 z-10 flex h-[95%] w-[80%] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-xl bg-c-blue-800 p-5 pl-11 text-white">
+        <Dialog.Content className="scrollbar-thin scrollbar-w-1 scrollbar-h-1/2 scrollbar-thumb-blue-300 scrollbar-track-[#8779B5]/10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full fixed left-1/2 top-1/2 z-50 flex h-[95%] w-[80%] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-xl bg-c-blue-800 p-5 pl-11 text-white">
           <Dialog.Title>
             <p className="self-end text-[50px]">{name}</p>
           </Dialog.Title>

@@ -63,7 +63,10 @@ export function Goals() {
           })
         ) : (
           <p className="rounded-lg bg-gray-700 bg-opacity-5 p-8 text-center font-normal text-white backdrop-blur-3xl">
-            {socialOrganization?.name} ainda não tem nenhum objetivo... <br />
+            {socialOrganization
+              ? socialOrganization?.name
+              : currentMentorship?.socialOrganization}{' '}
+            ainda não tem nenhum objetivo... <br />
             Aguarde o encontro do Mapa da Navegação para criá-los.
           </p>
         )}

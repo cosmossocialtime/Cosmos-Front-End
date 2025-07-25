@@ -5,7 +5,7 @@ import { Button } from '../Button'
 
 interface SettingCropAreaProps {
   selectedImgSrc: string
-  handleImg: (image: string) => void
+  handleImg: (image: string) => Promise<void>
   aspectRatio: number
   cropShape: 'round' | 'rect'
 }
@@ -22,6 +22,7 @@ export default function SettingCropArea({
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [croppedArea, setCroppedArea] = useState<Area>()
+  const [isLoading, setIsLoading] = useState(false)
 
   const onCropComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
@@ -30,10 +31,12 @@ export default function SettingCropArea({
     []
   )
 
-  function cropImg() {
+  async function cropImg() {
     const imageSrc = CropImage(croppedArea!, selectedImgSrc)
     if (imageSrc) {
-      handleImg(imageSrc)
+      setIsLoading(true)
+      await handleImg(imageSrc)
+      setIsLoading(false)
     }
   }
 
@@ -55,7 +58,11 @@ export default function SettingCropArea({
         />
       </div>
 
-      <Button.Primary className="p-4 text-base" onClick={() => cropImg()}>
+      <Button.Primary
+        className="p-4 text-base"
+        onClick={() => cropImg()}
+        disabled={isLoading}
+      >
         Cortar imagem
       </Button.Primary>
     </div>

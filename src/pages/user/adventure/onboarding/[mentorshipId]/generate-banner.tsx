@@ -29,7 +29,7 @@ export default function GenerateBanner() {
     setOnDialog(true)
   }
 
-  function handleImg(image: string) {
+  async function handleImg(image: string) {
     setProfilePhoto(image)
     setOnDialog(false)
   }

@@ -99,8 +99,9 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
             }}
           />
 
-          {currentMentorship.steps.map((step) =>
-            step.active ? (
+          {currentMentorship.steps.map((step) => {
+            const isCompleted = dayjs(step.endDate).isBefore(dayjs())
+            return isCompleted ? (
               <div
                 key={step.stepId}
                 className={`z-10 flex h-8 w-8 items-center justify-center justify-self-center rounded-full bg-white text-white`}
@@ -126,7 +127,7 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
                 />
               </div>
             )
-          )}
+          })}
         </div>
 
         <div
@@ -138,9 +139,9 @@ export function StagesLine({ currentMentorship, openPopUp }: StagesLineProps) {
           {currentMentorship.steps.map((step) => (
             <span
               key={step.stepId}
-              data-active={step.active}
+              data-active={true}
               className="text-center text-sm text-gray-400 data-[active=true]:cursor-pointer hover:data-[active=true]:font-semibold hover:data-[active=true]:text-blue-400"
-              onClick={() => step.active && openPopUp(step)}
+              onClick={() => openPopUp(step)}
             >
               {setMessage(step)}
             </span>
