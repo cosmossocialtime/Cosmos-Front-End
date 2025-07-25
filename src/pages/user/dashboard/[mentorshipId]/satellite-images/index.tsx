@@ -15,6 +15,7 @@ import dayjs from 'dayjs'
 import { Option } from '../../../../../types/MultiselectCombobox'
 import axios from 'axios'
 import { SocialOrganizationProps } from '../../../../../types/socialOrganization'
+import { MentorshipSectorProps } from '../../../../../types/mentorshipSector'
 
 interface User {
   user: {
@@ -34,6 +35,7 @@ interface SateliteInfo {
   history?: string
   causes?: [string]
   state?: string
+  completedOnboarding?: boolean
 }
 interface cityProps {
   id: number
@@ -95,18 +97,18 @@ const SatelitesPage = () => {
 
       const payload = {
         socialOrganizationId: currentMentorship.socialOrganizationId,
+        mentorshipId: Number(mentorshipId || '0'),
       }
 
       try {
         const response = await invokeLambda<
           typeof payload,
           { statusCode: number; body: string }
-        >('social-organization-select-lambda', payload)
+        >('mentorship-social-organization-select-lambda', payload)
 
         if (response.statusCode === 200) {
           const parsed = JSON.parse(response.body).socialOrganization
           const cidade = await findCity(parsed)
-
           setCompany({
             name: parsed.name,
             creationDate: parsed.creationDate
@@ -121,9 +123,22 @@ const SatelitesPage = () => {
             history: parsed.history,
             causes: parsed.causes && parsed.causes.map((c: Option) => c.label),
             state: parsed.state,
+            completedOnboarding: parsed.completedOnboarding,
           })
-
-          setSectors(parsed.sectors)
+          const sectors = parsed.mentorshipSectors.map(
+            (s: MentorshipSectorProps) => {
+              return {
+                id: s.id,
+                sectorId: s.sectorId,
+                sector: s.sector,
+                socialOrganizationId: s.mentorshipSocialOrganizationId,
+                ranking: s.ranking,
+                currentlyWorking: s.currentlyWorking,
+                effectiveness: s.effectiveness,
+              }
+            }
+          )
+          setSectors(sectors)
         }
       } catch (err) {
         console.error('Erro ao buscar dados da organização:', err)
@@ -136,12 +151,24 @@ const SatelitesPage = () => {
   return (
     <div className="flex overflow-x-hidden">
       <SideBar />
-      <div className="flex h-screen w-full flex-col items-center gap-16 bg-bgsatelites bg-cover bg-center  pt-10 lg:overflow-y-auto">
-        <h3 className="text-center text-2xl font-semibold text-white">
-          Clique sobre a Estrela e os planetas para conhecer mais sobre a
-          <br />
-          instituição que você irá mentorar
-        </h3>
+      <div className="flex h-screen w-full flex-col items-center gap-16 bg-bgsatelites bg-cover bg-center lg:overflow-y-auto">
+        <div>
+          <h3 className="pt-10 text-center text-2xl font-semibold text-white">
+            Clique sobre a Estrela e os planetas para conhecer mais sobre a
+            <br />
+            instituição que você irá mentorar
+          </h3>
+          {!company?.completedOnboarding && (
+            <>
+              <br />
+              <span className="text-center text-lg text-gray-200">
+                As imagens de satélite dos planetas estão quase prontas, aguarde
+                mais um pouco
+              </span>
+            </>
+          )}
+        </div>
+
         <div className="flex justify-center gap-2 lg:grid lg:grid-cols-12 lg:grid-rows-6">
           {sectors &&
             sectors.map((sector) => {
@@ -150,30 +177,75 @@ const SatelitesPage = () => {
               )
 
               return (
-                <Dialog.Root key={sector.id}>
-                  <div className={planets?.style}>
-                    <ItemSatelite className="h-full w-full">
-                      <Image
-                        src={planets ? planets.imageUrl : ''}
-                        width={planets?.size}
-                        height={planets?.size}
-                        alt="Images "
-                      />
-                      <h1>{planets?.name}</h1>
-                    </ItemSatelite>
-                    <ModalSatelite
-                      name={planets?.name}
-                      effectiveness={sector.effectiveness}
-                      ranking={sector.ranking}
-                      currentlyWorking={sector.currentlyWorking}
-                    />
-                  </div>
-                </Dialog.Root>
+                <>
+                  {company?.completedOnboarding ? (
+                    <Dialog.Root key={sector.id}>
+                      <div className={planets?.style}>
+                        <ItemSatelite className="h-full w-full">
+                          <Image
+                            src={planets ? planets.imageUrl : ''}
+                            width={planets?.size}
+                            height={planets?.size}
+                            alt="Images "
+                          />
+                          <h1>{planets?.name}</h1>
+                        </ItemSatelite>
+                        <ModalSatelite
+                          name={planets?.name}
+                          effectiveness={sector.effectiveness}
+                          ranking={sector.ranking}
+                          currentlyWorking={sector.currentlyWorking}
+                        />
+                      </div>
+                    </Dialog.Root>
+                  ) : (
+                    <div className={planets?.style}>
+                      <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg bg-zinc-200/5 py-3 text-center text-white backdrop-blur-sm">
+                        <Image
+                          src={planets ? planets.imageUrl : ''}
+                          className="grayscale filter"
+                          width={planets?.size}
+                          height={planets?.size}
+                          alt="Images "
+                        />
+                        <h1>{planets?.name}</h1>
+                      </div>
+                    </div>
+                  )}
+                </>
               )
             })}
-          <Dialog.Root>
+          {company?.completedOnboarding ? (
+            <Dialog.Root>
+              <div className="Intituto">
+                <ItemSatelite className="h-full w-full">
+                  <Image
+                    src="/images/satelites/instituto.png"
+                    width={200}
+                    height={200}
+                    alt="Images "
+                  />
+                  <h1>{company ? company.name : ''}</h1>
+                </ItemSatelite>
+
+                <ModalInstitute
+                  name={company?.name}
+                  totalCollaborators={company?.totalCollaborators}
+                  annualRevenue={company?.annualRevenue}
+                  beneficiaries={company?.beneficiaries}
+                  city={company?.city}
+                  creationDate={company?.creationDate}
+                  history={company?.history}
+                  mainChallenges={company?.mainChallenges}
+                  socialImpact={company?.socialImpact}
+                  state={company?.state}
+                  causes={company?.causes}
+                />
+              </div>
+            </Dialog.Root>
+          ) : (
             <div className="Intituto">
-              <ItemSatelite className="h-full w-full">
+              <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg bg-zinc-200/5 py-3 text-center text-white backdrop-blur-sm">
                 <Image
                   src="/images/satelites/instituto.png"
                   width={200}
@@ -181,23 +253,9 @@ const SatelitesPage = () => {
                   alt="Images "
                 />
                 <h1>{company ? company.name : ''}</h1>
-              </ItemSatelite>
-
-              <ModalInstitute
-                name={company?.name}
-                totalCollaborators={company?.totalCollaborators}
-                annualRevenue={company?.annualRevenue}
-                beneficiaries={company?.beneficiaries}
-                city={company?.city}
-                creationDate={company?.creationDate}
-                history={company?.history}
-                mainChallenges={company?.mainChallenges}
-                socialImpact={company?.socialImpact}
-                state={company?.state}
-                causes={company?.causes}
-              />
+              </div>
             </div>
-          </Dialog.Root>
+          )}
         </div>
       </div>
     </div>

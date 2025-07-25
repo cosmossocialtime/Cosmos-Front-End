@@ -61,8 +61,10 @@ export default function CurrentAchievement({
                   : 'e conquiste uma medalha'}
               </span>
               <div className="duration-400 absolute right-16 top-1/2 z-10 -translate-y-1/2 transition-all">
-                {achievement.completed && (
+                {achievement.completed ? (
                   <div className="absolute h-32 w-32 rounded-full bg-white/50 blur-xl" />
+                ) : (
+                  ''
                 )}
                 <Image
                   src={achievement.completed ? LightMedal : Medal}
