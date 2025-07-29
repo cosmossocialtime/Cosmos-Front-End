@@ -23,14 +23,28 @@ export function ScreenshotWrapper({
 
     await document.fonts.ready
 
+    const width = ref.current.offsetWidth
+    const height = ref.current.offsetHeight
+
     html2canvas(ref.current, {
       useCORS: true,
-      scale: 1.5,
+      scale: 1,
+      width,
+      height,
+      scrollX: 0,
+      scrollY: 0,
+      backgroundColor: null,
     }).then((canvas) => {
-      const dataUrl = canvas.toDataURL('image/jpeg', 1.0)
+      const resizedCanvas = document.createElement('canvas')
+      resizedCanvas.width = width
+      resizedCanvas.height = height
+      const ctx = resizedCanvas.getContext('2d')
+      ctx?.drawImage(canvas, 0, 0, width, height)
+
+      const dataUrl = resizedCanvas.toDataURL('image/jpeg', 1.0)
       const link = document.createElement('a')
       link.href = dataUrl || ''
-      link.download = 'Post de divulgação ' + organizationName + ' e Cosmos.jpg'
+      link.download = `Post de divulgação ${organizationName} e Cosmos.jpg`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
