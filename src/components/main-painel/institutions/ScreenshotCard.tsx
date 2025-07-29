@@ -20,12 +20,11 @@ export function ScreenshotCard({
           <div className="absolute left-[140px] top-[177px] flex w-full flex-col items-center gap-10  rounded-xl p-8 md:flex-row">
             <div className="relative left-[19px] h-[197.43px] w-[197.43px]"></div>
             <div className="absolute left-[52px] top-[31px] z-[3]">
-              <Image
-                className="rounded-xl"
-                alt="Logo da organização"
+              <img
                 src={logoUrl}
-                width={293.43}
-                height={293.43}
+                alt="Logo da organização"
+                className="h-[293.43px] w-[293.43px] rounded-xl object-contain"
+                crossOrigin="anonymous"
               />
             </div>
 
@@ -50,11 +49,11 @@ export function ScreenshotCard({
           <div className="absolute left-[330px] top-[580px]">
             <div className="mt-10 flex items-end gap-8">
               {mentorshipLogoUrl && (
-                <Image
-                  width={200}
-                  height={80}
+                <img
                   src={mentorshipLogoUrl}
                   alt={`Logo ${mentorshipName}`}
+                  className="h-[80px] w-[200px] object-contain"
+                  crossOrigin="anonymous"
                 />
               )}
               <Image
