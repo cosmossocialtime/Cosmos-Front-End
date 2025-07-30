@@ -5,7 +5,7 @@ export const stepsNames = [
   },
   {
     stepId: 2,
-    step: 'Imagens de Satélite',
+    step: 'Sistema Estelar',
   },
   {
     stepId: 3,

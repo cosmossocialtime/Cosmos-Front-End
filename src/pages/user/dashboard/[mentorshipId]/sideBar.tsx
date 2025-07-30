@@ -33,7 +33,7 @@ export default function SideBar() {
     {
       id: 3,
       route: `/user/dashboard/${mentorshipId}/satellite-images`,
-      name: 'Imagens de Satétile',
+      name: 'Sistema Estelar',
       icon: <Star />,
     },
     {
