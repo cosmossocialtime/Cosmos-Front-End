@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import LogoCosmos from '../../../../public/images/cosmos-logo-white.png'
 
 interface ScreenshotBannerCardProps {
   socialOrganization: string
@@ -48,7 +47,12 @@ export function ScreenshotBannerCard({
             crossOrigin="anonymous"
           />
         )}
-        <Image className="h-7 w-auto" alt="Logo Cosmos" src={LogoCosmos} />
+        <Image
+          width={135}
+          height={100}
+          alt="Logo Cosmos"
+          src="/images/logoCosmosBranco.svg"
+        />
       </div>
     </div>
   )
