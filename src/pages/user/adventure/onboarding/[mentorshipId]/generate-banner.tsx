@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
-import { Camera, DownloadSimple, UploadSimple } from 'phosphor-react'
+import { Camera, UploadSimple } from 'phosphor-react'
 import { Button } from '../../../../../components/Button'
 import UploadImage from '../../../../../components/Crop/UploadImage'
 import { DialogCrop } from '../../../../../components/Crop/DialogCrop'
 import SettingCropArea from '../../../../../components/Crop/SettingCropArea'
 import Image from 'next/image'
 import Link from 'next/link'
-import html2canvas from 'html2canvas'
 import LogoCosmos from '../../../../../../public/images/cosmos-logo-white.png'
 import { Loading } from '../../../../../components/Loading'
 import { useOnboarding } from '../../../../../hooks/useOnboarding'
 import { volunteerRoleLabel } from '../../../../../utils/roleId'
+import { ScreenshotBannerWrapper } from '../../../../../components/main-painel/painel/ScreenshotBannerWrapper'
 
 export default function GenerateBanner() {
   const { user, currentMentorship, company, rootRoute } = useOnboarding()
@@ -18,7 +18,6 @@ export default function GenerateBanner() {
   const [selectedImg, setSelectedImg] = useState('')
   const [profilePhoto, setProfilePhoto] = useState('')
   const [onDialog, setOnDialog] = useState(false)
-  const [printImage, setPrintImage] = useState('')
 
   useEffect(() => {
     setProfilePhoto(user?.profilePicture || '')
@@ -34,29 +33,20 @@ export default function GenerateBanner() {
     setOnDialog(false)
   }
 
-  async function takeScreenshot() {
-    const canvas = await html2canvas(document.querySelector('.card')!)
-    const base64Image = canvas.toDataURL('image/jpg')
-
-    setPrintImage(base64Image)
-  }
-
   if (!user || !currentMentorship || !company) {
     return <Loading />
   }
 
   return (
     <div className="relative">
-      <header className="absolute inset-x-0 flex items-center justify-end gap-12 bg-violet-900/50 px-20 py-3 text-gray-100 backdrop-blur-lg">
-        <a
-          href={printImage}
-          download
-          onClick={(e) => {
-            !printImage && e.preventDefault()
-          }}
-        >
-          <DownloadSimple size={40} />
-        </a>
+      <header className="absolute inset-x-0 flex h-20 items-center justify-end gap-12 bg-violet-900/50 px-20 py-3 text-gray-100 backdrop-blur-lg">
+        <ScreenshotBannerWrapper
+          organizationName={currentMentorship.socialOrganization}
+          byname={user.byname}
+          role={volunteerRoleLabel.get(currentMentorship.role) || ''}
+          profilePhoto={profilePhoto}
+          mentorshipLogoUrl={company.logo}
+        />
       </header>
 
       <div className="card flex min-h-screen min-w-[1080px] flex-col items-center gap-5 bg-bgNaveDeFundo bg-cover bg-center py-28">
@@ -68,7 +58,6 @@ export default function GenerateBanner() {
                   <Image
                     className="rounded-[10px]"
                     alt="Foto de usuário"
-                    onLoad={takeScreenshot}
                     src={profilePhoto}
                     width={320}
                     height={320}
