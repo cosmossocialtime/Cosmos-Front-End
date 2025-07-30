@@ -46,7 +46,7 @@ export function ScreenshotBannerWrapper({
       const dataUrl = resizedCanvas.toDataURL('image/jpeg', 1.0)
       const link = document.createElement('a')
       link.href = dataUrl || ''
-      link.download = `Post de divulgação ${organizationName} e Cosmos.jpg`
+      link.download = `Post de divulgação ${byname} e Cosmos.jpg`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
