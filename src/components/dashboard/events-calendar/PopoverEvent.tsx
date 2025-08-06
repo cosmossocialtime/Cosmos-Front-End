@@ -51,30 +51,28 @@ export function PopoverEvent() {
 
   async function deleteEvent() {
     try {
-      if (isMeetEvent) {
-        const googlePayload: any = {
-          eventId: selectedEvent?.eventId,
-          updateRecurrenceEvents: 0,
-          occurrenceDateTime: dayjs(
-            dayjs(selectedEvent?.startAt)
-          ).toISOString(),
-        }
-        try {
-          const googleRes = await invokeLambda<
-            typeof googlePayload,
-            { statusCode: number; body: string }
-          >('mentorship-event-google-calendar-delete-lambda', googlePayload)
+      // Exclui dados do evento no Google Calendar
+      const googlePayload: any = {
+        eventId: selectedEvent?.eventId,
+        updateRecurrenceEvents: 0,
+        occurrenceDateTime: dayjs(dayjs(selectedEvent?.startAt)).toISOString(),
+      }
+      try {
+        const googleRes = await invokeLambda<
+          typeof googlePayload,
+          { statusCode: number; body: string }
+        >('mentorship-event-google-calendar-delete-lambda', googlePayload)
 
-          if (googleRes.statusCode !== 200) {
-            toast.error('Erro ao remover no Google Calendar')
-            return
-          }
-        } catch (error) {
-          console.error(error)
-          toast.error('Erro ao remover evento no Google Calendar')
+        if (googleRes.statusCode !== 200) {
+          toast.error('Erro ao remover no Google Calendar')
           return
         }
+      } catch (error) {
+        console.error(error)
+        toast.error('Erro ao remover evento no Google Calendar')
+        return
       }
+      // Exclui dados do evento na plataforma
       const payload = {
         eventId: selectedEvent?.id || 0,
       }

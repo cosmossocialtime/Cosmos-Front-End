@@ -116,7 +116,7 @@ export default function ModalSatelite({
                 </span>
                 Como a organização desenvolve a área {name} atualmente?
               </h2>
-              <p className="ml-12 w-3/4">{currentlyWorking}</p>
+              <p className="ml-12 w-3/4 break-words">{currentlyWorking}</p>
             </div>
             <div className="mt-10 flex flex-col gap-5">
               <h2 className="flex items-center gap-4 text-xl">
@@ -127,7 +127,7 @@ export default function ModalSatelite({
                 da instituição?
                 <br /> O que poderia melhorar?
               </h2>
-              <p className="ml-12 w-3/4">{effectiveness}</p>
+              <p className="ml-12 w-3/4 break-words">{effectiveness}</p>
             </div>
           </div>
 
