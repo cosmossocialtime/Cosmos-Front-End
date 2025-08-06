@@ -13,6 +13,7 @@ import {
 } from '../../../../lib/email/templates/templates'
 import { sendEmail } from '../../../../lib/aws/sesSendMail'
 import { invokeLambda } from '../../../../lib/aws/invokeLambda'
+import { LambdaError } from '../../../../lib/aws/lambdaError'
 
 const schema = z.object({
   emails: z
@@ -105,12 +106,19 @@ export const InviteForm = ({
                 requestMemberName,
                 user.fullName || ''
               )
-
               await sendEmail([email], subject, html)
             }
           } catch (error) {
-            console.error('Erro ao fazer parse do usuário:', error)
-            toast.error(`Erro ao processar o usuário: ${email}`)
+            if (error instanceof LambdaError) {
+              if (error.statusCode === 400) {
+                toast.error(`Usuário já cadastrado como voluntário: ${email}`)
+              } else if (error.statusCode === 401) {
+                toast.error(`Usuário já cadastrado para a ONG: ${email}`)
+              } else {
+                toast.error(`Erro ao processar o usuário: ${email}`)
+              }
+            }
+            return
           }
         } else {
           const { subject, html } = inviteMemberTemplate(

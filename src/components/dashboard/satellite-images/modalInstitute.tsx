@@ -103,7 +103,7 @@ export default function ModalInstitute({
               </span>
               História
             </h2>
-            <p className="ml-12 w-3/4">{history}</p>
+            <p className="ml-12 w-3/4 break-words">{history}</p>
           </div>
           <div className="mt-10 flex flex-col  gap-5">
             <h2 className="flex items-center gap-4 text-xl">
@@ -112,7 +112,7 @@ export default function ModalInstitute({
               </span>
               Atuação e impacto social
             </h2>
-            <p className="ml-12 w-3/4">{socialImpact}</p>
+            <p className="ml-12 w-3/4 break-words">{socialImpact}</p>
           </div>
           <div className="mt-10 flex flex-col gap-5">
             <h2 className="flex items-center gap-4 text-xl">
@@ -121,7 +121,7 @@ export default function ModalInstitute({
               </span>
               Principais necessidades e desafios
             </h2>
-            <p className="ml-12 w-3/4">{mainChallenges}</p>
+            <p className="ml-12 w-3/4 break-words">{mainChallenges}</p>
           </div>
 
           <Dialog.Close className="absolute right-6 top-8 text-xl text-white">

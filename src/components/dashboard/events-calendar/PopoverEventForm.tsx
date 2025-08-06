@@ -145,80 +145,81 @@ export function PopoverEventForm() {
       let originalEventId: string | null = null
       let firstEvent = 0
 
-      if (onLinkMeet) {
-        const attendeesEmails = data.attendees
-          .map((id) => {
-            const user = users.find((a) => a.userId === id)
-            return user?.email
-          })
-          .filter(Boolean)
+      // Cria dados do evento no GoogleAgenda
+      const attendeesEmails = data.attendees
+        .map((id) => {
+          const user = users.find((a) => a.userId === id)
+          return user?.email
+        })
+        .filter(Boolean)
 
-        attendeesEmails.push(ownerUser.email)
-        const startDateTime = dayjs(
-          `${dayjs(data.eventAt).format('YYYY-MM-DD')}T${data.startAt}`
-        ).toISOString()
-        const endDateTime = dayjs(
-          `${dayjs(data.eventAt).format('YYYY-MM-DD')}T${data.endAt}`
-        ).toISOString()
+      attendeesEmails.push(ownerUser.email)
+      const startDateTime = dayjs(
+        `${dayjs(data.eventAt).format('YYYY-MM-DD')}T${data.startAt}`
+      ).toISOString()
+      const endDateTime = dayjs(
+        `${dayjs(data.eventAt).format('YYYY-MM-DD')}T${data.endAt}`
+      ).toISOString()
 
-        const googlePayload: any = {
-          eventId: selectedEvent?.eventId,
-          summary: data.title,
-          description: data.description,
-          startDateTime,
-          endDateTime,
-          attendeesEmails,
-        }
+      const googlePayload: any = {
+        eventId: selectedEvent?.eventId,
+        summary: data.title,
+        description: data.description,
+        useGoogleMeet: onLinkMeet,
+        externalLink: onLinkMeet ? '' : data.link,
+        startDateTime,
+        endDateTime,
+        attendeesEmails,
+      }
 
-        let functionUrl = ''
-        if (onRepeatEvent || isRecurring) {
-          const rrule = getRRuleByDate(
-            data.eventAt,
-            selectedRecurrence?.value || '',
-            onRepeatEvent
-              ? data.repeatUntil || new Date()
-              : selectedEvent?.repeatUntil || new Date()
+      let functionUrl = ''
+      if (onRepeatEvent || isRecurring) {
+        const rrule = getRRuleByDate(
+          data.eventAt,
+          selectedRecurrence?.value || '',
+          onRepeatEvent
+            ? data.repeatUntil || new Date()
+            : selectedEvent?.repeatUntil || new Date()
+        )
+        googlePayload.rrule = rrule
+        googlePayload.updateRecurrenceEvents = updateRecurrency ? 1 : 0
+        if (isEditing) {
+          googlePayload.oldRRuleUntil = getRRuleByDate(
+            selectedEvent?.startAt,
+            selectedEvent?.recurrenceType || '',
+            dayjs(selectedEvent?.startAt).subtract(1, 'day').toDate()
           )
-          googlePayload.rrule = rrule
-          googlePayload.updateRecurrenceEvents = updateRecurrency ? 1 : 0
-          if (isEditing) {
-            googlePayload.oldRRuleUntil = getRRuleByDate(
-              selectedEvent?.startAt,
-              selectedEvent?.recurrenceType || '',
-              dayjs(selectedEvent?.startAt).subtract(1, 'day').toDate()
-            )
-            googlePayload.originalEventId = selectedEvent?.originalEventId
-            googlePayload.originalInstanceStartDateTime = dayjs(
-              dayjs(selectedEvent?.startAt)
-            ).toISOString()
-          }
-          functionUrl =
-            'mentorship-event-google-calendar-recurring-upsert-lambda'
-        } else {
-          functionUrl = 'mentorship-event-google-calendar-upsert-lambda'
+          googlePayload.originalEventId = selectedEvent?.originalEventId
+          googlePayload.originalInstanceStartDateTime = dayjs(
+            dayjs(selectedEvent?.startAt)
+          ).toISOString()
         }
-        try {
-          const googleRes = await invokeLambda<
-            typeof googlePayload,
-            { statusCode: number; body: string }
-          >(functionUrl, googlePayload)
+        functionUrl = 'mentorship-event-google-calendar-recurring-upsert-lambda'
+      } else {
+        functionUrl = 'mentorship-event-google-calendar-upsert-lambda'
+      }
+      try {
+        const googleRes = await invokeLambda<
+          typeof googlePayload,
+          { statusCode: number; body: string }
+        >(functionUrl, googlePayload)
 
-          if (googleRes.statusCode !== 200) {
-            toast.error('Erro ao criar evento no Google Calendar')
-            return
-          }
-          const googleData = JSON.parse(googleRes.body)
-          data.link = googleData.hangoutLink
-          eventId = googleData.eventId
-          originalEventId = googleData.originalEventId
-          firstEvent = googleData.firstEvent
-        } catch (error) {
-          console.error(error)
+        if (googleRes.statusCode !== 200) {
           toast.error('Erro ao criar evento no Google Calendar')
           return
         }
+        const googleData = JSON.parse(googleRes.body)
+        data.link = onLinkMeet ? googleData.hangoutLink : data.link
+        eventId = googleData.eventId
+        originalEventId = googleData.originalEventId
+        firstEvent = googleData.firstEvent
+      } catch (error) {
+        console.error(error)
+        toast.error('Erro ao criar evento no Google Calendar')
+        return
       }
 
+      // Cria dados do evento na base de dados da aplicação
       const payload = {
         id: selectedEvent?.id,
         mentorshipId: currentMentorship.mentorshipId,
