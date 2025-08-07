@@ -132,9 +132,20 @@ export function PopoverEventForm() {
   ]
 
   useEffect(() => {
-    setOnLinkMeet(!!selectedEvent?.eventId)
+    setOnLinkMeet(isGoogleMeetLink(selectedEvent?.link || ''))
   }, [])
 
+  function isGoogleMeetLink(url: string): boolean {
+    try {
+      const parsedUrl = new URL(url)
+
+      const isCorrectHost = parsedUrl.hostname === 'meet.google.com'
+
+      return isCorrectHost
+    } catch {
+      return false
+    }
+  }
   async function submitForm(data: z.infer<ReturnType<typeof createSchema>>) {
     try {
       const dayEvent = dayjs(data.eventAt).format('MM/DD/YYYY')
