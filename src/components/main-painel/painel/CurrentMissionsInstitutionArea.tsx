@@ -31,19 +31,12 @@ export default function CurrentMissionsInstitutionArea({
 
   return (
     <div className="relative mt-4 flex flex-col rounded-lg ">
-      <h2 className="mb-8 px-2 text-lg text-gray-600 md:px-0">
-        Missões atuais
-      </h2>
-
-      {mentorships.length === 0 ? (
-        <div className="flex h-64 items-center justify-center rounded-lg bg-currentMission bg-cover bg-no-repeat px-6 text-center">
-          <p className="text-xl font-semibold text-gray-200">
-            Atualmente você não está participando de nenhuma missão. <br />
-            Acesse as opções abaixo e inscreva-se em uma nova aventura!
-          </p>
-        </div>
-      ) : (
+      {mentorships.length > 0 && (
         <>
+          <h2 className="mb-8 px-2 text-lg text-gray-600 md:px-0">
+            Missões atuais
+          </h2>
+
           <div className="absolute right-12 top-0 z-10 hidden translate-y-[20px] md:block">
             <Image
               src={AstronautaImg}

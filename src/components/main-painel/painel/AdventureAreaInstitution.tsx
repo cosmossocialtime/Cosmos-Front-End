@@ -7,17 +7,20 @@ import { SocialOrganizationProps } from '../../../types/socialOrganization'
 import { useOnboardingInstitution } from '../../../context/OnboardingInstituionProvider'
 import StarFour from '../../../assets/star-four.svg'
 import Image from 'next/image'
+import { MentorshipProps } from '../../../types/mentorship'
 
 interface AdventureAreaInstitutionProps {
   programs: ProgramProps[]
   user: UserProps
   socialOrganization: SocialOrganizationProps
+  mentorships: MentorshipProps[]
 }
 
 export default function AdventureAreaInstitution({
   programs,
   user,
   socialOrganization,
+  mentorships,
 }: AdventureAreaInstitutionProps) {
   const {
     changeUser,
@@ -41,8 +44,8 @@ export default function AdventureAreaInstitution({
 
   return (
     <div className={`overflow-y-auto pb-5 pr-4`}>
-      {programs.length === 0 ? (
-        <div className="mt-60 flex flex-col items-center space-y-4">
+      {programs.length === 0 && mentorships.length === 0 ? (
+        <div className="mt-20 flex flex-col items-center space-y-4">
           <div>
             {/* Ícone estrela */}
             <Image
@@ -54,11 +57,13 @@ export default function AdventureAreaInstitution({
           <h1 className="text-xl font-semibold text-gray-500">
             Boas-vindas à Cosmos
           </h1>
-          <p className="max-w-md text-center text-gray-500">
-            Aqui irão aparecer as missões que sua organização poderá se
-            inscrever. Por enquanto não há aventuras em aberto, mas você pode ir
-            acumulando conquistas ao preencher as informações da organização!
-            Vamos lá?
+          <p className="max-w-xl text-center text-gray-500">
+            Aqui irão aparecer as missões em que sua organização poderá se
+            inscrever.
+          </p>
+          <p className="max-w-xl text-center text-gray-500">
+            Por enquanto não há aventuras em aberto, mas você pode ir acumulando
+            conquistas ao preencher as informações da organização! Vamos lá?
           </p>
         </div>
       ) : (
