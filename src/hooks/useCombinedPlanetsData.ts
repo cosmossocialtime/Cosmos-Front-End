@@ -52,7 +52,7 @@ export function useCombinedPlanetsData(
     const baseRightPlanets: (PlanetItemProps | null)[] = [
       {
         imageSrc: '/images/satelites/pessoas.png',
-        name: 'Recursos Humanos',
+        name: 'Gestão de Pessoas',
         id: 1,
       },
       null,

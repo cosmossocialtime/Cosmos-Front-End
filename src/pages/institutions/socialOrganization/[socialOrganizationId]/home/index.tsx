@@ -120,6 +120,7 @@ export default function Home() {
             programs={programs || []}
             user={user}
             socialOrganization={socialOrganization}
+            mentorships={mentorships || []}
           />
         </div>
         <aside className="flex w-[360px] flex-col space-y-6">

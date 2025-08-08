@@ -111,14 +111,16 @@ export const InviteForm = ({
           } catch (error) {
             if (error instanceof LambdaError) {
               if (error.statusCode === 400) {
-                toast.error(`Usuário já cadastrado como voluntário: ${email}`)
-              } else if (error.statusCode === 401) {
-                toast.error(`Usuário já cadastrado para a ONG: ${email}`)
+                toast.error(
+                  `Usuário já cadastrado como voluntário, não é possível convidá-lo para fazer parte de uma organização.`
+                )
+              } else if (error.statusCode === 409) {
+                toast.error(`Este usuário já faz parte desta organização.`)
               } else {
                 toast.error(`Erro ao processar o usuário: ${email}`)
               }
+              return
             }
-            return
           }
         } else {
           const { subject, html } = inviteMemberTemplate(
