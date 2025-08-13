@@ -2,12 +2,17 @@ import { Calendar } from 'phosphor-react'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
 import { twMerge } from 'tailwind-merge'
 import 'react-datepicker/dist/react-datepicker.css'
+import dayjs from 'dayjs'
 
 interface InputDateProps extends ReactDatePickerProps {
   className?: string
 }
 
-export function InputDate({ className, ...rest }: InputDateProps) {
+export function InputDate({ className, selected, ...rest }: InputDateProps) {
+  // Valida e converte o valor recebido
+  const safeSelected =
+    selected && dayjs(selected).isValid() ? dayjs(selected).toDate() : null
+
   return (
     <div
       className={twMerge(
@@ -18,7 +23,7 @@ export function InputDate({ className, ...rest }: InputDateProps) {
       )}
     >
       <Calendar size={24} />
-      <DatePicker {...rest} dateFormat={'dd/MM/yyyy'} />
+      <DatePicker {...rest} selected={safeSelected} dateFormat="dd/MM/yyyy" />
     </div>
   )
 }
