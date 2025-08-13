@@ -74,7 +74,7 @@ export default function FormUserData({ userData }: FormUserDataProps) {
         <Input.Root ariaLabel="Data de nascimento">
           <Input.Date
             disabled={!enableForm}
-            selected={dayjs(newUserData.birthdate).toDate()}
+            selected={newUserData.birthdate}
             {...register('birthdate')}
             onChange={(date) => {
               date &&

@@ -9,9 +9,8 @@ interface InputDateProps extends ReactDatePickerProps {
 }
 
 export function InputDate({ className, selected, ...rest }: InputDateProps) {
-  // Valida e converte o valor recebido
   const safeSelected =
-    selected && dayjs(selected).isValid() ? dayjs(selected).toDate() : null
+    selected !== undefined && selected !== null ? new Date(selected) : null
 
   return (
     <div
