@@ -10,7 +10,7 @@ import { parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { api } from '../../../services/api'
 
 const schemaGender = z.object({
   gender: z.string().nonempty('Por favor selecione o seu gênero'),
@@ -31,11 +31,8 @@ export default function Genero() {
     if (gender) {
       const payload = { gender: gender }
       try {
-        const response = await invokeLambda<
-          typeof payload,
-          { statusCode: number; body: string }
-        >('user-update-lambda', payload)
-        if (response.statusCode === 201) {
+        const response = await api.put('user-update', payload)
+        if (response.data.statusCode === 201) {
           Router.push('/user/onboarding/company-code')
         } else {
           toast.error('Erro ao atualizar informações do usuário')

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { useQuery } from '@tanstack/react-query'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import AdventureAreaInstitution from '../../../../../components/main-painel/painel/AdventureAreaInstitution'
 import { Loading } from '../../../../../components/Loading'
 import AchievementsAreaInstitution from '../../../../../components/main-painel/painel/AchievementsAreaInstitution'
@@ -11,6 +10,7 @@ import { useHeader } from '../../../../../context/HeaderContext'
 import { AchievementProps } from '../../../../../types/achievement'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
+import { api } from '../../../../../services/api'
 
 export default function Home() {
   const {
@@ -30,12 +30,11 @@ export default function Home() {
 
   async function getDashboard() {
     const payload = { socialOrganizationId: organizationId }
-    const response = await invokeLambda<
-      typeof payload,
-      { statusCode: number; body: string }
-    >('dashboard-select-lambda', payload)
-    if (response.statusCode === 200) {
-      return JSON.parse(response.body)
+    const response = await api.get('dashboard-select', {
+      params: payload,
+    })
+    if (response.data.statusCode === 200) {
+      return JSON.parse(response.data.body)
     } else {
       throw new Error('Erro ao buscar informações')
     }

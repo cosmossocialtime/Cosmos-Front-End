@@ -13,7 +13,7 @@ import WarningGoalDeletion from './WarningGoalDeletion'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ErrorMessage } from '@hookform/error-message'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { api } from '../../../services/api'
 
 const editGoalFormSchema = z.object({
   title: z.string().nonempty('O título é obrigatório!'),
@@ -69,12 +69,10 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
       name: title,
       tasks: tasks.map((task) => ({ name: task.name, id: task.id })),
     }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'mentorship-goal-update-lambda',
-      payload
-    )
+    api
+      .put('mentorship-goal-update', payload)
       .then((response) => {
-        if (response.statusCode === 201) {
+        if (response.data.statusCode === 200) {
           toast.success('Dados salvos com sucesso!')
           updateGoals()
           changeEdit(false)

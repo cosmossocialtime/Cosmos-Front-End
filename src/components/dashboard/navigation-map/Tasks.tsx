@@ -7,7 +7,7 @@ import { InputTask } from './InputTask'
 import { toast } from 'react-toastify'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { api } from '../../../services/api'
 
 interface TasksProps {
   goal: GoalProps
@@ -30,13 +30,11 @@ export function Tasks({ goal }: TasksProps) {
   }
 
   function completeTask(task: TaskProps) {
-    const payload = { taskId: task.id }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'mentorship-goal-task-complete-lambda',
-      payload
-    )
+    const payload = { taskId: task.id, completed: !task.completed }
+    api
+      .patch('mentorship-goal-task-complete', payload)
       .then((response) => {
-        if (response.statusCode === 201) {
+        if (response.data.statusCode === 201) {
           const newTasks = goal.tasks.map((t) =>
             t.id === task.id ? { ...task, completed: !task.completed } : t
           )

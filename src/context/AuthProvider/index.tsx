@@ -1,13 +1,13 @@
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { createContext, useEffect, useRef, useState } from 'react'
 import { IAuthProvider, IContext, SignInData, UserLogged } from './types'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
 import Router from 'next/router'
 import jwtDecode from 'jwt-decode'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { publicRoutes } from '../../utils/publicRoutes'
 import { saveFormData } from '../../utils/localStorage'
 import { toast } from 'react-toastify'
+import { api } from '../../services/api'
 
 export const AuthContext = createContext<IContext>({} as IContext)
 
@@ -143,13 +143,8 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     { email, password }: SignInData,
     socialOrganizationId: string | null
   ) {
-    const payload = { email, password }
-    const response = await invokeLambda<
-      typeof payload,
-      { statusCode: number; body: string }
-    >('user-login-lambda', payload)
-
-    const res = JSON.parse(response.body)
+    const response = await api.post('/auth/user-login', { email, password })
+    const res = JSON.parse(response.data.body)
 
     if (!res) {
       throw new Error('Sem dados de resposta para salvar nos cookies')

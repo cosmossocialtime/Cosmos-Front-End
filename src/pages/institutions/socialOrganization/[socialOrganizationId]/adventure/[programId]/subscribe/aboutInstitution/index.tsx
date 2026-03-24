@@ -22,7 +22,6 @@ import SingleSelectComboBox from '../../../../../../../../components/combobox/Si
 import MultiSelectComboBox from '../../../../../../../../components/combobox/MultiSelectComboBox'
 import { Option } from '../../../../../../../../types/MultiselectCombobox'
 import { MultiValue } from 'react-select'
-import { invokeLambda } from '../../../../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
 import useFetch from '../../../../../../../../hooks/useFetch'
 import axios from 'axios'
@@ -34,6 +33,7 @@ import dayjs from 'dayjs'
 import formatCurrency from '../../../../../../../../utils/formatCurrency'
 import { toast } from 'react-toastify'
 import FileUpload from '../../../../../../../../components/file/FileUpload'
+import { api } from '../../../../../../../../services/api'
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -116,11 +116,8 @@ export default function AboutInstitution() {
 
   async function getCauses() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('cause-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('cause-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar causas!')
       throw error
@@ -404,13 +401,10 @@ export default function AboutInstitution() {
         mime: file.type,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('storage-create-lambda', payload)
+      const response = await api.post('storage-create', payload)
 
-      if (response.statusCode === 201) {
-        const { storageId } = JSON.parse(response.body)
+      if (response.data.statusCode === 201) {
+        const { storageId } = JSON.parse(response.data.body)
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')

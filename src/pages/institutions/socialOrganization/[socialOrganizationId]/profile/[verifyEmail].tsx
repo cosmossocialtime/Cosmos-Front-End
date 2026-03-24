@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { getFormData } from '../../../../../utils/localStorage'
-import { LambdaError } from '../../../../../lib/aws/lambdaError'
+import { api } from '../../../../../services/api'
+import axios from 'axios'
 
 export default function VerifyEmail() {
   const router = useRouter()
@@ -31,23 +31,18 @@ export default function VerifyEmail() {
 
         const payload = { email: user, token: token }
 
-        const response = await invokeLambda<
-          {
-            email: string
-            token: string
-          },
-          { statusCode: number; body: string }
-        >('user-confirm-email-update-lambda', payload)
+        const response = await api.put('user-confirm-email-update', payload)
 
-        if (response.statusCode === 200) {
+        if (response.data.statusCode === 200) {
           toast.success('E-mail validado com sucesso!')
           router.push(
             `/institutions/socialOrganization/${socialOrganizationId}/profile`
           )
         }
       } catch (error) {
-        if (error instanceof LambdaError) {
-          if (error.statusCode === 401 || error.statusCode === 400) {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status
+          if (status === 401 || status === 400) {
             return toast.error('Código de confirmação inválido!')
           } else {
             return toast.error('Erro ao validar e-mail.')

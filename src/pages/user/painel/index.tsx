@@ -6,21 +6,18 @@ import PerfilArea from '../../../components/main-painel/painel/PerfilArea'
 import AchievementsArea from '../../../components/main-painel/painel/AchievementsArea'
 import { Loading } from '../../../components/Loading'
 import { useQuery } from '@tanstack/react-query'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { AchievementProps } from '../../../types/achievement'
+import { api } from '../../../services/api'
 
 export default function Painel() {
   const [hasShownError, setHasShownError] = useState(false)
 
   async function getDashboard() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('dashboard-select-lambda', {})
-    if (response.statusCode === 200) {
-      return JSON.parse(response.body)
+    const response = await api.get('dashboard-select', {})
+    if (response.data.statusCode === 200) {
+      return JSON.parse(response.data.body)
     } else {
       throw new Error('Erro ao buscar informações')
     }

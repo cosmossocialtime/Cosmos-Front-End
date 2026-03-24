@@ -7,8 +7,8 @@ import Router from 'next/router'
 import { Loading } from '../../../../../components/Loading'
 import { toast } from 'react-toastify'
 import { useSubscribe } from '../../../../../hooks/useSubscribe'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { useQueryClient } from '@tanstack/react-query'
+import { api } from '../../../../../services/api'
 
 export default function TermsOfUse() {
   const { program, programId } = useSubscribe()
@@ -38,12 +38,10 @@ export default function TermsOfUse() {
       agreedAt: new Date(),
       programId: Number(programId),
     }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'volunteer-program-apply-lambda',
-      payload
-    )
+    api
+      .post('volunteer-program-apply', payload)
       .then((response) => {
-        if (response.statusCode === 201) {
+        if (response.data.statusCode === 201) {
           queryClient.invalidateQueries(['dashboard', null])
           Router.push(`/user/adventure/${programId}/subscribe/application-form`)
         }

@@ -8,8 +8,8 @@ import Modal from './Modal'
 import { useKeenSlider } from 'keen-slider/react'
 import { CaretLeft, CaretRight } from 'phosphor-react'
 import { useRouter } from 'next/router'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { volunteerRoleLabel } from '../../../utils/roleId'
+import { api } from '../../../services/api'
 
 interface MentorshipProps {
   id: number
@@ -59,16 +59,17 @@ export default function Slider() {
   useEffect(() => {
     if (mentorshipId) {
       const payload = { mentorshipId: Number(mentorshipId || '0') }
-      invokeLambda<typeof payload, { statusCode: number; body: string }>(
-        'mentorship-volunteers-select-lambda',
-        payload
-      ).then((response) => {
-        if (response.statusCode === 200) {
-          setMentorshipVolunteers(JSON.parse(response.body))
-        } else {
-          setMentorshipVolunteers([])
-        }
-      })
+      api
+        .get('mentorship-volunteers-select', {
+          params: payload,
+        })
+        .then((response) => {
+          if (response.data.statusCode === 200) {
+            setMentorshipVolunteers(JSON.parse(response.data.body))
+          } else {
+            setMentorshipVolunteers([])
+          }
+        })
     }
   }, [mentorshipId])
 

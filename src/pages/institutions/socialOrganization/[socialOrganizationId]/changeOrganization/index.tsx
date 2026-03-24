@@ -3,12 +3,12 @@ import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { useRouter } from 'next/router'
 import { useKeenSlider } from 'keen-slider/react'
 import { CaretLeft, CaretRight, Check } from 'phosphor-react'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 import { UserSocialOrganizationProps } from '../../../../../types/userSocialOrganization'
 import Link from 'next/link'
 import { Loading } from '../../../../../components/Loading'
+import { api } from '../../../../../services/api'
 
 export default function ChangeOrganizationPage() {
   const router = useRouter()
@@ -40,12 +40,9 @@ export default function ChangeOrganizationPage() {
   })
 
   async function getUser() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('user-select-lambda', {})
-    if (response.statusCode === 200) {
-      return JSON.parse(response.body)
+    const response = await api.get('user-select')
+    if (response.data.statusCode === 200) {
+      return JSON.parse(response.data.body)
     } else {
       throw new Error('Erro ao buscar informações')
     }

@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import Router from 'next/router'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { UserProps } from '../../types/user'
 import { SocialOrganizationProps } from '../../types/socialOrganization'
 import { ProgramProps } from '../../types/program'
 import { MentorshipApplicantProps } from '../../types/mentorshipApplicant'
 import { FocalPointProps } from '../../types/focalPoint'
+import { api } from '../../services/api'
 
 type OnboardingInstitutionContextProps = {
   user: UserProps | null
@@ -105,13 +105,10 @@ const OnboardingInstitutionProvider = ({
         professionalRole: (updatedUser && updatedUser.professionalRole) || '',
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('onboarding-create-lambda', payload)
+      const response = await api.post('onboarding-create', payload)
 
-      if (response.statusCode == 201) {
-        const parsed = JSON.parse(response.body)
+      if (response.data.statusCode == 201) {
+        const parsed = JSON.parse(response.data.body)
         toast.success('Cadastro concluído!')
         Router.push(
           `/institutions/socialOrganization/${parsed.socialOrganizationId}/home`
@@ -139,12 +136,9 @@ const OnboardingInstitutionProvider = ({
         professionalRole: (updatedUser && updatedUser.professionalRole) || '',
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('onboarding-member-create-lambda', payload)
+      const response = await api.post('onboarding-member-create', payload)
 
-      if (response.statusCode == 201) {
+      if (response.data.statusCode == 201) {
         toast.success('Cadastro concluído!')
         Router.push(
           `/institutions/socialOrganization/${socialOrganizationId}/home`
@@ -175,11 +169,8 @@ const OnboardingInstitutionProvider = ({
           program: program,
         }
 
-        const response = await invokeLambda<
-          typeof payload,
-          { statusCode: number; body: string }
-        >('onboardingProgram-create-lambda', payload)
-        if (response.statusCode == 201) {
+        const response = await api.post('onboarding-program-create', payload)
+        if (response.data.statusCode == 201) {
           toast.success('Cadastro concluído!')
           Router.push(
             `/institutions/socialOrganization/${

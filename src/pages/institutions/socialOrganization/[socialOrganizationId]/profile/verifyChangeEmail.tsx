@@ -3,12 +3,12 @@ import Mensagem from '../../../../../assets/icons/EnvelopeClaro.svg'
 import { useEffect, useState } from 'react'
 import styles from '../../../../../components/instituition/verifyEmail/verifyEmail.module.css'
 import { getFormData } from '../../../../../utils/localStorage'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { confirmChangeEmailInstitutionTemplate } from '../../../../../lib/email/templates/templates'
-import { sendEmail } from '../../../../../lib/aws/sesSendMail'
 import { useRouter } from 'next/router'
+import { api } from '../../../../../services/api'
+import { sendEmail } from '../../../../api/send-email'
 
 export default function VerifyChangeEmail() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -39,14 +39,12 @@ export default function VerifyChangeEmail() {
     try {
       const payload = { email: email }
 
-      const response = await invokeLambda<
-        {
-          email: string
-        },
-        { statusCode: number; body: string }
-      >('user-resend-confirmation-email-change-lambda', payload)
-      if (response.statusCode === 200) {
-        const parsed = JSON.parse(response.body)
+      const response = await api.post(
+        'user-resend-confirmation-email-change',
+        payload
+      )
+      if (response.data.statusCode === 200) {
+        const parsed = JSON.parse(response.data.body)
         const { subject, html } = confirmChangeEmailInstitutionTemplate(
           parsed.confirmationCode,
           parsed.name,

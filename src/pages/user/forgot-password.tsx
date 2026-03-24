@@ -3,12 +3,11 @@ import Main from '../../components/Main'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { FormEvent, useState } from 'react'
-import { setCookie } from 'nookies'
 import Router from 'next/router'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
-import { sendEmail } from '../../lib/aws/sesSendMail'
 import { forgotPasswordTemplate } from '../../lib/email/templates/templates'
 import { saveFormData } from '../../utils/localStorage'
+import { api } from '../../services/api'
+import { sendEmail } from '../api/send-email'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -20,16 +19,11 @@ export default function ForgotPassword() {
       const payload = {
         email: email,
       }
-      const response = await invokeLambda<
-        {
-          email: string
-        },
-        { statusCode: number; body: string }
-      >('user-forgot-password-lambda', payload)
+      const response = await api.post('user-forgot-password', payload)
 
-      const parsed = JSON.parse(response.body)
+      const parsed = JSON.parse(response.data.body)
 
-      if (response.statusCode == 200) {
+      if (response.data.statusCode == 200) {
         const { subject, html } = forgotPasswordTemplate(
           parsed.name,
           parsed.confirmationCode,
@@ -46,7 +40,7 @@ export default function ForgotPassword() {
             toast.error('Erro ao enviar email de redefinção de senha')
           })
       }
-      if (response.statusCode == 401) {
+      if (response.data.statusCode == 401) {
         toast.error('Email inválido')
       }
     } catch (error) {

@@ -10,12 +10,12 @@ import { useDashboard } from '../../../../../hooks/useDashboard'
 import { MentorshipProps } from '../../../../../types/mentorship'
 import { SectorProps } from '../../../../../types/sector'
 import { useRouter } from 'next/router'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import dayjs from 'dayjs'
 import { Option } from '../../../../../types/MultiselectCombobox'
 import axios from 'axios'
 import { SocialOrganizationProps } from '../../../../../types/socialOrganization'
 import { MentorshipSectorProps } from '../../../../../types/mentorshipSector'
+import { api } from '../../../../../services/api'
 
 interface User {
   user: {
@@ -101,13 +101,15 @@ const SatelitesPage = () => {
       }
 
       try {
-        const response = await invokeLambda<
-          typeof payload,
-          { statusCode: number; body: string }
-        >('mentorship-social-organization-select-lambda', payload)
+        const response = await api.get(
+          'mentorship-social-organization-select',
+          {
+            params: payload,
+          }
+        )
 
-        if (response.statusCode === 200) {
-          const parsed = JSON.parse(response.body).socialOrganization
+        if (response.data.statusCode === 200) {
+          const parsed = JSON.parse(response.data.body).socialOrganization
           const cidade = await findCity(parsed)
           setCompany({
             name: parsed.name,

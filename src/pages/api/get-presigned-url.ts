@@ -1,14 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import type { NextApiRequest, NextApiResponse } from 'next'
-
-const s3 = new S3Client({
-  region: process.env.NEXT_PUBLIC_AWS_REGION!,
-  credentials: {
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!,
-  },
-})
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,13 +15,23 @@ export default async function handler(
   }
 
   try {
-    const command = new PutObjectCommand({
-      Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
-      Key: key,
-      ContentType: fileType,
-    })
+    const payload = {
+      key: key,
+      fileType: fileType,
+    }
 
-    const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 300 })
+    const uploadUrl = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + '/s3-get-upload-url',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          payload,
+        }),
+      }
+    )
 
     return res.status(200).json({ uploadUrl })
   } catch (err) {

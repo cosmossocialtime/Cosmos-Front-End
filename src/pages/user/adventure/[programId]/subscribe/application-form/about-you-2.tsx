@@ -8,7 +8,7 @@ import { Header } from '../../../../../../components/adventure/Header'
 import { Loading } from '../../../../../../components/Loading'
 import Link from 'next/link'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
+import { api } from '../../../../../../services/api'
 
 const schema = z.object({
   reasonToJoin: z
@@ -31,11 +31,8 @@ export default function AboutYou2() {
       previousMentorship: previousMentorship,
     }
     try {
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-volunteering-update-lambda', payload)
-      if (response.statusCode === 201) {
+      const response = await api.put('user-volunteering-update', payload)
+      if (response.data.statusCode === 201) {
         Router.push(
           `/user/adventure/${programId}/subscribe/application-form/mission-role`
         )

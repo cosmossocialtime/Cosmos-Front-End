@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { invokeLambda } from '../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { UserSocialOrganizationProps } from '../types/userSocialOrganization'
+import { api } from '../services/api'
 
 export function useTeam(socialOrganizationId: number) {
   const queryClient = useQueryClient()
@@ -12,12 +12,9 @@ export function useTeam(socialOrganizationId: number) {
     error: errorUser,
   } = useQuery({
     queryFn: async () => {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('user-select-lambda', {})
-      if (response.statusCode === 200) {
-        const parsed = JSON.parse(response.body)
+      const response = await api.get('user-select')
+      if (response.data.statusCode === 200) {
+        const parsed = JSON.parse(response.data.body)
         const userSocialOrganizations =
           parsed.socialOrganizations &&
           parsed.socialOrganizations.filter(
@@ -43,11 +40,10 @@ export function useTeam(socialOrganizationId: number) {
     queryKey: ['users', socialOrganizationId],
     queryFn: async () => {
       const payload = { socialOrganizationId }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-users-select-lambda', payload)
-      return JSON.parse(response.body)
+      const response = await api.get('social-organization-users-select', {
+        params: payload,
+      })
+      return JSON.parse(response.data.body)
     },
     enabled: !!socialOrganizationId,
     refetchOnWindowFocus: true,
@@ -64,12 +60,16 @@ export function useTeam(socialOrganizationId: number) {
         userId: number
         newPermission: string
       }) => {
-        const payload = { userId, role: newPermission, socialOrganizationId }
-        const response = await invokeLambda<
-          typeof payload,
-          { statusCode: number; body: string }
-        >('social-organization-member-role-update-lambda', payload)
-        return JSON.parse(response.body)
+        const payload = {
+          userId: userId,
+          role: newPermission,
+          socialOrganizationId: socialOrganizationId,
+        }
+        const response = await api.put(
+          'social-organization-member-role-update',
+          payload
+        )
+        return JSON.parse(response.data.body)
       },
       onSuccess: () => {
         toast.success('Permissão alterada com sucesso!')
@@ -86,11 +86,10 @@ export function useTeam(socialOrganizationId: number) {
         userId: userId,
         socialOrganizationId: socialOrganizationId,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-member-delete-lambda', payload)
-      return JSON.parse(response.body)
+      const response = await api.delete('social-organization-member-delete', {
+        data: payload,
+      })
+      return JSON.parse(response.data.body)
     },
     onSuccess: () => {
       toast.success('Membro removido com sucesso!')

@@ -12,8 +12,8 @@ import { textAreaSchema } from '../../../../utils/ValidationSchemas'
 import { MentorshipSectorProps } from '../../../../types/mentorshipSector'
 import { toast } from 'react-toastify'
 import { queryClient } from '../../../../services/queryClient'
-import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { Option } from '../../../../types/MultiselectCombobox'
+import { api } from '../../../../services/api'
 
 const options = [
   { value: '1', label: '1 - Não precisa' },
@@ -131,11 +131,11 @@ export const SectorFormMentorship = ({
         effectiveness: data.effectiveness,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-social-organization-sector-upsert-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.patch(
+        'mentorship-social-organization-sector-upsert',
+        payload
+      )
+      if (response.data.statusCode == 201) {
         queryClient.invalidateQueries([
           'mentorshipSocialOrganization',
           socialOrganizationId || 0,

@@ -8,9 +8,9 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Main from '../../components/Main'
 import * as HoverCard from '@radix-ui/react-hover-card'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { getFormData } from '../../utils/localStorage'
-import { LambdaError } from '../../lib/aws/lambdaError'
+import { api } from '../../services/api'
+import axios from 'axios'
 
 const schema = z
   .object({
@@ -64,25 +64,19 @@ export default function ResetPassword() {
         email,
         token: token,
       }
-      const response = await invokeLambda<
-        {
-          password: string
-          email: string
-          token: string
-        },
-        { statusCode: number; body: string }
-      >('user-reset-password-lambda', payload)
+      const response = await api.post('user-reset-password', payload)
 
-      if (response.statusCode == 200) {
+      if (response.data.statusCode == 200) {
         toast.success('Senha alterada com sucesso')
         Router.push('/user/login')
       }
     } catch (error) {
-      if (error instanceof LambdaError) {
-        if (error.statusCode == 401) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+        if (status == 401) {
           return toast.error('Token inválido')
         }
-        if (error.statusCode === 400) {
+        if (status === 400) {
           return toast.error(
             'Não foi possivel processar sua requisição, tente novamente'
           )

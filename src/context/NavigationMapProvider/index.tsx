@@ -12,8 +12,8 @@ import { useQuery } from '@tanstack/react-query'
 import { queryClient } from '../../services/queryClient'
 import { useRouter } from 'next/router'
 import { MentorshipProps } from '../../types/mentorship'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { SocialOrganizationProps } from '../../types/socialOrganization'
+import { api } from '../../services/api'
 
 type NavigationMapContextProps = {
   currentMentorship?: MentorshipProps
@@ -53,22 +53,23 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   const [editEnable, setEditEnable] = useState(false)
   const [editTitle, setEditTitle] = useState(false)
 
-  async function getGoals() {
-    const payload = { mentorshipId: Number(mentorshipId || '0') }
-    const response = await invokeLambda<
-      typeof payload,
-      { statusCode: number; body: string }
-    >('mentorship-goals-select-lambda', payload)
-    if (response.statusCode === 200) {
-      return JSON.parse(response.body)
+  async function getGoals(id: number) {
+    if (!id) return []
+    const payload = { mentorshipId: id }
+    const response = await api.get('mentorship-goals-select', {
+      params: payload,
+    })
+    if (response.data.statusCode === 200) {
+      return JSON.parse(response.data.body)
     }
     console.error('Falha ao obter objetivos da missão')
     return []
   }
 
   const { data: goals = [], refetch } = useQuery({
-    queryKey: ['goals'],
-    queryFn: getGoals,
+    queryKey: ['goals', mentorshipId],
+    queryFn: () => getGoals(Number(mentorshipId)),
+    enabled: !!mentorshipId && route.isReady,
   })
 
   const updateGoals = useCallback(() => {
@@ -91,13 +92,11 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
       mentorshipId: Number(mentorshipId || '0'),
       name: 'Novo objetivo',
     }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'mentorship-goal-create-lambda',
-      payload
-    )
+    api
+      .post('mentorship-goal-create', payload)
       .then((response) => {
-        if (response.statusCode === 201) {
-          const parsed = JSON.parse(response.body)
+        if (response.data.statusCode === 201) {
+          const parsed = JSON.parse(response.data.body)
           selectGoalId(parsed.id)
           updateGoals()
           setEditEnable(true)
@@ -124,12 +123,10 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
       return
     }
     const payload = { goalId: selectedGoalId }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'mentorship-goal-delete-lambda',
-      payload
-    )
+    api
+      .delete('mentorship-goal-delete', { data: payload })
       .then((response) => {
-        if (response.statusCode === 200) {
+        if (response.data.statusCode === 200) {
           const newGoals = goals.filter(
             (goal: GoalProps) => goal.id !== selectedGoalId
           )
