@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { parseCookies } from 'nookies'
 
-const BASE_URL = 'http://localhost:8080/api'
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export function getApiClient(ctx?: any) {
   const { 'cosmos.token': token } = parseCookies(ctx)

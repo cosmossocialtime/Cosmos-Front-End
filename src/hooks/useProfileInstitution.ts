@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { invokeLambda } from '../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { UserSocialOrganizationProps } from '../types/userSocialOrganization'
+import { api } from '../services/api'
 
 export function useProfileInstitution(socialOrganizationId: number) {
   const queryClient = useQueryClient()
@@ -13,12 +13,9 @@ export function useProfileInstitution(socialOrganizationId: number) {
   } = useQuery({
     queryKey: ['user', socialOrganizationId],
     queryFn: async () => {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('user-select-lambda', {})
-      if (response.statusCode === 200) {
-        const parsed = JSON.parse(response.body)
+      const response = await api.get('user-select')
+      if (response.data.statusCode === 200) {
+        const parsed = JSON.parse(response.data.body)
         const userSocialOrganizations =
           parsed.socialOrganizations &&
           parsed.socialOrganizations.filter(
@@ -57,11 +54,8 @@ export function useProfileInstitution(socialOrganizationId: number) {
         professionalSector,
         socialOrganizationId,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-update-lambda', payload)
-      return JSON.parse(response.body)
+      const response = await api.put('user-update', payload)
+      return JSON.parse(response.data.body)
     },
     onSuccess: () => {
       toast.success('Alterações salvas com sucesso')
@@ -85,11 +79,8 @@ export function useProfileInstitution(socialOrganizationId: number) {
           storageId,
           imageType,
         }
-        const response = await invokeLambda<
-          typeof payload,
-          { statusCode: number; body: string }
-        >('user-images-update-lambda', payload)
-        return JSON.parse(response.body)
+        const response = await api.put('user-images-update', payload)
+        return JSON.parse(response.data.body)
       },
       onSuccess: () => {
         toast.success('Alterações salvas com sucesso')

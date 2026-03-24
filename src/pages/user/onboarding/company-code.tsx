@@ -9,7 +9,7 @@ import Image from 'next/image'
 import debounce from 'lodash.debounce'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { api } from '../../../services/api'
 
 const shemaCompanyCode = z.object({
   code: z.string().nonempty('O código da empresa é obrigatorio'),
@@ -33,12 +33,11 @@ export default function CompanyCode() {
     if (value.length === 6) {
       const payload = { code: value }
       try {
-        const response = await invokeLambda<
-          typeof payload,
-          { statusCode: number; body: string }
-        >('company-code-select-lambda', payload)
-        if (response.statusCode === 200) {
-          const parsed = JSON.parse(response.body)
+        const response = await api.get('company-code-select', {
+          params: payload,
+        })
+        if (response.data.statusCode === 200) {
+          const parsed = JSON.parse(response.data.body)
           setImageCompany(parsed.company.logo)
         } else {
           return toast.error('Tente novamente')
@@ -59,11 +58,8 @@ export default function CompanyCode() {
     }
     const payload = { companyCode: code }
     try {
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-update-lambda', payload)
-      if (response.statusCode === 201) {
+      const response = await api.put('user-update', payload)
+      if (response.data.statusCode === 201) {
         router.push('/user/onboarding/birth')
       } else {
         toast.error('Por gentileza digite um código válido')

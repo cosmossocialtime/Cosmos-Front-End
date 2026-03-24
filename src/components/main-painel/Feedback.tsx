@@ -2,7 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
+import { api } from '../../services/api'
 
 interface FeedbackProps {
   closeFeedback: () => void
@@ -22,11 +22,8 @@ export function Feedback({ closeFeedback }: FeedbackProps) {
       const payload = {
         feedback: feedbackContent,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-feedback-create-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.post('user-feedback-create', payload)
+      if (response.data.statusCode == 201) {
         toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
         closeFeedback()
       } else {

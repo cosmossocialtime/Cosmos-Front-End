@@ -11,9 +11,9 @@ import {
   inviteMemberExistingUserTemplate,
   inviteMemberTemplate,
 } from '../../../../lib/email/templates/templates'
-import { sendEmail } from '../../../../lib/aws/sesSendMail'
-import { invokeLambda } from '../../../../lib/aws/invokeLambda'
-import { LambdaError } from '../../../../lib/aws/lambdaError'
+import { api } from '../../../../services/api'
+import axios from 'axios'
+import { sendEmail } from '../../../../pages/api/send-email'
 
 const schema = z.object({
   emails: z
@@ -69,12 +69,11 @@ export const InviteForm = ({
   async function getUser(email: string) {
     try {
       const payload = { email }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-select-lambda', payload)
-      if (response.statusCode === 200) {
-        return JSON.parse(response.body)
+      const response = await api.get('user-select', {
+        params: payload,
+      })
+      if (response.data.statusCode === 200) {
+        return JSON.parse(response.data.body)
       }
     } catch (error) {
       return null
@@ -95,11 +94,11 @@ export const InviteForm = ({
               userType: 'social_organization_member',
             }
 
-            const response = await invokeLambda<
-              typeof payload,
-              { statusCode: number; body: string }
-            >('social-organization-member-create-lambda', payload)
-            if (response.statusCode === 201) {
+            const response = await api.post(
+              'social-organization-member-create',
+              payload
+            )
+            if (response.data.statusCode === 201) {
               const { subject, html } = inviteMemberExistingUserTemplate(
                 socialOrganization.name,
                 socialOrganization.id || 0,
@@ -109,12 +108,13 @@ export const InviteForm = ({
               await sendEmail([email], subject, html)
             }
           } catch (error) {
-            if (error instanceof LambdaError) {
-              if (error.statusCode === 400) {
+            if (axios.isAxiosError(error)) {
+              const status = error.response?.status
+              if (status === 400) {
                 toast.error(
                   `Usuário já cadastrado como voluntário, não é possível convidá-lo para fazer parte de uma organização.`
                 )
-              } else if (error.statusCode === 409) {
+              } else if (status === 409) {
                 toast.error(`Este usuário já faz parte desta organização.`)
               } else {
                 toast.error(`Erro ao processar o usuário: ${email}`)

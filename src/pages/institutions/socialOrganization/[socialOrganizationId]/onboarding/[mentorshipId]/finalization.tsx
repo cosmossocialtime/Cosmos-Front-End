@@ -2,9 +2,9 @@ import { ArrowLeft } from 'phosphor-react'
 import DynamicHeader from '../../../../../../components/header/DynamicHeader'
 import Router, { useRouter } from 'next/router'
 import { Button } from '../../../../../../components/Button/ButtonSubmit'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useHeader } from '../../../../../../context/HeaderContext'
+import { api } from '../../../../../../services/api'
 
 export default function Finalization() {
   const router = useRouter()
@@ -20,12 +20,9 @@ export default function Finalization() {
         mentorshipId: mentorId,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-complete-onboarding-lambda', payload)
+      const response = await api.put('mentorship-complete-onboarding', payload)
 
-      if (response.statusCode == 201) {
+      if (response.data.statusCode == 201) {
         toast.success('Onboarding concluído')
         setShowMenu(true)
         setShowOrganization(true)

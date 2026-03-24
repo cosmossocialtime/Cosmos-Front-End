@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Router from 'next/router'
 import { getFormData } from '../../utils/localStorage'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { resendInstitutionConfirmationTemplate } from '../../lib/email/templates/templates'
-import { sendEmail } from '../../lib/aws/sesSendMail'
 import Link from 'next/link'
+import { api } from '../../services/api'
+import { sendEmail } from '../api/send-email'
 
 export default function CompletedRegistration() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -37,15 +37,10 @@ export default function CompletedRegistration() {
     try {
       const payload = { email: email }
 
-      const response = await invokeLambda<
-        {
-          email: string
-        },
-        { statusCode: number; body: string }
-      >('user-resend-confirmation-lambda', payload)
+      const response = await api.post('user-resend-confirmation', payload)
 
-      if (response.statusCode === 200) {
-        const parsed = JSON.parse(response.body)
+      if (response.data.statusCode === 200) {
+        const parsed = JSON.parse(response.data.body)
         const { subject, html } = resendInstitutionConfirmationTemplate(
           parsed.confirmationCode
         )

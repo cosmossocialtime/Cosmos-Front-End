@@ -7,7 +7,7 @@ import Router from 'next/router'
 import Link from 'next/link'
 import { KnowledgeProps } from '../../../../../../types/knowledge'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
+import { api } from '../../../../../../services/api'
 
 export default function Confirmation() {
   const { program, programId } = useSubscribe()
@@ -17,12 +17,12 @@ export default function Confirmation() {
 
   useEffect(() => {
     const payload = { origin: 'volunteer' }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'sector-select-lambda',
-      payload
-    )
+    api
+      .get('sector-select', {
+        params: payload,
+      })
       .then((response) => {
-        setKnowledgeAreas(JSON.parse(response.body))
+        setKnowledgeAreas(JSON.parse(response.data.body))
       })
       .catch((error) => {
         console.error(error)
@@ -52,11 +52,8 @@ export default function Confirmation() {
     }
     const payload = { sectorIds: selectedAreas }
     try {
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-volunteering-update-lambda', payload)
-      if (response.statusCode === 201) {
+      const response = await api.put('user-volunteering-update', payload)
+      if (response.data.statusCode === 201) {
         completeRegistration()
       } else {
         toast.error(
@@ -76,12 +73,10 @@ export default function Confirmation() {
       applicationId: program?.volunteerApplicationId,
       completedApplication: true,
     }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'volunteer-applicant-update-lambda',
-      payload
-    )
+    api
+      .put('volunteer-applicant-update', payload)
       .then((response) => {
-        if (response.statusCode === 201) {
+        if (response.data.statusCode === 201) {
           Router.push(
             `/user/adventure/${programId}/subscribe/application-form/thanks`
           )

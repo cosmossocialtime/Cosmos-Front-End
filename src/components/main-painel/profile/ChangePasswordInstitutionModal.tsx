@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react'
 import { Button } from '../../Button/ButtonSubmit'
 import { passwordSchema } from '../../../utils/ValidationSchemas'
 import { toast } from 'react-toastify'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { InputPassword } from '../../Input/InputPassword'
+import { api } from '../../../services/api'
 
 interface ChangePasswordInstitutionModalProps {
   closeModal: () => void
@@ -42,11 +42,8 @@ export const ChangePasswordInstitutionModal = ({
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-password-update-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.put('user-password-update', payload)
+      if (response.data.statusCode == 201) {
         toast.success('Senha alterada com sucesso')
       } else {
         toast.error('Erro ao alterar senha')

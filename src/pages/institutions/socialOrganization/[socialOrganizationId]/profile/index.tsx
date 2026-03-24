@@ -7,7 +7,6 @@ import SettingCropArea from '../../../../../components/Crop/SettingCropArea'
 import { DialogCrop } from '../../../../../components/Crop/DialogCrop'
 import { Loading } from '../../../../../components/Loading'
 import DynamicHeader from '../../../../../components/header/DynamicHeader'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
@@ -33,6 +32,7 @@ import formatPhone from '../../../../../utils/formatPhone'
 import { useProfileInstitution } from '../../../../../hooks/useProfileInstitution'
 import { useHeader } from '../../../../../context/HeaderContext'
 import { ConfirmPasswordEmailChange } from '../../../../../components/instituition/profile/confirmPasswordEmailChange'
+import { api } from '../../../../../services/api'
 
 const schema = z.object({
   fullName: nameSchema,
@@ -85,11 +85,8 @@ export default function Profile() {
 
   async function getSectors() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('sector-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('sector-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -202,13 +199,10 @@ export default function Profile() {
         mime: blob.type,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('storage-create-lambda', payload)
+      const response = await api.post('storage-create', payload)
 
-      if (response.statusCode === 201) {
-        const { storageId } = JSON.parse(response.body)
+      if (response.data.statusCode === 201) {
+        const { storageId } = JSON.parse(response.data.body)
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')

@@ -4,7 +4,6 @@ import Router, { useRouter } from 'next/router'
 import { Button } from '../../../../../../components/Button/ButtonSubmit'
 import { useDashboard } from '../../../../../../hooks/useDashboard'
 import Image from 'next/image'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 import UploadImage from '../../../../../../components/Crop/UploadImage'
@@ -12,6 +11,7 @@ import { DialogCrop } from '../../../../../../components/Crop/DialogCrop'
 import SettingCropArea from '../../../../../../components/Crop/SettingCropArea'
 import { MentorshipProps } from '../../../../../../types/mentorship'
 import { ScreenshotWrapper } from '../../../../../../components/main-painel/institutions/ScreenshotWrapper'
+import { api } from '../../../../../../services/api'
 
 export default function OrganizationImageUpload() {
   const router = useRouter()
@@ -81,13 +81,10 @@ export default function OrganizationImageUpload() {
         mime: blob.type,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('storage-create-lambda', payload)
+      const response = await api.post('storage-create', payload)
 
-      if (response.statusCode === 201) {
-        const { storageId } = JSON.parse(response.body)
+      if (response.data.statusCode === 201) {
+        const { storageId } = JSON.parse(response.data.body)
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')

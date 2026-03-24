@@ -12,7 +12,7 @@ import Router from 'next/router'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { api } from '../../../services/api'
 
 interface cityProps {
   id: number
@@ -61,11 +61,8 @@ export default function EstadoCidade() {
       country: outOfBrazil ? 0 : 1,
     }
     try {
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-update-lambda', payload)
-      if (response.statusCode === 201) {
+      const response = await api.put('user-update', payload)
+      if (response.data.statusCode === 201) {
         Router.push('/user/onboarding/endpoint')
       } else {
         toast.error('Erro ao atualizar informações do usuário')

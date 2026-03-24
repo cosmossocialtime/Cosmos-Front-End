@@ -13,9 +13,9 @@ import StaticHeader from '../../../../../components/instituition/StaticHeader'
 import { Option } from '../../../../../types/MultiselectCombobox'
 import SingleSelectComboBox from '../../../../../components/combobox/SingleSelectComboBox'
 import { useOnboardingInstitution } from '../../../../../context/OnboardingInstituionProvider'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
+import { api } from '../../../../../services/api'
 
 const steps = [
   { id: 1, label: 'Cadastro inicial' },
@@ -68,12 +68,9 @@ export default function AboutYouForm() {
   })
 
   async function getUser() {
-    const response = await invokeLambda<
-      Record<string, never>,
-      { statusCode: number; body: string }
-    >('user-select-lambda', {})
-    if (response.statusCode === 200) {
-      return JSON.parse(response.body)
+    const response = await api.get('user-select')
+    if (response.data.statusCode === 200) {
+      return JSON.parse(response.data.body)
     } else {
       throw new Error('Erro ao buscar informações')
     }
@@ -81,11 +78,8 @@ export default function AboutYouForm() {
 
   async function getSectors() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('sector-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('sector-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error

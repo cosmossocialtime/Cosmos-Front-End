@@ -12,10 +12,10 @@ import { useRouter } from 'next/router'
 import { MultiValue } from 'react-select'
 import { Option } from '../../../../../types/MultiselectCombobox'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useHeader } from '../../../../../context/HeaderContext'
 import DynamicHeader from '../../../../../components/header/DynamicHeader'
+import { api } from '../../../../../services/api'
 
 const schema = z.object({
   name: z.string().nonempty(),
@@ -68,11 +68,8 @@ export default function CreateOrganization() {
 
   async function getCauses() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('cause-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('cause-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar causas!')
       throw error
@@ -86,11 +83,8 @@ export default function CreateOrganization() {
 
   async function getSectors() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('sector-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('sector-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -166,13 +160,10 @@ export default function CreateOrganization() {
         professionalRole: data.professionalRole,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-create-lambda', payload)
+      const response = await api.post('social-organization-create', payload)
 
-      if (response.statusCode == 201) {
-        const parsed = JSON.parse(response.body)
+      if (response.data.statusCode == 201) {
+        const parsed = JSON.parse(response.data.body)
         toast.success('Organização criada com sucesso')
         setShowMenu(true)
         setShowOrganization(true)

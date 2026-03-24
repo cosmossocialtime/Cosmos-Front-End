@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import DynamicHeader from '../../../../../../../components/header/DynamicHeader'
 import SideBar from '../sideBar'
-import { invokeLambda } from '../../../../../../../lib/aws/invokeLambda'
 import Image from 'next/image'
 import { Button } from '../../../../../../../components/Button/ButtonSubmit'
 import { MentorshipProps } from '../../../../../../../types/mentorship'
@@ -19,6 +18,7 @@ import { PlanetItemMentorship } from '../../../../../../../components/instituiti
 import { Loading } from '../../../../../../../components/Loading'
 import { toast } from 'react-toastify'
 import { queryClient } from '../../../../../../../services/queryClient'
+import { api } from '../../../../../../../services/api'
 
 export default function SateliteImages() {
   const router = useRouter()
@@ -36,11 +36,8 @@ export default function SateliteImages() {
 
   async function getSectors() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('sector-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('sector-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -62,12 +59,11 @@ export default function SateliteImages() {
         mentorshipId: mentorId,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-social-organization-select-lambda', payload)
+      const response = await api.get('mentorship-social-organization-select', {
+        params: payload,
+      })
 
-      const parsed = JSON.parse(response.body)
+      const parsed = JSON.parse(response.data.body)
       return parsed.socialOrganization
     } catch (error) {
       console.error('Erro ao buscar Organização Social!')
@@ -107,11 +103,11 @@ export default function SateliteImages() {
       const payload = {
         socialOrganization: org,
       }
-      const response = await invokeLambda<typeof payload, any>(
-        'mentorship-social-organization-update-lambda',
+      const response = await api.put(
+        'mentorship-social-organization-update',
         payload
       )
-      if (response.statusCode == 201) {
+      if (response.data.statusCode == 201) {
         queryClient.invalidateQueries([
           'mentorshipSocialOrganization',
           organizationId,

@@ -15,11 +15,11 @@ import { LoginLink } from '../../../../components/TitlesAndLinks/LinkLogin'
 import { Button } from '../../../../components/Button/ButtonSubmit'
 import Link from 'next/link'
 import { useState } from 'react'
-import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { saveFormData } from '../../../../utils/localStorage'
 import { signupInstitutionConfirmationTemplate } from '../../../../lib/email/templates/templates'
-import { sendEmail } from '../../../../lib/aws/sesSendMail'
-import { LambdaError } from '../../../../lib/aws/lambdaError'
+import { api } from '../../../../services/api'
+import axios from 'axios'
+import { sendEmail } from '../../../api/send-email'
 
 const schema = z.object({
   email: emailSchema,
@@ -52,17 +52,11 @@ export default function RegisterInstituition() {
         userType: 'social_organization_manager',
       }
 
-      const response = await invokeLambda<
-        {
-          email: string
-          password: string
-        },
-        { statusCode: number; body: string }
-      >('user-create-lambda', payload)
+      const response = await api.post('user-create', payload)
 
-      if (response.statusCode === 201) {
+      if (response.data.statusCode === 201) {
         saveFormData('cosmos.user', data.email)
-        const parsed = JSON.parse(response.body)
+        const parsed = JSON.parse(response.data.body)
         const { subject, html } = signupInstitutionConfirmationTemplate(
           parsed.confirmationCode
         )
@@ -78,14 +72,15 @@ export default function RegisterInstituition() {
           })
       }
     } catch (error) {
-      if (error instanceof LambdaError) {
-        if (error.statusCode === 400) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+        if (status === 400) {
           return toast.error(
             'Não foi possivel criar sua conta, pois este email já existe'
           )
         }
 
-        if (error.statusCode === 404 || error.statusCode === 500) {
+        if (status === 404 || status === 500) {
           return toast.error(
             'Não foi possivel criar sua conta, por favor tente novamente'
           )

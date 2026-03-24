@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '../../Button/ButtonSubmit'
 import { textAreaFeedbackSchema } from '../../../utils/ValidationSchemas'
 import { toast } from 'react-toastify'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { api } from '../../../services/api'
 
 interface FeedbackModalProps {
   closeModal: () => void
@@ -49,11 +49,8 @@ export const FeedbackModal = ({ closeModal }: FeedbackModalProps) => {
       const payload = {
         feedback: data.feedback,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-feedback-create-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.post('user-feedback-create', payload)
+      if (response.data.statusCode == 201) {
         toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
       } else {
         toast.error(

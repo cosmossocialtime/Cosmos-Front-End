@@ -8,9 +8,9 @@ import { useTeam } from '../../../../../hooks/useTeam'
 import { permissionsLabels } from '../../../../../utils/roleId'
 import { UserProps } from '../../../../../types/user'
 import { SocialOrganizationProps } from '../../../../../types/socialOrganization'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { PermissionDropdown } from '../../../../../components/instituition/painel/teams/PermissionDropdown'
+import { api } from '../../../../../services/api'
 
 export default function Teams() {
   const router = useRouter()
@@ -42,13 +42,13 @@ export default function Teams() {
     if (organizationId) {
       setIsLoadingSocialOrganization(true)
       const payload = { socialOrganizationId }
-      invokeLambda<typeof payload, { statusCode: number; body: string }>(
-        'social-organization-select-lambda',
-        payload
-      )
+      api
+        .get('social-organization-select', {
+          params: payload,
+        })
         .then((response) => {
-          if (response.statusCode === 200) {
-            const parsed = JSON.parse(response.body)
+          if (response.data.statusCode === 200) {
+            const parsed = JSON.parse(response.data.body)
             setSocialOrganization(parsed.socialOrganization)
             setIsLoadingSocialOrganization(false)
           } else {

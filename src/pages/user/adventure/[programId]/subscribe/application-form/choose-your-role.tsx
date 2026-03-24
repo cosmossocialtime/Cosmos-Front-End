@@ -9,7 +9,7 @@ import Link from 'next/link'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
+import { api } from '../../../../../../services/api'
 
 type crew = {
   id: number
@@ -55,12 +55,10 @@ export default function ChooseYourRole() {
         secondRole: secondOption,
         thirdRole: thirdOption,
       }
-      invokeLambda<typeof payload, { statusCode: number; body: string }>(
-        'volunteer-applicant-update-lambda',
-        payload
-      )
+      api
+        .put('volunteer-applicant-update', payload)
         .then((response) => {
-          if (response.statusCode === 201) {
+          if (response.data.statusCode === 201) {
             Router.push(
               `/user/adventure/${programId}/subscribe/application-form/confirmation`
             )

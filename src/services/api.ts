@@ -16,7 +16,7 @@ type userExpiration = {
 async function renewToken() {
   const response = await axios({
     method: 'post',
-    url: 'http://localhost:8080/api/auth/refreshToken',
+    url: process.env.NEXT_PUBLIC_API_URL + '/refresh-token',
     headers: { RefreshToken },
   })
 

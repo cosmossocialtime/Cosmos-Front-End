@@ -15,8 +15,8 @@ import {
 import { toast } from 'react-toastify'
 import { popovers, useCalendar } from '../../../context/CalendarProvider'
 import { DeleteConfirmation } from '../../DeleteConfirmation'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import Link from 'next/link'
+import { api } from '../../../services/api'
 
 export function PopoverEvent() {
   const {
@@ -58,12 +58,12 @@ export function PopoverEvent() {
         occurrenceDateTime: dayjs(dayjs(selectedEvent?.startAt)).toISOString(),
       }
       try {
-        const googleRes = await invokeLambda<
-          typeof googlePayload,
-          { statusCode: number; body: string }
-        >('mentorship-event-google-calendar-delete-lambda', googlePayload)
+        const googleRes = await api.delete(
+          'mentorship-event-google-calendar-delete',
+          { data: googlePayload }
+        )
 
-        if (googleRes.statusCode !== 200) {
+        if (googleRes.data.statusCode !== 200) {
           toast.error('Erro ao remover no Google Calendar')
           return
         }
@@ -73,15 +73,14 @@ export function PopoverEvent() {
         return
       }
       // Exclui dados do evento na plataforma
-      const payload = {
+      const payload: any = {
         eventId: selectedEvent?.id || 0,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-event-delete-lambda', payload)
+      const response = await api.delete('mentorship-event-delete', {
+        data: payload,
+      })
 
-      if (response.statusCode === 200) {
+      if (response.data.statusCode === 200) {
         toast.success('Evento excluído com sucesso')
         changePopover(popovers.Event)
         selectDay(null)
@@ -107,12 +106,12 @@ export function PopoverEvent() {
           ).toISOString(),
         }
         try {
-          const googleRes = await invokeLambda<
-            typeof googlePayload,
-            { statusCode: number; body: string }
-          >('mentorship-event-google-calendar-delete-lambda', googlePayload)
+          const googleRes = await api.delete(
+            'mentorship-event-google-calendar-delete',
+            { data: googlePayload }
+          )
 
-          if (googleRes.statusCode !== 200) {
+          if (googleRes.data.statusCode !== 200) {
             toast.error('Erro ao remover no Google Calendar')
             return
           }
@@ -122,16 +121,15 @@ export function PopoverEvent() {
           return
         }
       }
-      const payload = {
+      const payload: any = {
         eventId: selectedEvent?.id || 0,
         recurrenceGroupId: selectedEvent?.recurrenceGroupId || '',
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-event-delete-lambda', payload)
+      const response = await api.delete('mentorship-event-delete', {
+        data: payload,
+      })
 
-      if (response.statusCode === 200) {
+      if (response.data.statusCode === 200) {
         toast.success('Evento excluído com sucesso')
         changePopover(popovers.Event)
         selectDay(null)

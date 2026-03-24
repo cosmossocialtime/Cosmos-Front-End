@@ -10,11 +10,11 @@ import { toast } from 'react-toastify'
 import { Check, Eye, EyeClosed, Question } from 'phosphor-react'
 import Link from 'next/link'
 import Router from 'next/router'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
-import { sendEmail } from '../../lib/aws/sesSendMail'
 import { signupConfirmationTemplate } from '../../lib/email/templates/templates'
 import { saveFormData } from '../../utils/localStorage'
-import { LambdaError } from '../../lib/aws/lambdaError'
+import { api } from '../../services/api'
+import axios from 'axios'
+import { sendEmail } from '../api/send-email'
 
 const schema = z
   .object({
@@ -79,17 +79,11 @@ export default function Cadastrar() {
       userType: 'volunteer',
     }
     try {
-      const response = await invokeLambda<
-        {
-          email: string
-          password: string
-        },
-        { statusCode: number; body: string }
-      >('user-create-lambda', payload)
+      const response = await api.post('user-create', payload)
 
-      if (response.statusCode === 201) {
+      if (response.data.statusCode === 201) {
         saveFormData('cosmos.user', data.email)
-        const parsed = JSON.parse(response.body)
+        const parsed = JSON.parse(response.data.body)
         const { subject, html } = signupConfirmationTemplate(
           parsed.name,
           parsed.confirmationCode
@@ -104,14 +98,15 @@ export default function Cadastrar() {
           })
       }
     } catch (error) {
-      if (error instanceof LambdaError) {
-        if (error.statusCode === 400) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+        if (status === 400) {
           return toast.error(
             'Não foi possivel criar sua conta, pois este email já existe'
           )
         }
 
-        if (error.statusCode === 404 || error.statusCode === 500) {
+        if (status === 404 || status === 500) {
           return toast.error(
             'Não foi possivel criar sua conta, por favor tente novamente'
           )

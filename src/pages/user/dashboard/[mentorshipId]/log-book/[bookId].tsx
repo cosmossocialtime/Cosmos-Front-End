@@ -10,9 +10,9 @@ import { EventProps } from '../../../../../types/event'
 import Link from 'next/link'
 import { DashboardLoading } from '../../../../../components/dashboard/DashboardLoading'
 import SideBar from '../sideBar'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
 import { queryClient } from '../../../../../services/queryClient'
+import { api } from '../../../../../services/api'
 
 const schema = z.object({
   meetingAccomplishments: z.string(),
@@ -28,11 +28,10 @@ export default function Book() {
   async function getEvents() {
     try {
       const payload = { mentorshipId: Number(mentorshipId || '0') }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-calendar-select-lambda', payload)
-      return JSON.parse(response.body)
+      const response = await api.get('mentorship-calendar-select', {
+        params: payload,
+      })
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar eventos!')
       throw error
@@ -62,11 +61,11 @@ export default function Book() {
         nextMeetingGoals: nextMeetingGoals,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-event-logbook-upsert-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.patch(
+        'mentorship-event-logbook-upsert',
+        payload
+      )
+      if (response.data.statusCode == 201) {
         queryClient.invalidateQueries(['events', mentorshipId])
         toast.success('Informações salvas com sucesso!')
         Router.push(`/user/dashboard/${mentorshipId}/log-book`)

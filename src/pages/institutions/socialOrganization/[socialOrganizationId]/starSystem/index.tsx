@@ -1,11 +1,11 @@
 import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { useRouter } from 'next/router'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from '../../../../../components/Loading'
 import { CentralStar } from '../../../../../components/instituition/painel/solarSystem/centralStar'
 import { PlanetGrid } from '../../../../../components/instituition/painel/solarSystem/planetGrid'
 import { useCombinedPlanetsData } from '../../../../../hooks/useCombinedPlanetsData'
+import { api } from '../../../../../services/api'
 
 export default function StarSystem() {
   const router = useRouter()
@@ -14,11 +14,8 @@ export default function StarSystem() {
 
   async function getSectors() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('sector-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('sector-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -34,12 +31,11 @@ export default function StarSystem() {
     try {
       const payload = { socialOrganizationId: organizationId }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-select-lambda', payload)
+      const response = await api.get('social-organization-select', {
+        params: payload,
+      })
 
-      const parsed = JSON.parse(response.body)
+      const parsed = JSON.parse(response.data.body)
       return parsed.socialOrganization
     } catch (error) {
       console.error('Erro ao buscar Organização Social!')

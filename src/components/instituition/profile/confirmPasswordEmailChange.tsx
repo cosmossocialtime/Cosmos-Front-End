@@ -6,14 +6,14 @@ import { useEffect, useState } from 'react'
 import { Button } from '../../Button/ButtonSubmit'
 import { passwordSchema } from '../../../utils/ValidationSchemas'
 import { toast } from 'react-toastify'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { InputPassword } from '../../Input/InputPassword'
 import { confirmChangeEmailInstitutionTemplate } from '../../../lib/email/templates/templates'
-import { sendEmail } from '../../../lib/aws/sesSendMail'
-import { LambdaError } from '../../../lib/aws/lambdaError'
 import { Warning } from 'phosphor-react'
 import { saveFormData } from '../../../utils/localStorage'
 import { useRouter } from 'next/router'
+import { api } from '../../../services/api'
+import axios from 'axios'
+import { sendEmail } from '../../../pages/api/send-email'
 
 interface ConfirmPasswordEmailChangeProps {
   closeModal: () => void
@@ -80,11 +80,8 @@ export const ConfirmPasswordEmailChange = ({
   async function validatePassword(password: string): Promise<boolean> {
     try {
       const payload = { password: password }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number }
-      >('user-validate-password-lambda', payload)
-      return response.statusCode === 200
+      const response = await api.post('user-validate-password', payload)
+      return response.data.statusCode === 200
     } catch (error) {
       console.error(error)
       return false
@@ -95,19 +92,17 @@ export const ConfirmPasswordEmailChange = ({
     email: string
   ): Promise<null | { confirmationCode: string; name: string }> {
     try {
-      const payload = { email }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-request-email-update-lambda', payload)
+      const payload = { email: email }
+      const response = await api.put('user-request-email-update', payload)
 
-      if (response.statusCode === 200) {
-        return JSON.parse(response.body)
+      if (response.data.statusCode === 200) {
+        return JSON.parse(response.data.body)
       }
       return null
     } catch (error) {
-      if (error instanceof LambdaError) {
-        if (error.statusCode === 400) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+        if (status === 400) {
           toast.error(
             <div className="flex items-center gap-3 bg-white">
               <div className="flex items-center">

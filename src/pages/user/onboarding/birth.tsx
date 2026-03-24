@@ -11,7 +11,7 @@ import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { Button } from '../../../components/Button'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
+import { api } from '../../../services/api'
 
 export default function Nascimento() {
   const [dayValue, setDayValue] = useState('20')
@@ -37,11 +37,8 @@ export default function Nascimento() {
         birthdate: `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`,
       }
       try {
-        const response = await invokeLambda<
-          typeof payload,
-          { statusCode: number; body: string }
-        >('user-update-lambda', payload)
-        if (response.statusCode === 201) {
+        const response = await api.put('user-update', payload)
+        if (response.data.statusCode === 201) {
           Router.push('/user/onboarding/live')
         } else {
           toast.error('Erro ao atualizar informações do usuário')

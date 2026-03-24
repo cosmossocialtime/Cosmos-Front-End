@@ -6,8 +6,8 @@ import { useRef, useState } from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
-import { LambdaError } from '../../../lib/aws/lambdaError'
+import { api } from '../../../services/api'
+import axios from 'axios'
 
 interface PasswordInputProps {
   enableForm: boolean
@@ -63,24 +63,22 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
         newPassword: newPassword,
         passwordConfirm: passwordConfirm,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-password-update-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.put('user-password-update', payload)
+      if (response.data.statusCode == 201) {
         toast.success('Senha atualizada com sucesso')
       } else {
         toast.error('Erro ao alterar senha')
       }
     } catch (error) {
       console.error(error)
-      if (error instanceof LambdaError) {
-        if (error.statusCode === 400) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+        if (status === 400) {
           toast.error(
             'A nova senha e a confirmação estão diferentes! Tente novamente.'
           )
         }
-        if (error.statusCode === 401) {
+        if (status === 401) {
           toast.error('A senha atual está incorreta! Tente novamente.')
         }
       }

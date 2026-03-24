@@ -6,13 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
 import { getFormData } from '../../../../../../../../utils/localStorage'
 import SingleSelectComboBox from '../../../../../../../../components/combobox/SingleSelectComboBox'
-import { invokeLambda } from '../../../../../../../../lib/aws/invokeLambda'
 import { Option } from '../../../../../../../../types/MultiselectCombobox'
 import { useQuery } from '@tanstack/react-query'
 import ProgressBar from '../../../../../../../../components/menu/ProgressBar'
 import Layout from '../../../../../../../../components/Layout'
 import Router from 'next/router'
 import { useOnboardingInstitution } from '../../../../../../../../context/OnboardingInstituionProvider'
+import { api } from '../../../../../../../../services/api'
 
 const steps = [
   { id: 1, label: 'Termos' },
@@ -51,11 +51,8 @@ export default function Finalization() {
 
   async function getHowToHearAboutOrganization() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('how-hear-about-organization-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('how-hear-about-organization-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar opções!')
     }

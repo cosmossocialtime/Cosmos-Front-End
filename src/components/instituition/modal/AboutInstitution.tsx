@@ -23,7 +23,6 @@ import SingleSelectComboBox from '../../combobox/SingleSelectComboBox'
 import MultiSelectComboBox from '../../combobox/MultiSelectComboBox'
 import { Option } from '../../../types/MultiselectCombobox'
 import { MultiValue } from 'react-select'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import useFetch from '../../../hooks/useFetch'
 import axios from 'axios'
@@ -38,6 +37,7 @@ import StarFour from '../../../assets/star-four.svg'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
 import FileUpload from '../../file/FileUpload'
+import { api } from '../../../services/api'
 
 interface AboutInstitutionModalProps {
   closeModal: () => void
@@ -150,11 +150,8 @@ export const AboutInstitutionModal = ({
 
   async function getCauses() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('cause-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('cause-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar causas!')
       throw error
@@ -441,13 +438,10 @@ export const AboutInstitutionModal = ({
         mime: file.type,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('storage-create-lambda', payload)
+      const response = await api.post('storage-create', payload)
 
-      if (response.statusCode === 201) {
-        const { storageId } = JSON.parse(response.body)
+      if (response.data.statusCode === 201) {
+        const { storageId } = JSON.parse(response.data.body)
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')
@@ -517,13 +511,8 @@ export const AboutInstitutionModal = ({
           mainChallenges: data.challenges,
         },
       }
-      const response = await invokeLambda<
-        {
-          socialOrganization: SocialOrganizationProps
-        },
-        { statusCode: number; body: string }
-      >('social-organization-update-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.put('social-organization-update', payload)
+      if (response.data.statusCode == 201) {
         toast.success('Informações salvas com sucesso!')
         queryClient.invalidateQueries([
           'socialOrganization',

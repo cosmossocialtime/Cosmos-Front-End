@@ -3,18 +3,15 @@ import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
 import { Button } from '../../../components/Button'
 import Router from 'next/router'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
+import { api } from '../../../services/api'
 
 export default function Decolar() {
   async function handleSubmitCompletedOnboarding() {
     const payload = { completed: true }
     try {
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-update-lambda', payload)
-      if (response.statusCode === 201) {
+      const response = await api.put('user-update', payload)
+      if (response.data.statusCode === 201) {
         Router.push('/user/painel')
       } else {
         toast.error('Erro ao atualizar informações do usuário')

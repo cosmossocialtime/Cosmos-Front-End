@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { getFormData } from '../../utils/localStorage'
-import { LambdaError } from '../../lib/aws/lambdaError'
+import { api } from '../../services/api'
+import axios from 'axios'
 
 export default function VerifyUser() {
   const router = useRouter()
@@ -31,23 +31,18 @@ export default function VerifyUser() {
 
         const payload = { email: user, token: token }
 
-        const response = await invokeLambda<
-          {
-            email: string
-            token: string
-          },
-          { statusCode: number; body: string }
-        >('user-verify-lambda', payload)
+        const response = await api.post('user-verify', payload)
 
-        if (response.statusCode === 200) {
+        if (response.data.statusCode === 200) {
           toast.success('Usuário validado com sucesso!')
           router.push('/user/login')
         }
       } catch (error) {
-        if (error instanceof LambdaError) {
-          if (error.statusCode === 401) {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status
+          if (status === 401) {
             return toast.error('Código de confirmação inválido!')
-          } else if (error.statusCode === 404) {
+          } else if (status === 404) {
             return toast.error('Usuário já foi verificado!')
           } else {
             return toast.error('Erro ao validar usuário.')

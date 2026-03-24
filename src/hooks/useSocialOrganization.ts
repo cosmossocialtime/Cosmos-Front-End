@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { invokeLambda } from '../lib/aws/invokeLambda'
+import { api } from '../services/api'
 
 export function useSocialOrganization(socialOrganizationId: number) {
   const {
@@ -10,11 +10,10 @@ export function useSocialOrganization(socialOrganizationId: number) {
     queryKey: ['socialOrganization', socialOrganizationId],
     queryFn: async () => {
       const payload = { socialOrganizationId }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-select-lambda', payload)
-      return JSON.parse(response.body)
+      const response = await api.get('social-organization-select', {
+        params: payload,
+      })
+      return JSON.parse(response.data.body)
     },
     enabled: !!socialOrganizationId,
   })

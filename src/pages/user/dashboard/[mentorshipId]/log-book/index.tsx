@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router'
 import { ListOfEventsDay } from '../../../../../components/dashboard/log-book/ListOfEventsDay'
 import SideBar from '../sideBar'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
 import { EventProps } from '../../../../../types/event'
 import { DashboardLoading } from '../../../../../components/dashboard/DashboardLoading'
+import { api } from '../../../../../services/api'
 
 export default function LogBook() {
   const route = useRouter()
@@ -13,11 +13,10 @@ export default function LogBook() {
   async function getEvents() {
     try {
       const payload = { mentorshipId: Number(mentorshipId || '0') }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-calendar-select-lambda', payload)
-      return JSON.parse(response.body)
+      const response = await api.get('mentorship-calendar-select', {
+        params: payload,
+      })
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar eventos!')
       throw error

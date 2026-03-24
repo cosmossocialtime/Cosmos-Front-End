@@ -10,9 +10,9 @@ import FormUserData from '../../../components/main-painel/profile/FormUserData'
 import SettingCropArea from '../../../components/Crop/SettingCropArea'
 import { DialogCrop } from '../../../components/Crop/DialogCrop'
 import { Loading } from '../../../components/Loading'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { useProfile } from '../../../hooks/useProfile'
 import { toast } from 'react-toastify'
+import { api } from '../../../services/api'
 
 export default function Perfil() {
   const { user, isLoadingUser, updateUserImage } = useProfile()
@@ -62,13 +62,10 @@ export default function Perfil() {
         mime: blob.type,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('storage-create-lambda', payload)
+      const response = await api.post('storage-create', payload)
 
-      if (response.statusCode === 201) {
-        const { storageId } = JSON.parse(response.body)
+      if (response.data.statusCode === 201) {
+        const { storageId } = JSON.parse(response.data.body)
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')

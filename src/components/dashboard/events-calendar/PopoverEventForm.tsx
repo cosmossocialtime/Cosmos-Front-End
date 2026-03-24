@@ -16,12 +16,12 @@ import { useEffect, useMemo, useState } from 'react'
 
 import MeetIcon from '../../../assets/meet-icon.svg'
 import Image from 'next/image'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import SingleSelectComboBoxSecondary from '../../combobox/SingleSelectComboBoxSecondary'
 import { Option } from '../../../types/MultiselectCombobox'
 import { getRRuleByDate } from '../../../utils/getRRuleByDate'
 import { ButtonTertiary } from '../../Button/ButtonSubmitTertiary'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { api } from '../../../services/api'
 
 const createSchema = (onGoogleMeet: boolean, isRecurrence: boolean) =>
   z
@@ -205,21 +205,18 @@ export function PopoverEventForm() {
             dayjs(selectedEvent?.startAt)
           ).toISOString()
         }
-        functionUrl = 'mentorship-event-google-calendar-recurring-upsert-lambda'
+        functionUrl = 'mentorship-event-google-calendar-recurring-upsert'
       } else {
-        functionUrl = 'mentorship-event-google-calendar-upsert-lambda'
+        functionUrl = 'mentorship-event-google-calendar-upsert'
       }
       try {
-        const googleRes = await invokeLambda<
-          typeof googlePayload,
-          { statusCode: number; body: string }
-        >(functionUrl, googlePayload)
+        const googleRes = await api.patch(functionUrl, googlePayload)
 
-        if (googleRes.statusCode !== 200) {
+        if (googleRes.data.statusCode !== 200) {
           toast.error('Erro ao criar evento no Google Calendar')
           return
         }
-        const googleData = JSON.parse(googleRes.body)
+        const googleData = JSON.parse(googleRes.data.body)
         data.link = onLinkMeet ? googleData.hangoutLink : data.link
         eventId = googleData.eventId
         originalEventId = googleData.originalEventId
@@ -231,7 +228,7 @@ export function PopoverEventForm() {
       }
 
       // Cria dados do evento na base de dados da aplicação
-      const payload = {
+      const payload: any = {
         id: selectedEvent?.id,
         mentorshipId: currentMentorship.mentorshipId,
         title: data.title,
@@ -261,12 +258,9 @@ export function PopoverEventForm() {
           : null,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('mentorship-event-upsert-lambda', payload)
+      const response = await api.patch('mentorship-event-upsert', payload)
 
-      if (response.statusCode == 201) {
+      if (response.data.statusCode == 201) {
         toast.success('Evento salvo')
         changePopover(popovers.Event)
         selectDay(null)

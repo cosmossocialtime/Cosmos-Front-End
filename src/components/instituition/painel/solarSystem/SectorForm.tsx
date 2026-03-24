@@ -8,12 +8,12 @@ import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { Option } from '../../../../types/MultiselectCombobox'
 import { SectorProps } from '../../../../types/sector'
-import { invokeLambda } from '../../../../lib/aws/invokeLambda'
 import { toast } from 'react-toastify'
 import { EditButton } from '../../../Button/EditButton'
 import { useQueryClient } from '@tanstack/react-query'
 import TextAreaField from '../../../Input/TextAreaField'
 import { textAreaSchema } from '../../../../utils/ValidationSchemas'
+import { api } from '../../../../services/api'
 
 const options = [
   { value: '1', label: '1 - Não precisa' },
@@ -127,11 +127,11 @@ export const SectorForm = ({
         effectiveness: data.effectiveness,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-sector-upsert-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.patch(
+        'social-organization-sector-upsert',
+        payload
+      )
+      if (response.data.statusCode == 201) {
         queryClient.invalidateQueries([
           'socialOrganization',
           socialOrganizationId,

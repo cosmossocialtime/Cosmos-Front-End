@@ -1,6 +1,6 @@
-import { invokeLambda } from '../lib/aws/invokeLambda'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+import { api } from '../services/api'
 
 export function useDashboard(socialOrganizationId: number | null) {
   const queryClient = useQueryClient()
@@ -13,12 +13,11 @@ export function useDashboard(socialOrganizationId: number | null) {
     queryKey: ['dashboard', socialOrganizationId],
     queryFn: async () => {
       const payload = { socialOrganizationId: socialOrganizationId || 0 }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('dashboard-select-lambda', payload)
-      if (response.statusCode === 200) {
-        const parsed = JSON.parse(response.body)
+      const response = await api.get('dashboard-select', {
+        params: payload,
+      })
+      if (response.data.statusCode === 200) {
+        const parsed = JSON.parse(response.data.body)
         return parsed
       } else {
         return null
@@ -38,14 +37,11 @@ export function useDashboard(socialOrganizationId: number | null) {
       socialOrganizationId: number
     }) => {
       const payload = {
-        storageId,
-        socialOrganizationId,
+        storageId: storageId,
+        socialOrganizationId: socialOrganizationId,
       }
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('social-organization-logo-update-lambda', payload)
-      return JSON.parse(response.body)
+      const response = await api.put('social-organization-logo-update', payload)
+      return JSON.parse(response.data.body)
     },
     onSuccess: () => {
       toast.success('Alterações salvas com sucesso')

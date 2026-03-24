@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { toast } from 'react-toastify'
 import { useSubscribe } from '../../../../../../hooks/useSubscribe'
 import Router from 'next/router'
-import { invokeLambda } from '../../../../../../lib/aws/invokeLambda'
+import { api } from '../../../../../../services/api'
 
 const schema = z.object({
   professionalExperience: z.string(),
@@ -66,11 +66,8 @@ export default function ApplicationForm() {
       linkedinUrl: linkedinUrl,
     }
     try {
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('user-volunteering-update-lambda', payload)
-      if (response.statusCode === 201) {
+      const response = await api.put('user-volunteering-update', payload)
+      if (response.data.statusCode === 201) {
         Router.push(
           `/user/adventure/${programId}/subscribe/application-form/about-you-1`
         )

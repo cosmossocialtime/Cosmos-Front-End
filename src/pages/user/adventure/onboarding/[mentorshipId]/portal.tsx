@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '../../../../../components/Button'
 import { useOnboarding } from '../../../../../hooks/useOnboarding'
-import { invokeLambda } from '../../../../../lib/aws/invokeLambda'
+import { api } from '../../../../../services/api'
 
 export default function Portal() {
   const { currentMentorship, rootRoute, mentorshipId } = useOnboarding()
@@ -13,12 +13,10 @@ export default function Portal() {
       volunteerId: volunteerId,
       completedOnboarding: true,
     }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'volunteer-update-lambda',
-      payload
-    )
+    api
+      .put('volunteer-update', payload)
       .then((response) => {
-        if (response.statusCode === 201) {
+        if (response.data.statusCode === 201) {
           console.log('dado enviado com sucesso')
         }
       })

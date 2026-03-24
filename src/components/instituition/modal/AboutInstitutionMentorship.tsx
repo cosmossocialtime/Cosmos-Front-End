@@ -20,11 +20,9 @@ import { z } from 'zod'
 import MaskedDateField from '../../Input/MaskedDateField'
 import { CustomCheckbox } from '../../Input/CustomCheckbox'
 import SingleSelectComboBox from '../../combobox/SingleSelectComboBox'
-import dynamic from 'next/dynamic'
 import MultiSelectComboBox from '../../combobox/MultiSelectComboBox'
 import { Option } from '../../../types/MultiselectCombobox'
 import { MultiValue } from 'react-select'
-import { invokeLambda } from '../../../lib/aws/invokeLambda'
 import { useQuery } from '@tanstack/react-query'
 import useFetch from '../../../hooks/useFetch'
 import axios from 'axios'
@@ -40,6 +38,7 @@ import Image from 'next/image'
 import { toast } from 'react-toastify'
 import { queryClient } from '../../../services/queryClient'
 import FileUpload from '../../file/FileUpload'
+import { api } from '../../../services/api'
 
 interface AboutInstitutionMentorshipModalProps {
   closeModal: () => void
@@ -151,11 +150,8 @@ export const AboutInstitutionMentorshipModal = ({
 
   async function getCauses() {
     try {
-      const response = await invokeLambda<
-        Record<string, never>,
-        { statusCode: number; body: string }
-      >('cause-select-lambda', {})
-      return JSON.parse(response.body)
+      const response = await api.get('cause-select')
+      return JSON.parse(response.data.body)
     } catch (error) {
       console.error('Erro ao buscar causas!')
       throw error
@@ -442,13 +438,10 @@ export const AboutInstitutionMentorshipModal = ({
         mime: file.type,
       }
 
-      const response = await invokeLambda<
-        typeof payload,
-        { statusCode: number; body: string }
-      >('storage-create-lambda', payload)
+      const response = await api.post('storage-create', payload)
 
-      if (response.statusCode === 201) {
-        const { storageId } = JSON.parse(response.body)
+      if (response.data.statusCode === 201) {
+        const { storageId } = JSON.parse(response.data.body)
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')
@@ -518,13 +511,11 @@ export const AboutInstitutionMentorshipModal = ({
         },
       }
 
-      const response = await invokeLambda<
-        {
-          socialOrganization: MentorshipSocialOrganizationProps
-        },
-        { statusCode: number; body: string }
-      >('mentorship-social-organization-update-lambda', payload)
-      if (response.statusCode == 201) {
+      const response = await api.put(
+        'mentorship-social-organization-update',
+        payload
+      )
+      if (response.data.statusCode == 201) {
         toast.success('Informações salvas com sucesso!')
         queryClient.invalidateQueries([
           'mentorshipSocialOrganization',

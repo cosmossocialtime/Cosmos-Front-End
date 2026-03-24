@@ -11,7 +11,7 @@ import { useDashboard } from '../../hooks/useDashboard'
 import { MentorshipProps } from '../../types/mentorship'
 import { LoadingLight } from '../../components/LoadingLight'
 import { useRouter } from 'next/router'
-import { invokeLambda } from '../../lib/aws/invokeLambda'
+import { api } from '../../services/api'
 
 type CalendarContextProps = {
   selectedDay: Date | null
@@ -61,13 +61,13 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getEvents = useCallback(() => {
     const payload = { mentorshipId: Number(mentorshipId || '0') }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'mentorship-calendar-select-lambda',
-      payload
-    )
+    api
+      .get('mentorship-calendar-select', {
+        params: payload,
+      })
       .then((response) => {
-        if (response.statusCode === 200) {
-          setEvents(JSON.parse(response.body))
+        if (response.data.statusCode === 200) {
+          setEvents(JSON.parse(response.data.body))
         }
       })
       .catch((error) => {
@@ -80,13 +80,13 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
       return
     }
     const payload = { mentorshipId: Number(mentorshipId || '0') }
-    invokeLambda<typeof payload, { statusCode: number; body: string }>(
-      'mentorship-participants-select-lambda',
-      payload
-    )
+    api
+      .get('mentorship-volunteers-select', {
+        params: payload,
+      })
       .then((response) => {
-        if (response.statusCode === 200) {
-          setUsers(JSON.parse(response.body))
+        if (response.data.statusCode === 200) {
+          setUsers(JSON.parse(response.data.body))
         }
       })
       .catch((error) => {
