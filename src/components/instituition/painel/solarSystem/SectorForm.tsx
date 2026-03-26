@@ -127,11 +127,8 @@ export const SectorForm = ({
         effectiveness: data.effectiveness,
       }
 
-      const response = await api.patch(
-        'social-organization-sector-upsert',
-        payload
-      )
-      if (response.data.statusCode == 201) {
+      const response = await api.patch('/social-organization/sectors', payload)
+      if (response.status == 201) {
         queryClient.invalidateQueries([
           'socialOrganization',
           socialOrganizationId,

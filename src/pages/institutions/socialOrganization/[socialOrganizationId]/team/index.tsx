@@ -43,12 +43,12 @@ export default function Teams() {
       setIsLoadingSocialOrganization(true)
       const payload = { socialOrganizationId }
       api
-        .get('social-organization-select', {
+        .get('/social-organization', {
           params: payload,
         })
         .then((response) => {
-          if (response.data.statusCode === 200) {
-            const parsed = JSON.parse(response.data.body)
+          if (response.status === 200) {
+            const parsed = response.data
             setSocialOrganization(parsed.socialOrganization)
             setIsLoadingSocialOrganization(false)
           } else {

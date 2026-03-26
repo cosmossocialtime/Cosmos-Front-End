@@ -15,9 +15,9 @@ export default function Painel() {
   const [hasShownError, setHasShownError] = useState(false)
 
   async function getDashboard() {
-    const response = await api.get('dashboard-select', {})
-    if (response.data.statusCode === 200) {
-      return JSON.parse(response.data.body)
+    const response = await api.get('/dashboard', {})
+    if (response.status === 200) {
+      return response.data
     } else {
       throw new Error('Erro ao buscar informações')
     }

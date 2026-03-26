@@ -32,9 +32,9 @@ export function Tasks({ goal }: TasksProps) {
   function completeTask(task: TaskProps) {
     const payload = { taskId: task.id, completed: !task.completed }
     api
-      .patch('mentorship-goal-task-complete', payload)
+      .patch('/mentorship/goal/task/complete', payload)
       .then((response) => {
-        if (response.data.statusCode === 201) {
+        if (response.status === 201) {
           const newTasks = goal.tasks.map((t) =>
             t.id === task.id ? { ...task, completed: !task.completed } : t
           )

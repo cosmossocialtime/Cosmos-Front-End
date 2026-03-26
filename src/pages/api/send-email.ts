@@ -3,7 +3,7 @@ export async function sendEmail(
   subject: string,
   message: string
 ) {
-  await fetch(process.env.NEXT_PUBLIC_API_URL + '/send-email', {
+  await fetch(process.env.NEXT_PUBLIC_API_URL + '/email/send', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

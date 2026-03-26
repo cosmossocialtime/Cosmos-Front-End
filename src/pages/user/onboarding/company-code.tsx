@@ -33,11 +33,11 @@ export default function CompanyCode() {
     if (value.length === 6) {
       const payload = { code: value }
       try {
-        const response = await api.get('company-code-select', {
+        const response = await api.get('/company/code', {
           params: payload,
         })
-        if (response.data.statusCode === 200) {
-          const parsed = JSON.parse(response.data.body)
+        if (response.status === 200) {
+          const parsed = response.data
           setImageCompany(parsed.company.logo)
         } else {
           return toast.error('Tente novamente')
@@ -58,8 +58,8 @@ export default function CompanyCode() {
     }
     const payload = { companyCode: code }
     try {
-      const response = await api.put('user-update', payload)
-      if (response.data.statusCode === 201) {
+      const response = await api.put('/user', payload)
+      if (response.status === 201) {
         router.push('/user/onboarding/birth')
       } else {
         toast.error('Por gentileza digite um código válido')

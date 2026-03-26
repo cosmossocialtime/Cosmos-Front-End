@@ -13,11 +13,11 @@ export function useDashboard(socialOrganizationId: number | null) {
     queryKey: ['dashboard', socialOrganizationId],
     queryFn: async () => {
       const payload = { socialOrganizationId: socialOrganizationId || 0 }
-      const response = await api.get('dashboard-select', {
+      const response = await api.get('/dashboard', {
         params: payload,
       })
-      if (response.data.statusCode === 200) {
-        const parsed = JSON.parse(response.data.body)
+      if (response.status === 200) {
+        const parsed = response.data
         return parsed
       } else {
         return null
@@ -40,8 +40,8 @@ export function useDashboard(socialOrganizationId: number | null) {
         storageId: storageId,
         socialOrganizationId: socialOrganizationId,
       }
-      const response = await api.put('social-organization-logo-update', payload)
-      return JSON.parse(response.data.body)
+      const response = await api.put('/social-organization/logo', payload)
+      return response.data
     },
     onSuccess: () => {
       toast.success('Alterações salvas com sucesso')

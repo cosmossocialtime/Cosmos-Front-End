@@ -60,12 +60,12 @@ export default function Slider() {
     if (mentorshipId) {
       const payload = { mentorshipId: Number(mentorshipId || '0') }
       api
-        .get('mentorship-volunteers-select', {
+        .get('/mentorship/volunteer', {
           params: payload,
         })
         .then((response) => {
-          if (response.data.statusCode === 200) {
-            setMentorshipVolunteers(JSON.parse(response.data.body))
+          if (response.status === 200) {
+            setMentorshipVolunteers(response.data)
           } else {
             setMentorshipVolunteers([])
           }

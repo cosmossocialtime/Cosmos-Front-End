@@ -69,11 +69,11 @@ export const InviteForm = ({
   async function getUser(email: string) {
     try {
       const payload = { email }
-      const response = await api.get('user-select', {
+      const response = await api.get('/user', {
         params: payload,
       })
-      if (response.data.statusCode === 200) {
-        return JSON.parse(response.data.body)
+      if (response.status === 200) {
+        return response.data
       }
     } catch (error) {
       return null
@@ -95,10 +95,10 @@ export const InviteForm = ({
             }
 
             const response = await api.post(
-              'social-organization-member-create',
+              '/social-organization/member',
               payload
             )
-            if (response.data.statusCode === 201) {
+            if (response.status === 201) {
               const { subject, html } = inviteMemberExistingUserTemplate(
                 socialOrganization.name,
                 socialOrganization.id || 0,

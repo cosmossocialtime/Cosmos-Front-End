@@ -36,10 +36,10 @@ export default function VerifyEmail() {
     try {
       const payload = { email: email }
 
-      const response = await api.post('user-resend-confirmation', payload)
+      const response = await api.post('/auth/resend-confirmation', payload)
 
-      if (response.data.statusCode === 200) {
-        const parsed = JSON.parse(response.data.body)
+      if (response.status === 200) {
+        const parsed = response.data
         const { subject, html } = resendConfirmationTemplate(
           parsed.confirmationCode
         )

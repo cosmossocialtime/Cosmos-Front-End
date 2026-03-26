@@ -39,9 +39,9 @@ export default function TermsOfUse() {
       programId: Number(programId),
     }
     api
-      .post('volunteer-program-apply', payload)
+      .post('/volunteer/apply', payload)
       .then((response) => {
-        if (response.data.statusCode === 201) {
+        if (response.status === 201) {
           queryClient.invalidateQueries(['dashboard', null])
           Router.push(`/user/adventure/${programId}/subscribe/application-form`)
         }

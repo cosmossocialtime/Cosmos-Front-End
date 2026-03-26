@@ -14,9 +14,9 @@ export default function Portal() {
       completedOnboarding: true,
     }
     api
-      .put('volunteer-update', payload)
+      .put('/volunteer', payload)
       .then((response) => {
-        if (response.data.statusCode === 201) {
+        if (response.status === 201) {
           console.log('dado enviado com sucesso')
         }
       })

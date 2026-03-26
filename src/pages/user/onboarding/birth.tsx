@@ -37,8 +37,8 @@ export default function Nascimento() {
         birthdate: `${yearValue}-${monthInNumber(monthValue)}-${dayValue}`,
       }
       try {
-        const response = await api.put('user-update', payload)
-        if (response.data.statusCode === 201) {
+        const response = await api.put('/user', payload)
+        if (response.status === 201) {
           Router.push('/user/onboarding/live')
         } else {
           toast.error('Erro ao atualizar informações do usuário')

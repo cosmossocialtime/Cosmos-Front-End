@@ -132,10 +132,10 @@ export const SectorFormMentorship = ({
       }
 
       const response = await api.patch(
-        'mentorship-social-organization-sector-upsert',
+        '/mentorship/social-organizations/sector',
         payload
       )
-      if (response.data.statusCode == 201) {
+      if (response.status == 201) {
         queryClient.invalidateQueries([
           'mentorshipSocialOrganization',
           socialOrganizationId || 0,

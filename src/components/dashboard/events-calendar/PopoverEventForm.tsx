@@ -205,18 +205,18 @@ export function PopoverEventForm() {
             dayjs(selectedEvent?.startAt)
           ).toISOString()
         }
-        functionUrl = 'mentorship-event-google-calendar-recurring-upsert'
+        functionUrl = '/mentorship/event/google-calendar/recurring'
       } else {
-        functionUrl = 'mentorship-event-google-calendar-upsert'
+        functionUrl = '/mentorship/event/google-calendar'
       }
       try {
         const googleRes = await api.patch(functionUrl, googlePayload)
 
-        if (googleRes.data.statusCode !== 200) {
+        if (googleRes.status !== 200) {
           toast.error('Erro ao criar evento no Google Calendar')
           return
         }
-        const googleData = JSON.parse(googleRes.data.body)
+        const googleData = googleRes.data
         data.link = onLinkMeet ? googleData.hangoutLink : data.link
         eventId = googleData.eventId
         originalEventId = googleData.originalEventId
@@ -258,9 +258,9 @@ export function PopoverEventForm() {
           : null,
       }
 
-      const response = await api.patch('mentorship-event-upsert', payload)
+      const response = await api.patch('/mentorship/event', payload)
 
-      if (response.data.statusCode == 201) {
+      if (response.status == 201) {
         toast.success('Evento salvo')
         changePopover(popovers.Event)
         selectDay(null)

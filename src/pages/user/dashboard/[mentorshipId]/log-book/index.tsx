@@ -13,10 +13,10 @@ export default function LogBook() {
   async function getEvents() {
     try {
       const payload = { mentorshipId: Number(mentorshipId || '0') }
-      const response = await api.get('mentorship-calendar-select', {
+      const response = await api.get('/mentorship/calendar', {
         params: payload,
       })
-      return JSON.parse(response.data.body)
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar eventos!')
       throw error

@@ -63,8 +63,8 @@ export function PasswordInput({ enableForm }: PasswordInputProps) {
         newPassword: newPassword,
         passwordConfirm: passwordConfirm,
       }
-      const response = await api.put('user-password-update', payload)
-      if (response.data.statusCode == 201) {
+      const response = await api.put('/user/password', payload)
+      if (response.status == 201) {
         toast.success('Senha atualizada com sucesso')
       } else {
         toast.error('Erro ao alterar senha')

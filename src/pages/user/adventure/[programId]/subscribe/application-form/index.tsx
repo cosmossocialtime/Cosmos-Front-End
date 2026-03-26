@@ -66,8 +66,8 @@ export default function ApplicationForm() {
       linkedinUrl: linkedinUrl,
     }
     try {
-      const response = await api.put('user-volunteering-update', payload)
-      if (response.data.statusCode === 201) {
+      const response = await api.put('/user/volunteering', payload)
+      if (response.status === 201) {
         Router.push(
           `/user/adventure/${programId}/subscribe/application-form/about-you-1`
         )

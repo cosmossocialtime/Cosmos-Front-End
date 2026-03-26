@@ -105,10 +105,13 @@ const OnboardingInstitutionProvider = ({
         professionalRole: (updatedUser && updatedUser.professionalRole) || '',
       }
 
-      const response = await api.post('onboarding-create', payload)
+      const response = await api.post(
+        '/social-organization/onboarding',
+        payload
+      )
 
-      if (response.data.statusCode == 201) {
-        const parsed = JSON.parse(response.data.body)
+      if (response.status == 201) {
+        const parsed = response.data
         toast.success('Cadastro concluído!')
         Router.push(
           `/institutions/socialOrganization/${parsed.socialOrganizationId}/home`
@@ -136,9 +139,12 @@ const OnboardingInstitutionProvider = ({
         professionalRole: (updatedUser && updatedUser.professionalRole) || '',
       }
 
-      const response = await api.post('onboarding-member-create', payload)
+      const response = await api.post(
+        '/social-organization/member/onboarding',
+        payload
+      )
 
-      if (response.data.statusCode == 201) {
+      if (response.status == 201) {
         toast.success('Cadastro concluído!')
         Router.push(
           `/institutions/socialOrganization/${socialOrganizationId}/home`
@@ -169,8 +175,8 @@ const OnboardingInstitutionProvider = ({
           program: program,
         }
 
-        const response = await api.post('onboarding-program-create', payload)
-        if (response.data.statusCode == 201) {
+        const response = await api.post('/program/onboarding', payload)
+        if (response.status == 201) {
           toast.success('Cadastro concluído!')
           Router.push(
             `/institutions/socialOrganization/${

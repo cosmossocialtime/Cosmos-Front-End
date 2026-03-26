@@ -19,11 +19,11 @@ export default function ForgotPassword() {
       const payload = {
         email: email,
       }
-      const response = await api.post('user-forgot-password', payload)
+      const response = await api.post('/auth/forgot-password', payload)
 
-      const parsed = JSON.parse(response.data.body)
+      const parsed = response.data
 
-      if (response.data.statusCode == 200) {
+      if (response.status == 200) {
         const { subject, html } = forgotPasswordTemplate(
           parsed.name,
           parsed.confirmationCode,
@@ -40,7 +40,7 @@ export default function ForgotPassword() {
             toast.error('Erro ao enviar email de redefinção de senha')
           })
       }
-      if (response.data.statusCode == 401) {
+      if (response.status == 401) {
         toast.error('Email inválido')
       }
     } catch (error) {

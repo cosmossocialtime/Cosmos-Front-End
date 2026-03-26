@@ -10,10 +10,10 @@ export function useSocialOrganization(socialOrganizationId: number) {
     queryKey: ['socialOrganization', socialOrganizationId],
     queryFn: async () => {
       const payload = { socialOrganizationId }
-      const response = await api.get('social-organization-select', {
+      const response = await api.get('/social-organization', {
         params: payload,
       })
-      return JSON.parse(response.data.body)
+      return response.data
     },
     enabled: !!socialOrganizationId,
   })

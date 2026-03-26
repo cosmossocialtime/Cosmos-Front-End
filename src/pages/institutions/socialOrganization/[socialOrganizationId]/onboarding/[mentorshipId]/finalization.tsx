@@ -20,9 +20,9 @@ export default function Finalization() {
         mentorshipId: mentorId,
       }
 
-      const response = await api.put('mentorship-complete-onboarding', payload)
+      const response = await api.put('/mentorship/onboarding/complete', payload)
 
-      if (response.data.statusCode == 201) {
+      if (response.status == 201) {
         toast.success('Onboarding concluído')
         setShowMenu(true)
         setShowOrganization(true)

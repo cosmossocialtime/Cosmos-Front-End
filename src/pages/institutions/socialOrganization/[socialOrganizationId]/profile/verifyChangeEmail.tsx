@@ -39,12 +39,9 @@ export default function VerifyChangeEmail() {
     try {
       const payload = { email: email }
 
-      const response = await api.post(
-        'user-resend-confirmation-email-change',
-        payload
-      )
-      if (response.data.statusCode === 200) {
-        const parsed = JSON.parse(response.data.body)
+      const response = await api.post('/user/email/confirm/resend', payload)
+      if (response.status === 200) {
+        const parsed = response.data
         const { subject, html } = confirmChangeEmailInstitutionTemplate(
           parsed.confirmationCode,
           parsed.name,

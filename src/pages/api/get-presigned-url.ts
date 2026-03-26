@@ -21,7 +21,7 @@ export default async function handler(
     }
 
     const uploadUrl = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + '/s3-get-upload-url',
+      process.env.NEXT_PUBLIC_API_URL + '/s3/upload-url',
       {
         method: 'POST',
         headers: {

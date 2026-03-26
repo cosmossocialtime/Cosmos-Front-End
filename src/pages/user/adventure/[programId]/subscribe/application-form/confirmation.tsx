@@ -18,11 +18,11 @@ export default function Confirmation() {
   useEffect(() => {
     const payload = { origin: 'volunteer' }
     api
-      .get('sector-select', {
+      .get('/social-organization/sectors', {
         params: payload,
       })
       .then((response) => {
-        setKnowledgeAreas(JSON.parse(response.data.body))
+        setKnowledgeAreas(response.data)
       })
       .catch((error) => {
         console.error(error)
@@ -52,8 +52,8 @@ export default function Confirmation() {
     }
     const payload = { sectorIds: selectedAreas }
     try {
-      const response = await api.put('user-volunteering-update', payload)
-      if (response.data.statusCode === 201) {
+      const response = await api.put('/user/volunteering', payload)
+      if (response.status === 201) {
         completeRegistration()
       } else {
         toast.error(
@@ -74,9 +74,9 @@ export default function Confirmation() {
       completedApplication: true,
     }
     api
-      .put('volunteer-applicant-update', payload)
+      .put('/volunteer/applicant', payload)
       .then((response) => {
-        if (response.data.statusCode === 201) {
+        if (response.status === 201) {
           Router.push(
             `/user/adventure/${programId}/subscribe/application-form/thanks`
           )

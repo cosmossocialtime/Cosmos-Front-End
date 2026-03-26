@@ -42,8 +42,8 @@ export const ChangePasswordInstitutionModal = ({
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       }
-      const response = await api.put('user-password-update', payload)
-      if (response.data.statusCode == 201) {
+      const response = await api.put('/user/password', payload)
+      if (response.status == 201) {
         toast.success('Senha alterada com sucesso')
       } else {
         toast.error('Erro ao alterar senha')

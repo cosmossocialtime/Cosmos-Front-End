@@ -13,9 +13,9 @@ export function useProfileInstitution(socialOrganizationId: number) {
   } = useQuery({
     queryKey: ['user', socialOrganizationId],
     queryFn: async () => {
-      const response = await api.get('user-select')
-      if (response.data.statusCode === 200) {
-        const parsed = JSON.parse(response.data.body)
+      const response = await api.get('/user')
+      if (response.status === 200) {
+        const parsed = response.data
         const userSocialOrganizations =
           parsed.socialOrganizations &&
           parsed.socialOrganizations.filter(
@@ -54,8 +54,8 @@ export function useProfileInstitution(socialOrganizationId: number) {
         professionalSector,
         socialOrganizationId,
       }
-      const response = await api.put('user-update', payload)
-      return JSON.parse(response.data.body)
+      const response = await api.put('/user', payload)
+      return response.data
     },
     onSuccess: () => {
       toast.success('Alterações salvas com sucesso')
@@ -80,7 +80,7 @@ export function useProfileInstitution(socialOrganizationId: number) {
           imageType,
         }
         const response = await api.put('user-images-update', payload)
-        return JSON.parse(response.data.body)
+        return response.data
       },
       onSuccess: () => {
         toast.success('Alterações salvas com sucesso')
