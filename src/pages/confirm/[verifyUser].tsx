@@ -31,9 +31,9 @@ export default function VerifyUser() {
 
         const payload = { email: user, token: token }
 
-        const response = await api.post('user-verify', payload)
+        const response = await api.post('/auth/verify', payload)
 
-        if (response.data.statusCode === 200) {
+        if (response.status === 200) {
           toast.success('Usuário validado com sucesso!')
           router.push('/user/login')
         }

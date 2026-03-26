@@ -36,8 +36,8 @@ export default function SateliteImages() {
 
   async function getSectors() {
     try {
-      const response = await api.get('sector-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/sectors')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -59,11 +59,11 @@ export default function SateliteImages() {
         mentorshipId: mentorId,
       }
 
-      const response = await api.get('mentorship-social-organization-select', {
+      const response = await api.get('/mentorship/social-organizations', {
         params: payload,
       })
 
-      const parsed = JSON.parse(response.data.body)
+      const parsed = response.data
       return parsed.socialOrganization
     } catch (error) {
       console.error('Erro ao buscar Organização Social!')
@@ -104,10 +104,10 @@ export default function SateliteImages() {
         socialOrganization: org,
       }
       const response = await api.put(
-        'mentorship-social-organization-update',
+        '/mentorship/social-organizations',
         payload
       )
-      if (response.data.statusCode == 201) {
+      if (response.status == 201) {
         queryClient.invalidateQueries([
           'mentorshipSocialOrganization',
           organizationId,

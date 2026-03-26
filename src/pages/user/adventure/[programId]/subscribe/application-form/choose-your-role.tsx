@@ -56,9 +56,9 @@ export default function ChooseYourRole() {
         thirdRole: thirdOption,
       }
       api
-        .put('volunteer-applicant-update', payload)
+        .put('/volunteer/applicant', payload)
         .then((response) => {
-          if (response.data.statusCode === 201) {
+          if (response.status === 201) {
             Router.push(
               `/user/adventure/${programId}/subscribe/application-form/confirmation`
             )

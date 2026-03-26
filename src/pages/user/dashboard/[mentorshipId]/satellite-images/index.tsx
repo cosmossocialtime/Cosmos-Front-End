@@ -101,15 +101,12 @@ const SatelitesPage = () => {
       }
 
       try {
-        const response = await api.get(
-          'mentorship-social-organization-select',
-          {
-            params: payload,
-          }
-        )
+        const response = await api.get('/mentorship/social-organizations', {
+          params: payload,
+        })
 
-        if (response.data.statusCode === 200) {
-          const parsed = JSON.parse(response.data.body).socialOrganization
+        if (response.status === 200) {
+          const parsed = response.data.socialOrganization
           const cidade = await findCity(parsed)
           setCompany({
             name: parsed.name,

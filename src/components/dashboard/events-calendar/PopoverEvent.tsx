@@ -59,11 +59,11 @@ export function PopoverEvent() {
       }
       try {
         const googleRes = await api.delete(
-          'mentorship-event-google-calendar-delete',
+          '/mentorship/event/google-calendar',
           { data: googlePayload }
         )
 
-        if (googleRes.data.statusCode !== 200) {
+        if (googleRes.status !== 200) {
           toast.error('Erro ao remover no Google Calendar')
           return
         }
@@ -76,11 +76,11 @@ export function PopoverEvent() {
       const payload: any = {
         eventId: selectedEvent?.id || 0,
       }
-      const response = await api.delete('mentorship-event-delete', {
+      const response = await api.delete('/mentorship/event', {
         data: payload,
       })
 
-      if (response.data.statusCode === 200) {
+      if (response.status === 200) {
         toast.success('Evento excluído com sucesso')
         changePopover(popovers.Event)
         selectDay(null)
@@ -107,11 +107,11 @@ export function PopoverEvent() {
         }
         try {
           const googleRes = await api.delete(
-            'mentorship-event-google-calendar-delete',
+            '/mentorship/event/google-calendar',
             { data: googlePayload }
           )
 
-          if (googleRes.data.statusCode !== 200) {
+          if (googleRes.status !== 200) {
             toast.error('Erro ao remover no Google Calendar')
             return
           }
@@ -125,11 +125,11 @@ export function PopoverEvent() {
         eventId: selectedEvent?.id || 0,
         recurrenceGroupId: selectedEvent?.recurrenceGroupId || '',
       }
-      const response = await api.delete('mentorship-event-delete', {
+      const response = await api.delete('/mentorship/event', {
         data: payload,
       })
 
-      if (response.data.statusCode === 200) {
+      if (response.status === 200) {
         toast.success('Evento excluído com sucesso')
         changePopover(popovers.Event)
         selectDay(null)

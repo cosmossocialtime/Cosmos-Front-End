@@ -150,8 +150,8 @@ export const AboutInstitutionMentorshipModal = ({
 
   async function getCauses() {
     try {
-      const response = await api.get('cause-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/causes')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar causas!')
       throw error
@@ -438,10 +438,10 @@ export const AboutInstitutionMentorshipModal = ({
         mime: file.type,
       }
 
-      const response = await api.post('storage-create', payload)
+      const response = await api.post('/storage', payload)
 
-      if (response.data.statusCode === 201) {
-        const { storageId } = JSON.parse(response.data.body)
+      if (response.status === 201) {
+        const { storageId } = response.data
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')
@@ -469,7 +469,7 @@ export const AboutInstitutionMentorshipModal = ({
             socialOrganization?.socialOrganizationId || 0
           }/statute/${data.estatuto.name}`
           storageId = await uploadFile(data.estatuto, key)
-          const res = await fetch('/api/get-download-url', {
+          const res = await fetch('/api/s3/download-url', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -512,10 +512,10 @@ export const AboutInstitutionMentorshipModal = ({
       }
 
       const response = await api.put(
-        'mentorship-social-organization-update',
+        '/mentorship/social-organizations',
         payload
       )
-      if (response.data.statusCode == 201) {
+      if (response.status == 201) {
         toast.success('Informações salvas com sucesso!')
         queryClient.invalidateQueries([
           'mentorshipSocialOrganization',

@@ -31,8 +31,8 @@ export default function Genero() {
     if (gender) {
       const payload = { gender: gender }
       try {
-        const response = await api.put('user-update', payload)
-        if (response.data.statusCode === 201) {
+        const response = await api.put('/user', payload)
+        if (response.status === 201) {
           Router.push('/user/onboarding/company-code')
         } else {
           toast.error('Erro ao atualizar informações do usuário')

@@ -68,8 +68,8 @@ export default function CreateOrganization() {
 
   async function getCauses() {
     try {
-      const response = await api.get('cause-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/causes')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar causas!')
       throw error
@@ -83,8 +83,8 @@ export default function CreateOrganization() {
 
   async function getSectors() {
     try {
-      const response = await api.get('sector-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/sectors')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -160,10 +160,10 @@ export default function CreateOrganization() {
         professionalRole: data.professionalRole,
       }
 
-      const response = await api.post('social-organization-create', payload)
+      const response = await api.post('/social-organization', payload)
 
-      if (response.data.statusCode == 201) {
-        const parsed = JSON.parse(response.data.body)
+      if (response.status == 201) {
+        const parsed = response.data
         toast.success('Organização criada com sucesso')
         setShowMenu(true)
         setShowOrganization(true)

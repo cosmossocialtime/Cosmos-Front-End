@@ -80,8 +80,8 @@ export const ConfirmPasswordEmailChange = ({
   async function validatePassword(password: string): Promise<boolean> {
     try {
       const payload = { password: password }
-      const response = await api.post('user-validate-password', payload)
-      return response.data.statusCode === 200
+      const response = await api.post('/user/validate-password', payload)
+      return response.status === 200
     } catch (error) {
       console.error(error)
       return false
@@ -93,10 +93,10 @@ export const ConfirmPasswordEmailChange = ({
   ): Promise<null | { confirmationCode: string; name: string }> {
     try {
       const payload = { email: email }
-      const response = await api.put('user-request-email-update', payload)
+      const response = await api.put('/user/email/request', payload)
 
-      if (response.data.statusCode === 200) {
-        return JSON.parse(response.data.body)
+      if (response.status === 200) {
+        return response.data
       }
       return null
     } catch (error) {

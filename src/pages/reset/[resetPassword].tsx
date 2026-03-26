@@ -64,9 +64,9 @@ export default function ResetPassword() {
         email,
         token: token,
       }
-      const response = await api.post('user-reset-password', payload)
+      const response = await api.post('/auth/reset-password', payload)
 
-      if (response.data.statusCode == 200) {
+      if (response.status == 200) {
         toast.success('Senha alterada com sucesso')
         Router.push('/user/login')
       }

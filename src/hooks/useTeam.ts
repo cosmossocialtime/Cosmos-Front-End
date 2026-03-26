@@ -12,9 +12,9 @@ export function useTeam(socialOrganizationId: number) {
     error: errorUser,
   } = useQuery({
     queryFn: async () => {
-      const response = await api.get('user-select')
-      if (response.data.statusCode === 200) {
-        const parsed = JSON.parse(response.data.body)
+      const response = await api.get('/user')
+      if (response.status === 200) {
+        const parsed = response.data
         const userSocialOrganizations =
           parsed.socialOrganizations &&
           parsed.socialOrganizations.filter(
@@ -40,10 +40,10 @@ export function useTeam(socialOrganizationId: number) {
     queryKey: ['users', socialOrganizationId],
     queryFn: async () => {
       const payload = { socialOrganizationId }
-      const response = await api.get('social-organization-users-select', {
+      const response = await api.get('/social-organization/users', {
         params: payload,
       })
-      return JSON.parse(response.data.body)
+      return response.data
     },
     enabled: !!socialOrganizationId,
     refetchOnWindowFocus: true,
@@ -66,10 +66,10 @@ export function useTeam(socialOrganizationId: number) {
           socialOrganizationId: socialOrganizationId,
         }
         const response = await api.put(
-          'social-organization-member-role-update',
+          '/social-organization/member/role',
           payload
         )
-        return JSON.parse(response.data.body)
+        return response.data
       },
       onSuccess: () => {
         toast.success('Permissão alterada com sucesso!')
@@ -86,10 +86,10 @@ export function useTeam(socialOrganizationId: number) {
         userId: userId,
         socialOrganizationId: socialOrganizationId,
       }
-      const response = await api.delete('social-organization-member-delete', {
+      const response = await api.delete('/social-organization/member', {
         data: payload,
       })
-      return JSON.parse(response.data.body)
+      return response.data
     },
     onSuccess: () => {
       toast.success('Membro removido com sucesso!')

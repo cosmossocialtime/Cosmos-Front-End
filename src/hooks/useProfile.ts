@@ -13,9 +13,9 @@ export function useProfile() {
   } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const response = await api.get('user-select')
-      if (response.data.statusCode === 200) {
-        const parsed = JSON.parse(response.data.body)
+      const response = await api.get('/user')
+      if (response.status === 200) {
+        const parsed = response.data
         return parsed
       } else {
         return null
@@ -34,8 +34,8 @@ export function useProfile() {
         state: newUserData.state,
         city: newUserData.city,
       }
-      const response = await api.put('user-update', payload)
-      return JSON.parse(response.data.body)
+      const response = await api.put('/user', payload)
+      return response.data
     },
     onSuccess: () => {
       toast.success('Dados atualizados com sucesso!')
@@ -61,7 +61,7 @@ export function useProfile() {
           origin: 'volunteer',
         }
         const response = await api.put('user-images-update', payload)
-        return JSON.parse(response.data.body)
+        return response.data
       },
       onSuccess: () => {
         toast.success('Alterações salvas com sucesso')

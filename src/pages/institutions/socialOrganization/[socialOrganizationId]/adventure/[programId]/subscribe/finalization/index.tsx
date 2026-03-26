@@ -51,8 +51,8 @@ export default function Finalization() {
 
   async function getHowToHearAboutOrganization() {
     try {
-      const response = await api.get('how-hear-about-organization-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/mentorship/hear-about-organization')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar opções!')
     }

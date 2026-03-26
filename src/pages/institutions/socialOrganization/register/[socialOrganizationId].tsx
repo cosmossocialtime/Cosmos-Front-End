@@ -56,11 +56,11 @@ export default function RegisterInstituitionMember() {
         socialOrganizationId: organizationId,
       }
 
-      const response = await api.post('user-create', payload)
+      const response = await api.post('/user', payload)
 
-      if (response.data.statusCode === 201) {
+      if (response.status === 201) {
         saveFormData('cosmos.user', data.email)
-        const parsed = JSON.parse(response.data.body)
+        const parsed = response.data
         const { subject, html } = signupInstitutionConfirmationTemplate(
           parsed.confirmationCode
         )

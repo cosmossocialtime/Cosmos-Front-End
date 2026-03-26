@@ -57,8 +57,8 @@ export default function AboutOrganizationForm() {
 
   async function getCauses() {
     try {
-      const response = await api.get('cause-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/causes')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar causas!')
       throw error

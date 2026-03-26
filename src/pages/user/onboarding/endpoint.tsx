@@ -10,8 +10,8 @@ export default function Decolar() {
   async function handleSubmitCompletedOnboarding() {
     const payload = { completed: true }
     try {
-      const response = await api.put('user-update', payload)
-      if (response.data.statusCode === 201) {
+      const response = await api.put('/user', payload)
+      if (response.status === 201) {
         Router.push('/user/painel')
       } else {
         toast.error('Erro ao atualizar informações do usuário')

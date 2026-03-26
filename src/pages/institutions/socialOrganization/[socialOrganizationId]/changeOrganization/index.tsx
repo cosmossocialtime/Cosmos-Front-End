@@ -40,9 +40,9 @@ export default function ChangeOrganizationPage() {
   })
 
   async function getUser() {
-    const response = await api.get('user-select')
-    if (response.data.statusCode === 200) {
-      return JSON.parse(response.data.body)
+    const response = await api.get('/user')
+    if (response.status === 200) {
+      return response.data
     } else {
       throw new Error('Erro ao buscar informações')
     }

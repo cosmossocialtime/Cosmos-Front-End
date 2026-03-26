@@ -49,8 +49,8 @@ export const FeedbackModal = ({ closeModal }: FeedbackModalProps) => {
       const payload = {
         feedback: data.feedback,
       }
-      const response = await api.post('user-feedback-create', payload)
-      if (response.data.statusCode == 201) {
+      const response = await api.post('/user/feedback', payload)
+      if (response.status == 201) {
         toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
       } else {
         toast.error(

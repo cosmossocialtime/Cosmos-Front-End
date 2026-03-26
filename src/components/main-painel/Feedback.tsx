@@ -22,8 +22,8 @@ export function Feedback({ closeFeedback }: FeedbackProps) {
       const payload = {
         feedback: feedbackContent,
       }
-      const response = await api.post('user-feedback-create', payload)
-      if (response.data.statusCode == 201) {
+      const response = await api.post('/user/feedback', payload)
+      if (response.status == 201) {
         toast.success('Seu feedback foi enviado. Vamos analisá-lo em breve.')
         closeFeedback()
       } else {

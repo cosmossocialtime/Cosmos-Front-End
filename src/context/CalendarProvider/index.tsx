@@ -62,12 +62,12 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const getEvents = useCallback(() => {
     const payload = { mentorshipId: Number(mentorshipId || '0') }
     api
-      .get('mentorship-calendar-select', {
+      .get('/mentorship/calendar', {
         params: payload,
       })
       .then((response) => {
-        if (response.data.statusCode === 200) {
-          setEvents(JSON.parse(response.data.body))
+        if (response.status === 200) {
+          setEvents(response.data)
         }
       })
       .catch((error) => {
@@ -81,12 +81,12 @@ const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
     }
     const payload = { mentorshipId: Number(mentorshipId || '0') }
     api
-      .get('mentorship-volunteers-select', {
+      .get('/mentorship/volunteer', {
         params: payload,
       })
       .then((response) => {
-        if (response.data.statusCode === 200) {
-          setUsers(JSON.parse(response.data.body))
+        if (response.status === 200) {
+          setUsers(response.data)
         }
       })
       .catch((error) => {

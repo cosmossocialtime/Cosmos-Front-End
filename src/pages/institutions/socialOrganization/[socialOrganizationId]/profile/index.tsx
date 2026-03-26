@@ -85,8 +85,8 @@ export default function Profile() {
 
   async function getSectors() {
     try {
-      const response = await api.get('sector-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/sectors')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -199,10 +199,10 @@ export default function Profile() {
         mime: blob.type,
       }
 
-      const response = await api.post('storage-create', payload)
+      const response = await api.post('/storage', payload)
 
-      if (response.data.statusCode === 201) {
-        const { storageId } = JSON.parse(response.data.body)
+      if (response.status === 201) {
+        const { storageId } = response.data
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')

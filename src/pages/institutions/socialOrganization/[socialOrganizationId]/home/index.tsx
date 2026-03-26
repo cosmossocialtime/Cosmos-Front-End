@@ -30,11 +30,11 @@ export default function Home() {
 
   async function getDashboard() {
     const payload = { socialOrganizationId: organizationId }
-    const response = await api.get('dashboard-select', {
+    const response = await api.get('/dashboard', {
       params: payload,
     })
-    if (response.data.statusCode === 200) {
-      return JSON.parse(response.data.body)
+    if (response.status === 200) {
+      return response.data
     } else {
       throw new Error('Erro ao buscar informações')
     }

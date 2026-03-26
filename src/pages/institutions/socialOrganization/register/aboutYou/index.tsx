@@ -68,9 +68,9 @@ export default function AboutYouForm() {
   })
 
   async function getUser() {
-    const response = await api.get('user-select')
-    if (response.data.statusCode === 200) {
-      return JSON.parse(response.data.body)
+    const response = await api.get('/user')
+    if (response.status === 200) {
+      return response.data
     } else {
       throw new Error('Erro ao buscar informações')
     }
@@ -78,8 +78,8 @@ export default function AboutYouForm() {
 
   async function getSectors() {
     try {
-      const response = await api.get('sector-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/sectors')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error

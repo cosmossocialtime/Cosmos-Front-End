@@ -70,9 +70,9 @@ export default function GoalPopUp({ goal, index }: GoalPopUpProps) {
       tasks: tasks.map((task) => ({ name: task.name, id: task.id })),
     }
     api
-      .put('mentorship-goal-update', payload)
+      .put('/mentorship/goal', payload)
       .then((response) => {
-        if (response.data.statusCode === 200) {
+        if (response.status === 200) {
           toast.success('Dados salvos com sucesso!')
           updateGoals()
           changeEdit(false)

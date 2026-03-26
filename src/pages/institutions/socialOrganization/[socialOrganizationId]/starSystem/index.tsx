@@ -14,8 +14,8 @@ export default function StarSystem() {
 
   async function getSectors() {
     try {
-      const response = await api.get('sector-select')
-      return JSON.parse(response.data.body)
+      const response = await api.get('/social-organization/sectors')
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar setores!')
       throw error
@@ -31,11 +31,11 @@ export default function StarSystem() {
     try {
       const payload = { socialOrganizationId: organizationId }
 
-      const response = await api.get('social-organization-select', {
+      const response = await api.get('/social-organization', {
         params: payload,
       })
 
-      const parsed = JSON.parse(response.data.body)
+      const parsed = response.data
       return parsed.socialOrganization
     } catch (error) {
       console.error('Erro ao buscar Organização Social!')

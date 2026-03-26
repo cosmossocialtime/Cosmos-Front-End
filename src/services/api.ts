@@ -16,7 +16,7 @@ type userExpiration = {
 async function renewToken() {
   const response = await axios({
     method: 'post',
-    url: process.env.NEXT_PUBLIC_API_URL + '/refresh-token',
+    url: process.env.NEXT_PUBLIC_API_URL + '/auth/refresh-token',
     headers: { RefreshToken },
   })
 
@@ -29,6 +29,7 @@ api.interceptors.request.use(async (req) => {
     const isExpire = dayjs.unix(user.exp).diff(dayjs()) < 1
 
     if (isExpire) {
+      console.log('AQUI')
       const newToken = await renewToken()
       api.defaults.headers.Authorization = `Bearer ${newToken.data.accessToken}`
       setCookie(undefined, 'cosmos.token', newToken.data.accessToken, {
@@ -39,6 +40,8 @@ api.interceptors.request.use(async (req) => {
       })
     }
     if (!isExpire) {
+      console.log('AQUI2')
+      console.log(Token)
       api.defaults.headers.Authorization = `Bearer ${Token}`
     }
   }

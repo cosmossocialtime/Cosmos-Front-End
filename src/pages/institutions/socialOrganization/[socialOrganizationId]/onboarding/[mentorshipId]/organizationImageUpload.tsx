@@ -81,10 +81,10 @@ export default function OrganizationImageUpload() {
         mime: blob.type,
       }
 
-      const response = await api.post('storage-create', payload)
+      const response = await api.post('/storage', payload)
 
-      if (response.data.statusCode === 201) {
-        const { storageId } = JSON.parse(response.data.body)
+      if (response.status === 201) {
+        const { storageId } = response.data
         return Number(storageId)
       } else {
         toast.error('Erro ao salvar metadados no storage')

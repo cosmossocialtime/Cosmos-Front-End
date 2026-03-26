@@ -56,11 +56,11 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
   async function getGoals(id: number) {
     if (!id) return []
     const payload = { mentorshipId: id }
-    const response = await api.get('mentorship-goals-select', {
+    const response = await api.get('/mentorship/goal', {
       params: payload,
     })
-    if (response.data.statusCode === 200) {
-      return JSON.parse(response.data.body)
+    if (response.status === 200) {
+      return response.data
     }
     console.error('Falha ao obter objetivos da missão')
     return []
@@ -93,10 +93,10 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
       name: 'Novo objetivo',
     }
     api
-      .post('mentorship-goal-create', payload)
+      .post('/mentorship/goal', payload)
       .then((response) => {
-        if (response.data.statusCode === 201) {
-          const parsed = JSON.parse(response.data.body)
+        if (response.status === 201) {
+          const parsed = response.data
           selectGoalId(parsed.id)
           updateGoals()
           setEditEnable(true)
@@ -124,9 +124,9 @@ const NavigationMapProvider = ({ children }: { children: React.ReactNode }) => {
     }
     const payload = { goalId: selectedGoalId }
     api
-      .delete('mentorship-goal-delete', { data: payload })
+      .delete('/mentorship/goal', { data: payload })
       .then((response) => {
-        if (response.data.statusCode === 200) {
+        if (response.status === 200) {
           const newGoals = goals.filter(
             (goal: GoalProps) => goal.id !== selectedGoalId
           )

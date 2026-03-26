@@ -31,9 +31,9 @@ export default function VerifyEmail() {
 
         const payload = { email: user, token: token }
 
-        const response = await api.put('user-confirm-email-update', payload)
+        const response = await api.put('/user/email/confirm', payload)
 
-        if (response.data.statusCode === 200) {
+        if (response.status === 200) {
           toast.success('E-mail validado com sucesso!')
           router.push(
             `/institutions/socialOrganization/${socialOrganizationId}/profile`

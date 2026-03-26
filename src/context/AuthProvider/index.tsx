@@ -143,8 +143,9 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     { email, password }: SignInData,
     socialOrganizationId: string | null
   ) {
-    const response = await api.post('/auth/user-login', { email, password })
-    const res = JSON.parse(response.data.body)
+    const response = await api.post('/auth/login', { email, password })
+
+    const res = response.data
 
     if (!res) {
       throw new Error('Sem dados de resposta para salvar nos cookies')

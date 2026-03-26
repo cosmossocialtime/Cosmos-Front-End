@@ -61,8 +61,8 @@ export default function EstadoCidade() {
       country: outOfBrazil ? 0 : 1,
     }
     try {
-      const response = await api.put('user-update', payload)
-      if (response.data.statusCode === 201) {
+      const response = await api.put('/user', payload)
+      if (response.status === 201) {
         Router.push('/user/onboarding/endpoint')
       } else {
         toast.error('Erro ao atualizar informações do usuário')

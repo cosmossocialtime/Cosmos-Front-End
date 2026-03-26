@@ -28,10 +28,10 @@ export default function Book() {
   async function getEvents() {
     try {
       const payload = { mentorshipId: Number(mentorshipId || '0') }
-      const response = await api.get('mentorship-calendar-select', {
+      const response = await api.get('/mentorship/calendar', {
         params: payload,
       })
-      return JSON.parse(response.data.body)
+      return response.data
     } catch (error) {
       console.error('Erro ao buscar eventos!')
       throw error
@@ -61,11 +61,8 @@ export default function Book() {
         nextMeetingGoals: nextMeetingGoals,
       }
 
-      const response = await api.patch(
-        'mentorship-event-logbook-upsert',
-        payload
-      )
-      if (response.data.statusCode == 201) {
+      const response = await api.patch('/mentorship/event/logbook', payload)
+      if (response.status == 201) {
         queryClient.invalidateQueries(['events', mentorshipId])
         toast.success('Informações salvas com sucesso!')
         Router.push(`/user/dashboard/${mentorshipId}/log-book`)
