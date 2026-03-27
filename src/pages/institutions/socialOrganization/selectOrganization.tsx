@@ -63,8 +63,12 @@ export default function SelectOrganizationPage() {
   })
 
   useEffect(() => {
-    if (!user) return
-    const sorted = user.socialOrganizations.sort()
+    if (!user?.socialOrganizations?.length) return
+
+    const sorted = [...user.socialOrganizations].sort(
+      (a, b) => a.socialOrganizationId - b.socialOrganizationId
+    )
+
     setSocialOrganizationId(sorted[0].socialOrganizationId)
   }, [user])
 
