@@ -7,7 +7,6 @@ import { getFormData } from '../../utils/localStorage'
 import { resendInstitutionConfirmationTemplate } from '../../lib/email/templates/templates'
 import Link from 'next/link'
 import { api } from '../../services/api'
-import { sendEmail } from '../api/send-email'
 
 export default function CompletedRegistration() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -44,7 +43,14 @@ export default function CompletedRegistration() {
         const { subject, html } = resendInstitutionConfirmationTemplate(
           parsed.confirmationCode
         )
-        sendEmail([email], subject, html)
+        const payloadMail = {
+          toAddresses: [email],
+          subject: subject,
+          message: html,
+        }
+
+        api
+          .post('/email/send', payloadMail)
           .then(() => {
             toast.success('Email reenviado')
           })

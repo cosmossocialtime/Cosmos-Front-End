@@ -13,7 +13,6 @@ import { saveFormData } from '../../../utils/localStorage'
 import { useRouter } from 'next/router'
 import { api } from '../../../services/api'
 import axios from 'axios'
-import { sendEmail } from '../../../pages/api/send-email'
 
 interface ConfirmPasswordEmailChangeProps {
   closeModal: () => void
@@ -141,7 +140,13 @@ export const ConfirmPasswordEmailChange = ({
       socialOrganizationId
     )
     try {
-      await sendEmail([email], subject, html)
+      const payloadMail = {
+        toAddresses: [email],
+        subject: subject,
+        message: html,
+      }
+
+      await api.post('/email/send', payloadMail)
     } catch (err) {
       toast.error('Não foi possível enviar e-mail de confirmação de alteração')
       throw err

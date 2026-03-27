@@ -7,7 +7,6 @@ import { toast } from 'react-toastify'
 import DynamicHeader from '../../../../components/header/DynamicHeader'
 import { resendConfirmationTemplate } from '../../../../lib/email/templates/templates'
 import { api } from '../../../../services/api'
-import { sendEmail } from '../../../api/send-email'
 
 export default function VerifyEmail() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -43,7 +42,14 @@ export default function VerifyEmail() {
         const { subject, html } = resendConfirmationTemplate(
           parsed.confirmationCode
         )
-        sendEmail([email], subject, html)
+        const payloadMail = {
+          toAddresses: [email],
+          subject: subject,
+          message: html,
+        }
+
+        api
+          .post('/email/send', payloadMail)
           .then(() => {
             toast.success('Email reenviado')
           })

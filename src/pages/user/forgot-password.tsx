@@ -7,7 +7,6 @@ import Router from 'next/router'
 import { forgotPasswordTemplate } from '../../lib/email/templates/templates'
 import { saveFormData } from '../../utils/localStorage'
 import { api } from '../../services/api'
-import { sendEmail } from '../api/send-email'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -29,7 +28,14 @@ export default function ForgotPassword() {
           parsed.confirmationCode,
           parsed.role
         )
-        sendEmail([email], subject, html)
+        const payloadMail = {
+          toAddresses: [email],
+          subject: subject,
+          message: html,
+        }
+
+        api
+          .post('/email/send', payloadMail)
           .then(() => {
             toast.success(
               'Enviado um link para redefinição de senha no seu email'
