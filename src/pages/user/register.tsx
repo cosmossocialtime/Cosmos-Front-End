@@ -14,7 +14,6 @@ import { signupConfirmationTemplate } from '../../lib/email/templates/templates'
 import { saveFormData } from '../../utils/localStorage'
 import { api } from '../../services/api'
 import axios from 'axios'
-import { sendEmail } from '../api/send-email'
 
 const schema = z
   .object({
@@ -88,7 +87,14 @@ export default function Cadastrar() {
           parsed.name,
           parsed.confirmationCode
         )
-        sendEmail([data.email], subject, html)
+        const payloadMail = {
+          toAddresses: [data.email],
+          subject: subject,
+          message: html,
+        }
+
+        api
+          .post('/email/send', payloadMail)
           .then(() => {
             toast.success('Criado com sucesso!')
             Router.push('/user/completed-registration')

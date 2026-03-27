@@ -8,7 +8,6 @@ import DynamicHeader from '../../../../../components/header/DynamicHeader'
 import { confirmChangeEmailInstitutionTemplate } from '../../../../../lib/email/templates/templates'
 import { useRouter } from 'next/router'
 import { api } from '../../../../../services/api'
-import { sendEmail } from '../../../../api/send-email'
 
 export default function VerifyChangeEmail() {
   const [secondsAmount, setSecondsAmount] = useState(60)
@@ -47,7 +46,14 @@ export default function VerifyChangeEmail() {
           parsed.name,
           String(socialOrganizationId)
         )
-        sendEmail([email], subject, html)
+        const payloadMail = {
+          toAddresses: [email],
+          subject: subject,
+          message: html,
+        }
+
+        api
+          .post('/email/send', payloadMail)
           .then(() => {
             toast.success('Email reenviado')
           })

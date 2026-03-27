@@ -19,7 +19,6 @@ import { saveFormData } from '../../../../utils/localStorage'
 import { signupInstitutionConfirmationTemplate } from '../../../../lib/email/templates/templates'
 import { api } from '../../../../services/api'
 import axios from 'axios'
-import { sendEmail } from '../../../api/send-email'
 
 const schema = z.object({
   email: emailSchema,
@@ -64,7 +63,14 @@ export default function RegisterInstituitionMember() {
         const { subject, html } = signupInstitutionConfirmationTemplate(
           parsed.confirmationCode
         )
-        sendEmail([email], subject, html)
+        const payloadMail = {
+          toAddresses: [email],
+          subject: subject,
+          message: html,
+        }
+
+        api
+          .post('/email/send', payloadMail)
           .then(() => {
             toast.success('Criado com sucesso!')
             Router.push({

@@ -13,7 +13,6 @@ import {
 } from '../../../../lib/email/templates/templates'
 import { api } from '../../../../services/api'
 import axios from 'axios'
-import { sendEmail } from '../../../../pages/api/send-email'
 
 const schema = z.object({
   emails: z
@@ -105,7 +104,13 @@ export const InviteForm = ({
                 requestMemberName,
                 user.fullName || ''
               )
-              await sendEmail([email], subject, html)
+              const payloadMail = {
+                toAddresses: [email],
+                subject: subject,
+                message: html,
+              }
+
+              await api.post('/email/send', payloadMail)
             }
           } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -128,7 +133,14 @@ export const InviteForm = ({
             socialOrganization.id || 0,
             requestMemberName
           )
-          await sendEmail([email], subject, html)
+
+          const payloadMail = {
+            toAddresses: [email],
+            subject: subject,
+            message: html,
+          }
+
+          await api.post('/email/send', payloadMail)
         }
       }
 

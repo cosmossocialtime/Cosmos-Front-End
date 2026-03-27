@@ -11,6 +11,7 @@ export function useTeam(socialOrganizationId: number) {
     isLoading: isLoadingUser,
     error: errorUser,
   } = useQuery({
+    queryKey: ['user', socialOrganizationId],
     queryFn: async () => {
       const response = await api.get('/user')
       if (response.status === 200) {
@@ -27,6 +28,7 @@ export function useTeam(socialOrganizationId: number) {
         return null
       }
     },
+    enabled: !!socialOrganizationId,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
