@@ -370,20 +370,16 @@ export default function AboutInstitution() {
     key: string
   ): Promise<number | null> => {
     try {
+      const payloadS3 = {
+        key: key,
+        fileType: file.type,
+      }
       // Requisição da Presigned URL para upload do arquivo
-      const res = await fetch('/api/get-presigned-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileName: file.name,
-          fileType: file.type,
-          key,
-        }),
-      })
+      const res = await api.post('/s3/upload-url', payloadS3)
 
-      if (!res.ok) throw new Error('Erro ao obter Presigned URL')
+      if (res.status !== 200) throw new Error('Erro ao obter Presigned URL')
 
-      const { uploadUrl } = await res.json()
+      const { uploadUrl } = res.data
 
       // Upload para S3
       const upload = await fetch(uploadUrl, {
@@ -431,14 +427,12 @@ export default function AboutInstitution() {
           socialOrganization?.id || 0
         }/statute/${data.estatuto.name}`
         storageId = await uploadFile(data.estatuto, key)
-        const res = await fetch('/api/s3/download-url', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            key,
-          }),
-        })
-        downloadUrl = await res.json()
+        const payloadS3 = {
+          key: key,
+        }
+        const res = await api.post('/s3/download-url', payloadS3)
+
+        downloadUrl = res.data
       } else {
         storageId = socialOrganization?.storageId ?? null
         downloadUrl.downloadUrl =

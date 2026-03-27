@@ -31,20 +31,16 @@ export default function Perfil() {
   ) {
     const blob = await fetch(base64Image).then((response) => response.blob())
     try {
+      const payloadS3 = {
+        key: key,
+        fileType: blob.type,
+      }
       // Requisição da Presigned URL para upload do arquivo
-      const res = await fetch('/api/get-presigned-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileName: fileName,
-          fileType: blob.type,
-          key,
-        }),
-      })
+      const res = await api.post('/s3/upload-url', payloadS3)
 
-      if (!res.ok) throw new Error('Erro ao obter Presigned URL')
+      if (res.status !== 200) throw new Error('Erro ao obter Presigned URL')
 
-      const { uploadUrl } = await res.json()
+      const { uploadUrl } = res.data
 
       // Upload para S3
       const upload = await fetch(uploadUrl, {

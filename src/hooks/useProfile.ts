@@ -60,7 +60,7 @@ export function useProfile() {
           imageType,
           origin: 'volunteer',
         }
-        const response = await api.put('user-images-update', payload)
+        const response = await api.put('/user/images', payload)
         return response.data
       },
       onSuccess: () => {
