@@ -17,7 +17,7 @@ export function getApiClient(ctx?: any) {
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
-    
+
     return config
   })
   return api
