@@ -10,8 +10,15 @@ export function getApiClient(ctx?: any) {
     baseURL: BASE_URL,
   })
 
-  if (token) {
-    api.defaults.headers.Authorization = `Bearer ${token}`
-  }
+  api.interceptors.request.use((config) => {
+    const cookies = parseCookies(ctx)
+    const token = cookies['cosmos.token']
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    
+    return config
+  })
   return api
 }
