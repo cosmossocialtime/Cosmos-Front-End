@@ -6,42 +6,49 @@ import axios from 'axios'
 
 export const api = getApiClient()
 
-const { 'cosmos.refreshToken': RefreshToken } = parseCookies()
-const { 'cosmos.token': Token } = parseCookies()
+async function renewToken(refreshToken: string) {
+  return await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
+    {},
+    {
+      headers: { RefreshToken: refreshToken },
+    }
+  )
+}
 
 type userExpiration = {
   exp: number
 }
 
-async function renewToken() {
-  const response = await axios({
-    method: 'post',
-    url: process.env.NEXT_PUBLIC_API_URL + '/auth/refresh-token',
-    headers: { RefreshToken },
-  })
+api.interceptors.request.use(async (config) => {
+  const cookies = parseCookies()
+  const token = cookies['cosmos.token']
+  const refreshToken = cookies['cosmos.refreshToken']
 
-  return response
-}
+  if (token) {
+    const user = jwtDecode<userExpiration>(token)
+    const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1
 
-api.interceptors.request.use(async (req) => {
-  if (Token) {
-    const user: userExpiration = jwtDecode(Token)
-    const isExpire = dayjs.unix(user.exp).diff(dayjs()) < 1
+    if (isExpired && refreshToken) {
+      try {
+        const response = await renewToken(refreshToken)
+        const { accessToken: newToken, refreshToken: newRefreshToken } =
+          response.data
 
-    if (isExpire) {
-      const newToken = await renewToken()
-      api.defaults.headers.Authorization = `Bearer ${newToken.data.accessToken}`
-      setCookie(undefined, 'cosmos.token', newToken.data.accessToken, {
-        path: '/',
-      })
-      setCookie(undefined, 'cosmos.refreshToken', newToken.data.refreshToken, {
-        path: '/',
-      })
-    }
-    if (!isExpire) {
-      api.defaults.headers.Authorization = `Bearer ${Token}`
+        setCookie(undefined, 'cosmos.token', newToken, { path: '/' })
+        setCookie(undefined, 'cosmos.refreshToken', newRefreshToken, {
+          path: '/',
+        })
+
+        config.headers.Authorization = `Bearer ${newToken}`
+        return config
+      } catch (err) {
+        console.error('Erro ao renovar token', err)
+      }
+    } else {
+      config.headers.Authorization = `Bearer ${token}`
     }
   }
 
-  return req
+  return config
 })
