@@ -14,6 +14,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from '../services/queryClient'
 import { OnboardingInstitutionProvider } from '../context/OnboardingInstituionProvider'
 import { HeaderProvider } from '../context/HeaderContext'
+import Head from 'next/head'
 
 registerLocale('ptBR', ptBR)
 setDefaultLocale('ptBR')
@@ -21,6 +22,9 @@ setDefaultLocale('ptBR')
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
+      <Head>
+        <title>Cosmos Social</title>
+      </Head>
       <QueryClientProvider client={queryClient}>
         <NextNProgress
           color="#7A40D3"
