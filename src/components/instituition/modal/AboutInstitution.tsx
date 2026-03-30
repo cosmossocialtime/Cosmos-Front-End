@@ -357,7 +357,9 @@ export const AboutInstitutionModal = ({
       setSelectedCreationDate(
         socialOrganization.creationDate !== undefined &&
           socialOrganization.creationDate !== null
-          ? new Date(socialOrganization.creationDate)
+          ? dayjs(
+              dayjs(socialOrganization.creationDate).format('YYYY-MM-DD')
+            ).toDate()
           : null
       )
       setSelectedReceitaAnual(

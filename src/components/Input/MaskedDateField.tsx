@@ -4,6 +4,7 @@ import InputMask from 'react-input-mask'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Image from 'next/image'
+import dayjs from 'dayjs'
 
 interface MaskedDateFieldProps {
   label: string
@@ -30,8 +31,11 @@ export default function MaskedDateField({
 
   useEffect(() => {
     if (defaultDate !== null) {
-      const formatted = defaultDate.toLocaleDateString('pt-BR')
-      setSelectedDate(defaultDate)
+      const correctDate = dayjs(
+        dayjs(defaultDate).format('YYYY-MM-DD')
+      ).toDate()
+      const formatted = dayjs(correctDate).format('DD/MM/YYYY')
+      setSelectedDate(correctDate)
       setInputValue(formatted)
       setValue(name, formatted, { shouldValidate: true })
     }
@@ -46,7 +50,7 @@ export default function MaskedDateField({
         setValue(name, '', { shouldValidate: true }) // Exibe uma mensagem de erro
       } else {
         // Caso a data seja válida (não no futuro)
-        const formattedDate = date.toLocaleDateString('pt-BR')
+        const formattedDate = dayjs(date).format('DD/MM/YYYY')
         setSelectedDate(date)
         setValue(name, formattedDate, { shouldValidate: true })
         setInputValue(formattedDate)
